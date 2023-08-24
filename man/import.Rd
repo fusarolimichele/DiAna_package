@@ -38,6 +38,8 @@ quarter, restricted to the specified primaryids.
 Imports one of the FAERS relational databases.
 }
 \examples{
-\donttest{Drug <- import("DRUG", quarter = "22Q1")}
+\donttest{
+Drug <- import("DRUG", quarter = "22Q1")
+}
 
 }

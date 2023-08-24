@@ -39,10 +39,12 @@ import <- function(df_name, quarter, pids = NA, path = "~/") {
   t <- setDT(readRDS(
     paste0(path, "Desktop/DIANA-on-FAERS/DIANA/data", quarter, "/", df_name, ".rds")
   ))
-  if ("primaryid" %in% colnames(t)) {
-    t <- t[primaryid %in% pids]
-  } else {
-    stop("Column 'primaryid' not found in the data table.")
+  if (sum(!is.na(pids)) > 0) {
+    if ("primaryid" %in% colnames(t)) {
+      t <- t[primaryid %in% pids]
+    } else {
+      stop("Column 'primaryid' not found in the data table.")
+    }
   }
   return(t)
 }
