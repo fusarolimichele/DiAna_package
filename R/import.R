@@ -1,6 +1,8 @@
 #' @title import
 #' @name import
 #'
+#' @import data.table
+#'
 #' @description
 #' Imports one of the FAERS relational databases.
 #'
@@ -18,7 +20,7 @@
 #'                \item \emph{DRUG_NAME} =  Suspect and concomitant drugs (raw terms);
 #'                \item \emph{REAC_rec} =  Which event reappeared at the rechallenge.
 #'                }
-#' @param quarter last quarterly update, in the format \emph{23q1}.
+#' @param quarter last quarterly update, in the format \emph{22q1}.
 #' @param pids list of specific primaryids that should be imported,
 #'             defaults to the entire population.
 #' @param path path_substring to allow the use of the function
@@ -27,7 +29,7 @@
 #'         quarter, restricted to the specified primaryids.
 #'
 #' @examples
-#' \donttest{Drug <- import("DRUG", quarter = "23Q1")}
+#' \donttest{Drug <- import("DRUG", quarter = "22Q1")}
 #'
 #' @export
 #'
@@ -35,8 +37,10 @@ import <- function(df_name, quarter, pids=NA, path="~/") {
   t <- setDT(readRDS(
     paste0(path,"Desktop/DIANA-on-FAERS/DIANA/data",quarter,"/",df_name,".rds"))
   )
-  if(!is.na(pids)) {
-    t <- t[primaryid%in%pids]
+  if ("primaryid" %in% colnames(t)) {
+    t <- t[primaryid %in% pids]
+  } else {
+    stop("Column 'primaryid' not found in the data table.")
   }
   return(t)
 }
