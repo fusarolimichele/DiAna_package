@@ -29,14 +29,16 @@
 #'         quarter, restricted to the specified primaryids.
 #'
 #' @examples
-#' \donttest{Drug <- import("DRUG", quarter = "22Q1")}
+#' \donttest{
+#' Drug <- import("DRUG", quarter = "22Q1")
+#' }
 #'
 #' @export
 #'
-import <- function(df_name, quarter, pids=NA, path="~/") {
+import <- function(df_name, quarter, pids = NA, path = "~/") {
   t <- setDT(readRDS(
-    paste0(path,"Desktop/DIANA-on-FAERS/DIANA/data",quarter,"/",df_name,".rds"))
-  )
+    paste0(path, "Desktop/DIANA-on-FAERS/DIANA/data", quarter, "/", df_name, ".rds")
+  ))
   if ("primaryid" %in% colnames(t)) {
     t <- t[primaryid %in% pids]
   } else {
