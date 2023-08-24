@@ -3,8 +3,6 @@
 #' @description
 #' Sets up DiAna on the desktop, downloading the cleaned FAERS up to the specified quarter.
 #'
-#' @importFrom utils download.file unzip askYesNo
-#'
 #' @param quarter The ones available:
 #'       \itemize{
 #'                \item \emph{23Q1}

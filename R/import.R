@@ -1,8 +1,6 @@
 #' @title import
 #' @name import
 #'
-#' @import data.table
-#'
 #' @description
 #' Imports one of the FAERS relational databases.
 #'
