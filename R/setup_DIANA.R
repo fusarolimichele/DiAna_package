@@ -23,38 +23,26 @@ setup_DiAna <- function(quarter = "23Q1") {
 
   if (user_input == TRUE) {
     options(timeout = max(100000, getOption("timeout")))
-    # Get the desktop path
-    desktop_path <- file.path(Sys.getenv("USERPROFILE"), "Desktop")
-
-    # Define folder and subfolder paths
-    folder <- paste0("~", desktop_path, "/DiAna")
-    subfolder <- paste0("~", desktop_path, "/DiAna/data")
-    subfolder2 <- paste0("~", desktop_path, "/DiAna/projects")
     # Check if the folder exists
-    if (file.exists(subfolder)) {
-      cat("The folder already exists\n")
-    } else {
-      dir.create(folder)
-      dir.create(subfolder)
-      dir.create(subfolder2)
-    }
+    dir.create(paste0(here(), "/data"))
+    dir.create(paste0(here(), "/projects"))
+    dir.create(paste0(here(), "/external_sources"))
+  }
 
-    # URL for the DiAna zip file
-    if (quarter == "23Q1") {
-      DiAna_url <- "https://osf.io/download/epkqf/"
-    } else {
-      cat("The quarter required is not available on the DiAna OSF")
-    }
-
+  # URL for the DiAna zip file
+  if (quarter == "23Q1") {
+    DiAna_url <- "https://osf.io/download/epkqf/"
     # Download and extract DiAna data
-    download.file(DiAna_url, destfile = file.path(subfolder, paste0(quarter, ".zip")))
-    unzip(file.path(subfolder, paste0(quarter, ".zip")), exdir = subfolder)
-    file.remove(file.path(subfolder, paste0(quarter, ".zip")))
-
+    zip_path <- paste0(here(), "/data/", quarter, ".zip")
+    download.file(DiAna_url, destfile = zip_path)
+    unzip(zip_path, exdir = paste0(here(), "/data/"))
+    file.remove(zip_path)
     # Remove __MACOSX folder if it exists
-    macosx_folder <- file.path(subfolder, "__MACOSX")
+    macosx_folder <- paste0(here(), "/data/", "__MACOSX")
     if (file.exists(macosx_folder)) {
       unlink(macosx_folder, recursive = TRUE)
+    } else {
+      cat("The quarter required is not available on the DiAna OSF")
     }
   }
 }

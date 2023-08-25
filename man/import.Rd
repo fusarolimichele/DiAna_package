@@ -4,7 +4,7 @@
 \alias{import}
 \title{import}
 \usage{
-import(df_name, quarter, pids = NA, path = "~/")
+import(df_name, quarter, pids = NA)
 }
 \arguments{
 \item{df_name}{one of the following:
@@ -12,23 +12,20 @@ import(df_name, quarter, pids = NA, path = "~/")
 \item \emph{DRUG} =  Suspect and concomitant drugs (active ingredient);
 \item \emph{REAC} =  Suspect reactions (MedDRA PT);
 \item \emph{DEMO} =  Demographics and Reporting;
+\item \emph{DEMO_SUPP} =  Demographics and Reporting;
 \item \emph{INDI} =  Reasons for use;
 \item \emph{OUTC} =  Outcomes;
 \item \emph{THER} =  Drug regimen information;
 \item \emph{DRUG_ATC} =  Suspect and  concomitant drugs (ATC);
-\item \emph{DRUG_INFO_Doses} =  Dosage information;
-\item \emph{DRUG_INFO_DRroute} =  Dechallenge, Rechallenge, route, form;
+\item \emph{Doses} =  Dosage information;
+\item \emph{DRUG_SUPP} =  Dechallenge, Rechallenge, route, form;
 \item \emph{DRUG_NAME} =  Suspect and concomitant drugs (raw terms);
-\item \emph{REAC_rec} =  Which event reappeared at the rechallenge.
 }}
 
-\item{quarter}{last quarterly update, in the format \emph{22q1}.}
+\item{quarter}{last quarterly update, in the format \emph{23q1}.}
 
 \item{pids}{list of specific primaryids that should be imported,
 defaults to the entire population.}
-
-\item{path}{path_substring to allow the use of the function
-in any operative system. Defaults to \emph{~/}}
 }
 \value{
 It returns the relational database chosen, updated to the specified
@@ -38,8 +35,8 @@ quarter, restricted to the specified primaryids.
 Imports one of the FAERS relational databases.
 }
 \examples{
-\donttest{
-Drug <- import("DRUG", quarter = "22Q1")
+\dontrun{
+Drug <- import("DRUG", quarter = "23Q1")
 }
 
 }

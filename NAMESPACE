@@ -3,6 +3,7 @@
 export(import)
 export(setup_DiAna)
 import(data.table)
+importFrom(here,here)
 importFrom(utils,askYesNo)
 importFrom(utils,download.file)
 importFrom(utils,unzip)
