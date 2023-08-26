@@ -1,1 +1,6 @@
 .Rproj.user
+inst/doc
+data
+external_sources
+projects
+

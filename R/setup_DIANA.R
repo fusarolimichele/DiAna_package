@@ -1,7 +1,8 @@
 #' setup_DiAna
 #'
 #' @description
-#' Sets up DiAna on the desktop, downloading the cleaned FAERS up to the specified quarter.
+#' Sets up DiAna in the same folder as the Project,
+#' downloading the cleaned FAERS up to the specified quarter.
 #'
 #' @param quarter The ones available:
 #'       \itemize{

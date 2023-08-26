@@ -33,17 +33,13 @@
 #'
 import <- function(df_name, quarter, pids = NA) {
   path <- paste0(here(), "/data/", quarter, "/", df_name, ".rds")
-  if (file.exists(path)) {
-    t <- setDT(readRDS())
+  if (!file.exists(path)) {
+    stop("The dataset specified does not exist")
+  } else {
+    t <- setDT(readRDS(path))
     if (sum(!is.na(pids)) > 0) {
-      if ("primaryid" %in% colnames(t)) {
-        t <- t[primaryid %in% pids]
-      } else {
-        stop("Column 'primaryid' not found in the data table.")
-      }
+      t <- t[primaryid %in% pids]
     }
     return(t)
-  } else {
-    cat("the dataset specified does not exist")
   }
 }

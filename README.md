@@ -43,6 +43,13 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(DiAna)
+#> Welcome to DiAna package. A tool for standardized, flexible, and transparent disproportionality analysis on the FAERS.
+#> We have invested a lot of time and effort in creating R, please cite it when
+#>   using it for data analysis. To cite package ‘DiAna’ in publications use:
+#> 
+#>   Fusaroli M (2023). _DiAna: Advanced Disproportionality Analysis in the
+#>   FAERS for Drug Safety_. https://github.com/fusarolimichele/DiAna_package,
+#>   https://github.com/fusarolimichele/DiAna, https://osf.io/zqu89/.
 ## basic example code
 ```
 

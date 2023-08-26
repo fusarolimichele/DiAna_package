@@ -16,7 +16,8 @@ setup_DiAna(quarter = "23Q1")
 It creates, on the desktop, the directory which will host all the disproportionality analyses. It also download the cleaned FAERS up to the quarter of year specified.
 }
 \description{
-Sets up DiAna on the desktop, downloading the cleaned FAERS up to the specified quarter.
+Sets up DiAna in the same folder as the Project,
+downloading the cleaned FAERS up to the specified quarter.
 }
 \examples{
 \dontrun{
