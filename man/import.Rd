@@ -7,7 +7,8 @@
 import(df_name, quarter, pids = NA)
 }
 \arguments{
-\item{df_name}{one of the following:
+\item{df_name}{Name of the data file (without the ".rds" extension).
+It can be one of the following:
 \itemize{
 \item \emph{DRUG} =  Suspect and concomitant drugs (active ingredient);
 \item \emph{REAC} =  Suspect reactions (MedDRA PT);
@@ -22,21 +23,26 @@ import(df_name, quarter, pids = NA)
 \item \emph{DRUG_NAME} =  Suspect and concomitant drugs (raw terms);
 }}
 
-\item{quarter}{last quarterly update, in the format \emph{23q1}.}
+\item{quarter}{The quarter from which to import the data.
+For updated analyses use last quarterly update,
+in the format \emph{23q1}.}
 
-\item{pids}{list of specific primaryids that should be imported,
-defaults to the entire population.}
+\item{pids}{Optional vector of primary IDs to subset the imported data.
+Defaults to the entire population.}
 }
 \value{
-It returns the relational database chosen, updated to the specified
-quarter, restricted to the specified primaryids.
+A data.table containing the imported data.
 }
 \description{
-Imports one of the FAERS relational databases.
+Imports the specified FAERS relational database.
 }
 \examples{
 \dontrun{
-Drug <- import("DRUG", quarter = "23Q1")
+# Import full DRUG dataset up to 23Q1
+Drug <- import("DRUG", "23Q1")
+
+# Import reac data for specific primary IDs in quarters up to 23Q1
+selected_Reac <- import("REAC", "23Q1", pids = c("pid1", "pid2"))
 }
 
 }

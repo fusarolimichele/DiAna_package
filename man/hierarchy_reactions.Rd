@@ -2,24 +2,23 @@
 % Please edit documentation in R/count_reactions.R
 \name{hierarchy_reactions}
 \alias{hierarchy_reactions}
-\title{hierarchy_reactions
-Count the occurrences of each event (at all the meddra level) and provides
-a hierarchical csv.}
+\title{Generate Hierarchy of Reactions}
 \usage{
 hierarchy_reactions(pids_cases, reactions_path)
 }
 \arguments{
-\item{pids_cases}{the primaryids identifying the sample}
+\item{pids_cases}{Vector of primary IDs identifying the sample of interest.}
 
-\item{reactions_path}{the path for storing the csv.}
+\item{reactions_path}{Path to save the CSV file containing the hierarchy.}
 }
 \value{
-csv with SOCs ordered by occurrences and, within, HLGTs, HLTs, PTs.
+None. The function generates and writes the hierarchy to the csv.
+SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
 }
 \description{
-hierarchy_reactions
-Count the occurrences of each event (at all the meddra level) and provides
-a hierarchical csv.
+This function generates a hierarchy of reactions
+based on different MedDRA levels
+and writes the result to a CSV file.
 }
 \examples{
 \dontrun{

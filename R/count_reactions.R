@@ -1,11 +1,14 @@
-#' count_reactions
-#' Count the occurrences of each event (at any meddra level)
-#' and % as the number of individuals in the sample recording the event.
+#' Count Reactions by MedDRA Level
 #'
-#' @param pids_cases the primaryids identifying the sample
-#' @param meddra_level meddra_level investigated
+#' counts the occurrences of reactions based on MedDRA levels
+#' for a given set of primary IDs.
+#' Calculates % as the proportion of individuals recording the event.
 #'
-#' @return a database with three columns: event, N, and % in descending order.
+#' @param pids_cases Vector of primary IDs to consider for counting reactions.
+#' @param meddra_level The desired MedDRA level for counting (default is "pt").
+#'
+#' @return A data.table containing counts and percentages of reactions
+#'         at the specified MedDRA level and in descending order.
 #' @export
 #'
 #' @examples
@@ -27,13 +30,17 @@ count_reactions <- function(pids_cases, meddra_level = "pt") {
   )
   return(temp)
 }
-
-#' hierarchy_reactions
-#' Count the occurrences of each event (at all the meddra level) and provides
-#' a hierarchical csv.
-#' @param pids_cases the primaryids identifying the sample
-#' @param reactions_path the path for storing the csv.
-#' @return csv with SOCs ordered by occurrences and, within, HLGTs, HLTs, PTs.
+#' Generate Hierarchy of Reactions
+#'
+#' This function generates a hierarchy of reactions
+#' based on different MedDRA levels
+#' and writes the result to a CSV file.
+#'
+#' @param pids_cases Vector of primary IDs identifying the sample of interest.
+#' @param reactions_path Path to save the CSV file containing the hierarchy.
+#'
+#' @return None. The function generates and writes the hierarchy to the csv.
+#'         SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
 #' @export
 #'
 #' @examples

@@ -2,25 +2,27 @@
 % Please edit documentation in R/setup_DIANA.R
 \name{setup_DiAna}
 \alias{setup_DiAna}
-\title{setup_DiAna}
+\title{Set Up DiAna Environment}
 \usage{
 setup_DiAna(quarter = "23Q1")
 }
 \arguments{
-\item{quarter}{The ones available:
+\item{quarter}{The quarter for which to set up the DiAna environment
+(default is "23Q1"). The ones available:
 \itemize{
 \item \emph{23Q1}
 }}
 }
 \value{
-It creates, on the desktop, the directory which will host all the disproportionality analyses. It also download the cleaned FAERS up to the quarter of year specified.
+None. The function sets up the environment and downloads data.
 }
 \description{
-Sets up DiAna in the same folder as the Project,
-downloading the cleaned FAERS up to the specified quarter.
+This function sets up the DiAna environment by creating necessary folders
+and downloading the DiAna data up to the specified quarter.
 }
 \examples{
 \dontrun{
+# Set up DiAna environment for the default quarter
 setup_DiAna()
 }
 }

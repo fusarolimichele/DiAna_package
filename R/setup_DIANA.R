@@ -1,19 +1,20 @@
-#' setup_DiAna
+#' Set Up DiAna Environment
 #'
-#' @description
-#' Sets up DiAna in the same folder as the Project,
-#' downloading the cleaned FAERS up to the specified quarter.
+#' This function sets up the DiAna environment by creating necessary folders
+#' and downloading the DiAna data up to the specified quarter.
 #'
-#' @param quarter The ones available:
+#' @param quarter The quarter for which to set up the DiAna environment
+#'                (default is "23Q1"). The ones available:
 #'       \itemize{
 #'                \item \emph{23Q1}
 #'                }
 #'
-#' @return It creates, on the desktop, the directory which will host all the disproportionality analyses. It also download the cleaned FAERS up to the quarter of year specified.
+#' @return None. The function sets up the environment and downloads data.
 #' @export
 #'
 #' @examples
 #' \dontrun{
+#' # Set up DiAna environment for the default quarter
 #' setup_DiAna()
 #' }
 setup_DiAna <- function(quarter = "23Q1") {

@@ -2,24 +2,23 @@
 % Please edit documentation in R/count_reactions.R
 \name{count_reactions}
 \alias{count_reactions}
-\title{count_reactions
-Count the occurrences of each event (at any meddra level)
-and \% as the number of individuals in the sample recording the event.}
+\title{Count Reactions by MedDRA Level}
 \usage{
 count_reactions(pids_cases, meddra_level = "pt")
 }
 \arguments{
-\item{pids_cases}{the primaryids identifying the sample}
+\item{pids_cases}{Vector of primary IDs to consider for counting reactions.}
 
-\item{meddra_level}{meddra_level investigated}
+\item{meddra_level}{The desired MedDRA level for counting (default is "pt").}
 }
 \value{
-a database with three columns: event, N, and \% in descending order.
+A data.table containing counts and percentages of reactions
+at the specified MedDRA level and in descending order.
 }
 \description{
-count_reactions
-Count the occurrences of each event (at any meddra level)
-and \% as the number of individuals in the sample recording the event.
+counts the occurrences of reactions based on MedDRA levels
+for a given set of primary IDs.
+Calculates \% as the proportion of individuals recording the event.
 }
 \examples{
 \dontrun{
