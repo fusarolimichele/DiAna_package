@@ -31,11 +31,12 @@ disproportionality_analisis(
 
 \item{meddra_level}{The desired MedDRA level for analysis (default is "pt").}
 
-\item{restriction}{Primary IDs to consider for analysis (default is "none").}
+\item{restriction}{Primary IDs to consider for analysis (default is "none",
+which includes the entire population).}
 
 \item{sign_ciphers}{Number of decimal places for calculated values (default is 2).}
 
-\item{threshold_ROR}{Threshold for calculating Risk Odds Ratio (default is 3).}
+\item{threshold_ROR}{Threshold for calculating Reporitng Odds Ratio (default is 3).}
 
 \item{threshold_IC}{Threshold for calculating Information Component (default is 1).}
 

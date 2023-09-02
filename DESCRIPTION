@@ -1,9 +1,18 @@
 Package: DiAna
 Title: Advanced Disproportionality Analysis in the FAERS for Drug Safety
 Version: 0.0.0.9000
-Authors@R: 
-    person("Michele", "Fusaroli", , "michele.fusaroli2@unibo.it", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-0254-2212"))
+Authors@R:
+  c(person(given = "Michele",
+           family = "Fusaroli",
+           role = c("aut", "cre"),
+           email= "michele.fusaroli2@unibo.it",
+           comment = c(ORCID = "0000-0002-0254-2212")),
+    person(given="Valentina",
+           family="Giunchi",
+           role="aut",
+           email="valentina.giunchi2@unibo.it",
+           comment = c(ORCID = "0000-0001-5841-8520"))
+  )
 Description: The `DiAna` (Disproportionality Analysis) package allows for
     downloading FAERS cleaned data, and import relational datasets.  It
     allows to identify cases and select controls to reduce confounding.
@@ -11,6 +20,9 @@ License: MIT + file LICENSE
 URL: https://github.com/fusarolimichele/DiAna_package,
     https://github.com/fusarolimichele/DiAna, https://osf.io/zqu89/
 BugReports: https://github.com/fusarolimichele/DiAna_package/issues
+Depends: 
+    questionr,
+    tidyverse
 Imports: 
     data.table,
     here

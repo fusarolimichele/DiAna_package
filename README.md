@@ -43,13 +43,28 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(DiAna)
+#> Loading required package: questionr
+#> Loading required package: tidyverse
+#> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+#> ✔ dplyr     1.1.2     ✔ readr     2.1.4
+#> ✔ forcats   1.0.0     ✔ stringr   1.5.0
+#> ✔ ggplot2   3.4.3     ✔ tibble    3.2.1
+#> ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+#> ✔ purrr     1.0.2     
+#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+#> ✖ dplyr::filter() masks stats::filter()
+#> ✖ dplyr::lag()    masks stats::lag()
+#> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 #> Welcome to DiAna package. A tool for standardized, flexible, and transparent disproportionality analysis on the FAERS.
-#> We have invested a lot of time and effort in creating R, please cite it when
-#>   using it for data analysis. To cite package ‘DiAna’ in publications use:
 #> 
-#>   Fusaroli M (2023). _DiAna: Advanced Disproportionality Analysis in the
-#>   FAERS for Drug Safety_. https://github.com/fusarolimichele/DiAna_package,
-#>   https://github.com/fusarolimichele/DiAna, https://osf.io/zqu89/.
+#> We have invested a lot of time and effort in creating DiAna, please cite it when using it for data analysis. To cite package ‘DiAna’ in publications use:
+#> 
+#>   Fusaroli M, Giunchi V (2023). _DiAna: Advanced
+#>   Disproportionality Analysis in the FAERS for Drug
+#>   Safety_.
+#>   https://github.com/fusarolimichele/DiAna_package,
+#>   https://github.com/fusarolimichele/DiAna,
+#>   https://osf.io/zqu89/.
 ## basic example code
 ```
 
