@@ -43,8 +43,8 @@ setup_DiAna <- function(quarter = "23Q1") {
     macosx_folder <- paste0(here(), "/data/", "__MACOSX")
     if (file.exists(macosx_folder)) {
       unlink(macosx_folder, recursive = TRUE)
-    } else {
-      cat("The quarter required is not available on the DiAna OSF")
     }
+  } else {
+    cat("The quarter required is not available on the DiAna OSF")
   }
 }
