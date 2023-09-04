@@ -21,10 +21,10 @@ URL: https://github.com/fusarolimichele/DiAna_package,
     https://github.com/fusarolimichele/DiAna, https://osf.io/zqu89/
 BugReports: https://github.com/fusarolimichele/DiAna_package/issues
 Depends: 
+    data.table,
     questionr,
     tidyverse
 Imports: 
-    data.table,
     here
 Suggests: 
     knitr,

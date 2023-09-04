@@ -34,7 +34,7 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
       DiAna_url <- "https://osf.io/download/epkqf/"
       # Download and extract DiAna data
       zip_path <- paste0(here(), "/data/", quarter, ".zip")
-      download.file(DiAna_url, destfile = zip_path)
+      download.file(DiAna_url, destfile = zip_path, mode = "wb")
       unzip(zip_path, exdir = paste0(here(), "/data/"))
       file.remove(zip_path)
       # Remove __MACOSX folder if it exists

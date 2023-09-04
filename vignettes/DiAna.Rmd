@@ -14,13 +14,24 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Installing DiAna
+
+To install DiAna package, in RStudio, we run the two following lines of codes.
+
+```{r install, eval=FALSE}
+install.packages("devtools")
+devtools::install_github("fusarolimichele/DiAna_package")
+```
+
+
 # Setting up DiAna
 
 The first time we use DiAna, we have to set up the folder where the data will be stored together with the results of the analyses. We suggest to create anywhere (e.g., the desktop) a folder named DiAna, and to open in it an R project "DiAna.Rproj". On the console, we can then run the two rows below, the first importing the DiAna package (i.e., the toolbox with all the functions that we will use in our analyses), and the second automaticatilly setting up everything else for us: it will create a folder to store cleaned FAERS data, that will be downloaded from an OSF repository. The entire cleaning process is made transparent on the github. It will also create a folder for external sources and a folder to store projects.
 
 ```{r setup, eval=FALSE}
 library(DiAna)
-setup_DiAna()
+setup_DiAna(quarter = "23Q1")
+# input yes when asked to download the FAERS
 ```
 
 # Starting a project
@@ -30,7 +41,7 @@ We then are ready to start a project and the first thing we do is open a new scr
 ```{r details, eval=FALSE}
 # Information -----------------------------------------------------------------
 ## Project title --------------------------------------------------------------
-### Adverse Reactions to Venetoclax in the Child
+### The association between impulse control disorders and aripiprazole before the FDA warning
 
 ## Data -----------------------------------------------------------------------
 ### FDA Adverse Event Reporting System Quarterly Data
@@ -39,10 +50,9 @@ We then are ready to start a project and the first thing we do is open a new scr
 ### Michele Fusaroli
 
 ## Version --------------------------------------------------------------------
-### Set up: 2023-08-24
-### Last update: 2023-08-24
+### Set up: 2023-09-04
+### Last update: 2023-09-04
 
 # Set up ----------------------------------------------------------------------
-dir.create("projects/venetoclax")
 ```
 
