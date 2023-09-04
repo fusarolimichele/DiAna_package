@@ -4,7 +4,7 @@
 \alias{setup_DiAna}
 \title{Set Up DiAna Environment}
 \usage{
-setup_DiAna(quarter = "23Q1")
+setup_DiAna(quarter = "23Q1", timeout = 1e+05)
 }
 \arguments{
 \item{quarter}{The quarter for which to set up the DiAna environment
@@ -12,6 +12,9 @@ setup_DiAna(quarter = "23Q1")
 \itemize{
 \item \emph{23Q1}
 }}
+
+\item{timeout}{The amount of time after which R stops a task if it is still unfinished.
+Default 100000It may be necessary to increase it in the case of a slow connection.}
 }
 \value{
 None. The function sets up the environment and downloads data.
