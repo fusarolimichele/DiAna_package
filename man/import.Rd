@@ -39,10 +39,10 @@ Imports the specified FAERS relational database.
 \examples{
 \dontrun{
 # Import full DRUG dataset up to 23Q1
-Drug <- import("DRUG", "23Q1")
+import("DRUG", "23Q1")
 
 # Import reac data for specific primary IDs in quarters up to 23Q1
-selected_Reac <- import("REAC", "23Q1", pids = c("pid1", "pid2"))
+import("REAC", "23Q1", pids = c("pid1", "pid2"))
 }
 
 }

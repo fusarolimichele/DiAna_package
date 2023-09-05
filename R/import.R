@@ -29,14 +29,15 @@
 #' @examples
 #' \dontrun{
 #' # Import full DRUG dataset up to 23Q1
-#' Drug <- import("DRUG", "23Q1")
+#' import("DRUG", "23Q1")
 #'
 #' # Import reac data for specific primary IDs in quarters up to 23Q1
-#' selected_Reac <- import("REAC", "23Q1", pids = c("pid1", "pid2"))
+#' import("REAC", "23Q1", pids = c("pid1", "pid2"))
 #' }
 #'
 #' @export
 #'
+
 import <- function(df_name, quarter, pids = NA) {
   path <- paste0(here(), "/data/", quarter, "/", df_name, ".rds")
   if (!file.exists(path)) {
@@ -46,6 +47,7 @@ import <- function(df_name, quarter, pids = NA) {
     if (sum(!is.na(pids)) > 0) {
       t <- t[primaryid %in% pids]
     }
-    return(t)
+    assign(str_to_title(df_name), t, envir = .GlobalEnv)
   }
+  t
 }
