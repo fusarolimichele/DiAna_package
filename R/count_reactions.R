@@ -18,7 +18,13 @@
 reporting_rates <- function(pids_cases, meddra_level = "pt") {
   temp <- Reac[primaryid %in% pids_cases]
   if (meddra_level != "pt") {
-    temp <- distinct(MedDRA[, c("pt", meddra_level), with = FALSE])[temp, on = "pt"]
+    temp <- distinct(distinct(MedDRA[, c("pt", meddra_level), with = FALSE])[
+      temp,
+      on = "pt"
+    ][
+      , c("primaryid", meddra_level),
+      with = FALSE
+    ])
   }
   temp <- temp[, .N, by = get(meddra_level)][order(-N)][, perc := N / length(pids_cases)]
   colnames(temp) <- c(meddra_level, "N", "perc")
