@@ -3,6 +3,7 @@
 export(disproportionality_analisis)
 export(hierarchycal_rates)
 export(import)
+export(import_MedDRA)
 export(render_forest)
 export(reporting_rates)
 export(setup_DiAna)

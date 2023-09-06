@@ -10,7 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  dpi = 300
 )
 ```
 
@@ -35,24 +36,248 @@ setup_DiAna(quarter = "23Q1")
 ```
 
 # Starting a project
-We then are ready to start a project and the first thing we do is open a new script and insert some details on the project:
+We then are ready to start a project and the first thing we do is open a new script and insert some details on the project. Every time we use a # we are inserting a comment, that is extremely useful to document and explain our project, but that is not run and does not affect the results.
 
 
-```{r details, eval=FALSE}
+```{r details}
 # Information -----------------------------------------------------------------
 ## Project title --------------------------------------------------------------
-### The association between impulse control disorders and aripiprazole before the FDA warning
+### Was the association between impulse control disorders and aripiprazole already solid before the FDA warning and taking into account expected biases?
 
 ## Data -----------------------------------------------------------------------
-### FDA Adverse Event Reporting System Quarterly Data
+### FDA Adverse Event Reporting System Quarterly Data up to 23Q1
 
 ## Authors --------------------------------------------------------------------
 ### Michele Fusaroli
 
 ## Version --------------------------------------------------------------------
 ### Set up: 2023-09-04
-### Last update: 2023-09-04
-
-# Set up ----------------------------------------------------------------------
+### Last update: 2023-09-06
 ```
 
+We then are ready to start a project and the first thing we do is open a new script and insert some details on the project. Every time we use a # we are inserting a comment, that is extremely useful to document and explain our project, but that is not run and does not affect the results.
+
+We use library() to access the DiAna package, and define the drug ("aripiprazole") and events of interest. For this study we are investigating 5 manfestations of pathologic impulsivity (impulse control disorders: "gambling", "hypersexuality", "shopping", "hyperphagia", "kleptomania") together with one known adverse drug reaction of aripiprazole ("headache") and one clear bias ("bipolar disorder" is one of the major indications for using aripiprazole).
+
+```{r}
+library(DiAna) # access DiAna
+
+drug_selected <- "aripiprazole" # define the drug of interest
+
+reac_selected <- list( # define the events of interest
+  "gambling disorder",
+  "hypersexuality",
+  "compulsive shopping",
+  "hyperphagia",
+  "kleptomania",
+  "bipolar disorder",
+  "headache"
+)
+```
+
+Then we import the different datasets from the FAERS relational database that we are going to use in the simplest analysis: the datases storing information about drugs and reactions.
+
+We perform a disproportionality analysis using the disproportionality_analysis() function to see whether each of the events investigated is more reported with the drug of interest than what expected based on the entire FAERS database assuming that the drug and the event are independent.
+
+And we visualize the information component, a measure of disproportionality, using a forest plot.
+
+```{r}
+import("DRUG", "23Q1") # import FAERS drug information
+import("REAC", "23Q1") # import FAERS reaction information
+
+DPA_df <- disproportionality_analisis( # perform disproportionality analysis
+  drug_selected,
+  reac_selected
+)
+
+render_forest(DPA_df, "IC",
+  threshold = 0, # visualize forest plot
+  row = "event",
+  levs_row = reac_selected, facet_v = NA
+)
+```
+Apart from the warning, that in this case should not bother us, we found an association between aripiprazole and all the events investigated apart from headache.
+
+Sharing this script, we allow everyone to replicate the study, to use this study design for their own similar inquiries, and to make as suggestions to improve the quality of our evidence, for example taking care of some important biases.
+
+
+# Removing distortions due to duplicates
+
+Duplicates may distort our results. DiAna already applied multiple strategies to detect potential duplicates, and will soon add even more advanced algorithms. The results of these duplicates detection is stored in the DEMO dataset, that we are now importing.
+
+We are using now the RB_duplicates_only_susp algorithm, that looks for the same exact values in sex, age, country of occurrence, event date, list of events, and list of suspected drugs. This way we remove more than 3 milion reports over 16 total reports in the FAERS (quarterly data) up to 23Q1.
+
+Deduplicated reports are selected as those that are not identified as duplicates by the algorithm.
+
+Then we perform the disproportionality analysis restricting to deduplicated reports. And we store these results together with the results of the previous analysis to allow for visual comparison using a forest plot.
+
+
+```{r}
+import("DEMO", "23Q1") # import demographic information
+
+deduplicated <- Demo[RB_duplicates_only_susp == FALSE]$primaryid # identify deduplicated reports
+
+DPA_df_deduplicated <- disproportionality_analisis( # disproportionality analysis with restriction
+  drug_selected,
+  reac_selected,
+  restriction = deduplicated
+)
+
+df <- rbindlist(list( # storing together the results of different analyses
+  DPA_df[, nested := "main"],
+  DPA_df_deduplicated[, nested := "deduplicated"]
+))
+
+render_forest(df, "IC", # compare the results using a forest plot
+  nested = TRUE,
+  nested_colors = c("salmon", "goldenrod"),
+  threshold = 0, show_legend = TRUE,
+  row = "event", levs_row = reac_selected, facet_v = NA
+)
+```
+
+In these cases, in fact, we don't see much a difference comparing the analysis on the entire FAERS with the analysis on deduplicated data. This is not generalizable to other drugs and events, and to other deduplication algorithms.
+
+# Conditioning on the indication
+
+Since bipolar disorder is a reason for using aripiprazole, we could think that patients with bipolar disorder are more susceptible to impulsivity and impulsive behaviors, and maybe that could be the only reason for the association between aripiprazole and impulsive behaviors (what is known as confounding by indication).
+
+The way we can mitigate this bias is by conditioning on the indication, for example restricting to patients with bipolar disorder alone.
+
+We therefore need to import the Indi dataset.
+
+To be more sensitive the search for bipolar disorder, we want to use the MedDRA hierarchy. Alas, the access to MedDRA is by subscription only and we cannot provide our ready-to-use file. But with a prescription you can follow the algorithm deascribed in the https://github.com/fusarolimichele/DiAna to make your own DiAna-compatible MedDRA.
+
+Thus, we can select only reports with, among indications, terms included in the hlgt "manic and bipolar mood disorders and disturbances". And we repeat again the disproportionality analysis with a different restriction, and compare the results using the forest plot.
+
+```{r}
+##
+import("INDI", "23Q1") # import indications information
+import_MedDRA() # import MedDRA hierarchy
+
+bipolar_disorder <- Indi[indi_pt %in% MedDRA[ # select reports with bipolar disorder among indications
+  hlgt == "manic and bipolar mood disorders and disturbances"
+]$pt]$primaryid
+
+DPA_df_bipolar <- disproportionality_analisis( # disproportionality analysis with restriction
+  drug_selected,
+  reac_selected,
+  restriction = bipolar_disorder
+)
+
+df <- rbindlist(list( # storing together the results of different analyses
+  df,
+  DPA_df_bipolar[, nested := "bipolar"]
+), fill = TRUE)
+
+render_forest(df, "IC", # compare the results using a forest plot
+  nested = TRUE,
+  nested_colors = c("salmon", "goldenrod", "steelblue"),
+  threshold = 0, show_legend = TRUE,
+  row = "event", levs_row = reac_selected, facet_v = NA
+)
+```
+
+Conditioning on the indication, we see that the association with bipolar disorder disappears (as it should be). Also the association with impulse control disorders is weakened, supporting the hypothesis that bipolar disorder is a risk factor for impulsivity but it is not sufficient alone to completely explain these pervasive behaviors. The confidence interval of kleptomania gets wider, since the number of cases gets too small, and the signal disappear.
+
+We can also see that the signal for headache, which is not associated with bipolar disorder, is not affected by this restriction.
+
+# Restricting to reports submitted before the warning
+
+The FDA warning in 2016 may have inflated the reporting distorting the results (i.e., notoriety bias). To mitigate this bias we can select only reports submitted before the date of the warning, and repeating the disproportionality analysis.
+
+
+```{r}
+warning_date <- 20160305 # define the warning date
+pre_warning <- Demo[init_fda_dt < warning_date]$primaryid # select only reports submitted before the warning
+
+preW <- disproportionality_analisis( # disproportionality analysis with restriction
+  drug_selected,
+  reac_selected,
+  restriction = pre_warning
+)
+
+df <- rbindlist(list( # storing together the results of different analyses
+  df,
+  preW[, nested := "pre_warning"]
+), fill = TRUE)
+
+render_forest(df, "IC", # compare the results using a forest plot
+  nested = TRUE,
+  nested_colors = c("salmon", "goldenrod", "steelblue", "limegreen"),
+  threshold = 0, show_legend = TRUE,
+  row = "event", levs_row = reac_selected, facet_v = NA
+)
+```
+
+Here you see in green the results of the analysis restricting to the pre-warning. You can see that this analysis does not affect bipolar disorder nor headache, but it affects all the impulse control disorders apart gambling. Plausibly the FDA warning was based mainly on suspect aripiprazole-induced gambling disorder.
+
+# Custom event groupings
+
+MedDRA, used to code adverse events, is highly redundant: there are multiple terms that may be used to express the same concept. Therefore a more sensitive and specific approach should take into account all these terms.
+We can therefore redefine our reactions of interest for higher sensitivity.
+
+```{r}
+##
+reac_selected <- list( # redefined reaction for higher sensitivity
+  "gambling disorder" = list("gambling disorder", "gambling"),
+  "hypersexuality" = list(
+    "compulsive sexual behaviour", "hypersexuality",
+    "excessive masturbation", "excessive sexual fantasies", "libido increased",
+    "sexual activity increased", "kluver-bucy syndrome", "erotophonophilia",
+    "exhibitionism", "fetishism", "frotteurism", "masochism", "paraphilia",
+    "paedophilia", "sadism", "transvestism", "voyeurism",
+    "sexually inappropriate behaviour"
+  ),
+  "compulsive shopping" = list("compulsive shopping"),
+  "hyperphagia" = list(
+    "binge eating", "food craving", "hyperphagia",
+    "increased appetite"
+  ),
+  "kleptomania" = list("kleptomania", "shoplifting"),
+  "bipolar disorder" = as.list(MedDRA[hlt == "bipolar disorders"]$pt),
+  "headache" = as.list(MedDRA[hlgt == "headaches"]$pt)
+)
+
+custom_group <- disproportionality_analisis( # perform the disproportionality analysis
+  drug_selected,
+  reac_selected,
+  event_names = names(reac_selected)
+)
+
+df <- rbindlist(list( # storing together the results of different analyses
+  df,
+  custom_group[, nested := "custom-groups"]
+), fill = TRUE)
+
+render_forest(df, "IC", # compare the results using a forest plot
+  nested = TRUE,
+  nested_colors = c("salmon", "goldenrod", "steelblue", "limegreen", "violet"),
+  threshold = 0, show_legend = TRUE,
+  row = "event", levs_row = names(reac_selected), facet_v = NA
+)
+```
+As we can see here custom groups affect mainly kleptomania. Indeed many reporters prefer to use shoplifting instead of kleptomania, and therefore the signal is now much stronger.
+
+# Complete analysis
+
+In conclusion, we can integrate all the restrictions and use custom groups to have a unified analysis. 
+
+```{r}
+##
+restriction <- intersect(intersect(deduplicated, bipolar_disorder), pre_warning) # integrate all the restrictions
+
+complete <- disproportionality_analisis( # disproportionality
+  drug_selected,
+  reac_selected,
+  event_names = names(reac_selected),
+  restriction = restriction
+)
+render_forest(complete, "IC",
+  threshold = 0, # forest plot
+  row = "event",
+  levs_row = names(reac_selected), facet_v = NA
+)
+```
+
+Therefore, you can see that even before the warning and taking into account all the considered biases, the FDA had enough information to publish the warning.

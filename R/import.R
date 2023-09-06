@@ -51,3 +51,43 @@ import <- function(df_name, quarter, pids = NA) {
   }
   t
 }
+
+#' Import MedDRA Data
+#'
+#' This function imports MedDRA (Medical Dictionary for Regulatory Activities) data from a CSV file and stores it in the global environment.
+#'
+#' @return A data table containing MedDRA data.
+#'
+#' @details
+#' This function reads MedDRA data from a CSV file located at the path specified by `here()/external_sources/meddra_primary.csv`.
+#' If the file does not exist, it will stop execution and provide instructions on how to obtain MedDRA data.
+#' If the file exists, it will load the data, select specific columns (def, soc, hlgt, hlt, pt), remove duplicates, and store it in the global environment as "MedDRA".
+#'
+#' @seealso
+#' You can find more information and instructions for obtaining MedDRA data at https://github.com/fusarolimichele/DiAna.
+#'
+#' @examples
+#' \dontrun{
+#' # Import MedDRA data
+#' import_MedDRA()
+#' }
+#'
+#' @export
+
+import_MedDRA <- function() {
+  path <- paste0(here(), "/external_sources/meddra_primary.csv")
+  if (!file.exists(path)) {
+    stop("The MedDRA is not available with DiAna since the subscription must be done with MEDDRA MSSO.
+         Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna
+         to make it ready for download.")
+  } else {
+    MedDRA <- setDT(
+      read_delim(path,
+        ";",
+        escape_double = FALSE, trim_ws = TRUE
+      )
+    )[, .(def, soc, hlgt, hlt, pt)] %>% distinct()
+    assign("MedDRA", MedDRA, envir = .GlobalEnv)
+  }
+  MedDRA
+}
