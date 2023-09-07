@@ -7,10 +7,10 @@
 render_forest(
   df,
   TTO_ROR = "ROR",
-  levs_row = unique(df$drug),
+  levs_row = unique(df$substance),
   facet_v = "event",
   facet_h = NA,
-  row = "drug",
+  row = "substance",
   nested = FALSE,
   text_size_legend = 15,
   transformation = "identity",

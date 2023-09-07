@@ -11,13 +11,9 @@ disproportionality_analisis(
   temp_r = Reac,
   meddra_level = "pt",
   restriction = "none",
-  sign_ciphers = 2,
-  threshold_ROR = 3,
-  threshold_IC = 1,
-  event_names = "none",
-  KeepLessThanThreshold = TRUE,
-  order = "reac",
-  threshold = 1
+  ROR_minimum_cases = 3,
+  ROR_threshold = 1,
+  IC_threshold = 0
 )
 }
 \arguments{
@@ -34,19 +30,11 @@ disproportionality_analisis(
 \item{restriction}{Primary IDs to consider for analysis (default is "none",
 which includes the entire population).}
 
-\item{sign_ciphers}{Number of decimal places for calculated values (default is 2).}
+\item{ROR_minimum_cases}{Threshold for calculating Reporitng Odds Ratio (default is 3).}
 
-\item{threshold_ROR}{Threshold for calculating Reporitng Odds Ratio (default is 3).}
+\item{ROR_threshold}{Threshold for analysis (default is 1).}
 
-\item{threshold_IC}{Threshold for calculating Information Component (default is 1).}
-
-\item{event_names}{Event names for labeling results (default is "none").}
-
-\item{KeepLessThanThreshold}{Keep values less than threshold (default is TRUE).}
-
-\item{order}{Order for analysis: "reac" or "drug" (default is "reac").}
-
-\item{threshold}{Threshold for analysis (default is 1).}
+\item{IC_threshold}{Threshold for calculating Information Component (default is 1).}
 }
 \value{
 A data.table containing disproportionality analysis results.

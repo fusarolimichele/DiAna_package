@@ -126,7 +126,7 @@ DPA_df_deduplicated <- disproportionality_analisis( # disproportionality analysi
 df <- rbindlist(list( # storing together the results of different analyses
   DPA_df[, nested := "main"],
   DPA_df_deduplicated[, nested := "deduplicated"]
-))
+),fill = TRUE)
 
 render_forest(df, "IC", # compare the results using a forest plot
   nested = TRUE,
@@ -242,7 +242,7 @@ reac_selected <- list( # redefined reaction for higher sensitivity
 custom_group <- disproportionality_analisis( # perform the disproportionality analysis
   drug_selected,
   reac_selected,
-  event_names = names(reac_selected)
+  meddra_level="custom"
 )
 
 df <- rbindlist(list( # storing together the results of different analyses
@@ -270,7 +270,7 @@ restriction <- intersect(intersect(deduplicated, bipolar_disorder), pre_warning)
 complete <- disproportionality_analisis( # disproportionality
   drug_selected,
   reac_selected,
-  event_names = names(reac_selected),
+  meddra_level="custom",
   restriction = restriction
 )
 render_forest(complete, "IC",
