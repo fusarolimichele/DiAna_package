@@ -91,3 +91,30 @@ import_MedDRA <- function() {
   }
   MedDRA
 }
+
+#' Import ATC classification
+#'
+#' This function reads the ATC (Anatomical Therapeutic Chemical) classification
+#' from an external source and assigns it to a global environment variable.
+#'
+#' @return A data frame containing the dataset for ATC linkage.
+#'
+#' @examples
+#' \dontrun{
+#' import_ATC()
+#' }
+#'
+#' @export
+import_ATC <- function() {
+  ATC <- setDT(
+    read_delim(paste0(here(), "/external_sources/ATC_DiAna.csv"),
+      ";",
+      escape_double = FALSE, trim_ws = TRUE
+    )
+  )[, .(
+    substance = Substance, code, primary_code, Lvl4, Class4, Lvl3, Class3,
+    Lvl2, Class2, Lvl1, Class1
+  )] %>% distinct()
+  assign("ATC", ATC, envir = .GlobalEnv)
+  ATC
+}

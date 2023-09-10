@@ -21,7 +21,8 @@ None. The function sets up the environment and downloads data.
 }
 \description{
 This function sets up the DiAna environment by creating necessary folders
-and downloading the DiAna data up to the specified quarter.
+and downloading the DiAna data up to the specified quarter
+and DiAna dictionary together with the csv to link drugs with the ATC.
 }
 \examples{
 \dontrun{

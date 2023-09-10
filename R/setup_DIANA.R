@@ -1,7 +1,8 @@
 #' Set Up DiAna Environment
 #'
 #' This function sets up the DiAna environment by creating necessary folders
-#' and downloading the DiAna data up to the specified quarter.
+#' and downloading the DiAna data up to the specified quarter
+#' and DiAna dictionary together with the csv to link drugs with the ATC.
 #'
 #' @param quarter The quarter for which to set up the DiAna environment
 #'                (default is "23Q1"). The ones available:
@@ -42,6 +43,14 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
       if (file.exists(macosx_folder)) {
         unlink(macosx_folder, recursive = TRUE)
       }
+      download.file("https://osf.io/download/sywd9/",
+        destfile = paste0(here(), "/external_sources/ATC_DiAna.csv"),
+        mode = "wb"
+      )
+      download.file("https://osf.io/download/7tdmq/",
+        destfile = paste0(here(), "/external_sources/DiAna_dictionary.csv"),
+        mode = "wb"
+      )
     } else {
       cat("The quarter required is not available on the DiAna OSF")
     }
