@@ -15,13 +15,13 @@
 #'                \item \emph{OUTC} =  Outcomes;
 #'                \item \emph{THER} =  Drug regimen information;
 #'                \item \emph{DRUG_ATC} =  Suspect and  concomitant drugs (ATC);
-#'                \item \emph{Doses} =  Dosage information;
+#'                \item \emph{DOSES} =  Dosage information;
 #'                \item \emph{DRUG_SUPP} =  Dechallenge, Rechallenge, route, form;
 #'                \item \emph{DRUG_NAME} =  Suspect and concomitant drugs (raw terms);
 #'                }
 #' @param quarter The quarter from which to import the data.
 #'                For updated analyses use last quarterly update,
-#'                in the format \emph{23q1}.
+#'                in the format \emph{23Q1}.
 #' @param pids Optional vector of primary IDs to subset the imported data.
 #'             Defaults to the entire population.
 #' @return A data.table containing the imported data.

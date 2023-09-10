@@ -9,16 +9,16 @@
 #' @param meddra_level The desired MedDRA level for analysis (default is "pt").
 #' @param restriction Primary IDs to consider for analysis (default is "none",
 #'                    which includes the entire population).
-#' @param ROR_minimum_cases Threshold for calculating Reporitng Odds Ratio (default is 3).
-#' @param IC_threshold Threshold for calculating Information Component (default is 1).
-#' @param ROR_threshold Threshold for analysis (default is 1).
+#' @param ROR_minimum_cases Threshold of minimum cases for calculating Reporitng Odds Ratio (default is 3).
+#' @param IC_threshold Threshold for defining the significance of Information Component (default is 0).
+#' @param ROR_threshold Threshold for defining the significance of Reporting Odds Ratio (default is 1).
 #'
 #' @return A data.table containing disproportionality analysis results.
 #'
 #' @importFrom questionr odds.ratio
 #'
 #' @export
-disproportionality_analisis <- function(
+disproportionality_analysis <- function(
     drug_selected, reac_selected,
     temp_d = Drug, temp_r = Reac,
     meddra_level = "pt",
@@ -96,19 +96,20 @@ disproportionality_analisis <- function(
   results <- results[, label_ROR := paste0(ROR_median, " (", ROR_lower, "-", ROR_upper, ") [", D_E, "]")]
   results <- results[, label_IC := paste0(IC_median, " (", IC_lower, "-", IC_upper, ") [", D_E, "]")]
   results <- results[, Bonferroni := p_value_fisher < 0.05 / nrow(results[D_E >= ROR_minimum_cases])]
-  results$color_ROR <- as.character(NA)
-  results <- results[, color_ROR := ifelse(D_E < ROR_minimum_cases, "not enough cases", ifelse(is.nan(ROR_lower), "all_associated",
+  results <- results[, ROR_color := ifelse(D_E < ROR_minimum_cases, "not enough cases", ifelse(is.nan(ROR_lower), "all_associated",
     ifelse(ROR_lower <= ROR_threshold, "no signal",
       ifelse(Bonferroni == FALSE, "light signal",
         "strong signal"
       )
     )
   ))]
-  results <- results[, color_IC := ifelse(is.nan(IC_lower), "all_associated",
+  results <- results[, IC_color := ifelse(is.nan(IC_lower), "all_associated",
     ifelse(IC_lower <= IC_threshold, "no signal",
       "strong signal"
     )
   )]
+  results <- results[, ROR_color := factor(ROR_color, levels = c("not enough cases", "no signal", "light signal", "strong signal"), ordered = TRUE)]
+  results <- results[, IC_color := factor(IC_color, levels = c("no signal", "strong signal"), ordered = TRUE)]
 }
 
 #' Render Forest Plot
@@ -116,16 +117,16 @@ disproportionality_analisis <- function(
 #' This function generates a forest plot visualization of disproportions.
 #'
 #' @param df Data.table containing the data for rendering the forest plot.
-#' @param TTO_ROR Type of data to use for rendering: "TTO", "ROR", "ROR_disp", or "IC".
+#' @param index Type of data to use for rendering: "TTO", "ROR", "ROR_disp", or "IC".
+#' @param row Variable for the rows of the forest plot (default is "drug").
 #' @param levs_row Levels for the rows of the forest plot.
 #' @param facet_v Variable for vertical facetting (default is "event").
 #' @param facet_h Variable for horizontal facetting (default is NA).
-#' @param row Variable for the rows of the forest plot (default is "drug").
-#' @param nested Logical indicating if nested plotting is required (default is FALSE).
+#' @param nested Variable indicating if nested plotting is required (default is FALSE). If nested plotting is required the name of the variable should replace FALSE.
 #' @param text_size_legend Size of text in the legend (default is 15).
 #' @param transformation Transformation for the x-axis (default is "identity").
 #' @param nested_colors Vector of colors for plot elements.
-#' @param threshold Threshold value for analysis (default is 1).
+#' @param custom_threshold Threshold value for analysis (default is 1).
 #' @param dodge Position adjustment for dodging (default is 0.3).
 #' @param show_legend Logical indicating whether to show the legend (default is FALSE).
 #'
@@ -134,71 +135,97 @@ disproportionality_analisis <- function(
 #'
 #' @export
 
-render_forest <- function(df, TTO_ROR = "ROR", levs_row = unique(df$substance), facet_v = "event", facet_h = NA, row = "substance", nested = FALSE, text_size_legend = 15, transformation = "identity", nested_colors = NA, threshold = 1, dodge = .3, show_legend = FALSE) {
-  if (TTO_ROR == "TTO") {
-    df <- df[, median := TTO]
-    xlab <- "Time to onset (dd)"
+render_forest <- function(df,
+                          index = "IC",
+                          row = "substance",
+                          levs_row = NA,
+                          nested = FALSE,
+                          show_legend = TRUE,
+                          transformation = "identity",
+                          custom_threshold = NA,
+                          text_size_legend = 15,
+                          dodge = .3,
+                          nested_colors = NA,
+                          facet_v = NA,
+                          facet_h = NA) {
+  if (length(levs_row) == 1) {
+    levs_row <- factor(unique(df[[row]])) %>% droplevels()
   }
-  if (TTO_ROR == "ROR") {
-    df <- df[, median := ROR_median]
-    df <- df[, lower := ROR_lower]
-    df <- df[, upper := ROR_upper]
-    df <- df[, color := color_ROR]
-    df <- df[
-      , color_line := factor(color, levels = c("no signal", "light signal", "strong signal"), ordered = TRUE)
-    ]
-    levels(df$color_line) <- c("gray", "yellow", "red")
-    xlab <- "Reporting Odds Ratio"
+  if (index == "ROR") {
+    colors <- c("gray25", "gray", "yellow", "red")
+    threshold <- 1
   }
-  if (TTO_ROR == "IC") {
-    df <- df[, median := IC_median]
-    df <- df[, lower := IC_lower]
-    df <- df[, upper := IC_upper]
-    df <- df[, color := color_IC]
-    df <- df[
-      , color_line := factor(color, levels = c("no signal", "strong signal"), ordered = TRUE)
-    ]
-    levels(df$color_line) <- c("gray", "red")
-    xlab <- "Information Component"
+  if (index == "IC") {
+    colors <- c("gray", "red")
+    threshold <- 0
   }
-  ggplot(data = df, aes(y = factor(get(row), levels = levs_row))) +
+  if (!is.na(custom_threshold)) {
+    threshold <- custom_threshold
+  }
+  df$median <- df[[paste0(index, "_median")]]
+  df$lower <- df[[paste0(index, "_lower")]]
+  df$upper <- df[[paste0(index, "_upper")]]
+  df$color <- df[[paste0(index, "_color")]]
+  if (nested != FALSE) {
+    df$nested <- df[[nested]]
+    colors <- nested_colors
+    if (is.na(colors)) {
+      colors <- c(
+        "goldenrod", "steelblue", "salmon2",
+        "green4", "brown", "violet", "blue4"
+      )[1:length(unique(df[[nested]]))]
+    }
+  }
+
+  ggplot(
+    data = df, aes(
+      x = median, xmin = lower, xmax = upper,
+      y = factor(get(row), levels = levs_row)
+    ),
+    position = position_dodge(dodge), show.legend = show_legend,
+    alpha = 0.7
+  ) +
     {
-      if (nested == FALSE) geom_linerange(aes(x = median, xmin = lower, xmax = upper, color = color_line), alpha = 0.7, size = 1, show.legend = show_legend, data = df)
+      if (nested == FALSE) {
+        geom_linerange(aes(color = color), size = 1)
+      }
     } +
     {
-      if (nested != FALSE) geom_linerange(aes(x = median, xmin = lower, xmax = upper, color = nested, alpha = ifelse(lower > threshold, 1, .8)), size = 1, position = position_dodge(dodge), show.legend = show_legend, data = df)
+      if (nested == FALSE) {
+        geom_point(aes(color = color, size = (log10(D_E))))
+      }
     } +
     {
-      if (nested == FALSE) geom_point(aes(x = median, color = color_line, size = (log10(D_E))), alpha = 0.7, show.legend = show_legend, data = df)
+      if (nested != FALSE) geom_linerange(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8)), position = position_dodge(dodge), size = 1)
     } +
     {
-      if (nested != FALSE) geom_point(aes(x = median, color = nested, alpha = ifelse(lower > threshold, 1, .8), size = (log10(D_E))), position = position_dodge(dodge), show.legend = show_legend, data = df)
+      if (nested != FALSE) geom_point(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8), size = (log10(D_E))), position = position_dodge(dodge))
     } +
-    geom_vline(aes(xintercept = threshold), linetype = "dashed") +
-    geom_vline(aes(xintercept = 0)) +
-    xlab(xlab) +
-    ylab("") +
-    scale_x_continuous(trans = transformation) +
     {
       if (!is.na(facet_v)) facet_wrap(factor(get(facet_v)) ~ ., labeller = label_wrap_gen(width = 15), ncol = 4)
     } +
     {
       if (!is.na(facet_h)) facet_grid(rows = facet_h, labeller = label_wrap_gen(width = 25), scales = "free", space = "free", switch = "y")
     } +
+    geom_vline(aes(xintercept = threshold), linetype = "dashed") +
+    xlab(index) +
+    ylab("") +
+    scale_x_continuous(trans = transformation) +
     theme_bw() +
+    scale_alpha_continuous(guide = "none") +
+    guides(shape = guide_legend(override.aes = list(size = 5))) +
+    scale_size_area(guide = "none") +
+    {
+      if (nested == FALSE) labs(color = "Signal")
+    } +
+    {
+      if (nested != FALSE) labs(color = "Analysis")
+    } +
+    scale_color_manual(values = colors, drop = FALSE) +
     theme(
       strip.placement = "outside", strip.text.y.left = element_text(angle = 0, size = 7), legend.position = "bottom",
       legend.justification = "left",
       legend.title = element_blank()
     ) +
-    guides(shape = guide_legend(override.aes = list(size = 5))) +
-    scale_size_area(guide = "none") +
-    {
-      if (nested == FALSE) scale_color_manual(values = levels(df$color_line), drop = FALSE)
-    } +
-    {
-      if (nested == TRUE) scale_color_manual(values = nested_colors, drop = FALSE)
-    } +
-    scale_alpha_continuous(guide = "none") +
-    labs(color = "Analysis")
+    guides(shape = guide_legend(override.aes = list(size = 5)))
 }

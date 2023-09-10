@@ -85,15 +85,13 @@ And we visualize the information component, a measure of disproportionality, usi
 import("DRUG", "23Q1") # import FAERS drug information
 import("REAC", "23Q1") # import FAERS reaction information
 
-DPA_df <- disproportionality_analisis( # perform disproportionality analysis
+DPA_df <- disproportionality_analysis( # perform disproportionality analysis
   drug_selected,
   reac_selected
 )
 
 render_forest(DPA_df, "IC",
-  threshold = 0, # visualize forest plot
-  row = "event",
-  levs_row = reac_selected, facet_v = NA
+  row = "event"
 )
 ```
 Apart from the warning, that in this case should not bother us, we found an association between aripiprazole and all the events investigated apart from headache.
@@ -117,7 +115,7 @@ import("DEMO", "23Q1") # import demographic information
 
 deduplicated <- Demo[RB_duplicates_only_susp == FALSE]$primaryid # identify deduplicated reports
 
-DPA_df_deduplicated <- disproportionality_analisis( # disproportionality analysis with restriction
+DPA_df_deduplicated <- disproportionality_analysis( # disproportionality analysis with restriction
   drug_selected,
   reac_selected,
   restriction = deduplicated
@@ -126,13 +124,11 @@ DPA_df_deduplicated <- disproportionality_analisis( # disproportionality analysi
 df <- rbindlist(list( # storing together the results of different analyses
   DPA_df[, nested := "main"],
   DPA_df_deduplicated[, nested := "deduplicated"]
-),fill = TRUE)
+), fill = TRUE)
 
 render_forest(df, "IC", # compare the results using a forest plot
-  nested = TRUE,
-  nested_colors = c("salmon", "goldenrod"),
-  threshold = 0, show_legend = TRUE,
-  row = "event", levs_row = reac_selected, facet_v = NA
+  nested = "nested",
+  row = "event"
 )
 ```
 
@@ -159,7 +155,7 @@ bipolar_disorder <- Indi[indi_pt %in% MedDRA[ # select reports with bipolar diso
   hlgt == "manic and bipolar mood disorders and disturbances"
 ]$pt]$primaryid
 
-DPA_df_bipolar <- disproportionality_analisis( # disproportionality analysis with restriction
+DPA_df_bipolar <- disproportionality_analysis( # disproportionality analysis with restriction
   drug_selected,
   reac_selected,
   restriction = bipolar_disorder
@@ -171,10 +167,8 @@ df <- rbindlist(list( # storing together the results of different analyses
 ), fill = TRUE)
 
 render_forest(df, "IC", # compare the results using a forest plot
-  nested = TRUE,
-  nested_colors = c("salmon", "goldenrod", "steelblue"),
-  threshold = 0, show_legend = TRUE,
-  row = "event", levs_row = reac_selected, facet_v = NA
+  nested = "nested",
+  row = "event"
 )
 ```
 
@@ -191,7 +185,7 @@ The FDA warning in 2016 may have inflated the reporting distorting the results (
 warning_date <- 20160305 # define the warning date
 pre_warning <- Demo[init_fda_dt < warning_date]$primaryid # select only reports submitted before the warning
 
-preW <- disproportionality_analisis( # disproportionality analysis with restriction
+preW <- disproportionality_analysis( # disproportionality analysis with restriction
   drug_selected,
   reac_selected,
   restriction = pre_warning
@@ -203,10 +197,8 @@ df <- rbindlist(list( # storing together the results of different analyses
 ), fill = TRUE)
 
 render_forest(df, "IC", # compare the results using a forest plot
-  nested = TRUE,
-  nested_colors = c("salmon", "goldenrod", "steelblue", "limegreen"),
-  threshold = 0, show_legend = TRUE,
-  row = "event", levs_row = reac_selected, facet_v = NA
+  nested = "nested",
+  row = "event"
 )
 ```
 
@@ -239,10 +231,10 @@ reac_selected <- list( # redefined reaction for higher sensitivity
   "headache" = as.list(MedDRA[hlgt == "headaches"]$pt)
 )
 
-custom_group <- disproportionality_analisis( # perform the disproportionality analysis
+custom_group <- disproportionality_analysis( # perform the disproportionality analysis
   drug_selected,
   reac_selected,
-  meddra_level="custom"
+  meddra_level = "custom"
 )
 
 df <- rbindlist(list( # storing together the results of different analyses
@@ -251,10 +243,8 @@ df <- rbindlist(list( # storing together the results of different analyses
 ), fill = TRUE)
 
 render_forest(df, "IC", # compare the results using a forest plot
-  nested = TRUE,
-  nested_colors = c("salmon", "goldenrod", "steelblue", "limegreen", "violet"),
-  threshold = 0, show_legend = TRUE,
-  row = "event", levs_row = names(reac_selected), facet_v = NA
+  nested = "nested",
+  row = "event"
 )
 ```
 As we can see here custom groups affect mainly kleptomania. Indeed many reporters prefer to use shoplifting instead of kleptomania, and therefore the signal is now much stronger.
@@ -267,16 +257,14 @@ In conclusion, we can integrate all the restrictions and use custom groups to ha
 ##
 restriction <- intersect(intersect(deduplicated, bipolar_disorder), pre_warning) # integrate all the restrictions
 
-complete <- disproportionality_analisis( # disproportionality
+complete <- disproportionality_analysis( # disproportionality
   drug_selected,
   reac_selected,
-  meddra_level="custom",
+  meddra_level = "custom",
   restriction = restriction
 )
-render_forest(complete, "IC",
-  threshold = 0, # forest plot
-  row = "event",
-  levs_row = names(reac_selected), facet_v = NA
+render_forest(complete, "IC", # forest plot
+  row = "event"
 )
 ```
 

@@ -6,46 +6,46 @@
 \usage{
 render_forest(
   df,
-  TTO_ROR = "ROR",
-  levs_row = unique(df$substance),
-  facet_v = "event",
-  facet_h = NA,
+  index = "IC",
   row = "substance",
+  levs_row = NA,
   nested = FALSE,
-  text_size_legend = 15,
+  show_legend = TRUE,
   transformation = "identity",
-  nested_colors = NA,
-  threshold = 1,
+  custom_threshold = NA,
+  text_size_legend = 15,
   dodge = 0.3,
-  show_legend = FALSE
+  nested_colors = NA,
+  facet_v = NA,
+  facet_h = NA
 )
 }
 \arguments{
 \item{df}{Data.table containing the data for rendering the forest plot.}
 
-\item{TTO_ROR}{Type of data to use for rendering: "TTO", "ROR", "ROR_disp", or "IC".}
+\item{index}{Type of data to use for rendering: "TTO", "ROR", "ROR_disp", or "IC".}
+
+\item{row}{Variable for the rows of the forest plot (default is "drug").}
 
 \item{levs_row}{Levels for the rows of the forest plot.}
+
+\item{nested}{Variable indicating if nested plotting is required (default is FALSE). If nested plotting is required the name of the variable should replace FALSE.}
+
+\item{show_legend}{Logical indicating whether to show the legend (default is FALSE).}
+
+\item{transformation}{Transformation for the x-axis (default is "identity").}
+
+\item{custom_threshold}{Threshold value for analysis (default is 1).}
+
+\item{text_size_legend}{Size of text in the legend (default is 15).}
+
+\item{dodge}{Position adjustment for dodging (default is 0.3).}
+
+\item{nested_colors}{Vector of colors for plot elements.}
 
 \item{facet_v}{Variable for vertical facetting (default is "event").}
 
 \item{facet_h}{Variable for horizontal facetting (default is NA).}
-
-\item{row}{Variable for the rows of the forest plot (default is "drug").}
-
-\item{nested}{Logical indicating if nested plotting is required (default is FALSE).}
-
-\item{text_size_legend}{Size of text in the legend (default is 15).}
-
-\item{transformation}{Transformation for the x-axis (default is "identity").}
-
-\item{nested_colors}{Vector of colors for plot elements.}
-
-\item{threshold}{Threshold value for analysis (default is 1).}
-
-\item{dodge}{Position adjustment for dodging (default is 0.3).}
-
-\item{show_legend}{Logical indicating whether to show the legend (default is FALSE).}
 }
 \value{
 A ggplot object representing the forest plot visualization.

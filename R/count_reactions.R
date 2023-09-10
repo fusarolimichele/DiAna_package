@@ -9,6 +9,9 @@
 #'
 #' @return A data.table containing counts and percentages of reactions
 #'         at the specified MedDRA level and in descending order.
+#'
+#' @import tidyverse
+#'
 #' @export
 #'
 #' @examples
