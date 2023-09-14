@@ -30,7 +30,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt") {
   if (entity == "reaction") {
     df <- Reac
   } else if (entity == "indication") {
-    df <- Indi[, .(primaryid, pt = indi_pt)][pt != "product used for unknown indication"]
+    df <- Indi[, .(primaryid, pt = indi_pt)][! pt %in% c("product used for unknown indication","therapeutic procedures nec","therapeutic procedures and supportive care nec")]
   } else if (entity == "substance") {
     df <- Drug
   }
