@@ -23,7 +23,8 @@ BugReports: https://github.com/fusarolimichele/DiAna_package/issues
 Depends: 
     data.table,
     questionr,
-    tidyverse
+    tidyverse,
+    writexl
 Imports: 
     here
 Suggests: 

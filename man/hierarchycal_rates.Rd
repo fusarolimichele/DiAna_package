@@ -2,26 +2,40 @@
 % Please edit documentation in R/count_reactions.R
 \name{hierarchycal_rates}
 \alias{hierarchycal_rates}
-\title{Generate Hierarchy of Reactions}
+\title{Generate Hierarchy of events or substances}
 \usage{
-hierarchycal_rates(pids_cases, reactions_path)
+hierarchycal_rates(
+  pids_cases,
+  entity = "reaction",
+  file_name = "reporting_rates.xlsx"
+)
 }
 \arguments{
 \item{pids_cases}{Vector of primary IDs identifying the sample of interest.}
 
-\item{reactions_path}{Path to save the CSV file containing the hierarchy.}
+\item{entity}{Entity investigated. It can be one of the following:
+\itemize{
+\item \emph{reaction};
+\item \emph{indication};
+\item \emph{substance}.
+}}
+
+\item{file_name}{Path to save the XLSX file containing the hierarchy.}
 }
 \value{
-None. The function generates and writes the hierarchy to the csv.
-SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
+None. The function generates and writes the hierarchy to the xlsx.
+For indications and reactions, SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
+For substances, the ATC hierarchy is followed.
 }
 \description{
-This function generates a hierarchy of reactions
-based on different MedDRA levels
-and writes the result to a CSV file.
+This function generates a hierarchy of reporting rates
+for a specified entity and based on different MedDRA or ATC levels
+and writes the result to a xlsx file.
 }
 \examples{
 \dontrun{
-hierarchycal_rates(pids_cases, "reactions_list.csv")
+hierarchycal_rates(pids, "reaction", "reactions_rates.xlsx")
+hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
+hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
 }
 }

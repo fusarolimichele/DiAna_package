@@ -125,9 +125,11 @@ library(DiAna) # access DiAna
 #> ✖ lubridate::yday()    masks data.table::yday()
 #> ✖ lubridate::year()    masks data.table::year()
 #> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+#> Loading required package: writexl
+#> 
 #> Welcome to DiAna package. A tool for standardized, flexible, and transparent disproportionality analysis on the FAERS.
 #> 
-#> We have invested a lot of time and effort in creating DiAna, please cite it when using it for data analysis. To cite package ‘DiAna’ in publications use:
+#> To cite package ‘DiAna’ in publications use:
 #> 
 #>   Fusaroli M, Giunchi V (2023). _DiAna: Advanced
 #>   Disproportionality Analysis in the FAERS for Drug

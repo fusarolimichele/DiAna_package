@@ -2,26 +2,35 @@
 % Please edit documentation in R/count_reactions.R
 \name{reporting_rates}
 \alias{reporting_rates}
-\title{Count Reactions by MedDRA Level}
+\title{Reporting rates of events or substances}
 \usage{
-reporting_rates(pids_cases, meddra_level = "pt")
+reporting_rates(pids_cases, entity = "reaction", level = "pt")
 }
 \arguments{
 \item{pids_cases}{Vector of primary IDs to consider for counting reactions.}
 
-\item{meddra_level}{The desired MedDRA level for counting (default is "pt").}
+\item{entity}{Entity investigated. It can be one of the following:
+\itemize{
+\item \emph{reaction};
+\item \emph{indication};
+\item \emph{substance}.
+}}
+
+\item{level}{The desired MedDRA or ATC level for counting (default is "pt").}
 }
 \value{
-A data.table containing counts and percentages of reactions
-at the specified MedDRA level and in descending order.
+A data.table containing counts and percentages of the investigated entity
+at the specified level and in descending order.
 }
 \description{
-counts the occurrences of reactions based on MedDRA levels
+counts the occurrences of reactions/indications/substance
 for a given set of primary IDs.
 Calculates \% as the proportion of individuals recording the event.
 }
 \examples{
 \dontrun{
-reporting_rates(pids_cases, "pt")
+reporting_rates(pids, "reaction", "hlt")
+reporting_rates(pids, "indication", "pt")
+reporting_rates(pids, entity = "substance", level = "Class3")
 }
 }
