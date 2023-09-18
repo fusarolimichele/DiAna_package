@@ -51,6 +51,10 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
         destfile = paste0(here(), "/external_sources/DiAna_dictionary.csv"),
         mode = "wb"
       )
+      download.file("https://osf.io/download/a68ue/",
+                    destfile = paste0(here(), "/external_sources/Countries.csv"),
+                    mode = "wb"
+      )
     } else {
       cat("The quarter required is not available on the DiAna OSF")
     }
