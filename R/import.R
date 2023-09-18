@@ -105,7 +105,7 @@ import_MedDRA <- function() {
 #' }
 #'
 #' @export
-import_ATC <- function() {
+import_ATC <- function(primary = T) {
   ATC <- setDT(
     read_delim(paste0(here(), "/external_sources/ATC_DiAna.csv"),
       ";",
@@ -115,6 +115,9 @@ import_ATC <- function() {
     substance = Substance, code, primary_code, Lvl4, Class4, Lvl3, Class3,
     Lvl2, Class2, Lvl1, Class1
   )] %>% distinct()
+  if(primary == T){
+    ATC<- ATC[code == primary_code]
+  }
   assign("ATC", ATC, envir = .GlobalEnv)
   ATC
 }
