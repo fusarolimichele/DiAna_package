@@ -4,7 +4,7 @@
 \alias{import_ATC}
 \title{Import ATC classification}
 \usage{
-import_ATC()
+import_ATC(primary = T)
 }
 \value{
 A data frame containing the dataset for ATC linkage.

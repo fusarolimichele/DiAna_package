@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 ```
  
 # DiAna
- 
+  
 <!-- badges: start -->
 <!-- badges: end -->
 

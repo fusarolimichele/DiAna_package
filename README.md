@@ -98,6 +98,7 @@ of the major indications for using aripiprazole).
 ``` r
 library(DiAna) # access DiAna
 #> Loading required package: data.table
+#> Loading required package: gtsummary
 #> Loading required package: questionr
 #> Loading required package: tidyverse
 #> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──

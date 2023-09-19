@@ -115,8 +115,8 @@ import_ATC <- function(primary = T) {
     substance = Substance, code, primary_code, Lvl4, Class4, Lvl3, Class3,
     Lvl2, Class2, Lvl1, Class1
   )] %>% distinct()
-  if(primary == T){
-    ATC<- ATC[code == primary_code]
+  if (primary == T) {
+    ATC <- ATC[code == primary_code]
   }
   assign("ATC", ATC, envir = .GlobalEnv)
   ATC
