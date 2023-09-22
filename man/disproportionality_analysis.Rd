@@ -10,6 +10,7 @@ disproportionality_analysis(
   temp_d = Drug,
   temp_r = Reac,
   meddra_level = "pt",
+  drug_level = "substance",
   restriction = "none",
   ROR_minimum_cases = 3,
   ROR_threshold = 1,
@@ -26,6 +27,8 @@ disproportionality_analysis(
 \item{temp_r}{Data table containing reaction data (default is Reac).}
 
 \item{meddra_level}{The desired MedDRA level for analysis (default is "pt").}
+
+\item{drug_level}{The desired drug level for analysis (default is "substance"), can be "custom" for list of drugs.}
 
 \item{restriction}{Primary IDs to consider for analysis (default is "none",
 which includes the entire population).}

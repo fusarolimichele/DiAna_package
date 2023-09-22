@@ -32,7 +32,7 @@ descriptive(
 
 \item{method}{The method for Chi-square test analysis, either "independence_test" or "goodness_of_fit". Default is "independence_test". It applies only for comparisons between cases and non-cases.}
 
-\item{quarter}{The quarter for data import. Default is "23Q1".}
+\item{quarter}{The quarter for data import. Default is FAERS_version, which we recommend to provide at the beginning of the script.}
 }
 \value{
 The function generates descriptive statistics and saves them to an Excel file. It also creates CSV files for substances, indications, and reactions if specified.

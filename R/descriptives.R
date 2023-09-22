@@ -9,7 +9,7 @@
 #' @param vars A character vector of variable names to include in the analysis.
 #' @param list_pids A list of vectors with primary IDs for custom groups whose distribution should be described. Default is an empty list.
 #' @param method The method for Chi-square test analysis, either "independence_test" or "goodness_of_fit". Default is "independence_test". It applies only for comparisons between cases and non-cases.
-#' @param quarter The quarter for data import. Default is "23Q1".
+#' @param quarter The quarter for data import. Default is FAERS_version, which we recommend to provide at the beginning of the script.
 #'
 #' @return The function generates descriptive statistics and saves them to an Excel file. It also creates CSV files for substances, indications, and reactions if specified.
 #'
