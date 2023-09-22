@@ -4,7 +4,12 @@
 \alias{reporting_rates}
 \title{Reporting rates of events or substances}
 \usage{
-reporting_rates(pids_cases, entity = "reaction", level = "pt")
+reporting_rates(
+  pids_cases,
+  entity = "reaction",
+  level = "pt",
+  quarter = FAERS_version
+)
 }
 \arguments{
 \item{pids_cases}{Vector of primary IDs to consider for counting reactions.}
@@ -17,6 +22,8 @@ reporting_rates(pids_cases, entity = "reaction", level = "pt")
 }}
 
 \item{level}{The desired MedDRA or ATC level for counting (default is "pt").}
+
+\item{quarter}{set on FAERS_version, which can be provided at the beginning of the script.}
 }
 \value{
 A data.table containing counts and percentages of the investigated entity

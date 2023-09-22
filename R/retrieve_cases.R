@@ -29,7 +29,7 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
   path_MedDRA <- paste0(here(), "/external_sources/meddra_primary.csv")
 
   ## Reactions
-  t_reac <- import("REAC", pids = pids, quarter = quarter)
+  t_reac <- import("REAC", pids = pids, quarter = quarter, save_in_environment = FALSE)
   if (file.exists(path_MedDRA)) {
     import_MedDRA()
     t_reac <- MedDRA[t_reac, on = "pt"][order(soc)]
@@ -58,7 +58,7 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
   by = c("primaryid")
   ]
   ## Drug
-  t_drug <- import("DRUG", pids = pids, quarter = quarter)
+  t_drug <- import("DRUG", pids = pids, quarter = quarter, save_in_environment = FALSE)
   import_ATC()[code == primary_code]
   t_drug <- ATC[t_drug, on = "substance"][order(-substance)][order(-Class1)]
   t_drug1 <- t_drug[, .(substance = paste0("(", paste0(unique(substance),
@@ -71,13 +71,13 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
   t <- t_drug1[t_reac, on = "primaryid"]
 
   ## Demo
-  t <- import("DEMO", pids = pids, quarter = quarter)[
+  t <- import("DEMO", pids = pids, quarter = quarter, save_in_environment = FALSE)[
     , age_in_years := round(age_in_days / 365)
   ][
     t,
     on = "primaryid"
   ]
-  t <- import("DEMO_SUPP", pids = pids, quarter = quarter)[order(-rpsr_cod)][
+  t <- import("DEMO_SUPP", pids = pids, quarter = quarter, save_in_environment = FALSE)[order(-rpsr_cod)][
     , .(rpsr_cod = paste0(rpsr_cod, collapse = "; ")),
     by = "primaryid"
   ][
@@ -85,7 +85,7 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
     on = "primaryid"
   ]
   ## Outc
-  t <- import("OUTC", pids = pids, quarter = quarter)[order(-outc_cod)][
+  t <- import("OUTC", pids = pids, quarter = quarter, save_in_environment = FALSE)[order(-outc_cod)][
     , .(outc_cod = paste0(outc_cod, collapse = "; ")),
     by = "primaryid"
   ][
@@ -104,10 +104,10 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
     t_drug2,
     by = c("primaryid", "drug_seq"), all = TRUE
   )
-  t_drug2 <- import("THER", pids = pids, quarter = quarter)[t_drug2, on = c("primaryid", "drug_seq")]
-  t_drug2 <- import("DOSES", pids = pids, quarter = quarter)[t_drug2, on = c("primaryid", "drug_seq")]
-  t_drug2 <- import("DRUG_SUPP", pids = pids, quarter = quarter)[t_drug2, on = c("primaryid", "drug_seq")]
-  t_drug2 <- import("INDI", pids = pids, quarter = quarter)[indi_pt != "product used for unknown indication"][
+  t_drug2 <- import("THER", pids = pids, quarter = quarter, save_in_environment = FALSE)[t_drug2, on = c("primaryid", "drug_seq")]
+  t_drug2 <- import("DOSES", pids = pids, quarter = quarter, save_in_environment = FALSE)[t_drug2, on = c("primaryid", "drug_seq")]
+  t_drug2 <- import("DRUG_SUPP", pids = pids, quarter = quarter, save_in_environment = FALSE)[t_drug2, on = c("primaryid", "drug_seq")]
+  t_drug2 <- import("INDI", pids = pids, quarter = quarter, save_in_environment = FALSE)[indi_pt != "product used for unknown indication"][
     t_drug2,
     on = c("primaryid", "drug_seq")
   ]

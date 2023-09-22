@@ -4,7 +4,7 @@
 \alias{import}
 \title{import}
 \usage{
-import(df_name, quarter, pids = NA)
+import(df_name, quarter = FAERS_version, pids = NA, save_in_environment = TRUE)
 }
 \arguments{
 \item{df_name}{Name of the data file (without the ".rds" extension).

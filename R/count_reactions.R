@@ -13,6 +13,8 @@
 #'                }
 #' @param level The desired MedDRA or ATC level for counting (default is "pt").
 #'
+#' @param quarter set on FAERS_version, which can be provided at the beginning of the script.
+#'
 #' @return A data.table containing counts and percentages of the investigated entity
 #'         at the specified level and in descending order.
 #'
@@ -26,15 +28,20 @@
 #' reporting_rates(pids, "indication", "pt")
 #' reporting_rates(pids, entity = "substance", level = "Class3")
 #' }
-reporting_rates <- function(pids_cases, entity = "reaction", level = "pt") {
+reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", quarter = FAERS_version) {
   if (entity == "reaction") {
-    df <- Reac
+    temp <- import("REAC", quarter = quarter, pids = pids_cases, save_in_environment = FALSE)
   } else if (entity == "indication") {
-    df <- Indi[, .(primaryid, pt = indi_pt)][!pt %in% c("product used for unknown indication", "therapeutic procedures nec", "therapeutic procedures and supportive care nec")]
+    temp <- import("INDI", quarter = quarter, pids = pids_cases, save_in_environment = FALSE)[
+      , .(primaryid, pt = indi_pt)
+    ][!pt %in% c(
+      "product used for unknown indication",
+      "therapeutic procedures nec",
+      "therapeutic procedures and supportive care nec"
+    )]
   } else if (entity == "substance") {
-    df <- Drug
+    temp <- distinct(import("DRUG", quarter = quarter, pids = pids_cases, save_in_environment = FALSE)[, .(primaryid, substance)])
   }
-  temp <- df[primaryid %in% pids_cases]
   if (level %in% c("hlt", "hlgt", "soc")) {
     import_MedDRA()
     temp <- distinct(distinct(MedDRA[, c("pt", level), with = FALSE])[
@@ -58,7 +65,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt") {
       with = FALSE
     ])
   }
-  temp <- temp[, .N, by = get(level)][order(-N)][, perc := N / length(unique(df$primaryid))]
+  temp <- temp[, .N, by = get(level)][order(-N)][, perc := N / length(unique(temp$primaryid))]
   colnames(temp) <- c(level, "N", "perc")
   temp <- temp[, label := paste0(get(level), " (", round(perc * 100, 2), "%) [", N, "]")]
   temp <- temp[, .(get(level), label, N)]
@@ -100,7 +107,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt") {
 #' }
 hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = "reporting_rates.xlsx") {
   if (entity %in% c("reaction", "indication")) {
-    pts <- reporting_rates(pids_cases, entity = entity, "pt")
+    pts <- reporting_rates(pids_cases, entity = entity, "pt", )
     hlts <- reporting_rates(pids_cases, entity = entity, "hlt")
     hlgts <- reporting_rates(pids_cases, entity = entity, "hlgt")
     socs <- reporting_rates(pids_cases, entity = entity, "soc")

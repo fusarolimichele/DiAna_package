@@ -38,7 +38,7 @@
 #' @export
 #'
 
-import <- function(df_name, quarter, pids = NA) {
+import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environment = TRUE) {
   path <- paste0(here(), "/data/", quarter, "/", df_name, ".rds")
   if (!file.exists(path)) {
     stop("The dataset specified does not exist")
@@ -47,7 +47,9 @@ import <- function(df_name, quarter, pids = NA) {
     if (sum(!is.na(pids)) > 0) {
       t <- t[primaryid %in% pids]
     }
-    assign(str_to_title(df_name), t, envir = .GlobalEnv)
+    if (save_in_environment) {
+      assign(str_to_title(df_name), t, envir = .GlobalEnv)
+    }
   }
   t
 }
@@ -81,12 +83,12 @@ import_MedDRA <- function() {
          Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna
          to make it ready for download.")
   } else {
-    MedDRA <- setDT(
+    suppressMessages(MedDRA <- setDT(
       read_delim(path,
         ";",
-        escape_double = FALSE, trim_ws = TRUE
+        escape_double = FALSE, trim_ws = TRUE, show_col_types = FALSE
       )
-    )[, .(def, soc, hlgt, hlt, pt)] %>% distinct()
+    )[, .(def, soc, hlgt, hlt, pt)] %>% distinct())
     assign("MedDRA", MedDRA, envir = .GlobalEnv)
   }
   MedDRA
@@ -106,15 +108,14 @@ import_MedDRA <- function() {
 #'
 #' @export
 import_ATC <- function(primary = T) {
-  ATC <- setDT(
+  suppressMessages(ATC <- setDT(
     read_delim(paste0(here(), "/external_sources/ATC_DiAna.csv"),
-      ";",
-      escape_double = FALSE, trim_ws = TRUE
+      show_col_types = FALSE, ";", escape_double = FALSE, trim_ws = TRUE
     )
   )[, .(
     substance = Substance, code, primary_code, Lvl4, Class4, Lvl3, Class3,
     Lvl2, Class2, Lvl1, Class1
-  )] %>% distinct()
+  )] %>% distinct())
   if (primary == T) {
     ATC <- ATC[code == primary_code]
   }
