@@ -91,8 +91,9 @@ We perform a disproportionality analysis using the disproportionality_analysis()
 And we visualize the information component, a measure of disproportionality, using a forest plot.
 
 ```{r}
-import("DRUG", "23Q1") # import FAERS drug information
-import("REAC", "23Q1") # import FAERS reaction information
+FAERS_version <- "23Q1"
+import("DRUG") # import FAERS drug information
+import("REAC") # import FAERS reaction information
 
 DPA_df <- disproportionality_analysis( # perform disproportionality analysis
   drug_selected,
@@ -121,7 +122,7 @@ Then we perform the disproportionality analysis restricting to deduplicated repo
 
 
 ```{r}
-import("DEMO", "23Q1") # import demographic information
+import("DEMO") # import demographic information
 
 deduplicated <- Demo[RB_duplicates_only_susp == FALSE]$primaryid # identify deduplicated reports
 
@@ -158,7 +159,7 @@ Thus, we can select only reports with, among indications, terms included in the 
 
 ```{r}
 ##
-import("INDI", "23Q1") # import indications information
+import("INDI") # import indications information
 import_MedDRA() # import MedDRA hierarchy
 
 bipolar_disorder <- Indi[indi_pt %in% MedDRA[ # select reports with bipolar disorder among indications

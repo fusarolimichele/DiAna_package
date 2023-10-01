@@ -8,7 +8,8 @@ reporting_rates(
   pids_cases,
   entity = "reaction",
   level = "pt",
-  quarter = FAERS_version
+  drug_role = c("PS", "SS", "I", "C"),
+  drug_indi = NA
 )
 }
 \arguments{
@@ -23,7 +24,9 @@ reporting_rates(
 
 \item{level}{The desired MedDRA or ATC level for counting (default is "pt").}
 
-\item{quarter}{set on FAERS_version, which can be provided at the beginning of the script.}
+\item{drug_role}{is only used for substances. By default both suspect and concomitant drugs are included.}
+
+\item{drug_indi}{is only used for indications. By default the indications of all the drugs of the selected primaryids are considered, but you can specify a vector of drugs.}
 }
 \value{
 A data.table containing counts and percentages of the investigated entity

@@ -13,7 +13,9 @@
 #'                }
 #' @param level The desired MedDRA or ATC level for counting (default is "pt").
 #'
-#' @param quarter set on FAERS_version, which can be provided at the beginning of the script.
+#' @param drug_role is only used for substances. By default both suspect and concomitant drugs are included.
+#'
+#' @param drug_indi is only used for indications. By default the indications of all the drugs of the selected primaryids are considered, but you can specify a vector of drugs.
 #'
 #' @return A data.table containing counts and percentages of the investigated entity
 #'         at the specified level and in descending order.
@@ -28,19 +30,26 @@
 #' reporting_rates(pids, "indication", "pt")
 #' reporting_rates(pids, entity = "substance", level = "Class3")
 #' }
-reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", quarter = FAERS_version) {
+reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_role = c("PS", "SS", "I", "C"), drug_indi = NA) {
   if (entity == "reaction") {
-    temp <- import("REAC", quarter = quarter, pids = pids_cases, save_in_environment = FALSE)
+    temp <- import("REAC", pids = pids_cases, save_in_environment = FALSE)
   } else if (entity == "indication") {
-    temp <- import("INDI", quarter = quarter, pids = pids_cases, save_in_environment = FALSE)[
-      , .(primaryid, pt = indi_pt)
-    ][!pt %in% c(
+    temp <- import("INDI", pids = pids_cases, save_in_environment = FALSE)
+    if (sum(!is.na(drug_indi)) > 0) {
+      temp <- import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
+        temp,
+        on = c("primaryid", "drug_seq")
+      ][substance %in% drug_indi]
+    }
+    temp <- temp[, .(primaryid, pt = indi_pt)][!pt %in% c(
       "product used for unknown indication",
       "therapeutic procedures nec",
       "therapeutic procedures and supportive care nec"
     )]
   } else if (entity == "substance") {
-    temp <- distinct(import("DRUG", quarter = quarter, pids = pids_cases, save_in_environment = FALSE)[, .(primaryid, substance)])
+    temp <- distinct(import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
+      role_cod %in% drug_role
+    ][, .(primaryid, substance)])
   }
   if (level %in% c("hlt", "hlgt", "soc")) {
     import_MedDRA()
@@ -52,18 +61,19 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", quart
       with = FALSE
     ])
   }
-  if (entity == "substance" & level == "pt") {
-    level <- "substance"
-  }
-  if (entity == "substance" & level %in% c("Class1", "Class2", "Class3", "Class4")) {
-    import_ATC()[code == primary_code]
-    temp <- distinct(distinct(ATC[, c("substance", level), with = FALSE])[
-      temp,
-      on = "substance"
-    ][
-      , c("primaryid", level),
-      with = FALSE
-    ])
+  if (entity == "substance") {
+    if (level == "pt") {
+      level <- "substance"
+    } else if (level %in% c("Class1", "Class2", "Class3", "Class4")) {
+      import_ATC()[code == primary_code]
+      temp <- distinct(distinct(ATC[, c("substance", level), with = FALSE])[
+        temp[role_cod %in% drug_role],
+        on = "substance"
+      ][
+        , c("primaryid", level),
+        with = FALSE
+      ])
+    }
   }
   temp <- temp[, .N, by = get(level)][order(-N)][, perc := N / length(unique(temp$primaryid))]
   colnames(temp) <- c(level, "N", "perc")
@@ -105,7 +115,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", quart
 #' hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
 #' hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
 #' }
-hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = "reporting_rates.xlsx") {
+hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx")) {
   if (entity %in% c("reaction", "indication")) {
     pts <- reporting_rates(pids_cases, entity = entity, "pt", )
     hlts <- reporting_rates(pids_cases, entity = entity, "hlt")

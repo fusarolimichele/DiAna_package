@@ -105,7 +105,7 @@ library(DiAna) # access DiAna
 #> ✔ dplyr     1.1.3     ✔ readr     2.1.4
 #> ✔ forcats   1.0.0     ✔ stringr   1.5.0
 #> ✔ ggplot2   3.4.3     ✔ tibble    3.2.1
-#> ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+#> ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
 #> ✔ purrr     1.0.2     
 #> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 #> ✖ dplyr::between()     masks data.table::between()
@@ -166,7 +166,8 @@ And we visualize the information component, a measure of
 disproportionality, using a forest plot.
 
 ``` r
-import("DRUG", "23Q1") # import FAERS drug information
+FAERS_version <- "23Q1"
+import("DRUG") # import FAERS drug information
 #>           primaryid   drug_seq       substance role_cod
 #>        1:   4261825 1004486228        atropine        C
 #>        2:   4261825 1004486228   diphenoxylate        C
@@ -179,7 +180,7 @@ import("DRUG", "23Q1") # import FAERS drug information
 #> 64409057:  99974963          8            <NA>        I
 #> 64409058:  99974963          9     paracetamol        I
 #> 64409059:  99974963         10    zolmitriptan       SS
-import("REAC", "23Q1") # import FAERS reaction information
+import("REAC") # import FAERS reaction information
 #>           primaryid                   pt drug_rec_act
 #>        1:   4204616       abdominal pain         <NA>
 #>        2:   4204616 heart rate increased         <NA>
@@ -236,7 +237,7 @@ results of the previous analysis to allow for visual comparison using a
 forest plot.
 
 ``` r
-import("DEMO", "23Q1") # import demographic information
+import("DEMO") # import demographic information
 #>           primaryid  sex age_in_days wt_in_kgs             occr_country
 #>        1:  45217461    M        9855        NA                     <NA>
 #>        2:  57910401 <NA>          NA        NA                     <NA>
@@ -339,7 +340,7 @@ restriction, and compare the results using the forest plot.
 
 ``` r
 ##
-import("INDI", "23Q1") # import indications information
+import("INDI") # import indications information
 #>           primaryid   drug_seq                             indi_pt
 #>        1:   4204616 1004278786                    abortion induced
 #>        2:   4223542 1004334703                     crohn's disease
@@ -353,14 +354,6 @@ import("INDI", "23Q1") # import indications information
 #> 38150729:  99974963          9 product used for unknown indication
 #> 38150730:  99974963         10                            migraine
 import_MedDRA() # import MedDRA hierarchy
-#> New names:
-#> Rows: 25412 Columns: 6
-#> ── Column specification
-#> ──────────────────────────────────────────────────────── Delimiter: ";" chr
-#> (5): def, soc, hlgt, hlt, pt dbl (1): ...1
-#> ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-#> Specify the column types or set `show_col_types = FALSE` to quiet this message.
-#> • `` -> `...1`
 #>          def                                            soc
 #>     1:  cong     congenital, familial and genetic disorders
 #>     2:   inv                                 investigations
