@@ -11,7 +11,7 @@
 #' @param method The method for Chi-square test analysis, either "independence_test" or "goodness_of_fit". Default is "independence_test". It applies only for comparisons between cases and non-cases.
 #' @param quarter The quarter for data import. Default is FAERS_version, which we recommend to provide at the beginning of the script.
 #'
-#' @return The function generates descriptive statistics and saves them to an Excel file. It also creates CSV files for substances, indications, and reactions if specified.
+#' @return The function generates descriptive statistics and saves them to an Excel file.
 #'
 #' @examples
 #' \dontrun{
@@ -133,14 +133,6 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
     gt_table <- rbind(c("N", tempN_cases, ""), gt_table)
     # save it to the excel
     writexl::write_xlsx(gt_table, file_name)
-    hierarchycal_rates(pids_cases, entity = "substance", "substances.xlsx")
-    if (exists("MedDRA")) {
-      hierarchycal_rates(pids_cases, entity = "reaction", "reactions.xlsx")
-      hierarchycal_rates(pids_cases, entity = "indication", "indications.xlsx")
-    } else {
-      write_xlsx(reporting_rates(pids_cases, "reaction"), "reactions.xlsx")
-      write_xlsx(reporting_rates(pids_cases, "indication"), "indications.xlsx")
-    }
   } else {
     # descriptives cases and non-cases
     vars <- c(vars, "Group", names(list_pids))

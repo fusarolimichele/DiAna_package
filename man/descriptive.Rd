@@ -35,7 +35,7 @@ descriptive(
 \item{quarter}{The quarter for data import. Default is FAERS_version, which we recommend to provide at the beginning of the script.}
 }
 \value{
-The function generates descriptive statistics and saves them to an Excel file. It also creates CSV files for substances, indications, and reactions if specified.
+The function generates descriptive statistics and saves them to an Excel file.
 }
 \description{
 This function generates descriptive statistics for a sample of data, including cases and non-cases, and saves the results to an Excel file.
