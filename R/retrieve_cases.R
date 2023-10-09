@@ -6,7 +6,7 @@
 #'
 #' @param pids Primaryids of interest.
 #' @param file_name The name of the output CSV file (default is "individual cases").
-#' @param quarter The quarter for data retrieval (default is quarter).
+#' @param quarter The quarter for data retrieval (default is FAERS_version).
 #'
 #' @return Two csv files with individual cases information:
 #'         one general with a row per ICSR,
@@ -18,7 +18,7 @@
 #' }
 #'
 #' @export
-retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
+retrieve <- function(pids, file_name = "individual_cases", quarter = FAERS_version) {
   ## this function is intended to retrieve all the useful information inherent
   ## to a specific group of primaryids, to allow for in-deep case-by case
   ## evaluation and clinical reasoning.
@@ -26,7 +26,7 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
   ## Args: pids= primaryids of interest
   ##      file_name
 
-  path_MedDRA <- paste0(here(), "/external_sources/meddra_primary.csv")
+  path_MedDRA <- paste0(here::here(), "/external_sources/meddra_primary.csv")
 
   ## Reactions
   t_reac <- import("REAC", pids = pids, quarter = quarter, save_in_environment = FALSE)

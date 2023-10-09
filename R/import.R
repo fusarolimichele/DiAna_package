@@ -14,7 +14,6 @@
 #'                \item \emph{INDI} =  Reasons for use;
 #'                \item \emph{OUTC} =  Outcomes;
 #'                \item \emph{THER} =  Drug regimen information;
-#'                \item \emph{DRUG_ATC} =  Suspect and  concomitant drugs (ATC);
 #'                \item \emph{DOSES} =  Dosage information;
 #'                \item \emph{DRUG_SUPP} =  Dechallenge, Rechallenge, route, form;
 #'                \item \emph{DRUG_NAME} =  Suspect and concomitant drugs (raw terms);

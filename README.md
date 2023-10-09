@@ -204,7 +204,7 @@ render_forest(DPA_df, "IC",
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 Apart from the warning, that in this case should not bother us, we found
 an association between aripiprazole and all the events investigated
@@ -306,7 +306,7 @@ render_forest(df, "IC", # compare the results using a forest plot
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
 In these cases, in fact, we don’t see much a difference comparing the
 analysis on the entire FAERS with the analysis on deduplicated data.
@@ -424,7 +424,7 @@ render_forest(df, "IC", # compare the results using a forest plot
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
 Conditioning on the indication, we see that the association with bipolar
 disorder disappears (as it should be). Also the association with impulse
@@ -465,7 +465,7 @@ render_forest(df, "IC", # compare the results using a forest plot
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
 Here you see in green the results of the analysis restricting to the
 pre-warning. You can see that this analysis does not affect bipolar
@@ -520,7 +520,7 @@ render_forest(df, "IC", # compare the results using a forest plot
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" /> As
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" /> As
 we can see here custom groups affect mainly kleptomania. Indeed many
 reporters prefer to use shoplifting instead of kleptomania, and
 therefore the signal is now much stronger.
@@ -545,7 +545,7 @@ render_forest(complete, "IC", # forest plot
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
 Therefore, you can see that even before the warning and taking into
 account all the considered biases, the FDA had enough information to

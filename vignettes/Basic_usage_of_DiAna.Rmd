@@ -1,0 +1,316 @@
+---
+title: "Basic_usage_of_DiAna"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Basic_usage_of_DiAna}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# DiAna: Disproportionality Analysis for Pharmacovigilance
+
+## Introduction
+
+Welcome to DiAna, your go-to R package for performing disproportionality
+analysis on the FDA Adverse Event Reporting System (FAERS). DiAna
+simplifies the process of importing cleaned FAERS data, retrieving cases
+of interest, conducting descriptive analysis, and performing
+disproportionality analysis. Whether you're a novice or an expert in
+pharmacovigilance, DiAna is designed to make your analyses easy and
+efficient.
+
+## Prerequisites: Installing R and R Studio
+
+Before you can start using DiAna, you need to have R and R Studio
+installed on your system. If you haven't installed them yet, follow
+these simple steps:
+
+1.  Installing R Visit the official R project website
+    (<https://cran.r-project.org>) and download the appropriate version
+    of R for your operating system (Windows, macOS, or Linux). Run the
+    installer and follow the instructions to complete the installation.
+    R provides a powerful and flexible environment for statistical
+    computing and graphics, forming the foundation for your data
+    analysis with DiAna.
+
+2.  Installing R Studio R Studio is an integrated development
+    environment (IDE) for R that makes your R programming easier and
+    more efficient. Once R is installed, go to the R Studio website
+    (<https://posit.co/download/rstudio-desktop/>) and download the free
+    version of R Studio Desktop. Install R Studio by following the
+    installation instructions for your operating system.
+
+With R and R Studio installed, you have a comprehensive and
+user-friendly environment ready for conducting pharmacovigilance
+analyses using DiAna.
+
+## Setting Up Your DiAna Project
+
+For an organized and efficient workflow, we recommend creating a
+dedicated project for your DiAna analyses. Follow these steps to set up
+your DiAna project in R Studio:
+
+1.  Open R Studio: Start by opening R Studio on your computer. If you've
+    just installed R Studio, you can find it in your applications or
+    programs menu.
+
+2.  Create a New Project: In R Studio, click on File in the upper left
+    corner, then select New Project. Choose New Directory and then New
+    Project. Name your project (e.g., "DiAna") and specify a location on
+    your Desktop or any preferred directory.
+
+3.  Install the DiAna package: Begin by installing the DiAna package
+    from [GitHub](https://github.com/) writing and running the following
+    lines in the console:
+
+```{r install_DiAna, eval=FALSE}
+install.packages("devtools")
+devtools::install_github("fusarolimichele/DiAna_package")
+```
+
+It may be useful to run this command from time to time to download the
+latest update to the package (e.g., bugs solved, new or improved
+functions)
+
+4.  Setup the DiAna project: The first time we use DiAna, we have to set
+    up the folder where the data will be stored together with the
+    results of the analyses. This command will require a good internet
+    connection. The better your internet connection, the faster the
+    download. It usually takes between a few minutes and 20 minutes. On
+    the console, we run the two rows below (note that rows preceded by a
+    \# are comments and not commands):
+
+```{r setup_DiAna, eval=FALSE}
+library(DiAna)
+setup_DiAna(quarter = "23Q1")
+# input yes when asked to download the FAERS
+```
+
+With library DiAna we have imported the DiAna package (i.e., the toolbox
+with all the functions that we will use in our analyses). With
+setup_DiAna(quarter="23Q1") we are automaticatilly setting up the
+project: it will create a folder to store cleaned FAERS data, that will
+be downloaded from an OSF repository (in particular we are downloading
+the FAERS updated to the 23Q1 quarter). The entire cleaning process is
+made transparent on the github
+(<https://github.com/fusarolimichele/DiAna>). It will also create a
+folder for external sources and a folder to store projects. In the
+external sources, it will also download the DiAna dictionary used to
+translate free text drug names into active ingredients, a linkage to the
+ATC code, and other useful data sources.
+
+![](images/DiAna%20folder.png)
+
+As you can see some external sources are not available for download
+because they require subscription (e.g., MedDRA).
+
+## Getting Started
+
+Now that you have R and R Studio installed, you have installed the DiAna
+package, and you have set up your project, you are all set to begin your
+journey with DiAna.
+
+### Starting a subproject
+
+With DiAna the main project, we now want to create a subproject specific
+for this tutorial. The first thing we do is open a new R script (the
+white paper with the green and white cross on the top left corner of
+rstudio) and insert some details on the project. As specified before,
+every time we use a \# we are inserting a comment. Comments are
+extremely useful to document and explain our project, but are not run
+and do not affect the results.
+
+```{r project_details}
+# Information -----------------------------------------------------------------
+## Project title --------------------------------------------------------------
+### Tutorial on the Basic usage of DiAna
+## Data -----------------------------------------------------------------------
+### FDA Adverse Event Reporting System Quarterly Data up to 23Q1
+## Authors --------------------------------------------------------------------
+### Michele Fusaroli
+## Version --------------------------------------------------------------------
+### Set up: 2023-10-08### Last update: 2023-10-08
+```
+
+### **Setting Up Your DiAna Subproject**
+
+In this section, we guide you through setting up a subproject within
+your DiAna analysis environment. The following R code snippet creates a
+new directory named "tutorial" within the "projects" folder of your
+DiAna package. It specifies the version of the FAERS dataset to be used
+(in this case, "23Q1"). The **`here::here()`** function helps locate the
+current DiAna package directory, and the project_path variable is
+defined to point to the "tutorial" folder within your DiAna package.
+
+```{r setup_subproject}
+# Set up ----------------------------------------------------------------------
+dir.create(here::here(), "projects/tutorial", recursive = TRUE)
+FAERS_version <- "23Q1"
+DiAna_path <- here::here()
+project_path <- paste0(DiAna_path, "/projects/tutorial/")
+```
+
+By running this code, you establish a structured subproject environment.
+The "tutorial" folder will contain the necessary files and
+configurations for your subproject, ensuring a seamless and organized
+analysis experience.
+
+Finally, we save the script in the subproject folder, using the blue
+floppy icon above the script.
+
+### **Input data and packages**
+
+In the DiAna package, seamless data import is a crucial aspect of
+empowering pharmacovigilance analyses. The first code chunk utilizes the
+import() function to load essential datasets from the FDA Adverse Event
+Reporting System (FAERS). By importing datasets like "DRUG," "REAC,"
+"DEMO," and "INDI," DiAna equips users with comprehensive information
+about drugs, adverse reactions, patient demographics, and indications.In
+the DiAna package, seamless data import is a crucial aspect of
+empowering pharmacovigilance analyses. The first code chunk utilizes the
+**`import()`** function to load essential datasets from the FDA Adverse
+Event Reporting System (FAERS). By importing datasets like "DRUG,"
+"REAC," "DEMO," and "INDI," DiAna equips users with comprehensive
+information about drugs, adverse reactions, patient demographics, and
+indications.
+
+```{r import_FAERS, message=FALSE,results='hide'}
+## Packages -------------------------------------------------------------------
+library(DiAna)
+
+## Input FAERS ---------------------------------------------------------------
+import("DRUG")
+import("REAC")
+import("DEMO")
+import("INDI")
+
+# Try also importing and look at the information included in DEMO_SUPP, OUTC, THER, DOSES, DRUG_SUPP, DRUG_NAME
+```
+
+```{r, echo=FALSE}
+knitr::kable(tail(Demo), caption = "Example of demographics data")
+```
+
+```{r, echo=FALSE}
+knitr::kable(tail(Reac), caption = "Example of reaction data")
+```
+
+```{r, echo=FALSE}
+knitr::kable(tail(Drug), caption = "Example of drug data")
+```
+
+```{r, echo=FALSE}
+knitr::kable(tail(Indi), caption = "Example of indication data")
+```
+
+Moreover, DiAna offers functionality to import data related to the
+Anatomical Therapeutic Chemical (ATC) classification linked to the
+active ingredients as translated by the DiAna dictionary. This ATC file
+is a crucial component for grouping drugs based on their therapeutic
+use. Please note that we cannot provide the Medical Dictionary for
+Regulatory Activities (MedDRA), which is only upon subscription, and
+therefore the import_MedDRA function will not work for you. If you have
+access to MedDRA, you can follow the instructions on the GitHub
+repository to create the MedDRA file for the import_MedDRA function.
+
+```{r input_ATC,results='hide'}
+import_ATC()
+# we cannot make the meddra available because it is only upon subscription, but here we usually also use the import_MedDRA()) function for grouping events
+```
+
+```{r, echo=FALSE}
+knitr::kable(tail(ATC), caption = "Example of ATC data")
+```
+
+### **Selecting analysis parameters**
+
+In this code chunk, we define the specific parameters for our analysis
+in DiAna. **`drugs_selected`** is set to "haloperidol," representing the
+drug of interest, and **`events_selected`** is set to "pneumonia,"
+indicating the adverse event under investigation. These parameters play
+a pivotal role in guiding the disproportionality analysis. By specifying
+the drug and adverse event of focus, users can narrow down their
+analysis to a particular scenario, allowing for a more targeted and
+insightful exploration of adverse event patterns related to the selected
+drug. The flexibility to customize these and other parameters (e.g.,
+population), as we will see in the following paragraphs, enhances the
+precision of the analysis, enabling users to derive meaningful
+conclusions about drug safety within the pharmacovigilance framework.
+
+```{r parameters_selection}
+drugs_selected <- "haloperidol"
+
+events_selected <- "pneumonia"
+```
+
+### **Cases identification and retrieval**
+
+In this code segment, we delve into the process of cases identification
+and retrieval within the DiAna package. Firstly, reports associated with
+the specified drug of interest, denoted as **`drugs_selected`**, are
+identified using the Drug dataset. Similarly, adverse event reports
+related to the chosen event (**`events_selected`**) are extracted from
+the Reac dataset. The intersection of these two sets of primary IDs
+(**`pids_drugs`** and **`pids_events`**) identifies cases where both the
+drug and the adverse event are reported. These cases are crucial for
+in-depth individual assessment and analysis.
+
+```{r cases_identification}
+# we identify the reports with the drug
+pids_drugs <- unique(Drug[substance %in% drugs_selected]$primaryid)
+
+# we identify the reports with the event
+pids_events <- unique(Reac[pt %in% events_selected]$primaryid)
+
+# we identify cases as reports with both the drug and the event
+pids_cases <- intersect(pids_drugs, pids_events)
+```
+
+To facilitate further scrutiny and analysis, DiAna offers the
+**`retrieve()`** function, which gathers the information about these
+identified cases from the different FAERS dataset and stores it into two
+Excel files: one with a row for each case, one with multiple rows for
+each case recording more detailed drug information. The **`file_name`**
+parameter, specified as **`paste0(project_path, "individual_cases")`**,
+ensures that the retrieved cases are stored within the designated
+subproject folder.
+
+```{r cases_retrieval, eval=FALSE}
+# retrieve the cases into an excel for individual assessment
+retrieve(pids_cases, file_name = paste0(project_path, "individual_cases"))
+```
+
+This step is pivotal, allowing pharmacovigilance experts to conduct
+detailed examinations of individual cases, thereby enhancing the
+precision and depth of the analysis. DiAna's seamless case retrieval
+mechanism simplifies the process, empowering users to focus on in-depth
+assessments of specific adverse event patterns associated with the
+chosen drug.
+
+#Descriptive
+
+#Disproportionality
+
+#Conclusion
+
+Congratulations! You have successfully conducted basic
+disproportionality analysis using DiAna. This vignette covered the
+installation of the package, downloading necessary files, and the basic
+usage of its functionalities. DiAna empowers the pharmacovigilance
+community to make informed decisions and contribute to the collective
+knowledge of drug safety.
+
+For more advanced analyses and detailed explanations, explore our
+advanced vignettes and documentation (in progress). DiAna is here to
+simplify your pharmacovigilance journey and foster collaboration within
+the community.
