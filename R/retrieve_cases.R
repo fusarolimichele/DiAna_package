@@ -44,6 +44,8 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = FAERS_versi
     ),
     by = c("primaryid", "hlgt")
     ]
+  } else {
+    t_reac <- t_reac[, .(primaryid, pt, pt_rechallenged = drug_rec_act)]
   }
   t_reac <- t_reac[, .(
     pt = paste0(pt, collapse = "; "),

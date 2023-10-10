@@ -154,7 +154,7 @@ defined to point to the "tutorial" folder within your DiAna package.
 
 ```{r setup_subproject}
 # Set up ----------------------------------------------------------------------
-dir.create(here::here(), "projects/tutorial", recursive = TRUE)
+dir.create(paste0(here::here(), "/projects/tutorial"), recursive = TRUE)
 FAERS_version <- "23Q1"
 DiAna_path <- here::here()
 project_path <- paste0(DiAna_path, "/projects/tutorial/")
