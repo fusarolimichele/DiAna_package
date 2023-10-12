@@ -175,14 +175,7 @@ empowering pharmacovigilance analyses. The first code chunk utilizes the
 import() function to load essential datasets from the FDA Adverse Event
 Reporting System (FAERS). By importing datasets like "DRUG," "REAC,"
 "DEMO," and "INDI," DiAna equips users with comprehensive information
-about drugs, adverse reactions, patient demographics, and indications.In
-the DiAna package, seamless data import is a crucial aspect of
-empowering pharmacovigilance analyses. The first code chunk utilizes the
-**`import()`** function to load essential datasets from the FDA Adverse
-Event Reporting System (FAERS). By importing datasets like "DRUG,"
-"REAC," "DEMO," and "INDI," DiAna equips users with comprehensive
-information about drugs, adverse reactions, patient demographics, and
-indications.
+about drugs, adverse reactions, patient demographics, and indications.
 
 ```{r import_FAERS, message=FALSE,results='hide'}
 ## Packages -------------------------------------------------------------------
@@ -288,6 +281,7 @@ subproject folder.
 ```{r cases_retrieval, eval=FALSE}
 # retrieve the cases into an excel for individual assessment
 retrieve(pids_cases, file_name = paste0(project_path, "individual_cases"))
+
 ```
 
 This step is pivotal, allowing pharmacovigilance experts to conduct
@@ -297,7 +291,18 @@ mechanism simplifies the process, empowering users to focus on in-depth
 assessments of specific adverse event patterns associated with the
 chosen drug.
 
+```{r, echo=FALSE,warning=FALSE}
+individual_cases <- readxl::read_xlsx(paste0(project_path,"individual_cases.xlsx"))
+knitr::kable(head(individual_cases), caption = "Example of individual_cases")
+individual_cases_drug <- readxl::read_xlsx(paste0(project_path,"individual_cases_drug.xlsx"))
+knitr::kable(head(individual_cases_drug), caption = "Example of individual_cases_drug")
+```
+
 #Descriptive
+
+{r cases_retrieval, eval=FALSE}# retrieve the cases into an excel for
+individual assessmentretrieve(pids_cases, file_name =
+paste0(project_path, "individual_cases"))
 
 #Disproportionality
 

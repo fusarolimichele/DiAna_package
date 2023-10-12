@@ -5,10 +5,10 @@
 #' If MedDRA is available PTs are clustered by HLGT.
 #'
 #' @param pids Primaryids of interest.
-#' @param file_name The name of the output CSV file (default is "individual cases").
+#' @param file_name The name of the output xlsx file (default is "individual cases").
 #' @param quarter The quarter for data retrieval (default is FAERS_version).
 #'
-#' @return Two csv files with individual cases information:
+#' @return Two xlsx files with individual cases information:
 #'         one general with a row per ICSR,
 #'         and one with drug information and multiple rows per ICSR.
 #'
@@ -96,7 +96,7 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = FAERS_versi
   ]
 
   ## Save the database with general information
-  write.csv2(t, paste0(file_name, ".csv"))
+  writexl::write_xlsx(t, paste0(file_name, ".xlsx"))
 
   ## Further Drug information
   t_drug2 <- t_drug[, .(substance = paste0(unique(substance), collapse = ",")),
@@ -118,5 +118,5 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = FAERS_versi
   ] %>%
     select(-c(dose_amt, dose_unit, dose_freq, drug_seq, cum_dose_unit, cum_dose_chr))
   ## Save the database with further drug information
-  write.csv2(t_drug2, paste0(file_name, "_drug.csv"))
+  writexl::write_xlsx(t_drug2, paste0(file_name, "_drug.xlsx"))
 }
