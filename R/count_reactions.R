@@ -67,7 +67,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
     } else if (level %in% c("Class1", "Class2", "Class3", "Class4")) {
       import_ATC()[code == primary_code]
       temp <- distinct(distinct(ATC[, c("substance", level), with = FALSE])[
-        temp[role_cod %in% drug_role],
+        temp,
         on = "substance"
       ][
         , c("primaryid", level),
@@ -75,7 +75,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
       ])
     }
   }
-  temp <- temp[, .N, by = get(level)][order(-N)][, perc := N / length(unique(temp$primaryid))]
+  temp <- distinct(temp)[, .N, by = get(level)][order(-N)][, perc := N / length(unique(temp$primaryid))]
   colnames(temp) <- c(level, "N", "perc")
   temp <- temp[, label := paste0(get(level), " (", round(perc * 100, 2), "%) [", N, "]")]
   temp <- temp[, .(get(level), label, N)]
@@ -115,7 +115,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
 #' hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
 #' hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
 #' }
-hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx")) {
+hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx"), drug_role = c("PS", "SS", "I", "C")) {
   if (entity %in% c("reaction", "indication")) {
     pts <- reporting_rates(pids_cases, entity = entity, "pt", )
     hlts <- reporting_rates(pids_cases, entity = entity, "hlt")
@@ -127,11 +127,11 @@ hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = past
     ]
   }
   if (entity == "substance") {
-    substances <- reporting_rates(pids_cases, entity = entity, "substance")
-    Class4s <- reporting_rates(pids_cases, entity = entity, "Class4")
-    Class3s <- reporting_rates(pids_cases, entity = entity, "Class3")
-    Class2s <- reporting_rates(pids_cases, entity = entity, "Class2")
-    Class1s <- reporting_rates(pids_cases, entity = entity, "Class1")
+    substances <- reporting_rates(pids_cases, entity = entity, "substance", drug_role = drug_role)
+    Class4s <- reporting_rates(pids_cases, entity = entity, "Class4", drug_role = drug_role)
+    Class3s <- reporting_rates(pids_cases, entity = entity, "Class3", drug_role = drug_role)
+    Class2s <- reporting_rates(pids_cases, entity = entity, "Class2", drug_role = drug_role)
+    Class1s <- reporting_rates(pids_cases, entity = entity, "Class1", drug_role = drug_role)
     temp <- ATC[Class1s, on = "Class1"][Class2s, on = "Class2"][Class3s, on = "Class3"][Class4s, on = "Class4"][substances, on = "substance"]
     temp <- temp[order(-N_Class1, -label_Class1, -N_Class2, -label_Class2, -N_Class3, -label_Class3, -N_Class4, -label_Class4, -N_substance)][
       , .(label_Class1, label_Class2, label_Class3, label_Class4, label_substance)

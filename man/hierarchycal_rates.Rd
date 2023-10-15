@@ -7,7 +7,8 @@
 hierarchycal_rates(
   pids_cases,
   entity = "reaction",
-  file_name = paste0(project_path, "reporting_rates.xlsx")
+  file_name = paste0(project_path, "reporting_rates.xlsx"),
+  drug_role = c("PS", "SS", "I", "C")
 )
 }
 \arguments{
