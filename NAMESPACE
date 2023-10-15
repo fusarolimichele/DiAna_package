@@ -3,6 +3,7 @@
 export(descriptive)
 export(disproportionality_analysis)
 export(fisher.test.simulate.p.values)
+export(get_drugnames)
 export(hierarchycal_rates)
 export(import)
 export(import_ATC)

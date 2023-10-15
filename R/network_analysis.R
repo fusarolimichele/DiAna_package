@@ -42,11 +42,9 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   G_igraph <- set_vertex_attr(G_igraph, "size", value = log(labs$s2))
   G_igraph <- set_vertex_attr(G_igraph, "label", value = labs$s)
 
-
-
   tiff(file_name, width = width, height = height, res = 300)
   plot(comm_lv, G_igraph,
-    layout = L0, label = labs$s, vertex.label.dist = 1, # Distance between the label and the vertex
+    layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
     vertex.label.degree = pi / 2
   )
   dev.off()
