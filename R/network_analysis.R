@@ -1,3 +1,32 @@
+#' Perform Network Analysis and Visualization
+#'
+#' This function performs network analysis on the provided data and generates a visualization of the network. It uses IsingFit to model the network structure, clusters nodes using Louvain method, and visualizes the resulting network graph.
+#'
+#' @param pids Numeric vector of unique identifiers for data import.
+#' @param entity Character specifying the type of entity to analyze ("reaction", "indication", or "substance").
+#' @param remove_singlet Logical indicating whether to remove singleton nodes (nodes with no edges). Default is TRUE.
+#' @param remove_negative_edges Logical indicating whether to remove edges with negative weights. Default is TRUE.
+#' @param file_name Character string specifying the file name (including path) to save the network visualization. Default is "network.tiff".
+#' @param width Numeric specifying the width of the saved image in pixels. Default is 1500.
+#' @param height Numeric specifying the height of the saved image in pixels. Default is 1500.
+#'
+#' @return NULL (invisibly). Saves a network visualization as a TIFF file.
+#'
+#' @importFrom data.table .N
+#' @importFrom igraph graph.adjacency delete.vertices delete.edges degree set_vertex_attr
+#' @importFrom IsingFit IsingFit
+#' @importFrom tidyr pivot_wider
+#' @importFrom ggplot2 labs
+#' @importFrom gridExtra grid.arrange
+#'
+#' @examples
+#' \dontrun{
+#' # Example usage:
+#' # Perform network analysis for reactions with specified pids
+#' network_analysis(pids = c(1, 2, 3), entity = "reaction")
+#' }
+#'
+#' @export
 network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
                              remove_negative_edges = TRUE,
                              file_name = paste0(project_path, "network.tiff"), width = 1500, height = 1500) {
