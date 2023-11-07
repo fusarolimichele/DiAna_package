@@ -502,6 +502,10 @@ knitr::kable(head(readxl::read_xlsx("/Users/michele.fusaroli/Desktop/DiAna_packa
 We can also use a network to visualize the syndromic co-reporting of
 events:
 
+``` r
+network_analysis(pids_cases, width = 5000, height = 5000)
+```
+
 ![](images/network.png)
 
 ### **Disproportionality analysis**
