@@ -275,14 +275,14 @@ FAERS as free text and need a standardization. We implemented a
 FAERS-specific DiAna dictionary
 (<https://doi.org/10.1101/2023.06.07.23291076>). The get_drugnames
 function allows to retrieve the drugnames that were translated to the
-drug of interest. Here we show the first 10.
+drug of interest. Here we show the first 20.
 
 ```{r}
 t <- get_drugnames(drugs_selected)
 ```
 
 ```{r, echo=FALSE}
-DT::datatable(head(t,10))
+knitr::kable(head(t[,perc:=round(perc,2)],20))
 ```
 
 ### **Cases identification and retrieval**
