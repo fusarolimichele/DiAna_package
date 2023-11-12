@@ -282,7 +282,7 @@ t <- get_drugnames(drugs_selected)
 ```
 
 ```{r, echo=FALSE}
-knitr::kable(head(t[,perc:=round(perc,2)],20))
+knitr::kable(head(t[, perc := round(perc, 2)], 20))
 ```
 
 ### **Cases identification and retrieval**
@@ -333,9 +333,9 @@ alternative causes and risk factors.
 
 ```{r, echo=FALSE,warning=FALSE}
 individual_cases <- readxl::read_xlsx(paste0(project_path, "individual_cases.xlsx"))
-knitr::kable(head(individual_cases,10))
+knitr::kable(head(individual_cases, 10))
 individual_cases_drug <- readxl::read_xlsx(paste0(project_path, "individual_cases_drug.xlsx"))
-knitr::kable(head(individual_cases_drug,10))
+knitr::kable(head(individual_cases_drug, 10))
 ```
 
 ### **Descriptive analysis**
@@ -359,7 +359,7 @@ descriptive(pids_cases, RG = pids_drugs, drug = drugs_selected, file_name = past
 
 ```{r, echo=FALSE,warning=FALSE}
 descriptive_table <- readxl::read_xlsx(paste0(project_path, "descriptive.xlsx"))
-knitr::kable(head(descriptive_table,20))
+knitr::kable(head(descriptive_table, 20))
 ```
 
 Using different functions we can also identify concomitants (drugs),
@@ -375,7 +375,7 @@ head(reporting_rates(pids_cases, entity = "indication", drug_indi = "haloperidol
 
 # we describe concomitant suspected of the event according to the ATC classification
 hierarchycal_rates(pids_cases, "substance", drug_role = c("PS", "SS"))
-knitr::kable(head(readxl::read_xlsx("/Users/michele.fusaroli/Desktop/DiAna_package/DiAna/projects/tutorial/reporting_rates.xlsx"),20))
+knitr::kable(head(readxl::read_xlsx("/Users/michele.fusaroli/Desktop/DiAna_package/DiAna/projects/tutorial/reporting_rates.xlsx"), 20))
 ```
 
 ### **Network analysis** 

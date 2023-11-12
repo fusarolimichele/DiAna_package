@@ -471,7 +471,7 @@ head(reporting_rates(pids_cases, entity = "indication", drug_indi = "haloperidol
 
 # we describe concomitant suspected of the event according to the ATC classification
 hierarchycal_rates(pids_cases, "substance", drug_role = c("PS", "SS"))
-knitr::kable(head(readxl::read_xlsx("/Users/michele.fusaroli/Desktop/DiAna_package/DiAna/projects/tutorial/reporting_rates.xlsx"),20))
+knitr::kable(head(readxl::read_xlsx("/Users/michele.fusaroli/Desktop/DiAna_package/DiAna/projects/tutorial/reporting_rates.xlsx"), 20))
 ```
 
 | label_Class1             | label_Class2                   | label_Class3                    | label_Class4                                                      | label_substance                |
