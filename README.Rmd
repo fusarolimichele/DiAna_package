@@ -125,8 +125,8 @@ with all the functions that we will use in our analyses). With
 setup_DiAna(quarter="23Q1") we are automaticatilly setting up the
 project: it will create a folder to store cleaned FAERS data, that will
 be downloaded from an OSF repository (in particular we are downloading
-the FAERS updated to the 23Q1 quarter). The entire cleaning process is
-made transparent on the github
+the entire FAERS database, including all the quarters up to the 23Q1).
+The entire cleaning process is made transparent on the github
 (<https://github.com/fusarolimichele/DiAna>). It will also create a
 folder for external sources and a folder to store projects. In the
 external sources, it will also download the DiAna dictionary used to
