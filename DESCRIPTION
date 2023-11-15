@@ -23,6 +23,7 @@ BugReports: https://github.com/fusarolimichele/DiAna_package/issues
 Depends: 
     data.table,
     gtsummary,
+    IsingFit,
     questionr,
     tidyverse,
     writexl
