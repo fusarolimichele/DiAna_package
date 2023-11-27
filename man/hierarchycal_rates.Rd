@@ -7,7 +7,8 @@
 hierarchycal_rates(
   pids_cases,
   entity = "reaction",
-  file_name = "reporting_rates.xlsx"
+  file_name = paste0(project_path, "reporting_rates.xlsx"),
+  drug_role = c("PS", "SS", "I", "C")
 )
 }
 \arguments{
@@ -21,6 +22,8 @@ hierarchycal_rates(
 }}
 
 \item{file_name}{Path to save the XLSX file containing the hierarchy.}
+
+\item{drug_role}{If entity is substance, it is possible to specify the drug roles that should be considered}
 }
 \value{
 None. The function generates and writes the hierarchy to the xlsx.

@@ -4,7 +4,13 @@
 \alias{reporting_rates}
 \title{Reporting rates of events or substances}
 \usage{
-reporting_rates(pids_cases, entity = "reaction", level = "pt")
+reporting_rates(
+  pids_cases,
+  entity = "reaction",
+  level = "pt",
+  drug_role = c("PS", "SS", "I", "C"),
+  drug_indi = NA
+)
 }
 \arguments{
 \item{pids_cases}{Vector of primary IDs to consider for counting reactions.}
@@ -17,6 +23,10 @@ reporting_rates(pids_cases, entity = "reaction", level = "pt")
 }}
 
 \item{level}{The desired MedDRA or ATC level for counting (default is "pt").}
+
+\item{drug_role}{is only used for substances. By default both suspect and concomitant drugs are included.}
+
+\item{drug_indi}{is only used for indications. By default the indications of all the drugs of the selected primaryids are considered, but you can specify a vector of drugs.}
 }
 \value{
 A data.table containing counts and percentages of the investigated entity

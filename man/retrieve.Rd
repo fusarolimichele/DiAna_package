@@ -4,17 +4,17 @@
 \alias{retrieve}
 \title{Retrieve data for specific primaryids}
 \usage{
-retrieve(pids, file_name = "individual_cases", quarter = quarter)
+retrieve(pids, file_name = "individual_cases", quarter = FAERS_version)
 }
 \arguments{
 \item{pids}{Primaryids of interest.}
 
-\item{file_name}{The name of the output CSV file (default is "individual cases").}
+\item{file_name}{The name of the output xlsx file (default is "individual cases").}
 
-\item{quarter}{The quarter for data retrieval (default is quarter).}
+\item{quarter}{The quarter for data retrieval (default is FAERS_version).}
 }
 \value{
-Two csv files with individual cases information:
+Two xlsx files with individual cases information:
 one general with a row per ICSR,
 and one with drug information and multiple rows per ICSR.
 }

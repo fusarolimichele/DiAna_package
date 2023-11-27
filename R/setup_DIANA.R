@@ -31,32 +31,34 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
     dir.create(paste0(here(), "/projects"))
     dir.create(paste0(here(), "/external_sources"))
     # URL for the DiAna zip file
-    if (quarter == "23Q1") {
+    if (!quarter %in% c("23Q1", "23Q3")) {
+      stop("The quarter required is not available on the DiAna OSF")
+    } else if (quarter == "23Q1") {
       DiAna_url <- "https://osf.io/download/epkqf/"
-      # Download and extract DiAna data
-      zip_path <- paste0(here(), "/data/", quarter, ".zip")
-      download.file(DiAna_url, destfile = zip_path, mode = "wb")
-      unzip(zip_path, exdir = paste0(here(), "/data/"))
-      file.remove(zip_path)
-      # Remove __MACOSX folder if it exists
-      macosx_folder <- paste0(here(), "/data/", "__MACOSX")
-      if (file.exists(macosx_folder)) {
-        unlink(macosx_folder, recursive = TRUE)
-      }
-      download.file("https://osf.io/download/sywd9/",
-        destfile = paste0(here(), "/external_sources/ATC_DiAna.csv"),
-        mode = "wb"
-      )
-      download.file("https://osf.io/download/7tdmq/",
-        destfile = paste0(here(), "/external_sources/DiAna_dictionary.csv"),
-        mode = "wb"
-      )
-      download.file("https://osf.io/download/a68ue/",
-                    destfile = paste0(here(), "/external_sources/Countries.csv"),
-                    mode = "wb"
-      )
-    } else {
-      cat("The quarter required is not available on the DiAna OSF")
+    } else if (quarter == "23Q3") {
+      DiAna_url <- "https://osf.io/download/mb9wj/"
     }
+    # Download and extract DiAna data
+    zip_path <- paste0(here(), "/data/", quarter, ".zip")
+    download.file(DiAna_url, destfile = zip_path, mode = "wb")
+    unzip(zip_path, exdir = paste0(here(), "/data/"))
+    file.remove(zip_path)
+    # Remove __MACOSX folder if it exists
+    macosx_folder <- paste0(here(), "/data/", "__MACOSX")
+    if (file.exists(macosx_folder)) {
+      unlink(macosx_folder, recursive = TRUE)
+    }
+    download.file("https://osf.io/download/sywd9/",
+      destfile = paste0(here(), "/external_sources/ATC_DiAna.csv"),
+      mode = "wb"
+    )
+    download.file("https://osf.io/download/7tdmq/",
+      destfile = paste0(here(), "/external_sources/DiAna_dictionary.csv"),
+      mode = "wb"
+    )
+    download.file("https://osf.io/download/a68ue/",
+      destfile = paste0(here(), "/external_sources/Countries.csv"),
+      mode = "wb"
+    )
   }
 }

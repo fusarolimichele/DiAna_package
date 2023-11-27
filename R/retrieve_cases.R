@@ -5,10 +5,10 @@
 #' If MedDRA is available PTs are clustered by HLGT.
 #'
 #' @param pids Primaryids of interest.
-#' @param file_name The name of the output CSV file (default is "individual cases").
-#' @param quarter The quarter for data retrieval (default is quarter).
+#' @param file_name The name of the output xlsx file (default is "individual cases").
+#' @param quarter The quarter for data retrieval (default is FAERS_version).
 #'
-#' @return Two csv files with individual cases information:
+#' @return Two xlsx files with individual cases information:
 #'         one general with a row per ICSR,
 #'         and one with drug information and multiple rows per ICSR.
 #'
@@ -18,7 +18,7 @@
 #' }
 #'
 #' @export
-retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
+retrieve <- function(pids, file_name = "individual_cases", quarter = FAERS_version) {
   ## this function is intended to retrieve all the useful information inherent
   ## to a specific group of primaryids, to allow for in-deep case-by case
   ## evaluation and clinical reasoning.
@@ -26,10 +26,10 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
   ## Args: pids= primaryids of interest
   ##      file_name
 
-  path_MedDRA <- paste0(here(), "/external_sources/meddra_primary.csv")
+  path_MedDRA <- paste0(here::here(), "/external_sources/meddra_primary.csv")
 
   ## Reactions
-  t_reac <- import("REAC", pids = pids, quarter = quarter)
+  t_reac <- import("REAC", pids = pids, quarter = quarter, save_in_environment = FALSE)
   if (file.exists(path_MedDRA)) {
     import_MedDRA()
     t_reac <- MedDRA[t_reac, on = "pt"][order(soc)]
@@ -44,6 +44,8 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
     ),
     by = c("primaryid", "hlgt")
     ]
+  } else {
+    t_reac <- t_reac[, .(primaryid, pt, pt_rechallenged = drug_rec_act)]
   }
   t_reac <- t_reac[, .(
     pt = paste0(pt, collapse = "; "),
@@ -58,7 +60,7 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
   by = c("primaryid")
   ]
   ## Drug
-  t_drug <- import("DRUG", pids = pids, quarter = quarter)
+  t_drug <- import("DRUG", pids = pids, quarter = quarter, save_in_environment = FALSE)
   import_ATC()[code == primary_code]
   t_drug <- ATC[t_drug, on = "substance"][order(-substance)][order(-Class1)]
   t_drug1 <- t_drug[, .(substance = paste0("(", paste0(unique(substance),
@@ -71,13 +73,13 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
   t <- t_drug1[t_reac, on = "primaryid"]
 
   ## Demo
-  t <- import("DEMO", pids = pids, quarter = quarter)[
+  t <- import("DEMO", pids = pids, quarter = quarter, save_in_environment = FALSE)[
     , age_in_years := round(age_in_days / 365)
   ][
     t,
     on = "primaryid"
   ]
-  t <- import("DEMO_SUPP", pids = pids, quarter = quarter)[order(-rpsr_cod)][
+  t <- import("DEMO_SUPP", pids = pids, quarter = quarter, save_in_environment = FALSE)[order(-rpsr_cod)][
     , .(rpsr_cod = paste0(rpsr_cod, collapse = "; ")),
     by = "primaryid"
   ][
@@ -85,7 +87,7 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
     on = "primaryid"
   ]
   ## Outc
-  t <- import("OUTC", pids = pids, quarter = quarter)[order(-outc_cod)][
+  t <- import("OUTC", pids = pids, quarter = quarter, save_in_environment = FALSE)[order(-outc_cod)][
     , .(outc_cod = paste0(outc_cod, collapse = "; ")),
     by = "primaryid"
   ][
@@ -94,7 +96,7 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
   ]
 
   ## Save the database with general information
-  write.csv2(t, paste0(file_name, ".csv"))
+  writexl::write_xlsx(t, paste0(file_name, ".xlsx"))
 
   ## Further Drug information
   t_drug2 <- t_drug[, .(substance = paste0(unique(substance), collapse = ",")),
@@ -104,10 +106,10 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
     t_drug2,
     by = c("primaryid", "drug_seq"), all = TRUE
   )
-  t_drug2 <- import("THER", pids = pids, quarter = quarter)[t_drug2, on = c("primaryid", "drug_seq")]
-  t_drug2 <- import("DOSES", pids = pids, quarter = quarter)[t_drug2, on = c("primaryid", "drug_seq")]
-  t_drug2 <- import("DRUG_SUPP", pids = pids, quarter = quarter)[t_drug2, on = c("primaryid", "drug_seq")]
-  t_drug2 <- import("INDI", pids = pids, quarter = quarter)[indi_pt != "product used for unknown indication"][
+  t_drug2 <- import("THER", pids = pids, quarter = quarter, save_in_environment = FALSE)[t_drug2, on = c("primaryid", "drug_seq")]
+  t_drug2 <- import("DOSES", pids = pids, quarter = quarter, save_in_environment = FALSE)[t_drug2, on = c("primaryid", "drug_seq")]
+  t_drug2 <- import("DRUG_SUPP", pids = pids, quarter = quarter, save_in_environment = FALSE)[t_drug2, on = c("primaryid", "drug_seq")]
+  t_drug2 <- import("INDI", pids = pids, quarter = quarter, save_in_environment = FALSE)[indi_pt != "product used for unknown indication"][
     t_drug2,
     on = c("primaryid", "drug_seq")
   ]
@@ -116,5 +118,5 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = quarter) {
   ] %>%
     select(-c(dose_amt, dose_unit, dose_freq, drug_seq, cum_dose_unit, cum_dose_chr))
   ## Save the database with further drug information
-  write.csv2(t_drug2, paste0(file_name, "_drug.csv"))
+  writexl::write_xlsx(t_drug2, paste0(file_name, "_drug.xlsx"))
 }

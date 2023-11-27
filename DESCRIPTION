@@ -1,16 +1,10 @@
 Package: DiAna
 Title: Advanced Disproportionality Analysis in the FAERS for Drug Safety
 Version: 0.0.0.9000
-Authors@R:
-  c(person(given = "Michele",
-           family = "Fusaroli",
-           role = c("aut", "cre"),
-           email= "michele.fusaroli2@unibo.it",
+Authors@R:c(
+    person("Michele", "Fusaroli", , "michele.fusaroli2@unibo.it", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0254-2212")),
-    person(given="Valentina",
-           family="Giunchi",
-           role="aut",
-           email="valentina.giunchi2@unibo.it",
+    person("Valentina", "Giunchi", , "valentina.giunchi2@unibo.it", role = "aut",
            comment = c(ORCID = "0000-0001-5841-8520"))
   )
 Description: The `DiAna` (Disproportionality Analysis) package allows for
@@ -23,17 +17,22 @@ BugReports: https://github.com/fusarolimichele/DiAna_package/issues
 Depends: 
     data.table,
     gtsummary,
+    igraph,
+    IsingFit,
     questionr,
     tidyverse,
     writexl
 Imports: 
-    here
+    ggplot2,
+    gridExtra,
+    here,
+    tidyr
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: 
-    rmarkdown
+    knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -4,7 +4,7 @@
 \alias{import}
 \title{import}
 \usage{
-import(df_name, quarter, pids = NA)
+import(df_name, quarter = FAERS_version, pids = NA, save_in_environment = TRUE)
 }
 \arguments{
 \item{df_name}{Name of the data file (without the ".rds" extension).
@@ -17,7 +17,6 @@ It can be one of the following:
 \item \emph{INDI} =  Reasons for use;
 \item \emph{OUTC} =  Outcomes;
 \item \emph{THER} =  Drug regimen information;
-\item \emph{DRUG_ATC} =  Suspect and  concomitant drugs (ATC);
 \item \emph{DOSES} =  Dosage information;
 \item \emph{DRUG_SUPP} =  Dechallenge, Rechallenge, route, form;
 \item \emph{DRUG_NAME} =  Suspect and concomitant drugs (raw terms);
@@ -29,6 +28,8 @@ in the format \emph{23Q1}.}
 
 \item{pids}{Optional vector of primary IDs to subset the imported data.
 Defaults to the entire population.}
+
+\item{save_in_environment}{is a parameter automatically used within functions to avoid that the imported databases are overscribed.}
 }
 \value{
 A data.table containing the imported data.

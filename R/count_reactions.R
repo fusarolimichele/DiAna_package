@@ -13,6 +13,10 @@
 #'                }
 #' @param level The desired MedDRA or ATC level for counting (default is "pt").
 #'
+#' @param drug_role is only used for substances. By default both suspect and concomitant drugs are included.
+#'
+#' @param drug_indi is only used for indications. By default the indications of all the drugs of the selected primaryids are considered, but you can specify a vector of drugs.
+#'
 #' @return A data.table containing counts and percentages of the investigated entity
 #'         at the specified level and in descending order.
 #'
@@ -26,15 +30,27 @@
 #' reporting_rates(pids, "indication", "pt")
 #' reporting_rates(pids, entity = "substance", level = "Class3")
 #' }
-reporting_rates <- function(pids_cases, entity = "reaction", level = "pt") {
+reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_role = c("PS", "SS", "I", "C"), drug_indi = NA) {
   if (entity == "reaction") {
-    df <- Reac
+    temp <- import("REAC", pids = pids_cases, save_in_environment = FALSE)
   } else if (entity == "indication") {
-    df <- Indi[, .(primaryid, pt = indi_pt)][! pt %in% c("product used for unknown indication","therapeutic procedures nec","therapeutic procedures and supportive care nec")]
+    temp <- import("INDI", pids = pids_cases, save_in_environment = FALSE)
+    if (sum(!is.na(drug_indi)) > 0) {
+      temp <- import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
+        temp,
+        on = c("primaryid", "drug_seq")
+      ][substance %in% drug_indi]
+    }
+    temp <- temp[, .(primaryid, pt = indi_pt)][!pt %in% c(
+      "product used for unknown indication",
+      "therapeutic procedures nec",
+      "therapeutic procedures and supportive care nec"
+    )]
   } else if (entity == "substance") {
-    df <- Drug
+    temp <- distinct(import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
+      role_cod %in% drug_role
+    ][, .(primaryid, substance)])
   }
-  temp <- df[primaryid %in% pids_cases]
   if (level %in% c("hlt", "hlgt", "soc")) {
     import_MedDRA()
     temp <- distinct(distinct(MedDRA[, c("pt", level), with = FALSE])[
@@ -45,20 +61,21 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt") {
       with = FALSE
     ])
   }
-  if (entity == "substance" & level == "pt") {
-    level <- "substance"
+  if (entity == "substance") {
+    if (level == "pt") {
+      level <- "substance"
+    } else if (level %in% c("Class1", "Class2", "Class3", "Class4")) {
+      import_ATC()[code == primary_code]
+      temp <- distinct(distinct(ATC[, c("substance", level), with = FALSE])[
+        temp,
+        on = "substance"
+      ][
+        , c("primaryid", level),
+        with = FALSE
+      ])
+    }
   }
-  if (entity == "substance" & level %in% c("Class1", "Class2", "Class3", "Class4")) {
-    import_ATC()[code == primary_code]
-    temp <- distinct(distinct(ATC[, c("substance", level), with = FALSE])[
-      temp,
-      on = "substance"
-    ][
-      , c("primaryid", level),
-      with = FALSE
-    ])
-  }
-  temp <- temp[, .N, by = get(level)][order(-N)][, perc := N / length(unique(df$primaryid))]
+  temp <- distinct(temp)[, .N, by = get(level)][order(-N)][, perc := N / length(unique(temp$primaryid))]
   colnames(temp) <- c(level, "N", "perc")
   temp <- temp[, label := paste0(get(level), " (", round(perc * 100, 2), "%) [", N, "]")]
   temp <- temp[, .(get(level), label, N)]
@@ -86,6 +103,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt") {
 #'                \item \emph{substance}.
 #'                }
 #' @param file_name Path to save the XLSX file containing the hierarchy.
+#' @param drug_role If entity is substance, it is possible to specify the drug roles that should be considered
 #'
 #' @return None. The function generates and writes the hierarchy to the xlsx.
 #'         For indications and reactions, SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
@@ -98,9 +116,9 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt") {
 #' hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
 #' hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
 #' }
-hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = "reporting_rates.xlsx") {
+hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx"), drug_role = c("PS", "SS", "I", "C")) {
   if (entity %in% c("reaction", "indication")) {
-    pts <- reporting_rates(pids_cases, entity = entity, "pt")
+    pts <- reporting_rates(pids_cases, entity = entity, "pt", )
     hlts <- reporting_rates(pids_cases, entity = entity, "hlt")
     hlgts <- reporting_rates(pids_cases, entity = entity, "hlgt")
     socs <- reporting_rates(pids_cases, entity = entity, "soc")
@@ -110,11 +128,11 @@ hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = "rep
     ]
   }
   if (entity == "substance") {
-    substances <- reporting_rates(pids_cases, entity = entity, "substance")
-    Class4s <- reporting_rates(pids_cases, entity = entity, "Class4")
-    Class3s <- reporting_rates(pids_cases, entity = entity, "Class3")
-    Class2s <- reporting_rates(pids_cases, entity = entity, "Class2")
-    Class1s <- reporting_rates(pids_cases, entity = entity, "Class1")
+    substances <- reporting_rates(pids_cases, entity = entity, "substance", drug_role = drug_role)
+    Class4s <- reporting_rates(pids_cases, entity = entity, "Class4", drug_role = drug_role)
+    Class3s <- reporting_rates(pids_cases, entity = entity, "Class3", drug_role = drug_role)
+    Class2s <- reporting_rates(pids_cases, entity = entity, "Class2", drug_role = drug_role)
+    Class1s <- reporting_rates(pids_cases, entity = entity, "Class1", drug_role = drug_role)
     temp <- ATC[Class1s, on = "Class1"][Class2s, on = "Class2"][Class3s, on = "Class3"][Class4s, on = "Class4"][substances, on = "substance"]
     temp <- temp[order(-N_Class1, -label_Class1, -N_Class2, -label_Class2, -N_Class3, -label_Class3, -N_Class4, -label_Class4, -N_substance)][
       , .(label_Class1, label_Class2, label_Class3, label_Class4, label_substance)

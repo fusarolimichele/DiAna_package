@@ -2,16 +2,16 @@
 #'
 #' performs disproportionality analysis and returns the results.
 #'
-#' @param drug_selected A list of drugs for analysis.
-#' @param reac_selected A list of adverse events for analysis.
-#' @param temp_d Data table containing drug data (default is Drug).
+#' @param drug_selected A list of drugs for analysis. Can be a list of lists (to collapse terms together) if drug_level is set to custom.
+#' @param reac_selected A list of adverse events for analysis. Can be a list of lists (to collapse terms together) if meddra_level is set to custom.
+#' @param temp_d Data table containing drug data (default is Drug). If set to Drug[role_cod %in% c("PS","SS")] allows to investigate only suspects.
 #' @param temp_r Data table containing reaction data (default is Reac).
-#' @param meddra_level The desired MedDRA level for analysis (default is "pt").
-#' @param restriction Primary IDs to consider for analysis (default is "none",
-#'                    which includes the entire population).
+#' @param meddra_level The desired MedDRA level for analysis (default is "pt"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
+#' @param drug_level The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
+#' @param restriction Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo[!RB_duplicates_only_susp]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.
 #' @param ROR_minimum_cases Threshold of minimum cases for calculating Reporitng Odds Ratio (default is 3).
-#' @param IC_threshold Threshold for defining the significance of Information Component (default is 0).
-#' @param ROR_threshold Threshold for defining the significance of Reporting Odds Ratio (default is 1).
+#' @param IC_threshold Threshold for defining the significance of the lower limit of the Information Component (default is 0).
+#' @param ROR_threshold Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).
 #'
 #' @return A data.table containing disproportionality analysis results.
 #'
@@ -22,6 +22,7 @@ disproportionality_analysis <- function(
     drug_selected, reac_selected,
     temp_d = Drug, temp_r = Reac,
     meddra_level = "pt",
+    drug_level = "substance",
     restriction = "none",
     ROR_minimum_cases = 3,
     ROR_threshold = 1,
@@ -42,15 +43,24 @@ disproportionality_analysis <- function(
       custom = rep(names(reac_selected), lengths(reac_selected)),
       pt = unlist(reac_selected)
     )
-    temp_r <- df_custom[temp_r, on = "pt"]
+    temp_r <- df_custom[temp_r, on = "pt", allow.cartesian = TRUE]
     reac_selected <- names(reac_selected)
   }
+  if (drug_level == "custom") {
+    df_custom <- data.table(
+      custom = rep(names(drug_selected), lengths(drug_selected)),
+      substance = unlist(drug_selected)
+    )
+    temp_d <- df_custom[temp_d, on = "substance", allow.cartesian = TRUE]
+    drug_selected <- names(drug_selected)
+  }
   temp_r <- temp_r[, c(meddra_level, "primaryid"), with = FALSE] %>% distinct()
-  temp_d <- temp_d[, .(substance, primaryid)] %>% distinct()
+  temp_d <- temp_d[, c(drug_level, "primaryid"), with = FALSE] %>% distinct()
   TOT <- length(unique(temp_d$primaryid))
-  temp_d1 <- temp_d[substance %in% drug_selected][, .(primaryid_substance = list(primaryid)), by = "substance"]
+  temp_d1 <- temp_d[get(drug_level) %in% drug_selected][, .(primaryid_substance = list(primaryid)), by = drug_level]
   temp_r1 <- temp_r[get(meddra_level) %in% reac_selected][, .(primaryid_event = list(primaryid)), by = meddra_level]
   colnames(temp_r1) <- c("event", "primaryid_event")
+  colnames(temp_d1) <- c("substance", "primaryid_substance")
   results <- setDT(expand.grid("substance" = unlist(drug_selected), "event" = unlist(reac_selected)))
   results <- results[temp_d1, on = "substance"]
   results <- results[temp_r1, on = "event"]
@@ -62,7 +72,7 @@ disproportionality_analysis <- function(
   results <- results[, nD_nE := TOT - (D_E + D_nE + nD_E)]
   ROR <- lapply(seq(1:nrow(results)), function(x) {
     tab <- as.matrix(data.table(
-      E = c(results$nD_E[[x]], results$nD_E[[x]]),
+      E = c(results$D_E[[x]], results$nD_E[[x]]),
       nE = c(results$D_nE[[x]], results$nD_nE[[x]])
     ))
     or <- questionr::odds.ratio(tab)
@@ -111,6 +121,7 @@ disproportionality_analysis <- function(
   results <- results[, ROR_color := factor(ROR_color, levels = c("not enough cases", "no signal", "light signal", "strong signal"), ordered = TRUE)]
   results <- results[, IC_color := factor(IC_color, levels = c("no signal", "strong signal"), ordered = TRUE)]
 }
+
 
 #' Render Forest Plot
 #'
