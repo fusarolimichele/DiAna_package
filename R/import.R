@@ -23,6 +23,7 @@
 #'                in the format \emph{23Q1}.
 #' @param pids Optional vector of primary IDs to subset the imported data.
 #'             Defaults to the entire population.
+#' @param save_in_environment is a parameter automatically used within functions to avoid that the imported databases are overscribed.
 #' @return A data.table containing the imported data.
 #'
 #' @examples
@@ -97,6 +98,7 @@ import_MedDRA <- function() {
 #'
 #' This function reads the ATC (Anatomical Therapeutic Chemical) classification
 #' from an external source and assigns it to a global environment variable.
+#' @param primary Whether only the primary ATC should be retrieved.
 #'
 #' @return A data frame containing the dataset for ATC linkage.
 #'

@@ -6,6 +6,9 @@
 \usage{
 import_ATC(primary = T)
 }
+\arguments{
+\item{primary}{Whether only the primary ATC should be retrieved.}
+}
 \value{
 A data frame containing the dataset for ATC linkage.
 }

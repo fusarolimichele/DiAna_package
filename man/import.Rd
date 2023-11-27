@@ -28,6 +28,8 @@ in the format \emph{23Q1}.}
 
 \item{pids}{Optional vector of primary IDs to subset the imported data.
 Defaults to the entire population.}
+
+\item{save_in_environment}{is a parameter automatically used within functions to avoid that the imported databases are overscribed.}
 }
 \value{
 A data.table containing the imported data.

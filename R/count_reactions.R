@@ -103,6 +103,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
 #'                \item \emph{substance}.
 #'                }
 #' @param file_name Path to save the XLSX file containing the hierarchy.
+#' @param drug_role If entity is substance, it is possible to specify the drug roles that should be considered
 #'
 #' @return None. The function generates and writes the hierarchy to the xlsx.
 #'         For indications and reactions, SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.

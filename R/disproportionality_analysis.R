@@ -2,17 +2,16 @@
 #'
 #' performs disproportionality analysis and returns the results.
 #'
-#' @param drug_selected A list of drugs for analysis.
-#' @param reac_selected A list of adverse events for analysis.
-#' @param temp_d Data table containing drug data (default is Drug).
+#' @param drug_selected A list of drugs for analysis. Can be a list of lists (to collapse terms together) if drug_level is set to custom.
+#' @param reac_selected A list of adverse events for analysis. Can be a list of lists (to collapse terms together) if meddra_level is set to custom.
+#' @param temp_d Data table containing drug data (default is Drug). If set to Drug[role_cod %in% c("PS","SS")] allows to investigate only suspects.
 #' @param temp_r Data table containing reaction data (default is Reac).
-#' @param meddra_level The desired MedDRA level for analysis (default is "pt").
-#' @param drug_level The desired drug level for analysis (default is "substance"), can be "custom" for list of drugs.
-#' @param restriction Primary IDs to consider for analysis (default is "none",
-#'                    which includes the entire population).
+#' @param meddra_level The desired MedDRA level for analysis (default is "pt"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
+#' @param drug_level The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
+#' @param restriction Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo[!RB_duplicates_only_susp]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.
 #' @param ROR_minimum_cases Threshold of minimum cases for calculating Reporitng Odds Ratio (default is 3).
-#' @param IC_threshold Threshold for defining the significance of Information Component (default is 0).
-#' @param ROR_threshold Threshold for defining the significance of Reporting Odds Ratio (default is 1).
+#' @param IC_threshold Threshold for defining the significance of the lower limit of the Information Component (default is 0).
+#' @param ROR_threshold Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).
 #'
 #' @return A data.table containing disproportionality analysis results.
 #'

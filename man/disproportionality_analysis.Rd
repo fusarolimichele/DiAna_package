@@ -18,26 +18,25 @@ disproportionality_analysis(
 )
 }
 \arguments{
-\item{drug_selected}{A list of drugs for analysis.}
+\item{drug_selected}{A list of drugs for analysis. Can be a list of lists (to collapse terms together) if drug_level is set to custom.}
 
-\item{reac_selected}{A list of adverse events for analysis.}
+\item{reac_selected}{A list of adverse events for analysis. Can be a list of lists (to collapse terms together) if meddra_level is set to custom.}
 
-\item{temp_d}{Data table containing drug data (default is Drug).}
+\item{temp_d}{Data table containing drug data (default is Drug). If set to Drug\link{role_cod \%in\% c("PS","SS")} allows to investigate only suspects.}
 
 \item{temp_r}{Data table containing reaction data (default is Reac).}
 
-\item{meddra_level}{The desired MedDRA level for analysis (default is "pt").}
+\item{meddra_level}{The desired MedDRA level for analysis (default is "pt"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).}
 
-\item{drug_level}{The desired drug level for analysis (default is "substance"), can be "custom" for list of drugs.}
+\item{drug_level}{The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).}
 
-\item{restriction}{Primary IDs to consider for analysis (default is "none",
-which includes the entire population).}
+\item{restriction}{Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo\link{!RB_duplicates_only_susp}$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.}
 
 \item{ROR_minimum_cases}{Threshold of minimum cases for calculating Reporitng Odds Ratio (default is 3).}
 
-\item{ROR_threshold}{Threshold for defining the significance of Reporting Odds Ratio (default is 1).}
+\item{ROR_threshold}{Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).}
 
-\item{IC_threshold}{Threshold for defining the significance of Information Component (default is 0).}
+\item{IC_threshold}{Threshold for defining the significance of the lower limit of the Information Component (default is 0).}
 }
 \value{
 A data.table containing disproportionality analysis results.
