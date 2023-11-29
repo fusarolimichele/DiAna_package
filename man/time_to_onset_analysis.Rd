@@ -59,9 +59,9 @@ df2 <- time_to_onset_analysis(c("aripiprazole", "pramipexole"),
 }
 
 }
+\references{
+Van Holle, L., Zeinoun, Z., Bauchau, V. and Verstraeten, T. (2012), Using time-to-onset for detecting safety signals in spontaneous reports of adverse events following immunization: a proof of concept study. Pharmacoepidemiol Drug Saf, 21: 603-610. https://doi.org/10.1002/pds.3226
+}
 \seealso{
 \code{\link{ks.test}} for information about the Kolmogorov-Smirnov test.
-
-#' @references
-Van Holle, L., Zeinoun, Z., Bauchau, V. and Verstraeten, T. (2012), Using time-to-onset for detecting safety signals in spontaneous reports of adverse events following immunization: a proof of concept study. Pharmacoepidemiol Drug Saf, 21: 603-610. https://doi.org/10.1002/pds.3226
 }

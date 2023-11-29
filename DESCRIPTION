@@ -5,7 +5,9 @@ Authors@R:c(
     person("Michele", "Fusaroli", , "michele.fusaroli2@unibo.it", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0254-2212")),
     person("Valentina", "Giunchi", , "valentina.giunchi2@unibo.it", role = "aut",
-           comment = c(ORCID = "0000-0001-5841-8520"))
+           comment = c(ORCID = "0000-0001-5841-8520")),
+    person("Lionel", "Van Holle", , "lionel.vanholle@opensourcepv.com", role = "aut",
+           comment = c(ORCID = "0000-0001-7354-6475"))
   )
 Description: The `DiAna` (Disproportionality Analysis) package allows for
     downloading FAERS cleaned data, and import relational datasets.  It

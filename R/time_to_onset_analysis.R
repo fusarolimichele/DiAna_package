@@ -33,7 +33,7 @@
 #' @seealso
 #' \code{\link{ks.test}} for information about the Kolmogorov-Smirnov test.
 #'
-#' #' @references
+#' @references
 #' Van Holle, L., Zeinoun, Z., Bauchau, V. and Verstraeten, T. (2012), Using time-to-onset for detecting safety signals in spontaneous reports of adverse events following immunization: a proof of concept study. Pharmacoepidemiol Drug Saf, 21: 603-610. https://doi.org/10.1002/pds.3226
 #'
 #'
@@ -132,7 +132,6 @@ time_to_onset_analysis <- function(
   results <- results[, D_drug := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ks_drug[[x]][[1]], NA))]
   results <- results[, p_drug := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ks_drug[[x]][[2]], NA))]
   results <- results[, n_cases_with_tto := map2(index, D_E, \(x, y) length(unlist(y)))]
-  results <- results[, summary := map2(index, D_E, \(x, y) list(summary(unlist(y))))]
   results <- results[, min := map2(index, D_E, \(x, y) summary(unlist(y))[[1]])]
   results <- results[, Q1 := map2(index, D_E, \(x, y) summary(unlist(y))[[2]])] ## TO DO
   results <- results[, Q2 := map2(index, D_E, \(x, y) summary(unlist(y))[[3]])]

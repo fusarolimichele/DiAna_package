@@ -43,3 +43,8 @@ network_analysis(pids = c(1, 2, 3), entity = "reaction")
 }
 
 }
+\references{
+Fusaroli M, Raschi E, Gatti M, De Ponti F, Poluzzi E. Development of a Network-Based Signal Detection Tool: The COVID-19 Adversome in the FDA Adverse Event Reporting System. Front Pharmacol. 2021 Dec 8;12:740707. doi: 10.3389/fphar.2021.740707. PMID: 34955821; PMCID: PMC8694570.
+
+Fusaroli M, Polizzi S, Menestrina L, Giunchi V, Pellegrini L, Raschi E, et al. Unveiling the Hidden Toll of Drug-Induced Impulsivity: A Network Analysis of the FDA Adverse Event Reporting System. 2023; : 2023.11.17.23298635. \link{Cited 2023 Nov 29} Available from https://www.medrxiv.org/content/10.1101/2023.11.17.23298635v1
+}
