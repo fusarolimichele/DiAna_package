@@ -24,7 +24,11 @@ Useful links:
 Authors:
 \itemize{
   \item Valentina Giunchi \email{valentina.giunchi2@unibo.it} (\href{https://orcid.org/0000-0001-5841-8520}{ORCID})
-  \item Lionel Van Holle \email{lionel.vanholle@opensourcepv.com} (\href{https://orcid.org/0000-0001-7354-6475}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Lionel Van Holle \email{lionel.vanholle@opensourcepv.com} (\href{https://orcid.org/0000-0001-7354-6475}{ORCID}) [contributor]
 }
 
 }

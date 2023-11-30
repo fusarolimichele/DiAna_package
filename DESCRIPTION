@@ -6,7 +6,7 @@ Authors@R:c(
            comment = c(ORCID = "0000-0002-0254-2212")),
     person("Valentina", "Giunchi", , "valentina.giunchi2@unibo.it", role = "aut",
            comment = c(ORCID = "0000-0001-5841-8520")),
-    person("Lionel", "Van Holle", , "lionel.vanholle@opensourcepv.com", role = "aut",
+    person("Lionel", "Van Holle", , "lionel.vanholle@opensourcepv.com", role = "ctb",
            comment = c(ORCID = "0000-0001-7354-6475"))
   )
 Description: The `DiAna` (Disproportionality Analysis) package allows for
