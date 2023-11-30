@@ -164,6 +164,7 @@ time_to_onset_analysis <- function(
 #' plot_KS(results_tto_analysis, RG = "drug")
 #' }
 #'
+#' @export
 plot_KS <- function(results_tto_analysis, RG = "drug") {
   # simulate two distributions - your data goes here!
   sample1 <- unlist(results_tto_analysis$D_E)
