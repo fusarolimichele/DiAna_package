@@ -120,9 +120,12 @@ time_to_onset_analysis <- function(
   results <- results[, nD_E := map2(primaryid_event, primaryid_substance, \(x, y) !x %in% y)]
   results <- results[, nD_E := map2(ttos_event, nD_E, \(x, y) x[y])]
   #### Calculate KS
+  results <- results[lengths(D_E)>0]
+  results <- results[lengths(nD_E)>0]
   results <- results[, ks_event := map2(D_E, nD_E, \(x, y) ks.test(unlist(x), unlist(y),
     alternative = "two.sided", exact = FALSE
   ))]
+  results <- results[lengths(D_nE)>0]
   results <- results[, ks_drug := map2(D_E, D_nE, \(x, y) ks.test(unlist(x), unlist(y),
     alternative = "two.sided", exact = FALSE
   ))]
