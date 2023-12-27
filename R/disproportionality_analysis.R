@@ -128,7 +128,7 @@ disproportionality_analysis <- function(
 #' This function generates a forest plot visualization of disproportions.
 #'
 #' @param df Data.table containing the data for rendering the forest plot.
-#' @param index Type of data to use for rendering: "TTO", "ROR", "ROR_disp", or "IC".
+#' @param index Type of data to use for rendering: "ROR", "ROR_disp", or "IC".
 #' @param row Variable for the rows of the forest plot (default is "drug").
 #' @param levs_row Levels for the rows of the forest plot.
 #' @param facet_v Variable for vertical facetting (default is "event").
