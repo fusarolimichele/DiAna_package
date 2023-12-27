@@ -34,7 +34,7 @@
 #' @seealso
 #' \code{\link{ks.test}} for information about the Kolmogorov-Smirnov test.
 #'
-#' #' @references
+#' @references
 #' Van Holle, L., Zeinoun, Z., Bauchau, V. and Verstraeten, T. (2012), Using time-to-onset for detecting safety signals in spontaneous reports of adverse events following immunization: a proof of concept study. Pharmacoepidemiol Drug Saf, 21: 603-610. https://doi.org/10.1002/pds.3226
 #'
 #'
@@ -121,6 +121,7 @@ time_to_onset_analysis <- function(
   # results <- results[, E := D_E + nD_E]
   results <- results[, nD_E := map2(primaryid_event, primaryid_substance, \(x, y) !x %in% y)]
   results <- results[, nD_E := map2(ttos_event, nD_E, \(x, y) x[y])]
+
   #### Perform test
   if(test == "AD"){
     results <- results[lengths(D_E)>0]
@@ -169,4 +170,63 @@ time_to_onset_analysis <- function(
     results <- results[, max := map2(index, D_E, \(x, y) summary(unlist(y))[[6]])]
     return(results)
   }
+
+}
+
+#' Plot Kolmogorov-Smirnov (KS) plot
+#'
+#' This function generates a KS plot for comparing two distributions using the
+#' Kolmogorov-Smirnov statistic.
+#'
+#' @param results_tto_analysis The results of the time-to-event analysis.
+#' @param RG Specifies whether the drug-event combination of interest should be compared with other reports of the "drug" or of the "event".
+#'
+#' @return A ggplot object representing the KS plot.
+#'
+#' @details
+#' The function takes the results of a time-to-event analysis and compares
+#' two distributions based on the specified type of data (drug or event).
+#' It uses the ggplot2 package to create a KS plot, highlighting the points
+#' of greatest distance between the cumulative distribution functions (CDFs)
+#' of the two groups.
+#'
+#' @examples
+#' \dontrun{
+#' # Example usage:
+#' plot_KS(results_tto_analysis, RG = "drug")
+#' }
+#'
+#' @export
+plot_KS <- function(results_tto_analysis, RG = "drug") {
+  # simulate two distributions - your data goes here!
+  sample1 <- unlist(results_tto_analysis$D_E)
+  if (RG == "drug") {
+    sample2 <- unlist(results_tto_analysis$D_nE)
+  } else if (RG == "event") {
+    sample2 <- unlist(results_tto_analysis$nD_E)
+  }
+  group <- c(rep("Cases", length(sample1)), rep("RG", length(sample2)))
+  dat <- data.frame(KSD = c(sample1, sample2), group = group)
+  # create ECDF of data
+  cdf1 <- ecdf(sample1)
+  cdf2 <- ecdf(sample2)
+  # find min and max statistics to draw line between points of greatest distance
+  minMax <- seq(min(sample1, sample2), max(sample1, sample2), length.out = length(sample1))
+  x0 <- minMax[which(abs(cdf1(minMax) - cdf2(minMax)) == max(abs(cdf1(minMax) - cdf2(minMax))))]
+  y0 <- cdf1(x0)
+  y1 <- cdf2(x0)
+
+  ks_plot <- ggplot(dat, aes(x = KSD, group = group, color = group)) +
+    stat_ecdf(size = 1) +
+    theme_bw(base_size = 28) +
+    theme(legend.position = "top") +
+    xlab("days") +
+    ylab("cumulative distribution") +
+    # geom_line(size=1) +
+    geom_segment(aes(x = x0[1], y = y0[1], xend = x0[1], yend = y1[1]),
+      linetype = "dashed", color = "red"
+    ) +
+    geom_point(aes(x = x0[1], y = y0[1]), color = "red", size = 8) +
+    geom_point(aes(x = x0[1], y = y1[1]), color = "red", size = 8) +
+    theme(legend.title = element_blank())
 }
