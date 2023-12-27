@@ -13,7 +13,8 @@ time_to_onset_analysis(
   drug_level = "substance",
   restriction = "none",
   minimum_cases = 3,
-  max_TTO = 365
+  max_TTO = 365,
+  test = "AD"
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ time_to_onset_analysis(
 \item{minimum_cases}{The minimum number of cases required for the analysis (default is 3).}
 
 \item{max_TTO}{The maximum time to onset considered in the analysis, in days (default is 365).}
+
+\item{test}{The two-sample goodness of fit test to apply for TTO analysis. Choices are AD (Anderson-Darling test - default) and KS (Kolmogorov-Smirnov test).}
 }
 \value{
 A data.table containing results of the time-to-onset analysis, including drug-event associations, KS test statistics, and p-values.

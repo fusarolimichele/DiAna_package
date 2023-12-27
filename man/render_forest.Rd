@@ -23,7 +23,7 @@ render_forest(
 \arguments{
 \item{df}{Data.table containing the data for rendering the forest plot.}
 
-\item{index}{Type of data to use for rendering: "TTO", "ROR", "ROR_disp", or "IC".}
+\item{index}{Type of data to use for rendering: "ROR", "ROR_disp", or "IC".}
 
 \item{row}{Variable for the rows of the forest plot (default is "drug").}
 

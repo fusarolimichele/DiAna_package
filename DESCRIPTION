@@ -1,7 +1,7 @@
 Package: DiAna
 Title: Advanced Disproportionality Analysis in the FAERS for Drug Safety
 Version: 0.0.0.9000
-Authors@R:c(
+Authors@R: c(
     person("Michele", "Fusaroli", , "michele.fusaroli2@unibo.it", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0254-2212")),
     person("Valentina", "Giunchi", , "valentina.giunchi2@unibo.it", role = "aut",
@@ -23,6 +23,7 @@ Depends:
     IsingFit,
     questionr,
     tidyverse,
+    twosamples,
     writexl
 Imports: 
     ggplot2,
