@@ -10,6 +10,7 @@
 #' @param restriction Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo[!RB_duplicates_only_susp]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.
 #' @param minimum_cases The minimum number of cases required for the analysis (default is 3).
 #' @param max_TTO The maximum time to onset considered in the analysis, in days (default is 365).
+#' @param test The two-sample goodness of fit test to apply for TTO analysis. Choices are AD (Anderson-Darling test - default) and KS (Kolmogorov-Smirnov test).
 #'
 #' @return A data.table containing results of the time-to-onset analysis, including drug-event associations, KS test statistics, and p-values.
 #'
@@ -45,7 +46,8 @@ time_to_onset_analysis <- function(
     drug_level = "substance",
     restriction = "none",
     minimum_cases = 3,
-    max_TTO = 365) {
+    max_TTO = 365,
+    test = "AD") {
   if (length(restriction) > 1) {
     temp_d <- temp_d[primaryid %in% restriction] %>% droplevels()
     temp_r <- temp_r[primaryid %in% restriction] %>% droplevels()
@@ -119,29 +121,56 @@ time_to_onset_analysis <- function(
   # results <- results[, E := D_E + nD_E]
   results <- results[, nD_E := map2(primaryid_event, primaryid_substance, \(x, y) !x %in% y)]
   results <- results[, nD_E := map2(ttos_event, nD_E, \(x, y) x[y])]
-  #### Calculate KS
-  results <- results[lengths(D_E)>0]
-  results <- results[lengths(nD_E)>0]
-  results <- results[, ks_event := map2(D_E, nD_E, \(x, y) ks.test(unlist(x), unlist(y),
-    alternative = "two.sided", exact = FALSE
-  ))]
-  results <- results[lengths(D_nE)>0]
-  results <- results[, ks_drug := map2(D_E, D_nE, \(x, y) ks.test(unlist(x), unlist(y),
-    alternative = "two.sided", exact = FALSE
-  ))]
-  results <- results[, index := .I]
-  results <- results[, D_event := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ks_event[[x]][[1]], NA))]
-  results <- results[, p_event := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ks_event[[x]][[2]], NA))]
-  results <- results[, D_drug := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ks_drug[[x]][[1]], NA))]
-  results <- results[, p_drug := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ks_drug[[x]][[2]], NA))]
-  results <- results[, n_cases_with_tto := map2(index, D_E, \(x, y) length(unlist(y)))]
-  results <- results[, min := map2(index, D_E, \(x, y) summary(unlist(y))[[1]])]
-  results <- results[, Q1 := map2(index, D_E, \(x, y) summary(unlist(y))[[2]])] ## TO DO
-  results <- results[, Q2 := map2(index, D_E, \(x, y) summary(unlist(y))[[3]])]
-  results <- results[, mean := map2(index, D_E, \(x, y) summary(unlist(y))[[4]])]
-  results <- results[, Q3 := map2(index, D_E, \(x, y) summary(unlist(y))[[5]])]
-  results <- results[, max := map2(index, D_E, \(x, y) summary(unlist(y))[[6]])]
-  return(results)
+
+  #### Perform test
+  if(test == "AD"){
+    results <- results[lengths(D_E)>0]
+    results <- results[lengths(nD_E)>0]
+    results <- results[, ad_event := map2(D_E, nD_E, \(x, y) ad_test(unlist(x), unlist(y)))]
+    results <- results[lengths(D_nE)>0]
+    results <- results[, ad_drug := map2(D_E, nD_E, \(x, y) ad_test(unlist(x), unlist(y)))]
+    results <- results[, index := .I]
+    results <- results[, D_event := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ad_event[[x]][[1]], NA))]
+    results <- results[, p_event := map2(index, D_E, \(x,y) ifelse(length(unlist(y)) >= minimum_cases, ad_event[[x]][[2]], NA))]
+    results <- results[, D_drug := map2(index, D_E, \(x,y) ifelse(length(unlist(y)) >= minimum_cases, ad_drug[[x]][[1]], NA))]
+    results <- results[, p_drug := map2(index, D_E, \(x,y) ifelse(length(unlist(y)) >= minimum_cases, ad_drug[[x]][[2]], NA))]
+    results <- results[, n_cases_with_tto := map2(index, D_E, \(x, y) length(unlist(y)))]
+    results <- results[, summary := map2(index, D_E, \(x, y) list(summary(unlist(y))))]
+    results <- results[, min := map2(index, D_E, \(x, y) summary(unlist(y))[[1]])]
+    results <- results[, Q1 := map2(index, D_E, \(x, y) summary(unlist(y))[[2]])] ## TO DO
+    results <- results[, Q2 := map2(index, D_E, \(x, y) summary(unlist(y))[[3]])]
+    results <- results[, mean := map2(index, D_E, \(x, y) summary(unlist(y))[[4]])]
+    results <- results[, Q3 := map2(index, D_E, \(x, y) summary(unlist(y))[[5]])]
+    results <- results[, max := map2(index, D_E, \(x, y) summary(unlist(y))[[6]])]
+    return(results)
+  }
+
+  if(test == "KS"){
+    results <- results[lengths(D_E)>0]
+    results <- results[lengths(nD_E)>0]
+    results <- results[, ks_event := map2(D_E, nD_E, \(x, y) ks.test(unlist(x), unlist(y),
+                                                                     alternative = "two.sided", exact = FALSE
+    ))]
+    results <- results[lengths(D_nE)>0]
+    results <- results[, ks_drug := map2(D_E, D_nE, \(x, y) ks.test(unlist(x), unlist(y),
+                                                                    alternative = "two.sided", exact = FALSE
+    ))]
+    results <- results[, index := .I]
+    results <- results[, D_event := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ks_event[[x]][[1]], NA))]
+    results <- results[, p_event := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ks_event[[x]][[2]], NA))]
+    results <- results[, D_drug := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ks_drug[[x]][[1]], NA))]
+    results <- results[, p_drug := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ks_drug[[x]][[2]], NA))]
+    results <- results[, n_cases_with_tto := map2(index, D_E, \(x, y) length(unlist(y)))]
+    results <- results[, summary := map2(index, D_E, \(x, y) list(summary(unlist(y))))]
+    results <- results[, min := map2(index, D_E, \(x, y) summary(unlist(y))[[1]])]
+    results <- results[, Q1 := map2(index, D_E, \(x, y) summary(unlist(y))[[2]])] ## TO DO
+    results <- results[, Q2 := map2(index, D_E, \(x, y) summary(unlist(y))[[3]])]
+    results <- results[, mean := map2(index, D_E, \(x, y) summary(unlist(y))[[4]])]
+    results <- results[, Q3 := map2(index, D_E, \(x, y) summary(unlist(y))[[5]])]
+    results <- results[, max := map2(index, D_E, \(x, y) summary(unlist(y))[[6]])]
+    return(results)
+  }
+
 }
 
 #' Plot Kolmogorov-Smirnov (KS) plot
