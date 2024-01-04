@@ -187,7 +187,7 @@ import("REAC")
 import("DEMO")
 import("INDI")
 
-# Try also importing and look at the information included in DEMO_SUPP, OUTC, THER, DOSES, DRUG_SUPP, DRUG_NAME
+# Try also importing and look at the information included in DEMO_SUPP, OUTC, THER, DOSES, DRUG_SUPP, DRUG_NAME. But be careful that memory is a resource, and the more information you import, the slower the computer runs, up to the possibility of exhausting memory and crashing. In general, it is recommended to import only used dataframe Note that you can remove an imported dataframe from the local environment using, e.g., rm(Ther)
 ```
 
 ```{r, echo=FALSE}
@@ -354,10 +354,13 @@ hierarchycal_rates(pids_cases, "substance", drug_role = c("PS", "SS"))
 DT::datatable(readxl::read_xlsx("/Users/michele.fusaroli/Desktop/DiAna_package/DiAna/projects/tutorial/reporting_rates.xlsx"))
 ```
 
+Note that only ≈33% of the investigated cases, selected because they record haloperidol, records haloperidol as a suspect (in the other cases it is just a concomitant).
+
 ### **Network analysis** 
 
 We can also use a network to visualize the syndromic co-reporting of
-events:
+events. Note that this function takes time, since it calculates conditional dependences between all the included nodes. Consider selecting only a sample of the cases to make it faster. To better understand what the function does, refer to Fusaroli M, Raschi E, Gatti M, De Ponti F, Poluzzi E. Development of a Network-Based Signal Detection Tool: The COVID-19 Adversome in the FDA Adverse Event Reporting System. Front Pharmacol. 2021 Dec 8;12:740707. doi: 10.3389/fphar.2021.740707. PMID: 34955821; PMCID: PMC8694570. and to 1. Fusaroli M, Polizzi S, Menestrina L, Giunchi V, Pellegrini L, Raschi E, et al. Unveiling the Hidden Toll of Drug-Induced Impulsivity: A Network Analysis of the FDA Adverse Event Reporting System. medRxiv; 2023.Available from: https://www.medrxiv.org/content/10.1101/2023.11.17.23298635v1. We are also working on a tutorial.
+
 
 ```{r echo=FALSE, eval=FALSE}
 library(NetworkToolbox)
@@ -381,8 +384,8 @@ reaction of aripiprazole ("headache") and one clear bias ("bipolar
 disorder" is one of the major indications for using aripiprazole).
 
 ```{r}
-drug_selected <- "aripiprazole" # define the drug of interest
-reac_selected <- list( # define the events of interest
+drugs_selected <- "aripiprazole" # define the drug of interest
+events_selected <- list( # define the events of interest
   "gambling disorder", "hypersexuality", "compulsive shopping", "hyperphagia", "kleptomania", "bipolar disorder", "headache"
 )
 ```
@@ -396,7 +399,7 @@ measure of disproportionality, using a forest plot.
 
 ```{r}
 DPA_df <- disproportionality_analysis( # perform disproportionality analysis
-  drug_selected, reac_selected
+  drugs_selected, events_selected
 )
 render_forest(DPA_df, "IC", row = "event")
 ```
@@ -425,7 +428,7 @@ previous analysis to allow for visual comparison using a forest plot.
 ```{r}
 deduplicated <- Demo[RB_duplicates_only_susp == FALSE]$primaryid # identify deduplicated reports
 DPA_df_deduplicated <- disproportionality_analysis( # disproportionality analysis with restriction
-  drug_selected, reac_selected,
+  drugs_selected, events_selected,
   restriction = deduplicated
 )
 df <- rbindlist(list( # storing together the results of different analyses
@@ -472,7 +475,7 @@ bipolar_disorder <- Indi[indi_pt %in% MedDRA[ # select reports with bipolar diso
 # bipolar_disorder <- Indi[indi_pt =="bipolar disorder]$primaryid
 
 DPA_df_bipolar <- disproportionality_analysis( # disproportionality analysis with restriction
-  drug_selected, reac_selected,
+  drugs_selected, events_selected,
   restriction = bipolar_disorder
 )
 
@@ -506,7 +509,7 @@ disproportionality analysis.
 warning_date <- 20160305 # define the warning date
 pre_warning <- Demo[init_fda_dt < warning_date]$primaryid # select only reports submitted before the warning
 preW <- disproportionality_analysis( # disproportionality analysis with restriction
-  drug_selected, reac_selected,
+  drugs_selected, events_selected,
   restriction = pre_warning
 )
 
@@ -534,7 +537,7 @@ terms.We can therefore redefine our reactions of interest for higher
 sensitivity.
 
 ```{r}
-reac_selected <- list( # redefined reaction for higher sensitivity
+events_selected <- list( # redefined reaction for higher sensitivity
   "gambling disorder" = list("gambling disorder", "gambling"),
   "hypersexuality" = list("compulsive sexual behaviour", "hypersexuality", "excessive masturbation", "excessive sexual fantasies", "libido increased", "sexual activity increased", "kluver-bucy syndrome", "erotophonophilia", "exhibitionism", "fetishism", "frotteurism", "masochism", "paraphilia", "paedophilia", "sadism", "transvestism", "voyeurism", "sexually inappropriate behaviour"),
   "compulsive shopping" = list("compulsive shopping"),
@@ -545,7 +548,7 @@ reac_selected <- list( # redefined reaction for higher sensitivity
 )
 
 custom_group <- disproportionality_analysis( # perform the disproportionality analysis
-  drug_selected, reac_selected,
+  drugs_selected, events_selected,
   meddra_level = "custom"
 )
 
@@ -567,7 +570,7 @@ to have a unified analysis.
 ```{r}
 restriction <- intersect(intersect(deduplicated, bipolar_disorder), pre_warning) # integrate all the restrictions
 complete <- disproportionality_analysis( # disproportionality
-  drug_selected, reac_selected,
+  drugs_selected, events_selected,
   meddra_level = "custom", restriction = restriction
 )
 render_forest(complete, "IC", # forest plot
