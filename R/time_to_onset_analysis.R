@@ -216,7 +216,7 @@ plot_KS <- function(results_tto_analysis, RG = "drug") {
   y1 <- cdf2(x0)
 
   ks_plot <- ggplot(dat, aes(x = KSD, group = group, color = group)) +
-    stat_ecdf(size = 1) +
+    stat_ecdf(linewidth = 1) +
     theme_bw(base_size = 28) +
     theme(legend.position = "top") +
     xlab("days") +
@@ -228,4 +228,5 @@ plot_KS <- function(results_tto_analysis, RG = "drug") {
     geom_point(aes(x = x0[1], y = y0[1]), color = "red", size = 8) +
     geom_point(aes(x = x0[1], y = y1[1]), color = "red", size = 8) +
     theme(legend.title = element_blank())
+  ks_plot
 }
