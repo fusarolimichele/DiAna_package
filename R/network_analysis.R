@@ -45,10 +45,22 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   df <- distinct(df)
   binary_data <- df
   binary_data$value <- 1
-  binary_data <- binary_data %>% pivot_wider(
-    names_from = pt,
-    values_from = value
-  )
+  if(entity=="reaction"){
+    binary_data <- binary_data %>% pivot_wider(
+      names_from = pt,
+      values_from = value
+    )
+  } else if(entity=="indication"){
+    binary_data <- binary_data %>% pivot_wider(
+      names_from = indi_pt,
+      values_from = value
+    )
+  } else if(entity=="substance"){
+    binary_data <- binary_data %>% pivot_wider(
+      names_from = substance,
+      values_from = value
+    )
+  }
   row_names <- binary_data$primaryid
   binary_data <- binary_data %>%
     select(-primaryid) %>%
