@@ -9,6 +9,7 @@
 #' @param file_name Character string specifying the file name (including path) to save the network visualization. Default is "network.tiff".
 #' @param width Numeric specifying the width of the saved image in pixels. Default is 1500.
 #' @param height Numeric specifying the height of the saved image in pixels. Default is 1500.
+#' @param labs_size Size of labels in network visualization. Default is 1. It can be changed if visualization is not good.
 #'
 #' @return NULL (invisibly). Saves a network visualization as a TIFF file.
 #'
@@ -34,11 +35,13 @@
 #' @export
 network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
                              remove_negative_edges = TRUE,
-                             file_name = paste0(project_path, "network.tiff"), width = 1500, height = 1500) {
+                             file_name = paste0(project_path, "network.tiff"), width = 1500, height = 1500,
+                             labs_size = 1) {
   if (entity == "reaction") {
     df <- import("REAC", pids = pids)[, .(primaryid, pt)]
   } else if (entity == "indication") {
     df <- import("INDI", pids = pids)
+    df <- df[, .(primaryid, indi_pt)] # removal of drug_seq
   } else if (entity == "substance") {
     df <- import("DRUG", pids = pids)[, .(primaryid, substance)]
   }
@@ -61,6 +64,7 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
       values_from = value
     )
   }
+
   row_names <- binary_data$primaryid
   binary_data <- binary_data %>%
     select(-primaryid) %>%
@@ -82,16 +86,28 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   cols[cols %in% t] <- 100
   G_igraph <- set_vertex_attr(G_igraph, "color", value = cols)
   G_igraph <- set_vertex_attr(G_igraph, "group", value = factor(cols))
-  labs1 <- df[, .N, by = "pt"][order(-N)][, .(s = pt, s2 = N)]
+
+  if(entity=="reaction"){
+    labs1 <- df[, .N, by = "pt"][order(-N)][, .(s = pt, s2 = N)]
+  } else if(entity=="indication"){
+    labs1 <- df[, .N, by = "indi_pt"][order(-N)][, .(s = indi_pt, s2 = N)]
+  } else if(entity=="substance"){
+    labs1 <- df[, .N, by = "substance"][order(-N)][, .(s = substance, s2 = N)]
+
+  }
+
+  #labs1 <- df[, .N, by = "pt"][order(-N)][, .(s = pt, s2 = N)]
   labs <- data.table(s = V(G_igraph)$name)
   labs <- left_join(labs, labs1)
+  labs[is.na(s2)]$s2 <- 0
   G_igraph <- set_vertex_attr(G_igraph, "size", value = log(labs$s2))
   G_igraph <- set_vertex_attr(G_igraph, "label", value = labs$s)
 
+  V(G_igraph)$label.cex <- labs_size
   tiff(file_name, width = width, height = height, res = 300)
   plot(comm_lv, G_igraph,
-    layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
-    vertex.label.degree = pi / 2
+       layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
+       vertex.label.degree = pi / 2
   )
   dev.off()
 }
