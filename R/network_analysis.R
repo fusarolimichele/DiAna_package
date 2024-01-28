@@ -10,6 +10,7 @@
 #' @param width Numeric specifying the width of the saved image in pixels. Default is 1500.
 #' @param height Numeric specifying the height of the saved image in pixels. Default is 1500.
 #' @param labs_size Size of labels in network visualization. Default is 1. It can be changed if visualization is not good.
+#' @param restriction Restriction performed in the analysis. Default is NA. It could be setted to 'suspects' if entity is 'substance' to restrict the analysis to primary and secondary suspects
 #'
 #' @return NULL (invisibly). Saves a network visualization as a TIFF file.
 #'
@@ -36,14 +37,19 @@
 network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
                              remove_negative_edges = TRUE,
                              file_name = paste0(project_path, "network.tiff"), width = 1500, height = 1500,
-                             labs_size = 1) {
+                             labs_size = 1, restriction = NA) {
   if (entity == "reaction") {
     df <- import("REAC", pids = pids)[, .(primaryid, pt)]
   } else if (entity == "indication") {
     df <- import("INDI", pids = pids)
     df <- df[, .(primaryid, indi_pt)] # removal of drug_seq
   } else if (entity == "substance") {
-    df <- import("DRUG", pids = pids)[, .(primaryid, substance)]
+    df <- import("DRUG", pids = pids)
+    if(restriction == "suspects"){
+      df <- df[role_cod %in% c("PS","SS")]
+
+      df <- df[, .(primaryid, substance)]
+    }
   }
   df <- distinct(df)
   binary_data <- df
