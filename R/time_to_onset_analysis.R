@@ -230,3 +230,98 @@ plot_KS <- function(results_tto_analysis, RG = "drug") {
     theme(legend.title = element_blank())
   ks_plot
 }
+
+
+#' TTO Render Forest Plot
+#'
+#' This function generates a forest plot visualization of time to onset analysis
+#'
+#' @param df Data.table containing the data for rendering the forest plot.
+#' @param row Variable for the rows of the forest plot (default is "substance").
+#' @param levs_row Levels for the rows of the forest plot.
+#' @param facet_v Variable for vertical facetting (default is "NA", it could be setted to e.g., "event").
+#' @param facet_h Variable for horizontal facetting (default is NA).
+#' @param nested Variable indicating if nested plotting is required (default is FALSE). If nested plotting is required the name of the variable should replace FALSE.
+#' @param text_size_legend Size of text in the legend (default is 15).
+#' @param transformation Transformation for the x-axis (default is "identity").
+#' @param nested_colors Vector of colors for plot elements.
+#' @param dodge Position adjustment for dodging (default is 0.3).
+#' @param show_legend Logical indicating whether to show the legend (default is FALSE).
+#'
+#' @return A ggplot object representing the forest plot visualization.
+#'
+#'
+#' @export
+
+render_tto <- function(df,
+                       row = "substance",
+                       levs_row = NA,
+                       nested = FALSE,
+                       show_legend = TRUE,
+                       transformation = "identity",
+                       text_size_legend = 15,
+                       dodge = .3,
+                       nested_colors = NA,
+                       facet_v = NA,
+                       facet_h = NA) {
+  if (length(levs_row) == 1) {
+    levs_row <- factor(unique(df[[row]])) %>% droplevels()
+  }
+  colors <- c("gray","orange", "red")
+
+  df$median <- as.numeric(df$Q2)
+  df$lower <- as.numeric(df$min)
+  df$upper <- as.numeric(df$max)
+  df$color <- ifelse(df$p_event<=0.05 & df$p_drug<=0.05, "red", ifelse(df$p_event<=0.05 | df$p_drug<=0.05, "orange", "gray"))
+
+  if (nested != FALSE) {
+    df$nested <- df[[nested]]
+    colors <- nested_colors
+    if (is.na(colors)) {
+      colors <- c(
+        "goldenrod", "steelblue", "salmon2",
+        "green4", "brown", "violet", "blue4"
+      )[1:length(unique(df[[nested]]))]
+    }
+  }
+
+  ggplot(
+    data = df, aes(
+      x = median, xmin = lower, xmax = upper,
+      y = factor(get(row), levels = levs_row)
+    ),
+    position = position_dodge(dodge), show.legend = show_legend,
+    alpha = 0.7
+  ) +
+    {
+      if (nested == FALSE) {
+        geom_linerange(aes(col = color), size = 1)
+      }
+    } +
+    {
+      if (nested == FALSE) {
+        geom_point(aes(col = color))
+      }
+    } +
+    {
+      if (nested != FALSE) geom_linerange(aes(color = nested, position = position_dodge(dodge)), size = 1)
+    } +
+    {
+      if (nested != FALSE) geom_point(aes(color = nested, position = position_dodge(dodge)))
+    } +
+    {
+      if (!is.na(facet_v)) facet_wrap(factor(get(facet_v)) ~ ., labeller = label_wrap_gen(width = 15), ncol = 4)
+    } +
+    {
+      if (!is.na(facet_h)) facet_grid(rows = facet_h, labeller = label_wrap_gen(width = 25), scales = "free", space = "free", switch = "y")
+    } +
+    xlab("TTO (days)") +
+    ylab("") +
+    scale_x_continuous(trans = transformation) +
+    scale_color_manual(values=c(red="red", orange="orange", gray="gray"))+
+    theme_bw() +
+    scale_size_area(guide = "none") +
+    guides(shape = guide_legend(override.aes = list(size = 5)), col="none")
+}
+
+
