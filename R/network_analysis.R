@@ -45,8 +45,8 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
     df <- df[, .(primaryid, indi_pt)] # removal of drug_seq
   } else if (entity == "substance") {
     df <- import("DRUG", pids = pids)
-    if(restriction == "suspects"){
-      df <- df[role_cod %in% c("PS","SS")]
+    if (restriction == "suspects") {
+      df <- df[role_cod %in% c("PS", "SS")]
 
       df <- df[, .(primaryid, substance)]
     }
@@ -54,17 +54,17 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   df <- distinct(df)
   binary_data <- df
   binary_data$value <- 1
-  if(entity=="reaction"){
+  if (entity == "reaction") {
     binary_data <- binary_data %>% pivot_wider(
       names_from = pt,
       values_from = value
     )
-  } else if(entity=="indication"){
+  } else if (entity == "indication") {
     binary_data <- binary_data %>% pivot_wider(
       names_from = indi_pt,
       values_from = value
     )
-  } else if(entity=="substance"){
+  } else if (entity == "substance") {
     binary_data <- binary_data %>% pivot_wider(
       names_from = substance,
       values_from = value
@@ -93,16 +93,15 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   G_igraph <- set_vertex_attr(G_igraph, "color", value = cols)
   G_igraph <- set_vertex_attr(G_igraph, "group", value = factor(cols))
 
-  if(entity=="reaction"){
+  if (entity == "reaction") {
     labs1 <- df[, .N, by = "pt"][order(-N)][, .(s = pt, s2 = N)]
-  } else if(entity=="indication"){
+  } else if (entity == "indication") {
     labs1 <- df[, .N, by = "indi_pt"][order(-N)][, .(s = indi_pt, s2 = N)]
-  } else if(entity=="substance"){
+  } else if (entity == "substance") {
     labs1 <- df[, .N, by = "substance"][order(-N)][, .(s = substance, s2 = N)]
-
   }
 
-  #labs1 <- df[, .N, by = "pt"][order(-N)][, .(s = pt, s2 = N)]
+  # labs1 <- df[, .N, by = "pt"][order(-N)][, .(s = pt, s2 = N)]
   labs <- data.table(s = V(G_igraph)$name)
   labs <- left_join(labs, labs1)
   labs[is.na(s2)]$s2 <- 0
@@ -112,8 +111,8 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   V(G_igraph)$label.cex <- labs_size
   tiff(file_name, width = width, height = height, res = 300)
   plot(comm_lv, G_igraph,
-       layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
-       vertex.label.degree = pi / 2
+    layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
+    vertex.label.degree = pi / 2
   )
   dev.off()
 }

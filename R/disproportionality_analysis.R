@@ -223,7 +223,7 @@ render_forest <- function(df,
     ylab("") +
     scale_x_continuous(trans = transformation) +
     theme_bw() +
-    scale_alpha_continuous(guide = "none") +
+    scale_alpha_continuous(range = c(0.4, 1), guide = "none") +
     guides(shape = guide_legend(override.aes = list(size = 5))) +
     scale_size_area(guide = "none") +
     {

@@ -11,7 +11,9 @@ network_analysis(
   remove_negative_edges = TRUE,
   file_name = paste0(project_path, "network.tiff"),
   width = 1500,
-  height = 1500
+  height = 1500,
+  labs_size = 1,
+  restriction = NA
 )
 }
 \arguments{
@@ -28,6 +30,10 @@ network_analysis(
 \item{width}{Numeric specifying the width of the saved image in pixels. Default is 1500.}
 
 \item{height}{Numeric specifying the height of the saved image in pixels. Default is 1500.}
+
+\item{labs_size}{Size of labels in network visualization. Default is 1. It can be changed if visualization is not good.}
+
+\item{restriction}{Restriction performed in the analysis. Default is NA. It could be setted to 'suspects' if entity is 'substance' to restrict the analysis to primary and secondary suspects}
 }
 \value{
 NULL (invisibly). Saves a network visualization as a TIFF file.

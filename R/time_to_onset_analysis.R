@@ -267,12 +267,12 @@ render_tto <- function(df,
   if (length(levs_row) == 1) {
     levs_row <- factor(unique(df[[row]])) %>% droplevels()
   }
-  colors <- c("gray","orange", "red")
+  colors <- c("gray", "orange", "red")
 
   df$median <- as.numeric(df$Q2)
   df$lower <- as.numeric(df$min)
   df$upper <- as.numeric(df$max)
-  df$color <- ifelse(df$p_event<=0.05 & df$p_drug<=0.05, "red", ifelse(df$p_event<=0.05 | df$p_drug<=0.05, "orange", "gray"))
+  df$color <- ifelse(df$p_event <= 0.05 & df$p_drug <= 0.05, "red", ifelse(df$p_event <= 0.05 | df$p_drug <= 0.05, "orange", "gray"))
 
   if (nested != FALSE) {
     df$nested <- df[[nested]]
@@ -318,10 +318,8 @@ render_tto <- function(df,
     xlab("TTO (days)") +
     ylab("") +
     scale_x_continuous(trans = transformation) +
-    scale_color_manual(values=c(red="red", orange="orange", gray="gray"))+
+    scale_color_manual(values = c(red = "red", orange = "orange", gray = "gray")) +
     theme_bw() +
     scale_size_area(guide = "none") +
-    guides(shape = guide_legend(override.aes = list(size = 5)), col="none")
+    guides(shape = guide_legend(override.aes = list(size = 5)), col = "none")
 }
-
-
