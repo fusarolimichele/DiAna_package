@@ -48,7 +48,7 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
     if (file.exists(macosx_folder)) {
       unlink(macosx_folder, recursive = TRUE)
     }
-    download.file("https://osf.io/download/sywd9/",
+    download.file("https://osf.io/download/ng467/",
       destfile = paste0(here(), "/external_sources/ATC_DiAna.csv"),
       mode = "wb"
     )
