@@ -31,12 +31,14 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
     dir.create(paste0(here(), "/projects"))
     dir.create(paste0(here(), "/external_sources"))
     # URL for the DiAna zip file
-    if (!quarter %in% c("23Q1", "23Q3")) {
+    if (!quarter %in% c("23Q1", "23Q3", "23Q4")) {
       stop("The quarter required is not available on the DiAna OSF")
     } else if (quarter == "23Q1") {
       DiAna_url <- "https://osf.io/download/epkqf/"
     } else if (quarter == "23Q3") {
       DiAna_url <- "https://osf.io/download/mb9wj/"
+    } else if (quarter == "23Q4") {
+      DiAna_url <- "https://osf.io/download/8xvnt/"
     }
     # Download and extract DiAna data
     zip_path <- paste0(here(), "/data/", quarter, ".zip")
