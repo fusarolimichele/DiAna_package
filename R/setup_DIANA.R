@@ -9,6 +9,12 @@
 #'       \itemize{
 #'                \item \emph{23Q1}
 #'                }
+#'        \itemize{
+#'                \item \emph{23Q3}
+#'                }
+#'        \itemize{
+#'                \item \emph{23Q4}
+#'                }
 #' @param timeout The amount of time after which R stops a task if it is still unfinished.
 #'                Default 100000It may be necessary to increase it in the case of a slow connection.
 #'

@@ -78,12 +78,12 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   rownames(binary_data) <- row_names
   binary_data[is.na(binary_data[, ])] <- 0
   g1 <- IsingFit::IsingFit(binary_data)
-  G_igraph <- igraph::graph.adjacency(g1$weiadj, mode = "undirected", weighted = TRUE)
+  G_igraph <- igraph::graph_from_adjacency_matrix(g1$weiadj, mode = "undirected", weighted = TRUE)
   if (remove_singlet) {
-    G_igraph <- igraph::delete.vertices(simplify(G_igraph), igraph::degree(G_igraph) == 0)
+    G_igraph <- igraph::delete_vertices(simplify(G_igraph), igraph::degree(G_igraph) == 0)
   }
   if (remove_negative_edges) {
-    G_igraph <- igraph::delete.edges(G_igraph, which(E(G_igraph)$weight < 0))
+    G_igraph <- igraph::delete_edges(G_igraph, which(E(G_igraph)$weight < 0))
   }
   L0 <- layout_nicely(G_igraph)
   comm_lv <- cluster_louvain(G_igraph)
