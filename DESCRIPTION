@@ -21,6 +21,7 @@ Depends:
     gtsummary,
     igraph,
     IsingFit,
+    psych,
     questionr,
     tidyverse,
     twosamples,
