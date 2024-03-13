@@ -111,8 +111,8 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   V(G_igraph)$label.cex <- labs_size
   tiff(file_name, width = width, height = height, res = 300)
   plot(comm_lv, G_igraph,
-       layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
-       vertex.label.degree = pi / 2
+    layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
+    vertex.label.degree = pi / 2
   )
   dev.off()
 }
