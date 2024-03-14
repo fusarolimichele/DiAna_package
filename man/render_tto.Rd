@@ -10,7 +10,7 @@ render_tto(
   levs_row = NA,
   nested = FALSE,
   show_legend = TRUE,
-  transformation = "identity",
+  transformation = "log10",
   text_size_legend = 15,
   dodge = 0.3,
   nested_colors = NA,

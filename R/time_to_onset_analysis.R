@@ -258,7 +258,7 @@ render_tto <- function(df,
                        levs_row = NA,
                        nested = FALSE,
                        show_legend = TRUE,
-                       transformation = "identity",
+                       transformation = "log10",
                        text_size_legend = 15,
                        dodge = .3,
                        nested_colors = NA,
@@ -314,6 +314,9 @@ render_tto <- function(df,
     } +
     {
       if (!is.na(facet_h)) facet_grid(rows = facet_h, labeller = label_wrap_gen(width = 25), scales = "free", space = "free", switch = "y")
+    } +
+    {
+      if (!is.na(facet_h) & !is.na(facet_v)) facet_grid(factor(get(facet_h)) ~ factor(get(facet_v)), labeller = label_wrap_gen(width = 15), scales = "free", space = "free", switch = "y")
     } +
     xlab("TTO (days)") +
     ylab("") +

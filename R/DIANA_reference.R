@@ -10,12 +10,13 @@
 #' # DiAna_reference()
 #' }
 DiAna_reference <- function() {
-  print(paste0("To cite package ‘DiAna’ in publications use:
-
-  Fusaroli M., Giunchi V. - DiAna version ", packageVersion("DiAna"), " (", packageDate("DiAna"), "). Advanced
-  Disproportionality Analysis in the FAERS for Drug
-  Safety.
-  https://github.com/fusarolimichele/DiAna_package,
-  https://github.com/fusarolimichele/DiAna,
-  https://osf.io/zqu89/."))
+  print(
+    c(
+      paste0(
+        "Fusaroli M., Giunchi V. - DiAna version ", packageVersion("DiAna"), " (", packageDate("DiAna"), "). ",
+        "An open access toolkit for DIsproportionality ANAlysis and other pharmacovigilance investigations in the FAERS. https://github.com/fusarolimichele/DiAna_package; https://github.com/fusarolimichele/DiAna; https://osf.io/zqu89/."
+      ),
+      paste0("Additional reference: Fusaroli M, Giunchi V, Battini V, Puligheddu S, Khouri C, Carnovale C, Raschi E, Poluzzi E. Enhancing Transparency in Defining Studied Drugs: The Open-Source Living DiAna Dictionary for Standardizing Drug Names in the FAERS. Drug Saf. 2024 Mar;47(3):271-284. doi: 10.1007/s40264-023-01391-4.")
+    )
+  )
 }
