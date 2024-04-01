@@ -3,6 +3,7 @@
 export(DiAna_reference)
 export(descriptive)
 export(disproportionality_analysis)
+export(disproportionality_comparison)
 export(fisher.test.simulate.p.values)
 export(get_drugnames)
 export(hierarchycal_rates)

@@ -240,3 +240,68 @@ render_forest <- function(df,
     ) +
     guides(shape = guide_legend(override.aes = list(size = 5)))
 }
+
+#'  Disproportionality Analysis using numbers
+#'
+#' performs disproportionality analysis when provided with numbers and returns the results.
+#'
+#' @param
+#'
+#' @param
+#'
+#' @return A data.table containing disproportionality analysis results.
+#'
+#' @importFrom questionr odds.ratio
+#'
+#' @export
+
+#' @examples
+#' \dontrun{
+#' disproportionality_comparison(event_count = 10000, drug_count = 3000, drug_event_count = 500, tot = 20000000)
+#' }
+disproportionality_comparison <- function(drug_count = length(pids_drug), event_count = length(pids_event),
+                                          drug_event_count = length(intersect(pids_drug, pids_event)), tot = nrow(Demo)) {
+  tab <- as.matrix(data.table(
+    E = c(drug_event_count, event_count - drug_event_count),
+    nE = c(drug_count - drug_event_count, tot - event_count - (drug_count - drug_event_count))
+  ))
+  rownames(tab) <- c("D", "nD")
+  print(tab)
+  cat("\n")
+  cat("\n")
+  or <- questionr::odds.ratio(tab)
+  ROR_median <- floor(or$OR * 100) / 100
+  ROR_lower <- floor(or$`2.5 %` * 100) / 100
+  ROR_upper <- floor(or$`97.5 %` * 100) / 100
+  IC_median <- log2((drug_event_count + .5) / (((drug_count * event_count) / tot) + .5))
+  IC_lower <- floor((IC_median - 3.3 * (drug_event_count + .5)^(-1 / 2) - 2 * (drug_event_count + .5)^(-3 / 2)) * 100) / 100
+  IC_upper <- floor((IC_median + 2.4 * (drug_event_count + .5)^(-1 / 2) - 0.5 * (drug_event_count + .5)^(-3 / 2)) * 100) / 100
+  gamma_lower <- log2(stats::qgamma(
+    p = .025,
+    shape = drug_event_count + 0.5,
+    rate = ((drug_count * event_count) / tot) + 0.5
+  ))
+  gamma_median <- log2(stats::qgamma(
+    p = .05,
+    shape = drug_event_count + 0.5,
+    rate = ((drug_count * event_count) / tot) + 0.5
+  ))
+  gamma_upper <- log2(stats::qgamma(
+    p = .975,
+    shape = drug_event_count + 0.5,
+    rate = ((drug_count * event_count) / tot) + 0.5
+  ))
+  IC_median <- floor(IC_median * 100) / 100
+  RRR_median <- drug_event_count / ((drug_count * event_count) / tot)
+  RRR_lower <- (drug_event_count) / (drug_count * event_count / tot) * exp(stats::qnorm(.025) * sqrt(1 / drug_event_count - 1 / drug_count + 1 / event_count - 1 / tot))
+  RRR_upper <- (drug_event_count) / (drug_count * event_count / tot) * exp(stats::qnorm(.975) * sqrt(1 / drug_event_count - 1 / drug_count + 1 / event_count - 1 / tot))
+  PRR_median <- (drug_event_count) / (tot * (drug_count / tot) * ((event_count - drug_event_count) / (tot - drug_count)))
+  PRR_lower <- (drug_event_count) / (drug_count * (event_count - drug_event_count) / (tot - drug_count)) * exp(stats::qnorm(.025) * sqrt(1 / drug_event_count - 1 / drug_count + 1 / (event_count - drug_event_count) - 1 / (tot - drug_count)))
+  PRR_upper <- (drug_event_count) / (drug_count * (event_count - drug_event_count) / (tot - drug_count)) * exp(stats::qnorm(.975) * sqrt(1 / drug_event_count - 1 / drug_count + 1 / (event_count - drug_event_count) - 1 / (tot - drug_count)))
+
+  cat(paste0("ROR = ", ROR_median, " (", ROR_lower, "-", ROR_upper, ")\n"))
+  cat(paste0("PRR = ", round(PRR_median, 2), " (", round(PRR_lower, 2), "-", round(PRR_upper, 2), ")\n"))
+  cat(paste0("RRR = ", round(RRR_median, 2), " (", round(RRR_lower, 2), "-", round(RRR_upper, 2), ")\n"))
+  cat(paste0("IC = ", IC_median, " (", IC_lower, "-", IC_upper, ")\n"))
+  cat(paste0("IC_gamma = ", round(gamma_median, 2), " (", round(gamma_lower, 2), "-", round(gamma_upper, 2), ")"))
+}
