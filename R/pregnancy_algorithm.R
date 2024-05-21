@@ -1044,7 +1044,7 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
 
   other_pregnancy_pids <- setdiff(other_pregnancy_pids, age_ineligible)
 
-  medium_specificity <- union(definite_pregnancy_pids, other_pregnancy_pids)
+  medium_specificity <- union(high_specificity, other_pregnancy_pids)
   results <- list(
     "high_specificity" = high_specificity,
     "medium_specificity" = medium_specificity,
