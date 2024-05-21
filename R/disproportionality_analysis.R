@@ -241,24 +241,37 @@ render_forest <- function(df,
     guides(shape = guide_legend(override.aes = list(size = 5)))
 }
 
-#'  Disproportionality Analysis using numbers
+#' Disproportionality Analysis for Drug-Event Combinations
 #'
-#' performs disproportionality analysis when provided with numbers and returns the results.
+#' This function performs a disproportionality analysis for drug-event combinations in the FAERS dataset, calculating various metrics such as the Reporting Odds Ratio (ROR), Proportional Reporting Ratio (PRR), Relative Reporting Ratio (RRR), and Information Component (IC).
 #'
-#' @param
-#'
-#' @param
-#'
-#' @return A data.table containing disproportionality analysis results.
-#'
-#' @importFrom questionr odds.ratio
-#'
-#' @export
-
-#' @examples
-#' \dontrun{
-#' disproportionality_comparison(event_count = 10000, drug_count = 3000, drug_event_count = 500, tot = 20000000)
+#' @param drug_count An integer representing the number of reports for the drug of interest. Default is the length of \code{pids_drug}.
+#' @param event_count An integer representing the number of reports for the event of interest. Default is the length of \code{pids_event}.
+#' @param drug_event_count An integer representing the number of reports for the drug-event combination. Default is the length of the intersection of \code{pids_drug} and \code{pids_event}.
+#' @param tot An integer representing the total number of reports in the dataset. Default is the number of rows in the \code{Demo} table.
+#' @return This function prints a contingency table and several disproportionality metrics:
+#' \itemize{
+#'   \item \code{ROR}: Reporting Odds Ratio with confidence intervals.
+#'   \item \code{PRR}: Proportional Reporting Ratio with confidence intervals.
+#'   \item \code{RRR}: Relative Reporting Ratio with confidence intervals.
+#'   \item \code{IC}: Information Component with confidence intervals.
+#'   \item \code{IC_gamma}: Gamma distribution-based Information Component with confidence intervals.
 #' }
+#' @details
+#' The function constructs a contingency table for the drug-event combination and computes the following metrics:
+#' \describe{
+#'   \item{\code{ROR}}{Reporting Odds Ratio: Based on odds ratio}
+#'   \item{\code{PRR}}{Proportional Reporting Ratio: The expected probability of the event is calculated on the population not having the drug of interest.}
+#'   \item{\code{RRR}}{Relative Reporting Ratio: The expected probability of the event is calculated on the entire population.}
+#'   \item{\code{IC}}{Information Component: A measure based on Bayesian confidence propagation neural network models. It is the log2 of the shrinked RRR.}
+#'   \item{\code{IC_gamma}}{Gamma distribution-based Information Component: An alternative IC calculation using the gamma distribution.}
+#' }
+#' @importFrom questionr odds.ratio
+#' @importFrom data.table data.table
+#' @export
+#' @examples
+#' # Perform disproportionality analysis with custom parameters
+#' disproportionality_comparison(drug_count = 100, event_count = 50, drug_event_count = 10, tot = 10000)
 disproportionality_comparison <- function(drug_count = length(pids_drug), event_count = length(pids_event),
                                           drug_event_count = length(intersect(pids_drug, pids_event)), tot = nrow(Demo)) {
   tab <- as.matrix(data.table(
