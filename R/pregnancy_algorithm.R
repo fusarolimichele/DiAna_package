@@ -3,11 +3,12 @@
 #' This function retrieves the identifiers of pregnancy-related reports from the FDA Adverse Event Reporting System (FAERS) for a specified quarter.
 #'
 #' @param quarter A character string specifying the FAERS quarter to retrieve data for. Default is the current FAERS version (\code{FAERS_version}).
-#' @return A list containing three elements:
+#' @return A list containing four elements:
 #' \describe{
 #'   \item{\code{high_specificity}}{A vector of identifiers with high specificity for pregnancy-related reports.}
 #'   \item{\code{medium_specificity}}{A vector of identifiers with medium specificity for pregnancy-related reports.}
 #'   \item{\code{low_specificity}}{A vector of identifiers with low specificity for pregnancy-related reports.}
+#'   \item{\code{paternal_exposure}}{A vector of identifiers for paternal exposure-related reports.}
 #' }
 #' @details
 #' The function processes data from multiple FAERS tables (\code{DEMO}, \code{DRUG}, \code{REAC}, \code{INDI}, \code{OUTC}, \code{THER}, and \code{DRUG_SUPP}) to identify pregnancy-related reports based on specific indications, reactions, and drug routes. The results are filtered to exclude reports unlikely to be related to pregnancy (e.g., reports involving males, children, or older adults). The algorithm is an implementation and evolution of the original pregnancy algorithm by Sakai,ref. 10.3389/fphar.2022.1063625
@@ -999,14 +1000,18 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
   )
 
   step1_pregn <- union(union(indi_preg, reac_preg), route_preg)
-
+  paternal_exposure <- union(
+    Indi[indi_pt %in% exposure_pat_def]$primaryid,
+    Reac[pt %in% exposure_pat_def]$primaryid
+  )
+  low_specificity <- setdiff(step1_pregn, paternal_exposure)
   # Definitive pregnancy---------------------------------
   preg_exp_pids <- intersect(
     union(
       Indi[indi_pt %in% exposure_def]$primaryid,
       Reac[pt %in% exposure_def]$primaryid
     ),
-    step1_pregn
+    low_specificity
   )
 
   transp_pids <- intersect(
@@ -1014,12 +1019,12 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
       "transplacental",
       "intraamniotic", "extraamniotic"
     )]$primaryid,
-    step1_pregn
+    low_specificity
   )
 
-  definite_pregnancy_pids <- union(preg_exp_pids, transp_pids)
+  high_specificity <- union(preg_exp_pids, transp_pids)
   # Exclusion criteria -----------------------------------
-  other_pregnancy_pids <- setdiff(step1_pregn, definite_pregnancy_pids)
+  other_pregnancy_pids <- setdiff(low_specificity, high_specificity)
 
   children_pids <- intersect(
     union(
@@ -1035,25 +1040,16 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
 
   other_pregnancy_pids <- setdiff(other_pregnancy_pids, male_or_na_pids)
 
-  age_ineligible <- intersect(Demo[age_in_days >= 50 * 365 | is.na(age_in_days)]$primaryid, other_pregnancy_pids)
+  age_ineligible <- intersect(Demo[age_in_days >= 55 * 365 | is.na(age_in_days)]$primaryid, other_pregnancy_pids)
 
   other_pregnancy_pids <- setdiff(other_pregnancy_pids, age_ineligible)
 
-  paternal_exposure <- intersect(
-    union(
-      Indi[indi_pt %in% exposure_pat_def]$primaryid,
-      Reac[pt %in% exposure_pat_def]$primaryid
-    ),
-    other_pregnancy_pids
-  )
-
-  other_pregnancy_pids <- setdiff(other_pregnancy_pids, paternal_exposure)
-
-  pregnancy_reports <- union(definite_pregnancy_pids, other_pregnancy_pids)
+  medium_specificity <- union(definite_pregnancy_pids, other_pregnancy_pids)
   results <- list(
-    "high_specificity" = definite_pregnancy_pids,
-    "medium_specificity" = pregnancy_reports,
-    "low_specificity" = step1_pregn
+    "high_specificity" = high_specificity,
+    "medium_specificity" = medium_specificity,
+    "low_specificity" = low_specificity,
+    "paternal_exposure" = paternal_exposure
   )
   return(results)
 }
