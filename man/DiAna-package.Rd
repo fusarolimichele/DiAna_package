@@ -21,6 +21,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Michele Fusaroli \email{michele.fusaroli2@unibo.it} (\href{https://orcid.org/0000-0002-0254-2212}{ORCID})
 
+Authors:
+\itemize{
+  \item Valentina Giunchi \email{valentina.giunchi2@unibo.it} (\href{https://orcid.org/0000-0001-5841-8520}{ORCID})
+}
+
 Other contributors:
 \itemize{
   \item Violetta Zoffoli [contributor]
