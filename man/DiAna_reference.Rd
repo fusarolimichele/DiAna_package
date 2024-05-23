@@ -4,7 +4,7 @@
 \alias{DiAna_reference}
 \title{Get DiAna reference}
 \usage{
-DiAna_reference()
+DiAna_reference(print = TRUE)
 }
 \value{
 DiAna reference
