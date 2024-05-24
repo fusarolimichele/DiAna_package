@@ -123,17 +123,17 @@ time_to_onset_analysis <- function(
   results <- results[, nD_E := map2(ttos_event, nD_E, \(x, y) x[y])]
 
   #### Perform test
-  if(test == "AD"){
-    results <- results[lengths(D_E)>0]
-    results <- results[lengths(nD_E)>0]
+  if (test == "AD") {
+    results <- results[lengths(D_E) > 0]
+    results <- results[lengths(nD_E) > 0]
     results <- results[, ad_event := map2(D_E, nD_E, \(x, y) ad_test(unlist(x), unlist(y)))]
-    results <- results[lengths(D_nE)>0]
+    results <- results[lengths(D_nE) > 0]
     results <- results[, ad_drug := map2(D_E, nD_E, \(x, y) ad_test(unlist(x), unlist(y)))]
     results <- results[, index := .I]
     results <- results[, D_event := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ad_event[[x]][[1]], NA))]
-    results <- results[, p_event := map2(index, D_E, \(x,y) ifelse(length(unlist(y)) >= minimum_cases, ad_event[[x]][[2]], NA))]
-    results <- results[, D_drug := map2(index, D_E, \(x,y) ifelse(length(unlist(y)) >= minimum_cases, ad_drug[[x]][[1]], NA))]
-    results <- results[, p_drug := map2(index, D_E, \(x,y) ifelse(length(unlist(y)) >= minimum_cases, ad_drug[[x]][[2]], NA))]
+    results <- results[, p_event := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ad_event[[x]][[2]], NA))]
+    results <- results[, D_drug := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ad_drug[[x]][[1]], NA))]
+    results <- results[, p_drug := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ad_drug[[x]][[2]], NA))]
     results <- results[, n_cases_with_tto := map2(index, D_E, \(x, y) length(unlist(y)))]
     results <- results[, summary := map2(index, D_E, \(x, y) list(summary(unlist(y))))]
     results <- results[, min := map2(index, D_E, \(x, y) summary(unlist(y))[[1]])]
@@ -145,15 +145,15 @@ time_to_onset_analysis <- function(
     return(results)
   }
 
-  if(test == "KS"){
-    results <- results[lengths(D_E)>0]
-    results <- results[lengths(nD_E)>0]
+  if (test == "KS") {
+    results <- results[lengths(D_E) > 0]
+    results <- results[lengths(nD_E) > 0]
     results <- results[, ks_event := map2(D_E, nD_E, \(x, y) ks.test(unlist(x), unlist(y),
-                                                                     alternative = "two.sided", exact = FALSE
+      alternative = "two.sided", exact = FALSE
     ))]
-    results <- results[lengths(D_nE)>0]
+    results <- results[lengths(D_nE) > 0]
     results <- results[, ks_drug := map2(D_E, D_nE, \(x, y) ks.test(unlist(x), unlist(y),
-                                                                    alternative = "two.sided", exact = FALSE
+      alternative = "two.sided", exact = FALSE
     ))]
     results <- results[, index := .I]
     results <- results[, D_event := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ks_event[[x]][[1]], NA))]
@@ -170,7 +170,6 @@ time_to_onset_analysis <- function(
     results <- results[, max := map2(index, D_E, \(x, y) summary(unlist(y))[[6]])]
     return(results)
   }
-
 }
 
 #' Plot Kolmogorov-Smirnov (KS) plot
@@ -259,7 +258,7 @@ render_tto <- function(df,
                        levs_row = NA,
                        nested = FALSE,
                        show_legend = TRUE,
-                       transformation = "identity",
+                       transformation = "log10",
                        text_size_legend = 15,
                        dodge = .3,
                        nested_colors = NA,
@@ -268,12 +267,12 @@ render_tto <- function(df,
   if (length(levs_row) == 1) {
     levs_row <- factor(unique(df[[row]])) %>% droplevels()
   }
-  colors <- c("gray","orange", "red")
+  colors <- c("gray", "orange", "red")
 
   df$median <- as.numeric(df$Q2)
   df$lower <- as.numeric(df$min)
   df$upper <- as.numeric(df$max)
-  df$color <- ifelse(df$p_event<=0.05 & df$p_drug<=0.05, "red", ifelse(df$p_event<=0.05 | df$p_drug<=0.05, "orange", "gray"))
+  df$color <- ifelse(df$p_event <= 0.05 & df$p_drug <= 0.05, "red", ifelse(df$p_event <= 0.05 | df$p_drug <= 0.05, "orange", "gray"))
 
   if (nested != FALSE) {
     df$nested <- df[[nested]]
@@ -316,13 +315,14 @@ render_tto <- function(df,
     {
       if (!is.na(facet_h)) facet_grid(rows = facet_h, labeller = label_wrap_gen(width = 25), scales = "free", space = "free", switch = "y")
     } +
+    {
+      if (!is.na(facet_h) & !is.na(facet_v)) facet_grid(factor(get(facet_h)) ~ factor(get(facet_v)), labeller = label_wrap_gen(width = 15), scales = "free", space = "free", switch = "y")
+    } +
     xlab("TTO (days)") +
     ylab("") +
     scale_x_continuous(trans = transformation) +
-    scale_color_manual(values=c(red="red", orange="orange", gray="gray"))+
+    scale_color_manual(values = c(red = "red", orange = "orange", gray = "gray")) +
     theme_bw() +
     scale_size_area(guide = "none") +
-    guides(shape = guide_legend(override.aes = list(size = 5)), col="none")
+    guides(shape = guide_legend(override.aes = list(size = 5)), col = "none")
 }
-
-

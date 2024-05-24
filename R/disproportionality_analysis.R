@@ -128,7 +128,7 @@ disproportionality_analysis <- function(
 #' This function generates a forest plot visualization of disproportions.
 #'
 #' @param df Data.table containing the data for rendering the forest plot.
-#' @param index Type of data to use for rendering: "TTO", "ROR", "ROR_disp", or "IC".
+#' @param index Type of data to use for rendering: "ROR" or "IC".
 #' @param row Variable for the rows of the forest plot (default is "drug").
 #' @param levs_row Levels for the rows of the forest plot.
 #' @param facet_v Variable for vertical facetting (default is "event").
@@ -223,7 +223,7 @@ render_forest <- function(df,
     ylab("") +
     scale_x_continuous(trans = transformation) +
     theme_bw() +
-    scale_alpha_continuous(guide = "none") +
+    scale_alpha_continuous(range = c(0.4, 1), guide = "none") +
     guides(shape = guide_legend(override.aes = list(size = 5))) +
     scale_size_area(guide = "none") +
     {
@@ -239,4 +239,82 @@ render_forest <- function(df,
       legend.title = element_blank()
     ) +
     guides(shape = guide_legend(override.aes = list(size = 5)))
+}
+
+#' Disproportionality Analysis for Drug-Event Combinations
+#'
+#' This function performs a disproportionality analysis for drug-event combinations in the FAERS dataset, calculating various metrics such as the Reporting Odds Ratio (ROR), Proportional Reporting Ratio (PRR), Relative Reporting Ratio (RRR), and Information Component (IC).
+#'
+#' @param drug_count An integer representing the number of reports for the drug of interest. Default is the length of \code{pids_drug}.
+#' @param event_count An integer representing the number of reports for the event of interest. Default is the length of \code{pids_event}.
+#' @param drug_event_count An integer representing the number of reports for the drug-event combination. Default is the length of the intersection of \code{pids_drug} and \code{pids_event}.
+#' @param tot An integer representing the total number of reports in the dataset. Default is the number of rows in the \code{Demo} table.
+#' @return This function prints a contingency table and several disproportionality metrics:
+#' \itemize{
+#'   \item \code{ROR}: Reporting Odds Ratio with confidence intervals.
+#'   \item \code{PRR}: Proportional Reporting Ratio with confidence intervals.
+#'   \item \code{RRR}: Relative Reporting Ratio with confidence intervals.
+#'   \item \code{IC}: Information Component with confidence intervals.
+#'   \item \code{IC_gamma}: Gamma distribution-based Information Component with confidence intervals.
+#' }
+#' @details
+#' The function constructs a contingency table for the drug-event combination and computes the following metrics:
+#' \describe{
+#'   \item{\code{ROR}}{Reporting Odds Ratio: Based on odds ratio}
+#'   \item{\code{PRR}}{Proportional Reporting Ratio: The expected probability of the event is calculated on the population not having the drug of interest.}
+#'   \item{\code{RRR}}{Relative Reporting Ratio: The expected probability of the event is calculated on the entire population.}
+#'   \item{\code{IC}}{Information Component: A measure based on Bayesian confidence propagation neural network models. It is the log2 of the shrinked RRR.}
+#'   \item{\code{IC_gamma}}{Gamma distribution-based Information Component: An alternative IC calculation using the gamma distribution.}
+#' }
+#' @importFrom questionr odds.ratio
+#' @importFrom data.table data.table
+#' @export
+#' @examples
+#' # Perform disproportionality analysis with custom parameters
+#' disproportionality_comparison(drug_count = 100, event_count = 50, drug_event_count = 10, tot = 10000)
+disproportionality_comparison <- function(drug_count = length(pids_drug), event_count = length(pids_event),
+                                          drug_event_count = length(intersect(pids_drug, pids_event)), tot = nrow(Demo)) {
+  tab <- as.matrix(data.table(
+    E = c(drug_event_count, event_count - drug_event_count),
+    nE = c(drug_count - drug_event_count, tot - event_count - (drug_count - drug_event_count))
+  ))
+  rownames(tab) <- c("D", "nD")
+  print(tab)
+  cat("\n")
+  cat("\n")
+  or <- questionr::odds.ratio(tab)
+  ROR_median <- floor(or$OR * 100) / 100
+  ROR_lower <- floor(or$`2.5 %` * 100) / 100
+  ROR_upper <- floor(or$`97.5 %` * 100) / 100
+  IC_median <- log2((drug_event_count + .5) / (((drug_count * event_count) / tot) + .5))
+  IC_lower <- floor((IC_median - 3.3 * (drug_event_count + .5)^(-1 / 2) - 2 * (drug_event_count + .5)^(-3 / 2)) * 100) / 100
+  IC_upper <- floor((IC_median + 2.4 * (drug_event_count + .5)^(-1 / 2) - 0.5 * (drug_event_count + .5)^(-3 / 2)) * 100) / 100
+  gamma_lower <- log2(stats::qgamma(
+    p = .025,
+    shape = drug_event_count + 0.5,
+    rate = ((drug_count * event_count) / tot) + 0.5
+  ))
+  gamma_median <- log2(stats::qgamma(
+    p = .05,
+    shape = drug_event_count + 0.5,
+    rate = ((drug_count * event_count) / tot) + 0.5
+  ))
+  gamma_upper <- log2(stats::qgamma(
+    p = .975,
+    shape = drug_event_count + 0.5,
+    rate = ((drug_count * event_count) / tot) + 0.5
+  ))
+  IC_median <- floor(IC_median * 100) / 100
+  RRR_median <- drug_event_count / ((drug_count * event_count) / tot)
+  RRR_lower <- (drug_event_count) / (drug_count * event_count / tot) * exp(stats::qnorm(.025) * sqrt(1 / drug_event_count - 1 / drug_count + 1 / event_count - 1 / tot))
+  RRR_upper <- (drug_event_count) / (drug_count * event_count / tot) * exp(stats::qnorm(.975) * sqrt(1 / drug_event_count - 1 / drug_count + 1 / event_count - 1 / tot))
+  PRR_median <- (drug_event_count) / (tot * (drug_count / tot) * ((event_count - drug_event_count) / (tot - drug_count)))
+  PRR_lower <- (drug_event_count) / (drug_count * (event_count - drug_event_count) / (tot - drug_count)) * exp(stats::qnorm(.025) * sqrt(1 / drug_event_count - 1 / drug_count + 1 / (event_count - drug_event_count) - 1 / (tot - drug_count)))
+  PRR_upper <- (drug_event_count) / (drug_count * (event_count - drug_event_count) / (tot - drug_count)) * exp(stats::qnorm(.975) * sqrt(1 / drug_event_count - 1 / drug_count + 1 / (event_count - drug_event_count) - 1 / (tot - drug_count)))
+
+  cat(paste0("ROR = ", ROR_median, " (", ROR_lower, "-", ROR_upper, ")\n"))
+  cat(paste0("PRR = ", round(PRR_median, 2), " (", round(PRR_lower, 2), "-", round(PRR_upper, 2), ")\n"))
+  cat(paste0("RRR = ", round(RRR_median, 2), " (", round(RRR_lower, 2), "-", round(RRR_upper, 2), ")\n"))
+  cat(paste0("IC = ", IC_median, " (", IC_lower, "-", IC_upper, ")\n"))
+  cat(paste0("IC_gamma = ", round(gamma_median, 2), " (", round(gamma_lower, 2), "-", round(gamma_upper, 2), ")"))
 }

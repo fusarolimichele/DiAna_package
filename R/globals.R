@@ -1,13 +1,11 @@
 utils::globalVariables(c("primaryid"))
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("Welcome to DiAna package. A tool for standardized, flexible, and transparent disproportionality analysis on the FAERS.")
-  packageStartupMessage("To cite package ‘DiAna’ in publications use:
-
-  Fusaroli M, Giunchi V (2023). _DiAna: Advanced
-  Disproportionality Analysis in the FAERS for Drug
-  Safety_.
-  https://github.com/fusarolimichele/DiAna_package,
-  https://github.com/fusarolimichele/DiAna,
-  https://osf.io/zqu89/.")
+  packageStartupMessage("Welcome to DiAna package. A tool for standardized, flexible, and transparent pharmacovigilance analyses on the FAERS.")
+  packageStartupMessage()
+  packageStartupMessage(paste0("To cite this package in your work and publications use: ", DiAna_reference()[2]))
+  packageStartupMessage()
+  packageStartupMessage(DiAna_reference()[4])
+  packageStartupMessage()
+  packageStartupMessage(DiAna_reference()[6])
 }

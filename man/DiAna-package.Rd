@@ -28,7 +28,10 @@ Authors:
 
 Other contributors:
 \itemize{
+  \item Violetta Zoffoli [contributor]
   \item Lionel Van Holle \email{lionel.vanholle@opensourcepv.com} (\href{https://orcid.org/0000-0001-7354-6475}{ORCID}) [contributor]
+  \item Takamasa Sakai \email{tksakai@meijo-u.ac.jp} [contributor]
+  \item Nhung Trinh \email{nhung.trinh@farmasi.uio.no} [contributor]
 }
 
 }
