@@ -65,11 +65,11 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
       destfile = paste0(here(), "/external_sources/ATC_DiAna.csv"),
       mode = "wb"
     )
-    download.file("https://osf.io/download/hfazw/",
+    download.file("https://osf.io/download/muqa5/",
       destfile = paste0(here(), "/external_sources/DiAna_dictionary.csv"),
       mode = "wb"
     )
-    download.file("https://osf.io/download/a68ue/",
+    download.file("https://osf.io/download/j8saz/",
       destfile = paste0(here(), "/external_sources/Countries.csv"),
       mode = "wb"
     )
