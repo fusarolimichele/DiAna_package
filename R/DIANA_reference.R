@@ -22,3 +22,34 @@ DiAna_reference <- function(print = TRUE) {
     paste0("Additional reference: Fusaroli M, Giunchi V, Battini V, Puligheddu S, Khouri C, Carnovale C, Raschi E, Poluzzi E. Enhancing Transparency in Defining Studied Drugs: The Open-Source Living DiAna Dictionary for Standardizing Drug Names in the FAERS. Drug Saf. 2024 Mar;47(3):271-284. doi: 10.1007/s40264-023-01391-4.")
   )
 }
+
+#' Get specifics of dictionaries used in database version
+#'
+#' This function provides specifics on dictionaries used for cleaning the specified database version
+#'
+#' @return Specifics
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # FAERS_quarter_specifics()
+#' }
+FAERS_quarter_specifics <- function(quarter = FAERS_version, print = TRUE) {
+  union(
+    c(
+      paste0("The DiAna dictionary used to convert drugnames to substances is ", quarter),
+      paste0("If a reference is needed use: Fusaroli M, Giunchi V, Battini V, Puligheddu S, Khouri C, Carnovale C, Raschi E, Poluzzi E. Enhancing Transparency in Defining Studied Drugs: The Open-Source Living DiAna Dictionary for Standardizing Drug Names in the FAERS. Drug Saf. 2024 Mar;47(3):271-284. doi: 10.1007/s40264-023-01391-4.")
+    ),
+    if (quarter == "24Q1") {
+      c(
+        paste0(""),
+        paste0(
+          "Events are coded according to MedDRA (the international Medical Dictionary for Regulatory Activities terminology developed under the auspices of the International Council for Harmonisation of Technical Requirements for Pharmaceuticals for Human Use (ICH), ",
+          "version 26.1)"
+        )
+      )
+    } else {
+      c("No information available for the specified quarter. Note that information is available only from 24Q1 onward")
+    }
+  )
+}
