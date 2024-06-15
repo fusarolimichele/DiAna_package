@@ -318,3 +318,206 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
   cat(paste0("IC = ", IC_median, " (", IC_lower, "-", IC_upper, ")\n"))
   cat(paste0("IC_gamma = ", round(gamma_median, 2), " (", round(gamma_lower, 2), "-", round(gamma_upper, 2), ")"))
 }
+
+
+#' Disproportionality Time Trend for a Drug-Event Combination
+#'
+#' This function calculates the disproportionality time trend for a given drug-event combination.
+#'
+#' @param drug_selected Drug selected
+#' @param reac_selected Event selected
+#' @param temp_d Data frame containing drug data. Defaults to `Drug`.
+#' @param temp_r Data frame containing reaction data. Defaults to `Reac`.
+#' @param temp_demo Data frame containing demographic data. Defaults to `Demo`.
+#' @param meddra_level Character string specifying the MedDRA level. Options are "pt" (preferred term) or "custom". Defaults to "pt".
+#' @param drug_level Character string specifying the drug level. Options are "substance" or "custom". Defaults to "substance".
+#' @param restriction Character vector of primary IDs to restrict the analysis. Defaults to "none".
+#' @param time_granularity Character string specifying the time granularity. Options are "year", "quarter", or "month". Defaults to "year".
+#' @param cumulative Logical indicating whether to calculate cumulative values. Defaults to `TRUE`.
+#'
+#' @return A data frame containing the disproportionality results over time, including:
+#' \item{period}{Time period}
+#' \item{TOT}{Total number of reports}
+#' \item{D_E}{Number of reports with both drug and event}
+#' \item{D_nE}{Number of reports with the drug but not the event}
+#' \item{D}{Total number of reports with the drug}
+#' \item{nD_E}{Number of reports with the event but not the drug}
+#' \item{E}{Total number of reports with the event}
+#' \item{nD_nE}{Number of reports with neither the drug nor the event}
+#' \item{ROR_median}{Reporting odds ratio (ROR) median}
+#' \item{ROR_lower}{ROR lower bound (2.5%)}
+#' \item{ROR_upper}{ROR upper bound (97.5%)}
+#' \item{p_value_fisher}{Fisher's exact test p-value}
+#' \item{Bonferroni}{Bonferroni-corrected p-value}
+#' \item{IC_median}{Information component (IC) median}
+#' \item{IC_lower}{IC lower bound}
+#' \item{IC_upper}{IC upper bound}
+#' \item{label_ROR}{Formatted ROR label}
+#' \item{label_IC}{Formatted IC label}
+#'
+#' @details
+#' The function processes the provided data to calculate the reporting odds ratio (ROR) and the information component (IC) for the specified drug-event combination over time.
+#'
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' drug_selected <- "aspirin"
+#' reac_selected <- "headache"
+#' result <- disproportionality_trend(drug_selected, reac_selected)
+#' }
+#'
+#' @export
+disproportionality_trend <- function(
+    drug_selected, reac_selected,
+    temp_d = Drug, temp_r = Reac,
+    temp_demo = Demo,
+    meddra_level = "pt",
+    drug_level = "substance",
+    restriction = "none",
+    time_granularity = "year",
+    cumulative = TRUE) {
+  if (length(restriction) > 1) {
+    temp_d <- temp_d[primaryid %in% restriction] %>% droplevels()
+    temp_r <- temp_r[primaryid %in% restriction] %>% droplevels()
+    temp_demo <- temp_demo[primaryid %in% restriction] %>% droplevels()
+  }
+  if (meddra_level != "pt" & meddra_level != "custom") {
+    if (!exists("MedDRA")) {
+      stop("The MedDRA dictionary is not uploaded.
+                                Without it, only analyses at the PT level are possible")
+    }
+    temp_r <- MedDRA[, c(meddra_level, "pt"), with = FALSE][temp_r, on = "pt"]
+  }
+  if (meddra_level == "custom") {
+    df_custom <- data.table(
+      custom = rep(names(reac_selected), lengths(reac_selected)),
+      pt = unlist(reac_selected)
+    )
+    temp_r <- df_custom[temp_r, on = "pt", allow.cartesian = TRUE]
+    reac_selected <- names(reac_selected)
+  }
+  if (drug_level == "custom") {
+    df_custom <- data.table(
+      custom = rep(names(drug_selected), lengths(drug_selected)),
+      substance = unlist(drug_selected)
+    )
+    temp_d <- df_custom[temp_d, on = "substance", allow.cartesian = TRUE]
+    drug_selected <- names(drug_selected)
+  }
+  if (time_granularity == "year") {
+    temp_demo <- temp_demo[, period := as.numeric(substr(
+      ifelse(is.na(init_fda_dt),
+        fda_dt, init_fda_dt
+      ),
+      1, 4
+    ))][, period := ifelse(period < 2004, 2004, period)]
+  }
+  # ...quarter, month
+  temp_demo <- temp_demo[, .(primaryid, period)][, .(pids = list(primaryid)), by = "period"]
+  temp_r <- temp_r[, c(meddra_level, "primaryid"), with = FALSE] %>% distinct()
+  temp_d <- temp_d[, c(drug_level, "primaryid"), with = FALSE] %>% distinct()
+  temp_demo <- temp_demo[, TOT := unlist(map(pids, \(x) length(x)))]
+  pids_d <- unique(temp_d[get(drug_level) %in% drug_selected]$primaryid)
+  pids_r <- unique(temp_r[get(meddra_level) %in% reac_selected]$primaryid)
+  results <- temp_demo
+  results <- results[, pids_drug := map(pids, \(x) intersect(pids_d, x))]
+  results <- results[, pids_reac := map(pids, \(x) intersect(pids_r, x))]
+  results <- results[, D_E := as.numeric(map2(pids_drug, pids_reac, \(x, y)length(intersect(x, y))))]
+  results <- results[, D_nE := as.numeric(map2(pids_drug, pids_reac, \(x, y)length(setdiff(x, y))))]
+  results <- results[, D := D_E + D_nE]
+  results <- results[, nD_E := as.numeric(map2(pids_reac, pids_drug, \(x, y)length(setdiff(x, y))))]
+  results <- results[, E := D_E + nD_E]
+  results <- results[, nD_nE := TOT - (D_E + D_nE + nD_E)]
+  if (cumulative == TRUE) {
+    results <- results[, cum_D_E := Reduce(function(x, y) sum(x[[1]], y), D_E, accumulate = TRUE)]
+    results <- results[, cum_D_nE := Reduce(function(x, y) sum(x[[1]], y), D_nE, accumulate = TRUE)]
+    results <- results[, cum_D := Reduce(function(x, y) sum(x[[1]], y), D, accumulate = TRUE)]
+    results <- results[, cum_nD_E := Reduce(function(x, y) sum(x[[1]], y), nD_E, accumulate = TRUE)]
+    results <- results[, cum_E := Reduce(function(x, y) sum(x[[1]], y), E, accumulate = TRUE)]
+    results <- results[, cum_nD_nE := Reduce(function(x, y) sum(x[[1]], y), nD_nE, accumulate = TRUE)]
+    results <- results[, cum_TOT := Reduce(function(x, y) sum(x[[1]], y), TOT, accumulate = TRUE)]
+    results <- results[, .(period, TOT = cum_TOT, D_E = cum_D_E, D_nE = cum_D_nE, D = cum_D, nD_E = cum_nD_E, E = cum_E, nD_nE = cum_nD_nE)]
+  }
+  ROR <- lapply(seq(1:nrow(results)), function(x) {
+    tab <- as.matrix(data.table(
+      E = c(results$D_E[[x]], results$nD_E[[x]]),
+      nE = c(results$D_nE[[x]], results$nD_nE[[x]])
+    ))
+    or <- questionr::odds.ratio(tab)
+    ROR_median <- floor(or$OR * 100) / 100
+    ROR_lower <- floor(or$`2.5 %` * 100) / 100
+    ROR_upper <- floor(or$`97.5 %` * 100) / 100
+    p_value_fisher <- or$p
+    return(list(ROR_median, ROR_lower, ROR_upper, p_value_fisher))
+  })
+  results <- results[, ROR_median := as.numeric(map(ROR, \(x) x[[1]]))][
+    , ROR_lower := as.numeric(map(ROR, \(x) x[[2]]))
+  ][
+    , ROR_upper := as.numeric(map(ROR, \(x) x[[3]]))
+  ][
+    , p_value_fisher := as.numeric(map(ROR, \(x) x[[4]]))
+  ]
+  results <- results[, Bonferroni := results$p_value_fisher * sum(results$D_E >= 3)]
+  IC <- lapply(seq(1:nrow(results)), function(x) {
+    IC_median <- log2((results$D_E[[x]] + .5) / (((results$D[[x]] * results$E[[x]]) / results$TOT[[x]]) + .5))
+    IC_lower <- floor((IC_median - 3.3 * (results$D_E[[x]] + .5)^(-1 / 2) - 2 * (results$D_E[[x]] + .5)^(-3 / 2)) * 100) / 100
+    IC_upper <- floor((IC_median + 2.4 * (results$D_E[[x]] + .5)^(-1 / 2) - 0.5 * (results$D_E[[x]] + .5)^(-3 / 2)) * 100) / 100
+    IC_median <- floor(IC_median * 100) / 100
+    return(list(IC_median, IC_lower, IC_upper))
+  })
+
+  results <- results[, IC_median := as.numeric(map(IC, \(x) x[[1]]))][
+    , IC_lower := as.numeric(map(IC, \(x) x[[2]]))
+  ][
+    , IC_upper := as.numeric(map(IC, \(x) x[[3]]))
+  ]
+  results <- results[, label_ROR := paste0(ROR_median, " (", ROR_lower, "-", ROR_upper, ") [", D_E, "]")]
+  results <- results[, label_IC := paste0(IC_median, " (", IC_lower, "-", IC_upper, ") [", D_E, "]")]
+  return(results)
+}
+
+#' Plot Disproportionality Trend
+#'
+#' This function plots the disproportionality trend over time for a given metric.
+#'
+#' @param disproportionality_trend_results Data frame containing the results from the `disproportionality_trend` function.
+#' @param metric Character string specifying the metric to plot. Options are "IC" (information component) or "ROR" (reporting odds ratio). Defaults to "IC".
+#'
+#' @return A ggplot object representing the disproportionality trend plot for the specified metric.
+#'
+#' @details
+#' The function creates a plot to visualize the disproportionality trend of a drug-event combination over time. Depending on the selected metric, it plots either the information component (IC) or the reporting odds ratio (ROR) with corresponding confidence intervals.
+#'
+#' @examples
+#' \dontrun{
+#' # Example usage
+#' trend_results <- disproportionality_trend(drug_selected = "aspirin", reac_selected = "headache")
+#' plot_IC <- plot_disproportionality_trend(trend_results, metric = "IC")
+#' plot_ROR <- plot_disproportionality_trend(trend_results, metric = "ROR")
+#' }
+#'
+#' @export
+plot_disproportionality_trend <- function(disproportionality_trend_results, metric = "IC") {
+  if (metric == "IC") {
+    plot <- ggplot(disproportionality_trend_results) +
+      geom_pointrange(aes(x = period, y = IC_median, ymin = IC_lower, ymax = IC_upper, color = ifelse(IC_lower > 0, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
+      geom_line(aes(x = period, y = IC_median), linetype = "dashed", color = "blue") +
+      theme_bw() +
+      xlab("") +
+      ylab("IC") +
+      scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
+      theme(legend.title = element_blank())
+  } else if (metric == "ROR") {
+    plot <- ggplot(disproportionality_trend_results) +
+      geom_pointrange(aes(x = period, y = ROR_median, ymin = ROR_lower, ymax = ROR_upper, color = ifelse(ROR_lower > 1, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
+      geom_line(aes(x = period, y = ROR_median), linetype = "dashed", color = "blue") +
+      theme_bw() +
+      xlab("") +
+      ylab("ROR") +
+      scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
+      theme(legend.title = element_blank())
+  } else {
+    (plot <- "Metrics not available")
+  }
+  return(plot)
+}

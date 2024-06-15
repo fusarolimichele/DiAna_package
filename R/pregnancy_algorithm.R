@@ -3,12 +3,13 @@
 #' This function retrieves the identifiers of pregnancy-related reports from the FDA Adverse Event Reporting System (FAERS) for a specified quarter.
 #'
 #' @param quarter A character string specifying the FAERS quarter to retrieve data for. Default is the current FAERS version (\code{FAERS_version}).
-#' @return A list containing four elements:
+#' @return A list containing five elements:
 #' \describe{
 #'   \item{\code{high_specificity}}{A vector of identifiers with high specificity for pregnancy-related reports.}
 #'   \item{\code{medium_specificity}}{A vector of identifiers with medium specificity for pregnancy-related reports.}
 #'   \item{\code{low_specificity}}{A vector of identifiers with low specificity for pregnancy-related reports.}
 #'   \item{\code{paternal_exposure}}{A vector of identifiers for paternal exposure-related reports.}
+#'   \item{\code{flowchart}}{An editable flowchart showing case retrieval}
 #' }
 #' @details
 #' The function processes data from multiple FAERS tables (\code{DEMO}, \code{DRUG}, \code{REAC}, \code{INDI}, \code{OUTC}, \code{THER}, and \code{DRUG_SUPP}) to identify pregnancy-related reports based on specific indications, reactions, and drug routes. The results are filtered to exclude reports unlikely to be related to pregnancy (e.g., reports involving males, children, or older adults). The algorithm is an implementation and evolution of the original pregnancy algorithm by Sakai,ref. 10.3389/fphar.2022.1063625
@@ -999,19 +1000,19 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
     )]$primaryid
   )
 
-  step1_pregn <- union(union(indi_preg, reac_preg), route_preg)
+  low_specificity <- union(union(indi_preg, reac_preg), route_preg)
+  # Definitive pregnancy---------------------------------
   paternal_exposure <- union(
     Indi[indi_pt %in% exposure_pat_def]$primaryid,
     Reac[pt %in% exposure_pat_def]$primaryid
   )
-  low_specificity <- setdiff(step1_pregn, paternal_exposure)
-  # Definitive pregnancy---------------------------------
+  low_specificity_not_pat <- setdiff(low_specificity, paternal_exposure)
   preg_exp_pids <- intersect(
     union(
       Indi[indi_pt %in% exposure_def]$primaryid,
       Reac[pt %in% exposure_def]$primaryid
     ),
-    low_specificity
+    low_specificity_not_pat
   )
 
   transp_pids <- intersect(
@@ -1019,12 +1020,16 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
       "transplacental",
       "intraamniotic", "extraamniotic"
     )]$primaryid,
-    low_specificity
+    low_specificity_not_pat
   )
 
   high_specificity <- union(preg_exp_pids, transp_pids)
   # Exclusion criteria -----------------------------------
-  other_pregnancy_pids <- setdiff(low_specificity, high_specificity)
+  other_pregnancy_pids <- setdiff(low_specificity_not_pat, high_specificity)
+  N9 <- paste0(
+    "Other potential pregnancy reports", "\n",
+    "N = ", length(other_pregnancy_pids)
+  )
 
   children_pids <- intersect(
     union(
@@ -1045,11 +1050,70 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
   other_pregnancy_pids <- setdiff(other_pregnancy_pids, age_ineligible)
 
   medium_specificity <- union(high_specificity, other_pregnancy_pids)
+  N1 <- paste0("FAERS version ", quarter, "\n", "N = ", nrow(Demo))
+  N2 <- paste0(
+    "Any PT from pregnancy SMQs among reactions:", "\n",
+    "Congenital, familial and genetic disorders (SMQ)", "\n",
+    "Foetal disorders (SMQ)", "\n",
+    "Neonatal disorders (SMQ)", "\n",
+    "Normal pregnancy conditions and outcomes (SMQ)", "\n",
+    "Pregnancy, labour and delivery complications and risk factors (excl abortions and stillbirth) (SMQ)", "\n",
+    "Termination of pregnancy and risk of abortion (SMQ)", "\n",
+    "N = ", length(reac_preg)
+  )
+  N3 <- paste0(
+    "Any PT from pregnancy SMQs among indications:", "\n",
+    "Foetal disorders (SMQ)", "\n",
+    "Normal pregnancy conditions and outcomes (SMQ)", "\n",
+    "Pregnancy, labour and delivery complications and risk factors (excl abortions and stillbirth) (SMQ)", "\n",
+    "N = ", length(indi_preg)
+  )
+  N4 <- paste0(
+    "Administration Route transplacental or via amniotic fluid,", "\n",
+    "and pregnancy-related exposures among reactions or indications", "\n",
+    "N = ", length(route_preg)
+  )
+  N5 <- paste0(
+    "Low Specificity", "\n",
+    "N = ", length(low_specificity)
+  )
+  N6 <- paste0(
+    "Paternal Exposure", "\n",
+    "N = ", length(paternal_exposure)
+  )
+  N7 <- paste0(
+    "Any term related to transplacental, intraamniotic, extra amniotic exposure among routes:", "\n",
+    "N = ", length(transp_pids)
+  )
+  N8 <- paste0(
+    "Any PT related to pregnancy exposure among reactions or indications:", "\n",
+    "N = ", length(preg_exp_pids)
+  )
+  N10 <- paste0("High Specificity", "\n", "N = ", length(high_specificity))
+  N11 <- paste0("Children reports (treatment for congenital anomalies or <15*365 days) ", "\n", "N = ", length(children_pids))
+  N12 <- paste0("Gender male or unknown", "\n", "N = ", length(male_or_na_pids))
+  N13 <- paste0("Age >=55 or unknown", "\n", "N = ", length(age_ineligible))
+  N14 <- paste0("Other pregnancy reports", "\n", "N = ", length(other_pregnancy_pids))
+  N15 <- paste0("Medium Specificity", "\n", "N = ", length(medium_specificity))
+  data <- tibble::tibble(
+    from = c(N1, N1, N1, N2, N3, N4, N5, N5, N5, N5, N7, N8, N9, N9, N9, N9, N10, N14),
+    to = c(N2, N3, N4, N5, N5, N5, N6, N7, N8, N9, N10, N10, N11, N12, N13, N14, N15, N15)
+  )
+  node_data <- tibble::tibble(
+    name = c(N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, N11, N12, N13, N14, N15),
+    type = c(rep("white", 4), "yellow", "lightblue", rep("white", 3), "coral4", rep("white", 4), "salmon")
+  )
+
+  flowchart <- ggflowchart(data, node_data, fill = type, text_size = 1.5) +
+    scale_fill_manual(values = c("coral4", "lightblue", "salmon", "white", "yellow")) +
+    theme(legend.position = "none")
+
   results <- list(
     "high_specificity" = high_specificity,
     "medium_specificity" = medium_specificity,
     "low_specificity" = low_specificity,
-    "paternal_exposure" = paternal_exposure
+    "paternal_exposure" = paternal_exposure,
+    "flowchart" = flowchart
   )
   return(results)
 }

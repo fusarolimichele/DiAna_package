@@ -8,4 +8,6 @@ utils::globalVariables(c("primaryid"))
   packageStartupMessage(DiAna_reference()[4])
   packageStartupMessage()
   packageStartupMessage(DiAna_reference()[6])
+  packageStartupMessage()
+  packageStartupMessage("The MedDRA version used is 26.1")
 }

@@ -10,12 +10,13 @@ retrieve_pregnancy_pids(quarter = FAERS_version)
 \item{quarter}{A character string specifying the FAERS quarter to retrieve data for. Default is the current FAERS version (\code{FAERS_version}).}
 }
 \value{
-A list containing four elements:
+A list containing five elements:
 \describe{
 \item{\code{high_specificity}}{A vector of identifiers with high specificity for pregnancy-related reports.}
 \item{\code{medium_specificity}}{A vector of identifiers with medium specificity for pregnancy-related reports.}
 \item{\code{low_specificity}}{A vector of identifiers with low specificity for pregnancy-related reports.}
 \item{\code{paternal_exposure}}{A vector of identifiers for paternal exposure-related reports.}
+\item{\code{flowchart}}{An editable flowchart showing case retrieval}
 }
 }
 \description{
