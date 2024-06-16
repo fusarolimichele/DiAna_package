@@ -487,6 +487,7 @@ disproportionality_trend <- function(
 #'
 #' @param disproportionality_trend_results Data frame containing the results from the `disproportionality_trend` function.
 #' @param metric Character string specifying the metric to plot. Options are "IC" (information component) or "ROR" (reporting odds ratio). Defaults to "IC".
+#' @param time_granularity Character string specifying the time frame. It is recommeded to use the same specified in the 'disproportionality_trend' function. Default is "year". Alternatives are "quarter" and "month".
 #'
 #' @return A ggplot object representing the disproportionality trend plot for the specified metric.
 #'
@@ -502,25 +503,49 @@ disproportionality_trend <- function(
 #' }
 #'
 #' @export
-plot_disproportionality_trend <- function(disproportionality_trend_results, metric = "IC") {
+plot_disproportionality_trend <- function(disproportionality_trend_results, metric = "IC", time_granularity = "year") {
   if (metric == "IC") {
-    plot <- ggplot(disproportionality_trend_results) +
-      geom_pointrange(aes(x = period, y = IC_median, ymin = IC_lower, ymax = IC_upper, color = ifelse(IC_lower > 0, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
-      geom_line(aes(x = period, y = IC_median), linetype = "dashed", color = "blue") +
-      theme_bw() +
-      xlab("") +
-      ylab("IC") +
-      scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
-      theme(legend.title = element_blank())
+    if(time_granularity %in% c("year", "quarter")){
+      plot <- ggplot(disproportionality_trend_results) +
+        geom_pointrange(aes(x = period, y = IC_median, ymin = IC_lower, ymax = IC_upper, color = ifelse(IC_lower > 0, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
+        geom_line(aes(x = period, y = IC_median), linetype = "dashed", color = "blue") +
+        theme_bw() +
+        xlab("") +
+        ylab("IC") +
+        scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
+        theme(legend.title = element_blank())
+    } else if(time_granularity == "month"){
+      disproportionality_trend_results$period <- ym(disproportionality_trend_results$period)
+      plot <- ggplot(disproportionality_trend_results) +
+        geom_pointrange(aes(x = period, y = IC_median, ymin = IC_lower, ymax = IC_upper, color = ifelse(IC_lower > 0, "signal", "no-signal"), size = D_E), fatten = 0.3, show.legend = FALSE) +
+        geom_line(aes(x = period, y = IC_median), linetype = "dashed", color = "blue") +
+        theme_bw() +
+        xlab("") +
+        ylab("IC") +
+        scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
+        theme(legend.title = element_blank())
+    }
   } else if (metric == "ROR") {
-    plot <- ggplot(disproportionality_trend_results) +
-      geom_pointrange(aes(x = period, y = ROR_median, ymin = ROR_lower, ymax = ROR_upper, color = ifelse(ROR_lower > 1, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
-      geom_line(aes(x = period, y = ROR_median), linetype = "dashed", color = "blue") +
-      theme_bw() +
-      xlab("") +
-      ylab("ROR") +
-      scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
-      theme(legend.title = element_blank())
+    if(time_granularity %in% c("year", "quarter")){
+      plot <- ggplot(disproportionality_trend_results) +
+        geom_pointrange(aes(x = period, y = ROR_median, ymin = ROR_lower, ymax = ROR_upper, color = ifelse(ROR_lower > 1, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
+        geom_line(aes(x = period, y = ROR_median), linetype = "dashed", color = "blue") +
+        theme_bw() +
+        xlab("") +
+        ylab("ROR") +
+        scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
+        theme(legend.title = element_blank())
+    } else if(time_granularity == "month"){
+      disproportionality_trend_results$period <- ym(disproportionality_trend_results$period)
+      plot <- ggplot(disproportionality_trend_results) +
+        geom_pointrange(aes(x = period, y = ROR_median, ymin = ROR_lower, ymax = ROR_upper, color = ifelse(ROR_lower > 1, "signal", "no-signal"), size = D_E), fatten = 0.3, show.legend = FALSE) +
+        geom_line(aes(x = period, y = ROR_median), linetype = "dashed", color = "blue") +
+        theme_bw() +
+        xlab("") +
+        ylab("ROR") +
+        scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
+        theme(legend.title = element_blank())
+    }
   } else {
     (plot <- "Metrics not available")
   }
