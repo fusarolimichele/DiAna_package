@@ -10,6 +10,7 @@ disproportionality_trend(
   temp_d = Drug,
   temp_r = Reac,
   temp_demo = Demo,
+  temp_demo_supp = Demo_supp[, .(primaryid, quarter)],
   meddra_level = "pt",
   drug_level = "substance",
   restriction = "none",
@@ -40,7 +41,7 @@ disproportionality_trend(
 }
 \value{
 A data frame containing the disproportionality results over time, including:
-\item{period}{Time period}
+\item{period}{Time period}{Deafult is 'year'. Other values are 'quarter' and 'month'. When using 'quarter' Demo_supp is required}
 \item{TOT}{Total number of reports}
 \item{D_E}{Number of reports with both drug and event}
 \item{D_nE}{Number of reports with the drug but not the event}

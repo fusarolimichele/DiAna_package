@@ -27,6 +27,7 @@ Depends:
     IsingFit,
     psych,
     questionr,
+    readxl,
     tidyverse,
     twosamples,
     writexl

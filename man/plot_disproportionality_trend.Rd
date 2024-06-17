@@ -4,12 +4,18 @@
 \alias{plot_disproportionality_trend}
 \title{Plot Disproportionality Trend}
 \usage{
-plot_disproportionality_trend(disproportionality_trend_results, metric = "IC")
+plot_disproportionality_trend(
+  disproportionality_trend_results,
+  metric = "IC",
+  time_granularity = "year"
+)
 }
 \arguments{
 \item{disproportionality_trend_results}{Data frame containing the results from the \code{disproportionality_trend} function.}
 
 \item{metric}{Character string specifying the metric to plot. Options are "IC" (information component) or "ROR" (reporting odds ratio). Defaults to "IC".}
+
+\item{time_granularity}{Character string specifying the time frame. It is recommeded to use the same specified in the 'disproportionality_trend' function. Default is "year". Alternatives are "quarter" and "month".}
 }
 \value{
 A ggplot object representing the disproportionality trend plot for the specified metric.

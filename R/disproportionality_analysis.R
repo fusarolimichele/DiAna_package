@@ -381,39 +381,16 @@ disproportionality_trend <- function(
     temp_r <- temp_r[primaryid %in% restriction] %>% droplevels()
     temp_demo <- temp_demo[primaryid %in% restriction] %>% droplevels()
   }
-  if (meddra_level != "pt" & meddra_level != "custom") {
-    if (!exists("MedDRA")) {
-      stop("The MedDRA dictionary is not uploaded.
-                                Without it, only analyses at the PT level are possible")
-    }
-    temp_r <- MedDRA[, c(meddra_level, "pt"), with = FALSE][temp_r, on = "pt"]
-  }
-  if (meddra_level == "custom") {
-    df_custom <- data.table(
-      custom = rep(names(reac_selected), lengths(reac_selected)),
-      pt = unlist(reac_selected)
-    )
-    temp_r <- df_custom[temp_r, on = "pt", allow.cartesian = TRUE]
-    reac_selected <- names(reac_selected)
-  }
-  if (drug_level == "custom") {
-    df_custom <- data.table(
-      custom = rep(names(drug_selected), lengths(drug_selected)),
-      substance = unlist(drug_selected)
-    )
-    temp_d <- df_custom[temp_d, on = "substance", allow.cartesian = TRUE]
-    drug_selected <- names(drug_selected)
-  }
   if (time_granularity == "year") {
     temp_demo <- temp_demo[, period := as.numeric(substr(
       ifelse(is.na(init_fda_dt),
-             fda_dt, init_fda_dt
+        fda_dt, init_fda_dt
       ),
       1, 4
     ))][, period := ifelse(period < 2004, 2004, period)]
-  } else if (time_granularity == "quarter"){
+  } else if (time_granularity == "quarter") {
     temp_demo <- temp_demo_supp[, period := quarter]
-  } else if(time_granularity == "month"){
+  } else if (time_granularity == "month") {
     temp_demo <- temp_demo[, period := as.numeric(substr(
       ifelse(is.na(init_fda_dt), fda_dt, init_fda_dt), 1, 6
     ))][, period := ifelse(period < 200401, 200401, period)]
@@ -505,7 +482,7 @@ disproportionality_trend <- function(
 #' @export
 plot_disproportionality_trend <- function(disproportionality_trend_results, metric = "IC", time_granularity = "year") {
   if (metric == "IC") {
-    if(time_granularity %in% c("year", "quarter")){
+    if (time_granularity %in% c("year", "quarter")) {
       plot <- ggplot(disproportionality_trend_results) +
         geom_pointrange(aes(x = period, y = IC_median, ymin = IC_lower, ymax = IC_upper, color = ifelse(IC_lower > 0, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
         geom_line(aes(x = period, y = IC_median), linetype = "dashed", color = "blue") +
@@ -514,7 +491,7 @@ plot_disproportionality_trend <- function(disproportionality_trend_results, metr
         ylab("IC") +
         scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
         theme(legend.title = element_blank())
-    } else if(time_granularity == "month"){
+    } else if (time_granularity == "month") {
       disproportionality_trend_results$period <- ym(disproportionality_trend_results$period)
       plot <- ggplot(disproportionality_trend_results) +
         geom_pointrange(aes(x = period, y = IC_median, ymin = IC_lower, ymax = IC_upper, color = ifelse(IC_lower > 0, "signal", "no-signal"), size = D_E), fatten = 0.3, show.legend = FALSE) +
@@ -526,7 +503,7 @@ plot_disproportionality_trend <- function(disproportionality_trend_results, metr
         theme(legend.title = element_blank())
     }
   } else if (metric == "ROR") {
-    if(time_granularity %in% c("year", "quarter")){
+    if (time_granularity %in% c("year", "quarter")) {
       plot <- ggplot(disproportionality_trend_results) +
         geom_pointrange(aes(x = period, y = ROR_median, ymin = ROR_lower, ymax = ROR_upper, color = ifelse(ROR_lower > 1, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
         geom_line(aes(x = period, y = ROR_median), linetype = "dashed", color = "blue") +
@@ -535,7 +512,7 @@ plot_disproportionality_trend <- function(disproportionality_trend_results, metr
         ylab("ROR") +
         scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
         theme(legend.title = element_blank())
-    } else if(time_granularity == "month"){
+    } else if (time_granularity == "month") {
       disproportionality_trend_results$period <- ym(disproportionality_trend_results$period)
       plot <- ggplot(disproportionality_trend_results) +
         geom_pointrange(aes(x = period, y = ROR_median, ymin = ROR_lower, ymax = ROR_upper, color = ifelse(ROR_lower > 1, "signal", "no-signal"), size = D_E), fatten = 0.3, show.legend = FALSE) +
