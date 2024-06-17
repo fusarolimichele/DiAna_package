@@ -336,7 +336,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' @param cumulative Logical indicating whether to calculate cumulative values. Defaults to `TRUE`.
 #'
 #' @return A data frame containing the disproportionality results over time, including:
-#' \item{period}{Time period}
+#' \item{period}{Time period}{Deafult is 'year'. Other values are 'quarter' and 'month'. When using 'quarter' Demo_supp is required}
 #' \item{TOT}{Total number of reports}
 #' \item{D_E}{Number of reports with both drug and event}
 #' \item{D_nE}{Number of reports with the drug but not the event}
@@ -370,7 +370,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 disproportionality_trend <- function(
     drug_selected, reac_selected,
     temp_d = Drug, temp_r = Reac,
-    temp_demo = Demo,
+    temp_demo = Demo, temp_demo_supp = Demo_supp[, .(primaryid, quarter)],
     meddra_level = "pt",
     drug_level = "substance",
     restriction = "none",
@@ -407,12 +407,17 @@ disproportionality_trend <- function(
   if (time_granularity == "year") {
     temp_demo <- temp_demo[, period := as.numeric(substr(
       ifelse(is.na(init_fda_dt),
-        fda_dt, init_fda_dt
+             fda_dt, init_fda_dt
       ),
       1, 4
     ))][, period := ifelse(period < 2004, 2004, period)]
+  } else if (time_granularity == "quarter"){
+    temp_demo <- temp_demo_supp[, period := quarter]
+  } else if(time_granularity == "month"){
+    temp_demo <- temp_demo[, period := as.numeric(substr(
+      ifelse(is.na(init_fda_dt), fda_dt, init_fda_dt), 1, 6
+    ))][, period := ifelse(period < 200401, 200401, period)]
   }
-  # ...quarter, month
   temp_demo <- temp_demo[, .(primaryid, period)][, .(pids = list(primaryid)), by = "period"]
   temp_r <- temp_r[, c(meddra_level, "primaryid"), with = FALSE] %>% distinct()
   temp_d <- temp_d[, c(drug_level, "primaryid"), with = FALSE] %>% distinct()
@@ -482,6 +487,7 @@ disproportionality_trend <- function(
 #'
 #' @param disproportionality_trend_results Data frame containing the results from the `disproportionality_trend` function.
 #' @param metric Character string specifying the metric to plot. Options are "IC" (information component) or "ROR" (reporting odds ratio). Defaults to "IC".
+#' @param time_granularity Character string specifying the time frame. It is recommeded to use the same specified in the 'disproportionality_trend' function. Default is "year". Alternatives are "quarter" and "month".
 #'
 #' @return A ggplot object representing the disproportionality trend plot for the specified metric.
 #'
@@ -497,25 +503,49 @@ disproportionality_trend <- function(
 #' }
 #'
 #' @export
-plot_disproportionality_trend <- function(disproportionality_trend_results, metric = "IC") {
+plot_disproportionality_trend <- function(disproportionality_trend_results, metric = "IC", time_granularity = "year") {
   if (metric == "IC") {
-    plot <- ggplot(disproportionality_trend_results) +
-      geom_pointrange(aes(x = period, y = IC_median, ymin = IC_lower, ymax = IC_upper, color = ifelse(IC_lower > 0, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
-      geom_line(aes(x = period, y = IC_median), linetype = "dashed", color = "blue") +
-      theme_bw() +
-      xlab("") +
-      ylab("IC") +
-      scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
-      theme(legend.title = element_blank())
+    if(time_granularity %in% c("year", "quarter")){
+      plot <- ggplot(disproportionality_trend_results) +
+        geom_pointrange(aes(x = period, y = IC_median, ymin = IC_lower, ymax = IC_upper, color = ifelse(IC_lower > 0, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
+        geom_line(aes(x = period, y = IC_median), linetype = "dashed", color = "blue") +
+        theme_bw() +
+        xlab("") +
+        ylab("IC") +
+        scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
+        theme(legend.title = element_blank())
+    } else if(time_granularity == "month"){
+      disproportionality_trend_results$period <- ym(disproportionality_trend_results$period)
+      plot <- ggplot(disproportionality_trend_results) +
+        geom_pointrange(aes(x = period, y = IC_median, ymin = IC_lower, ymax = IC_upper, color = ifelse(IC_lower > 0, "signal", "no-signal"), size = D_E), fatten = 0.3, show.legend = FALSE) +
+        geom_line(aes(x = period, y = IC_median), linetype = "dashed", color = "blue") +
+        theme_bw() +
+        xlab("") +
+        ylab("IC") +
+        scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
+        theme(legend.title = element_blank())
+    }
   } else if (metric == "ROR") {
-    plot <- ggplot(disproportionality_trend_results) +
-      geom_pointrange(aes(x = period, y = ROR_median, ymin = ROR_lower, ymax = ROR_upper, color = ifelse(ROR_lower > 1, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
-      geom_line(aes(x = period, y = ROR_median), linetype = "dashed", color = "blue") +
-      theme_bw() +
-      xlab("") +
-      ylab("ROR") +
-      scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
-      theme(legend.title = element_blank())
+    if(time_granularity %in% c("year", "quarter")){
+      plot <- ggplot(disproportionality_trend_results) +
+        geom_pointrange(aes(x = period, y = ROR_median, ymin = ROR_lower, ymax = ROR_upper, color = ifelse(ROR_lower > 1, "signal", "no-signal"), size = D_E), fatten = 1, show.legend = FALSE) +
+        geom_line(aes(x = period, y = ROR_median), linetype = "dashed", color = "blue") +
+        theme_bw() +
+        xlab("") +
+        ylab("ROR") +
+        scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
+        theme(legend.title = element_blank())
+    } else if(time_granularity == "month"){
+      disproportionality_trend_results$period <- ym(disproportionality_trend_results$period)
+      plot <- ggplot(disproportionality_trend_results) +
+        geom_pointrange(aes(x = period, y = ROR_median, ymin = ROR_lower, ymax = ROR_upper, color = ifelse(ROR_lower > 1, "signal", "no-signal"), size = D_E), fatten = 0.3, show.legend = FALSE) +
+        geom_line(aes(x = period, y = ROR_median), linetype = "dashed", color = "blue") +
+        theme_bw() +
+        xlab("") +
+        ylab("ROR") +
+        scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
+        theme(legend.title = element_blank())
+    }
   } else {
     (plot <- "Metrics not available")
   }
