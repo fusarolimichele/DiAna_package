@@ -11,6 +11,9 @@
 #' @return Two xlsx files with individual cases information:
 #'         one general with a row per ICSR,
 #'         and one with drug information and multiple rows per ICSR.
+#' @importFrom dplyr select
+#' @importFrom writexl write_xlsx
+#' @importFrom here here
 #'
 #' @examples
 #' \dontrun{
@@ -116,7 +119,7 @@ retrieve <- function(pids, file_name = "individual_cases", quarter = FAERS_versi
   t_drug2 <- t_drug2[, dose := gsub("NA", "", paste0(dose_amt, " ", dose_unit, " ", dose_freq))][
     , cum_dose := gsub("NA", "", paste0(cum_dose_unit, " ", cum_dose_chr))
   ] %>%
-    select(-c(dose_amt, dose_unit, dose_freq, drug_seq, cum_dose_unit, cum_dose_chr))
+    dplyr::select(-c(dose_amt, dose_unit, dose_freq, drug_seq, cum_dose_unit, cum_dose_chr))
   ## Save the database with further drug information
   writexl::write_xlsx(t_drug2, paste0(file_name, "_drug.xlsx"))
 }

@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
-data
 projects
 external_sources
+^Developer_script\\.R$
+Developer

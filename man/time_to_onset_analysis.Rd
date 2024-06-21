@@ -22,7 +22,7 @@ time_to_onset_analysis(
 
 \item{reac_selected}{A list of adverse events for analysis. Can be a list of lists (to collapse terms together) if meddra_level is set to custom.}
 
-\item{temp_d}{Data table containing drug data (default is Drug). If set to Drug\link{role_cod \%in\% c("PS","SS")} allows to investigate only suspects.}
+\item{temp_d}{Data table containing drug data (default is Drug). If set to Drug[role_cod \%in\% c("PS","SS")] allows to investigate only suspects.}
 
 \item{temp_r}{Data table containing reaction data (default is Reac).}
 
@@ -30,7 +30,7 @@ time_to_onset_analysis(
 
 \item{drug_level}{The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).}
 
-\item{restriction}{Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo\link{!RB_duplicates_only_susp}$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.}
+\item{restriction}{Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo[!RB_duplicates_only_susp]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.}
 
 \item{minimum_cases}{The minimum number of cases required for the analysis (default is 3).}
 

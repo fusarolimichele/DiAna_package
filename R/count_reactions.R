@@ -20,7 +20,7 @@
 #' @return A data.table containing counts and percentages of the investigated entity
 #'         at the specified level and in descending order.
 #'
-#' @import tidyverse
+#' @importFrom dplyr distinct
 #'
 #' @export
 #'
@@ -47,13 +47,13 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
       "therapeutic procedures and supportive care nec"
     )]
   } else if (entity == "substance") {
-    temp <- distinct(import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
+    temp <- dplyr::distinct(import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
       role_cod %in% drug_role
     ][, .(primaryid, substance)])
   }
   if (level %in% c("hlt", "hlgt", "soc")) {
     import_MedDRA()
-    temp <- distinct(distinct(MedDRA[, c("pt", level), with = FALSE])[
+    temp <- dplyr::distinct(dplyr::distinct(MedDRA[, c("pt", level), with = FALSE])[
       temp,
       on = "pt"
     ][
@@ -66,7 +66,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
       level <- "substance"
     } else if (level %in% c("Class1", "Class2", "Class3", "Class4")) {
       import_ATC()[code == primary_code]
-      temp <- distinct(distinct(ATC[, c("substance", level), with = FALSE])[
+      temp <- dplyr::distinct(dplyr::distinct(ATC[, c("substance", level), with = FALSE])[
         temp,
         on = "substance"
       ][
@@ -75,7 +75,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
       ])
     }
   }
-  temp <- distinct(temp)[, .N, by = get(level)][order(-N)][, perc := N / length(unique(temp$primaryid))]
+  temp <- dplyr::distinct(temp)[, .N, by = get(level)][order(-N)][, perc := N / length(unique(temp$primaryid))]
   colnames(temp) <- c(level, "N", "perc")
   temp <- temp[, label := paste0(get(level), " (", round(perc * 100, 2), "%) [", N, "]")]
   temp <- temp[, .(get(level), label, N)]
@@ -108,6 +108,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
 #' @return None. The function generates and writes the hierarchy to the xlsx.
 #'         For indications and reactions, SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
 #'         For substances, the ATC hierarchy is followed.
+#' @importFrom writexl write_xlsx
 #' @export
 #'
 #' @examples

@@ -4,11 +4,11 @@
 #'
 #' @param drug_selected A list of drugs for analysis. Can be a list of lists (to collapse terms together) if drug_level is set to custom.
 #' @param reac_selected A list of adverse events for analysis. Can be a list of lists (to collapse terms together) if meddra_level is set to custom.
-#' @param temp_d Data table containing drug data (default is Drug). If set to Drug[role_cod %in% c("PS","SS")] allows to investigate only suspects.
+#' @param temp_d Data table containing drug data (default is Drug). If set to Drug\[role_cod %in% c("PS","SS")\] allows to investigate only suspects.
 #' @param temp_r Data table containing reaction data (default is Reac).
 #' @param meddra_level The desired MedDRA level for analysis (default is "pt"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
 #' @param drug_level The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
-#' @param restriction Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo[!RB_duplicates_only_susp]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.
+#' @param restriction Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo\[!RB_duplicates_only_susp\]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.
 #' @param ROR_minimum_cases Threshold of minimum cases for calculating Reporitng Odds Ratio (default is 3).
 #' @param IC_threshold Threshold for defining the significance of the lower limit of the Information Component (default is 0).
 #' @param ROR_threshold Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).
@@ -16,6 +16,8 @@
 #' @return A data.table containing disproportionality analysis results.
 #'
 #' @importFrom questionr odds.ratio
+#' @importFrom dplyr distinct
+#' @importFrom purrr map map2
 #'
 #' @export
 disproportionality_analysis <- function(
@@ -54,8 +56,8 @@ disproportionality_analysis <- function(
     temp_d <- df_custom[temp_d, on = "substance", allow.cartesian = TRUE]
     drug_selected <- names(drug_selected)
   }
-  temp_r <- temp_r[, c(meddra_level, "primaryid"), with = FALSE] %>% distinct()
-  temp_d <- temp_d[, c(drug_level, "primaryid"), with = FALSE] %>% distinct()
+  temp_r <- temp_r[, c(meddra_level, "primaryid"), with = FALSE] %>% dplyr::distinct()
+  temp_d <- temp_d[, c(drug_level, "primaryid"), with = FALSE] %>% dplyr::distinct()
   TOT <- length(unique(temp_d$primaryid))
   temp_d1 <- temp_d[get(drug_level) %in% drug_selected][, .(primaryid_substance = list(primaryid)), by = drug_level]
   temp_r1 <- temp_r[get(meddra_level) %in% reac_selected][, .(primaryid_event = list(primaryid)), by = meddra_level]
@@ -64,10 +66,10 @@ disproportionality_analysis <- function(
   results <- setDT(expand.grid("substance" = unlist(drug_selected), "event" = unlist(reac_selected)))
   results <- results[temp_d1, on = "substance"]
   results <- results[temp_r1, on = "event"]
-  results <- results[, D_E := as.numeric(map2(primaryid_substance, primaryid_event, \(x, y)length(intersect(x, y))))]
-  results <- results[, D_nE := as.numeric(map2(primaryid_substance, primaryid_event, \(x, y)length(setdiff(x, y))))]
+  results <- results[, D_E := as.numeric(purrr::map2(primaryid_substance, primaryid_event, \(x, y)length(intersect(x, y))))]
+  results <- results[, D_nE := as.numeric(purrr::map2(primaryid_substance, primaryid_event, \(x, y)length(setdiff(x, y))))]
   results <- results[, D := D_E + D_nE]
-  results <- results[, nD_E := as.numeric(map2(primaryid_event, primaryid_substance, \(x, y)length(setdiff(x, y))))]
+  results <- results[, nD_E := as.numeric(purrr::map2(primaryid_event, primaryid_substance, \(x, y)length(setdiff(x, y))))]
   results <- results[, E := D_E + nD_E]
   results <- results[, nD_nE := TOT - (D_E + D_nE + nD_E)]
   ROR <- lapply(seq(1:nrow(results)), function(x) {
@@ -82,12 +84,12 @@ disproportionality_analysis <- function(
     p_value_fisher <- or$p
     return(list(ROR_median, ROR_lower, ROR_upper, p_value_fisher))
   })
-  results <- results[, ROR_median := as.numeric(map(ROR, \(x) x[[1]]))][
-    , ROR_lower := as.numeric(map(ROR, \(x) x[[2]]))
+  results <- results[, ROR_median := as.numeric(purrr::map(ROR, \(x) x[[1]]))][
+    , ROR_lower := as.numeric(purrr::map(ROR, \(x) x[[2]]))
   ][
-    , ROR_upper := as.numeric(map(ROR, \(x) x[[3]]))
+    , ROR_upper := as.numeric(purrr::map(ROR, \(x) x[[3]]))
   ][
-    , p_value_fisher := as.numeric(map(ROR, \(x) x[[4]]))
+    , p_value_fisher := as.numeric(purrr::map(ROR, \(x) x[[4]]))
   ]
   results <- results[, Bonferroni := results$p_value_fisher * sum(results$D_E >= 3)]
   IC <- lapply(seq(1:nrow(results)), function(x) {
@@ -98,10 +100,10 @@ disproportionality_analysis <- function(
     return(list(IC_median, IC_lower, IC_upper))
   })
 
-  results <- results[, IC_median := as.numeric(map(IC, \(x) x[[1]]))][
-    , IC_lower := as.numeric(map(IC, \(x) x[[2]]))
+  results <- results[, IC_median := as.numeric(purrr::map(IC, \(x) x[[1]]))][
+    , IC_lower := as.numeric(purrr::map(IC, \(x) x[[2]]))
   ][
-    , IC_upper := as.numeric(map(IC, \(x) x[[3]]))
+    , IC_upper := as.numeric(purrr::map(IC, \(x) x[[3]]))
   ]
   results <- results[, label_ROR := paste0(ROR_median, " (", ROR_lower, "-", ROR_upper, ") [", D_E, "]")]
   results <- results[, label_IC := paste0(IC_median, " (", IC_lower, "-", IC_upper, ") [", D_E, "]")]
@@ -267,11 +269,17 @@ render_forest <- function(df,
 #'   \item{\code{IC_gamma}}{Gamma distribution-based Information Component: An alternative IC calculation using the gamma distribution.}
 #' }
 #' @importFrom questionr odds.ratio
-#' @importFrom data.table data.table
+#' @importFrom stats qgamma qnorm
 #' @export
 #' @examples
-#' # Perform disproportionality analysis with custom parameters
-#' disproportionality_comparison(drug_count = 100, event_count = 50, drug_event_count = 10, tot = 10000)
+#' \dontrun{
+#' # Example usage
+#' disproportionality_comparison(
+#'   drug_count = 100, event_count = 50,
+#'   drug_event_count = 10, tot = 10000
+#' )
+#' }
+#'
 disproportionality_comparison <- function(drug_count = length(pids_drug), event_count = length(pids_event),
                                           drug_event_count = length(intersect(pids_drug, pids_event)), tot = nrow(Demo)) {
   tab <- as.matrix(data.table(
@@ -329,6 +337,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' @param temp_d Data frame containing drug data. Defaults to `Drug`.
 #' @param temp_r Data frame containing reaction data. Defaults to `Reac`.
 #' @param temp_demo Data frame containing demographic data. Defaults to `Demo`.
+#' @param temp_demo_supp Data frame containing supplementary demographic data, and in particular the quarter. Defaults to `Demo_supp\[, .(primaryid, quarter)\]`.
 #' @param meddra_level Character string specifying the MedDRA level. Options are "pt" (preferred term) or "custom". Defaults to "pt".
 #' @param drug_level Character string specifying the drug level. Options are "substance" or "custom". Defaults to "substance".
 #' @param restriction Character vector of primary IDs to restrict the analysis. Defaults to "none".
@@ -355,6 +364,9 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' \item{label_ROR}{Formatted ROR label}
 #' \item{label_IC}{Formatted IC label}
 #'
+#' @importFrom dplyr distinct
+#' @importFrom purrr map map2
+#' @importFrom questionr odds.ratio
 #' @details
 #' The function processes the provided data to calculate the reporting odds ratio (ROR) and the information component (IC) for the specified drug-event combination over time.
 #'
@@ -396,18 +408,18 @@ disproportionality_trend <- function(
     ))][, period := ifelse(period < 200401, 200401, period)]
   }
   temp_demo <- temp_demo[, .(primaryid, period)][, .(pids = list(primaryid)), by = "period"]
-  temp_r <- temp_r[, c(meddra_level, "primaryid"), with = FALSE] %>% distinct()
-  temp_d <- temp_d[, c(drug_level, "primaryid"), with = FALSE] %>% distinct()
-  temp_demo <- temp_demo[, TOT := unlist(map(pids, \(x) length(x)))]
+  temp_r <- temp_r[, c(meddra_level, "primaryid"), with = FALSE] %>% dplyr::distinct()
+  temp_d <- temp_d[, c(drug_level, "primaryid"), with = FALSE] %>% dplyr::distinct()
+  temp_demo <- temp_demo[, TOT := unlist(purrr::map(pids, \(x) length(x)))]
   pids_d <- unique(temp_d[get(drug_level) %in% drug_selected]$primaryid)
   pids_r <- unique(temp_r[get(meddra_level) %in% reac_selected]$primaryid)
   results <- temp_demo
-  results <- results[, pids_drug := map(pids, \(x) intersect(pids_d, x))]
-  results <- results[, pids_reac := map(pids, \(x) intersect(pids_r, x))]
-  results <- results[, D_E := as.numeric(map2(pids_drug, pids_reac, \(x, y)length(intersect(x, y))))]
-  results <- results[, D_nE := as.numeric(map2(pids_drug, pids_reac, \(x, y)length(setdiff(x, y))))]
+  results <- results[, pids_drug := purrr::map(pids, \(x) intersect(pids_d, x))]
+  results <- results[, pids_reac := purrr::map(pids, \(x) intersect(pids_r, x))]
+  results <- results[, D_E := as.numeric(purrr::map2(pids_drug, pids_reac, \(x, y)length(intersect(x, y))))]
+  results <- results[, D_nE := as.numeric(purrr::map2(pids_drug, pids_reac, \(x, y)length(setdiff(x, y))))]
   results <- results[, D := D_E + D_nE]
-  results <- results[, nD_E := as.numeric(map2(pids_reac, pids_drug, \(x, y)length(setdiff(x, y))))]
+  results <- results[, nD_E := as.numeric(purrr::map2(pids_reac, pids_drug, \(x, y)length(setdiff(x, y))))]
   results <- results[, E := D_E + nD_E]
   results <- results[, nD_nE := TOT - (D_E + D_nE + nD_E)]
   if (cumulative == TRUE) {
@@ -432,12 +444,12 @@ disproportionality_trend <- function(
     p_value_fisher <- or$p
     return(list(ROR_median, ROR_lower, ROR_upper, p_value_fisher))
   })
-  results <- results[, ROR_median := as.numeric(map(ROR, \(x) x[[1]]))][
-    , ROR_lower := as.numeric(map(ROR, \(x) x[[2]]))
+  results <- results[, ROR_median := as.numeric(purrr::map(ROR, \(x) x[[1]]))][
+    , ROR_lower := as.numeric(purrr::map(ROR, \(x) x[[2]]))
   ][
-    , ROR_upper := as.numeric(map(ROR, \(x) x[[3]]))
+    , ROR_upper := as.numeric(purrr::map(ROR, \(x) x[[3]]))
   ][
-    , p_value_fisher := as.numeric(map(ROR, \(x) x[[4]]))
+    , p_value_fisher := as.numeric(purrr::map(ROR, \(x) x[[4]]))
   ]
   results <- results[, Bonferroni := results$p_value_fisher * sum(results$D_E >= 3)]
   IC <- lapply(seq(1:nrow(results)), function(x) {
@@ -448,10 +460,10 @@ disproportionality_trend <- function(
     return(list(IC_median, IC_lower, IC_upper))
   })
 
-  results <- results[, IC_median := as.numeric(map(IC, \(x) x[[1]]))][
-    , IC_lower := as.numeric(map(IC, \(x) x[[2]]))
+  results <- results[, IC_median := as.numeric(purrr::map(IC, \(x) x[[1]]))][
+    , IC_lower := as.numeric(purrr::map(IC, \(x) x[[2]]))
   ][
-    , IC_upper := as.numeric(map(IC, \(x) x[[3]]))
+    , IC_upper := as.numeric(purrr::map(IC, \(x) x[[3]]))
   ]
   results <- results[, label_ROR := paste0(ROR_median, " (", ROR_lower, "-", ROR_upper, ") [", D_E, "]")]
   results <- results[, label_IC := paste0(IC_median, " (", IC_lower, "-", IC_upper, ") [", D_E, "]")]
@@ -467,7 +479,7 @@ disproportionality_trend <- function(
 #' @param time_granularity Character string specifying the time frame. It is recommeded to use the same specified in the 'disproportionality_trend' function. Default is "year". Alternatives are "quarter" and "month".
 #'
 #' @return A ggplot object representing the disproportionality trend plot for the specified metric.
-#'
+#' @importFrom lubridate ym
 #' @details
 #' The function creates a plot to visualize the disproportionality trend of a drug-event combination over time. Depending on the selected metric, it plots either the information component (IC) or the reporting odds ratio (ROR) with corresponding confidence intervals.
 #'
@@ -492,7 +504,7 @@ plot_disproportionality_trend <- function(disproportionality_trend_results, metr
         scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
         theme(legend.title = element_blank())
     } else if (time_granularity == "month") {
-      disproportionality_trend_results$period <- ym(disproportionality_trend_results$period)
+      disproportionality_trend_results$period <- lubridate::ym(disproportionality_trend_results$period)
       plot <- ggplot(disproportionality_trend_results) +
         geom_pointrange(aes(x = period, y = IC_median, ymin = IC_lower, ymax = IC_upper, color = ifelse(IC_lower > 0, "signal", "no-signal"), size = D_E), fatten = 0.3, show.legend = FALSE) +
         geom_line(aes(x = period, y = IC_median), linetype = "dashed", color = "blue") +
@@ -513,7 +525,7 @@ plot_disproportionality_trend <- function(disproportionality_trend_results, metr
         scale_color_manual(values = c("no-signal" = "gray", "signal" = "red")) +
         theme(legend.title = element_blank())
     } else if (time_granularity == "month") {
-      disproportionality_trend_results$period <- ym(disproportionality_trend_results$period)
+      disproportionality_trend_results$period <- lubridate::ym(disproportionality_trend_results$period)
       plot <- ggplot(disproportionality_trend_results) +
         geom_pointrange(aes(x = period, y = ROR_median, ymin = ROR_lower, ymax = ROR_upper, color = ifelse(ROR_lower > 1, "signal", "no-signal"), size = D_E), fatten = 0.3, show.legend = FALSE) +
         geom_line(aes(x = period, y = ROR_median), linetype = "dashed", color = "blue") +

@@ -14,12 +14,13 @@
 #'
 #' @return NULL (invisibly). Saves a network visualization as a TIFF file.
 #'
-#' @importFrom data.table .N
-#' @importFrom igraph graph.adjacency delete.vertices delete.edges degree set_vertex_attr
+#' @importFrom dplyr distinct left_join select
+#' @importFrom igraph cluster_louvain graph_from_adjacency_matrix delete.vertices delete.edges degree layout_nicely set_vertex_attr simplify membership V E
 #' @importFrom IsingFit IsingFit
 #' @importFrom tidyr pivot_wider
 #' @importFrom ggplot2 labs
 #' @importFrom gridExtra grid.arrange
+#' @importFrom grDevices dev.off tiff
 #'
 #' @examples
 #' \dontrun{
@@ -31,7 +32,7 @@
 #' @references
 #' Fusaroli M, Raschi E, Gatti M, De Ponti F, Poluzzi E. Development of a Network-Based Signal Detection Tool: The COVID-19 Adversome in the FDA Adverse Event Reporting System. Front Pharmacol. 2021 Dec 8;12:740707. doi: 10.3389/fphar.2021.740707. PMID: 34955821; PMCID: PMC8694570.
 #'
-#' Fusaroli M, Polizzi S, Menestrina L, Giunchi V, Pellegrini L, Raschi E, et al. Unveiling the Hidden Toll of Drug-Induced Impulsivity: A Network Analysis of the FDA Adverse Event Reporting System. 2023; : 2023.11.17.23298635. [Cited 2023 Nov 29] Available from https://www.medrxiv.org/content/10.1101/2023.11.17.23298635v1
+#' Fusaroli M, Polizzi S, Menestrina L, Giunchi V, Pellegrini L, Raschi E, et al. Unveiling the Hidden Toll of Drug-Induced Impulsivity: A Network Analysis of the FDA Adverse Event Reporting System. 2023; : 2023.11.17.23298635. \[Cited 2023 Nov 29\] Available from https://www.medrxiv.org/content/10.1101/2023.11.17.23298635v1
 #'
 #' @export
 network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
@@ -51,7 +52,7 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
       df <- df[, .(primaryid, substance)]
     }
   }
-  df <- distinct(df)
+  df <- dplyr::distinct(df)
   binary_data <- df
   binary_data$value <- 1
   if (entity == "reaction") {
@@ -73,25 +74,25 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
 
   row_names <- binary_data$primaryid
   binary_data <- binary_data %>%
-    select(-primaryid) %>%
+    dplyr::select(-primaryid) %>%
     as.matrix()
   rownames(binary_data) <- row_names
   binary_data[is.na(binary_data[, ])] <- 0
   g1 <- IsingFit::IsingFit(binary_data)
   G_igraph <- igraph::graph_from_adjacency_matrix(g1$weiadj, mode = "undirected", weighted = TRUE)
   if (remove_singlet) {
-    G_igraph <- igraph::delete_vertices(simplify(G_igraph), igraph::degree(G_igraph) == 0)
+    G_igraph <- igraph::delete_vertices(igraph::simplify(G_igraph), igraph::degree(G_igraph) == 0)
   }
   if (remove_negative_edges) {
     G_igraph <- igraph::delete_edges(G_igraph, which(E(G_igraph)$weight < 0))
   }
-  L0 <- layout_nicely(G_igraph)
-  comm_lv <- cluster_louvain(G_igraph)
-  t <- as.numeric(names(table(membership(comm_lv))[table(membership(comm_lv)) == 1]))
+  L0 <- igraph::layout_nicely(G_igraph)
+  comm_lv <- igraph::cluster_louvain(G_igraph)
+  t <- as.numeric(names(table(igraph::membership(comm_lv))[table(igraph::membership(comm_lv)) == 1]))
   cols <- comm_lv$membership
   cols[cols %in% t] <- 100
-  G_igraph <- set_vertex_attr(G_igraph, "color", value = cols)
-  G_igraph <- set_vertex_attr(G_igraph, "group", value = factor(cols))
+  G_igraph <- igraph::set_vertex_attr(G_igraph, "color", value = cols)
+  G_igraph <- igraph::set_vertex_attr(G_igraph, "group", value = factor(cols))
 
   if (entity == "reaction") {
     labs1 <- df[, .N, by = "pt"][order(-N)][, .(s = pt, s2 = N)]
@@ -103,16 +104,16 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
 
   # labs1 <- df[, .N, by = "pt"][order(-N)][, .(s = pt, s2 = N)]
   labs <- data.table(s = V(G_igraph)$name)
-  labs <- left_join(labs, labs1)
+  labs <- dplyr::left_join(labs, labs1)
   labs[is.na(s2)]$s2 <- 0
-  G_igraph <- set_vertex_attr(G_igraph, "size", value = log(labs$s2))
-  G_igraph <- set_vertex_attr(G_igraph, "label", value = labs$s)
+  G_igraph <- igraph::set_vertex_attr(G_igraph, "size", value = log(labs$s2))
+  G_igraph <- igraph::set_vertex_attr(G_igraph, "label", value = labs$s)
 
   V(G_igraph)$label.cex <- labs_size
-  tiff(file_name, width = width, height = height, res = 300)
+  grDevices::tiff(file_name, width = width, height = height, res = 300)
   plot(comm_lv, G_igraph,
     layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
     vertex.label.degree = pi / 2
   )
-  dev.off()
+  grDevices::dev.off()
 }

@@ -4,7 +4,13 @@
 \alias{import}
 \title{import}
 \usage{
-import(df_name, quarter = FAERS_version, pids = NA, save_in_environment = TRUE)
+import(
+  df_name,
+  quarter = FAERS_version,
+  pids = NA,
+  save_in_environment = TRUE,
+  env = .GlobalEnv
+)
 }
 \arguments{
 \item{df_name}{Name of the data file (without the ".rds" extension).
@@ -30,6 +36,8 @@ in the format \emph{23Q1}.}
 Defaults to the entire population.}
 
 \item{save_in_environment}{is a parameter automatically used within functions to avoid that the imported databases are overscribed.}
+
+\item{env}{The environment where the data will be assigned. Default to .GlobalEnv}
 }
 \value{
 A data.table containing the imported data.

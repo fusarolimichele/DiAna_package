@@ -4,15 +4,14 @@
 \name{DiAna-package}
 \alias{DiAna}
 \alias{DiAna-package}
-\title{DiAna: Advanced Disproportionality Analysis in the FAERS for Drug Safety}
+\title{DiAna: DIsproportionality ANAlysis and Pharmacovigilance in the FAERS}
 \description{
-The `DiAna` (Disproportionality Analysis) package allows for downloading FAERS cleaned data, and import relational datasets. It allows to identify cases and select controls to reduce confounding.
+The 'DiAna' (Disproportionality Analysis) package offers advanced tools for analyzing FDA Adverse Event Reporting System (FAERS) data, enhancing drug safety research. It enables users to download cleaned FAERS data and import relational datasets, facilitating case identification and control selection to minimize confounding in analyses. The package includes functions for descriptive and disproportionality analysis, time-to-onset analysis, network analysis, retrieval algorithms, and visualization.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/fusarolimichele/DiAna_package}
-  \item \url{https://github.com/fusarolimichele/DiAna}
+  \item \url{https://github.com/fusarolimichele/DiAna_package,https://github.com/fusarolimichele/DiAna}
   \item \url{https://osf.io/zqu89/}
   \item Report bugs at \url{https://github.com/fusarolimichele/DiAna_package/issues}
 }

@@ -12,7 +12,13 @@
 #' @param quarter The quarter for data import. Default is FAERS_version, which we recommend to provide at the beginning of the script.
 #'
 #' @return The function generates descriptive statistics and saves them to an Excel file.
-#'
+#' @importFrom dplyr distinct left_join
+#' @importFrom writexl write_xlsx
+#' @importFrom tibble as_tibble
+#' @importFrom gtsummary add_p add_q all_categorical all_continuous all_continuous2 bold_labels style_pvalue tbl_summary
+#' @importFrom here here
+#' @importFrom tidyr separate
+#' @importFrom readr read_delim
 #' @examples
 #' \dontrun{
 #' import("DEMO", quarter = "23Q1")
@@ -40,7 +46,7 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
                         list_pids = list(), method = "independence_test",
                         quarter = FAERS_version) {
   # import data if now already uploaded
-  pids_tot <- union(pids_cases, RG)
+  pids_tot <- base::union(pids_cases, RG)
   temp <- import("DEMO", quarter = quarter, pids = pids_tot, save_in_environment = FALSE)
   temp_outc <- import("OUTC", quarter = quarter, pids = pids_tot, save_in_environment = FALSE)
   temp_reac <- import("REAC", quarter = quarter, pids = pids_tot, save_in_environment = FALSE)
@@ -71,17 +77,17 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
   temp[, age_range := cut(age_in_days, c(0, 28, 730, 4380, 6570, 10950, 18250, 23725, 27375, 31025, 36500, 73000),
     include.lowest = TRUE, right = FALSE,
     labels = c(
-      "Neonate (<28d)", "Infant (28d-<2y)", "Child (2y-<12y)", "Teenager (12y-<18y)", "Adult (18y-<30y)", "Adult (30y-<50y)",
-      "Adult (50y-<65y)", "Elderly (65y-<75y)", "Elderly (75y-<85y)", "Elderly (85y-<100y)", "Elderly (≥100y)"
+      "Neonate (<28d)", "Infant (28d-1y)", "Child (2y-11y)", "Teenager (12y-17y)", "Adult (18y-29y)", "Adult (30y-49y)",
+      "Adult (50y-64y)", "Elderly (65y-74y)", "Elderly (75y-84y)", "Elderly (85y-99y)", "Elderly (>99y)"
     )
   )]
   temp <- temp_outc[, .(Outcome = max(outc_cod)), by = "primaryid"][temp, on = "primaryid"]
   temp[is.na(Outcome)]$Outcome <- "Non Serious"
   levels(temp$Outcome) <- c("Other serious", "Congenital anomaly", "Hospitalization", "Required intervention", "Disability", "Life threatening", "Death", "Non Serious")
   temp$Outcome <- factor(temp$Outcome, levels = c("Death", "Life threatening", "Disability", "Required intervention", "Hospitalization", "Congenital anomaly", "Other serious", "Non Serious"), ordered = TRUE)
-  suppressMessages(country_codes <- setDT(read_delim(paste0(paste0(here(), "/external_sources/Countries.csv")), ";", escape_double = FALSE, trim_ws = TRUE, show_col_types = FALSE))[
+  suppressMessages(country_codes <- setDT(readr::read_delim(paste0(paste0(here::here(), "/external_sources/Countries.csv")), ";", escape_double = FALSE, trim_ws = TRUE, show_col_types = FALSE))[
     , .(country = Country_Name, continent = Continent_Name)
-  ][!is.na(country)] %>% distinct())
+  ][!is.na(country)] %>% dplyr::distinct())
   temp[, country := ifelse(is.na(as.character(occr_country)), as.character(reporter_country), as.character(occr_country))]
   temp <- country_codes[temp, on = "country"]
   temp$country <- as.factor(temp$country)
@@ -108,7 +114,7 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
       , .(role_cod = max(role_cod)),
       by = "primaryid"
     ]
-    suppressMessages(temp <- left_join(temp, temp_drug))
+    suppressMessages(temp <- dplyr::left_join(temp, temp_drug))
   } else {
     vars <- setdiff(vars, c("role_cod", "time_to_onset"))
     print("Variables role_cod and time_to_onset not considered. If you want to include them please provide the drug investigated")
@@ -119,14 +125,14 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
     # select the vars
     temp <- temp[, ..vars]
     t <- temp %>%
-      tbl_summary(statistic = list(
-        all_continuous() ~ "{median} ({p25}-{p75}) [{min}-{max}]",
-        all_categorical() ~ "{n};{p}"
+      gtsummary::tbl_summary(statistic = list(
+        gtsummary::all_continuous() ~ "{median} ({p25}-{p75}) [{min}-{max}]",
+        gtsummary::all_categorical() ~ "{n};{p}"
       ), digits = colnames(temp) ~ c(0, 2)) # %>%
     # format the table
-    gt_table <- t %>% as_tibble()
+    gt_table <- t %>% tibble::as_tibble()
     tempN_cases <- as.numeric(gsub("\\*\\*", "", gsub(".*N = ", "", colnames(gt_table)[[2]])))
-    suppressWarnings(gt_table <- gt_table %>% separate(get(colnames(gt_table)[[2]]),
+    suppressWarnings(gt_table <- gt_table %>% tidyr::separate(get(colnames(gt_table)[[2]]),
       sep = ";",
       into = c("N_cases", "%_cases")
     ))
@@ -148,29 +154,29 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
     temp <- temp[, ..vars]
     # perform the descriptive analysis
     suppressMessages(t <- temp %>%
-      tbl_summary(
+      gtsummary::tbl_summary(
         by = Group, statistic = list(
-          all_continuous() ~ "{median} ({p25}-{p75}) [{min}-{max}] {p_nonmiss}",
-          all_continuous2() ~ "{median} ({p25}-{p75}) [{min}-{max}] {p_nonmiss}",
-          all_categorical() ~ "{n};{p}"
+          gtsummary::all_continuous() ~ "{median} ({p25}-{p75}) [{min}-{max}] {p_nonmiss}",
+          gtsummary::all_continuous2() ~ "{median} ({p25}-{p75}) [{min}-{max}] {p_nonmiss}",
+          gtsummary::all_categorical() ~ "{n};{p}"
         ),
         digits = colnames(temp) ~ c(0, 2)
       ) %>%
-      add_p(
-        test = list(all_categorical() ~ "fisher.test.simulate.p.values"), # this applies the custom test to all categorical variables
-        pvalue_fun = function(x) style_pvalue(x, digits = 3)
+      gtsummary::add_p(
+        test = list(gtsummary::all_categorical() ~ "fisher.test.simulate.p.values"), # this applies the custom test to all categorical variables
+        pvalue_fun = function(x) gtsummary::style_pvalue(x, digits = 3)
       ) %>%
-      add_q("holm") %>%
-      bold_labels())
+      gtsummary::add_q("holm") %>%
+      gtsummary::bold_labels())
     # format the table
-    gt_table <- t %>% as_tibble()
+    gt_table <- t %>% tibble::as_tibble()
     tempN_cases <- as.numeric(gsub(",", "", gsub(".*N = ", "", colnames(gt_table)[[2]])))
     tempN_controls <- as.numeric(gsub(",", "", gsub(".*N = ", "", colnames(gt_table)[[3]])))
-    suppressWarnings(gt_table <- gt_table %>% separate(get(colnames(gt_table)[[2]]),
+    suppressWarnings(gt_table <- gt_table %>% tidyr::separate(get(colnames(gt_table)[[2]]),
       sep = ";",
       into = c("N_cases", "%_cases")
     ))
-    suppressWarnings(gt_table <- gt_table %>% separate(get(colnames(gt_table)[[4]]),
+    suppressWarnings(gt_table <- gt_table %>% tidyr::separate(get(colnames(gt_table)[[4]]),
       sep = ";",
       into = c("N_controls", "%_controls")
     ))
@@ -194,9 +200,10 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
 #'   \item{p}{The simulated p-value for the Fisher's Exact Test.}
 #'   \item{test}{The name of the test method, which is "Fisher's Exact Test with Simulation".}
 #' }
-#'
+#' @importFrom stats fisher.test
 #' @seealso \code{\link[stats:fisher.test]{fisher.test}} for more information on Fisher's Exact Test.
 #'
+#' @keywords internal
 #' @export
 
 fisher.test.simulate.p.values <- function(data, variable, by, ...) {

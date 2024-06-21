@@ -29,6 +29,8 @@ disproportionality_trend(
 
 \item{temp_demo}{Data frame containing demographic data. Defaults to \code{Demo}.}
 
+\item{temp_demo_supp}{Data frame containing supplementary demographic data, and in particular the quarter. Defaults to \verb{Demo_supp\[, .(primaryid, quarter)\]}.}
+
 \item{meddra_level}{Character string specifying the MedDRA level. Options are "pt" (preferred term) or "custom". Defaults to "pt".}
 
 \item{drug_level}{Character string specifying the drug level. Options are "substance" or "custom". Defaults to "substance".}

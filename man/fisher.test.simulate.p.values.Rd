@@ -28,3 +28,4 @@ This function performs Fisher's Exact Test with simulated p-values for associati
 \seealso{
 \code{\link[stats:fisher.test]{fisher.test}} for more information on Fisher's Exact Test.
 }
+\keyword{internal}

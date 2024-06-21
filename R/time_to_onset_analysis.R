@@ -3,17 +3,19 @@
 #' This function conducts a time-to-onset analysis for associations between drugs and events based on user-specified parameters.
 #' @param drug_selected A list of drugs for analysis. Can be a list of lists (to collapse terms together) if drug_level is set to custom.
 #' @param reac_selected A list of adverse events for analysis. Can be a list of lists (to collapse terms together) if meddra_level is set to custom.
-#' @param temp_d Data table containing drug data (default is Drug). If set to Drug[role_cod %in% c("PS","SS")] allows to investigate only suspects.
+#' @param temp_d Data table containing drug data (default is Drug). If set to Drug\[role_cod %in% c("PS","SS")\] allows to investigate only suspects.
 #' @param temp_r Data table containing reaction data (default is Reac).
 #' @param meddra_level The desired MedDRA level for analysis (default is "pt"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
 #' @param drug_level The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
-#' @param restriction Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo[!RB_duplicates_only_susp]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.
+#' @param restriction Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo\[!RB_duplicates_only_susp\]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.
 #' @param minimum_cases The minimum number of cases required for the analysis (default is 3).
 #' @param max_TTO The maximum time to onset considered in the analysis, in days (default is 365).
 #' @param test The two-sample goodness of fit test to apply for TTO analysis. Choices are AD (Anderson-Darling test - default) and KS (Kolmogorov-Smirnov test).
 #'
 #' @return A data.table containing results of the time-to-onset analysis, including drug-event associations, KS test statistics, and p-values.
-#'
+#' @importFrom dplyr distinct
+#' @importFrom stats ks.test
+#' @importFrom twosamples ad_test
 #' @examples
 #' \dontrun{
 #' # Example usage:
@@ -96,9 +98,9 @@ time_to_onset_analysis <- function(
     drug_selected <- names(drug_selected)
   }
   #
-  temp_d <- temp_d[, c(drug_level, "primaryid", "time_to_onset"), with = FALSE] %>% distinct()
+  temp_d <- temp_d[, c(drug_level, "primaryid", "time_to_onset"), with = FALSE] %>% dplyr::distinct()
   temp_d <- temp_d[, .(time_to_onset = max(time_to_onset)), by = c(drug_level, "primaryid")]
-  temp_r <- temp_r[, c(meddra_level, "primaryid", "time_to_onset"), with = FALSE] %>% distinct()
+  temp_r <- temp_r[, c(meddra_level, "primaryid", "time_to_onset"), with = FALSE] %>% dplyr::distinct()
   temp_r <- temp_r[, .(time_to_onset = min(time_to_onset)), by = c(meddra_level, "primaryid")]
 
 
@@ -126,9 +128,9 @@ time_to_onset_analysis <- function(
   if (test == "AD") {
     results <- results[lengths(D_E) > 0]
     results <- results[lengths(nD_E) > 0]
-    results <- results[, ad_event := map2(D_E, nD_E, \(x, y) ad_test(unlist(x), unlist(y)))]
+    results <- results[, ad_event := map2(D_E, nD_E, \(x, y) twosamples::ad_test(unlist(x), unlist(y)))]
     results <- results[lengths(D_nE) > 0]
-    results <- results[, ad_drug := map2(D_E, nD_E, \(x, y) ad_test(unlist(x), unlist(y)))]
+    results <- results[, ad_drug := map2(D_E, nD_E, \(x, y) twosamples::ad_test(unlist(x), unlist(y)))]
     results <- results[, index := .I]
     results <- results[, D_event := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ad_event[[x]][[1]], NA))]
     results <- results[, p_event := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ad_event[[x]][[2]], NA))]
@@ -148,11 +150,11 @@ time_to_onset_analysis <- function(
   if (test == "KS") {
     results <- results[lengths(D_E) > 0]
     results <- results[lengths(nD_E) > 0]
-    results <- results[, ks_event := map2(D_E, nD_E, \(x, y) ks.test(unlist(x), unlist(y),
+    results <- results[, ks_event := map2(D_E, nD_E, \(x, y) stats::ks.test(unlist(x), unlist(y),
       alternative = "two.sided", exact = FALSE
     ))]
     results <- results[lengths(D_nE) > 0]
-    results <- results[, ks_drug := map2(D_E, D_nE, \(x, y) ks.test(unlist(x), unlist(y),
+    results <- results[, ks_drug := map2(D_E, D_nE, \(x, y) stats::ks.test(unlist(x), unlist(y),
       alternative = "two.sided", exact = FALSE
     ))]
     results <- results[, index := .I]
@@ -182,6 +184,7 @@ time_to_onset_analysis <- function(
 #'
 #' @return A ggplot object representing the KS plot.
 #'
+#' @importFrom stats ecdf
 #' @details
 #' The function takes the results of a time-to-event analysis and compares
 #' two distributions based on the specified type of data (drug or event).
@@ -207,8 +210,8 @@ plot_KS <- function(results_tto_analysis, RG = "drug") {
   group <- c(rep("Cases", length(sample1)), rep("RG", length(sample2)))
   dat <- data.frame(KSD = c(sample1, sample2), group = group)
   # create ECDF of data
-  cdf1 <- ecdf(sample1)
-  cdf2 <- ecdf(sample2)
+  cdf1 <- stats::ecdf(sample1)
+  cdf2 <- stats::ecdf(sample2)
   # find min and max statistics to draw line between points of greatest distance
   minMax <- seq(min(sample1, sample2), max(sample1, sample2), length.out = length(sample1))
   x0 <- minMax[which(abs(cdf1(minMax) - cdf2(minMax)) == max(abs(cdf1(minMax) - cdf2(minMax))))]
