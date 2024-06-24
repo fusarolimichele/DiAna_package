@@ -39,4 +39,6 @@ test_that("Disproportionality on databases works with heterogeneous input in dru
                disproportionality_analysis(list("adalimumab","etanercept","infliximab"),list("nausea","injection site pain"),sample_Drug,sample_Reac))
   })
 
-
+test_that("Render_forest of disproportionality analysis produces a result ") {
+ render_forest(disproportionality_analysis(list("adalimumab","etanercept","infliximab"),list("nausea","injection site pain"),sample_Drug,sample_Reac))
+})
