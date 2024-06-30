@@ -53,3 +53,8 @@ A ggplot object representing the forest plot visualization.
 \description{
 This function generates a forest plot visualization of disproportions.
 }
+\seealso{
+Other visualization functions: 
+\code{\link{plot_disproportionality_trend}()}
+}
+\concept{visualization functions}

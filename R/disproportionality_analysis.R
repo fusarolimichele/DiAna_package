@@ -2,6 +2,7 @@
 #'
 #' performs disproportionality analysis and returns the results.
 #'
+#' @family disproportionality functions
 #' @inheritParams descriptive
 #' @param drug_selected A list of drugs for analysis. Can be a list of lists (to collapse terms together).
 #' @param reac_selected A list of adverse events for analysis. Can be a list of lists (to collapse terms together).
@@ -158,6 +159,7 @@ disproportionality_analysis <- function(
 #'
 #' This function generates a forest plot visualization of disproportions.
 #'
+#' @family visualization functions
 #' @param df Data.table containing the data for rendering the forest plot.
 #' @param index Type of data to use for rendering: "ROR" or "IC".
 #' @param row Variable for the rows of the forest plot (default is "drug").
@@ -276,6 +278,7 @@ render_forest <- function(df,
 #'
 #' This function performs a disproportionality analysis for drug-event combinations in the FAERS dataset, calculating various metrics such as the Reporting Odds Ratio (ROR), Proportional Reporting Ratio (PRR), Relative Reporting Ratio (RRR), and Information Component (IC).
 #'
+#' @family disproportionality functions
 #' @param drug_count An integer representing the number of reports for the drug of interest. Default is the length of \code{pids_drug}.
 #' @param event_count An integer representing the number of reports for the event of interest. Default is the length of \code{pids_event}.
 #' @param drug_event_count An integer representing the number of reports for the drug-event combination. Default is the length of the intersection of \code{pids_drug} and \code{pids_event}.
@@ -377,7 +380,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' Disproportionality Time Trend for a Drug-Event Combination
 #'
 #' This function calculates the disproportionality time trend for a given drug-event combination.
-#'
+#' @family disproportionality functions
 #' @inheritParams descriptive
 #' @inheritParams disproportionality_analysis
 #' @param drug_selected Drug selected
@@ -516,6 +519,7 @@ disproportionality_trend <- function(
 #'
 #' This function plots the disproportionality trend over time for a given metric.
 #'
+#' @family visualization functions
 #' @param disproportionality_trend_results Data frame containing the results from the `disproportionality_trend` function.
 #' @param metric Character string specifying the metric to plot. Options are "IC" (information component) or "ROR" (reporting odds ratio). Defaults to "IC".
 #' @param time_granularity Character string specifying the time frame. It is recommeded to use the same specified in the 'disproportionality_trend' function. Default is "year". Alternatives are "quarter" and "month".

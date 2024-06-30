@@ -6,3 +6,5 @@ projects
 external_sources
 ^Developer_script\\.R$
 Developer
+^codecov\.yml$
+^\.github$

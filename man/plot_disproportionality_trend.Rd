@@ -35,3 +35,8 @@ plot_ROR <- plot_disproportionality_trend(trend_results, metric = "ROR")
 }
 
 }
+\seealso{
+Other visualization functions: 
+\code{\link{render_forest}()}
+}
+\concept{visualization functions}

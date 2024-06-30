@@ -44,3 +44,9 @@ A data.table containing disproportionality analysis results.
 \description{
 performs disproportionality analysis and returns the results.
 }
+\seealso{
+Other disproportionality functions: 
+\code{\link{disproportionality_comparison}()},
+\code{\link{disproportionality_trend}()}
+}
+\concept{disproportionality functions}
