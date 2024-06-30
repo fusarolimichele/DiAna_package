@@ -4,6 +4,7 @@
 #' for a given set of primary IDs.
 #' Calculates % as the proportion of individuals recording the event.
 #'
+#' @inheritParams descriptive
 #' @param pids_cases Vector of primary IDs to consider for counting reactions.
 #' @param entity Entity investigated. It can be one of the following:
 #'       \itemize{
@@ -30,13 +31,13 @@
 #' reporting_rates(pids, "indication", "pt")
 #' reporting_rates(pids, entity = "substance", level = "Class3")
 #' }
-reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_role = c("PS", "SS", "I", "C"), drug_indi = NA) {
+reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_role = c("PS", "SS", "I", "C"), drug_indi = NA, temp_reac=Reac,temp_drug=Drug,temp_indi=Indi) {
   if (entity == "reaction") {
-    temp <- import("REAC", pids = pids_cases, save_in_environment = FALSE)
+    temp <- temp_reac
   } else if (entity == "indication") {
-    temp <- import("INDI", pids = pids_cases, save_in_environment = FALSE)
+    temp <- temp_indi
     if (sum(!is.na(drug_indi)) > 0) {
-      temp <- import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
+      temp <- temp_drug[
         temp,
         on = c("primaryid", "drug_seq")
       ][substance %in% drug_indi]
@@ -47,9 +48,9 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
       "therapeutic procedures and supportive care nec"
     )]
   } else if (entity == "substance") {
-    temp <- dplyr::distinct(import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
+    temp <- dplyr::distinct(temp_drug)[
       role_cod %in% drug_role
-    ][, .(primaryid, substance)])
+    ][, .(primaryid, substance)]
   }
   if (level %in% c("hlt", "hlgt", "soc")) {
     import_MedDRA()
@@ -119,7 +120,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
 #' }
 hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx"), drug_role = c("PS", "SS", "I", "C")) {
   if (entity %in% c("reaction", "indication")) {
-    pts <- reporting_rates(pids_cases, entity = entity, "pt", )
+    pts <- reporting_rates(pids_cases, entity = entity, "pt")
     hlts <- reporting_rates(pids_cases, entity = entity, "hlt")
     hlgts <- reporting_rates(pids_cases, entity = entity, "hlgt")
     socs <- reporting_rates(pids_cases, entity = entity, "soc")

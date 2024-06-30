@@ -2,7 +2,7 @@
 #'
 #' This function retrieves the identifiers of pregnancy-related reports from the FDA Adverse Event Reporting System (FAERS) for a specified quarter.
 #'
-#' @param quarter A character string specifying the FAERS quarter to retrieve data for. Default is the current FAERS version (\code{FAERS_version}).
+#' @param quarter A character string specifying the FAERS quarter to retrieve data for. Default is the current FAERS version (\code{FAERS_version}). It can also be set to "sample" to use instead sample data, mainly for testing.
 #' @return A list containing five elements:
 #' \describe{
 #'   \item{\code{high_specificity}}{A vector of identifiers with high specificity for pregnancy-related reports.}
@@ -978,14 +978,23 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
     "maternal exposure via partner during pregnancy"
   )
 
-
-  import("DEMO")
-  import("DRUG")
-  import("REAC")
-  import("INDI")
-  import("OUTC")
-  import("THER")
-  import("DRUG_SUPP")
+  if (quarter == "sample") {
+    Demo <- sample_Demo
+    Drug <- sample_Drug
+    Reac <- sample_Reac
+    Indi <- sample_Indi
+    Outc <- sample_Outc
+    Ther <- sample_Ther
+    Drug_supp <- sample_Drug_Supp
+  } else {
+    import("DEMO")
+    import("DRUG")
+    import("REAC")
+    import("INDI")
+    import("OUTC")
+    import("THER")
+    import("DRUG_SUPP")
+  }
   # Step 1 - Pregnancy reports---------------------------------
   indi_preg <- unique(Indi[indi_pt %in% pregnancy_indication]$primaryid)
 

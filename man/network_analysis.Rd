@@ -13,11 +13,15 @@ network_analysis(
   width = 1500,
   height = 1500,
   labs_size = 1,
-  restriction = NA
+  restriction = NA,
+  temp_reac = Reac,
+  temp_indi = Indi,
+  temp_drug = Drug,
+  save_plot = TRUE
 )
 }
 \arguments{
-\item{pids}{Numeric vector of unique identifiers for data import.}
+\item{pids}{Numeric vector of unique identifiers on which the network analysis should be performed.}
 
 \item{entity}{Character specifying the type of entity to analyze ("reaction", "indication", or "substance").}
 
@@ -34,6 +38,14 @@ network_analysis(
 \item{labs_size}{Size of labels in network visualization. Default is 1. It can be changed if visualization is not good.}
 
 \item{restriction}{Restriction performed in the analysis. Default is NA. It could be setted to 'suspects' if entity is 'substance' to restrict the analysis to primary and secondary suspects}
+
+\item{temp_reac}{Reac dataset. Can be set to sample_Reac for testing}
+
+\item{temp_indi}{Indi dataset. Can be set to sample_Indi for testing}
+
+\item{temp_drug}{Drug dataset. Can be set to sample_Drug for testing}
+
+\item{save_plot}{Whether the plot should be saved as a tiff. Defaults to true}
 }
 \value{
 NULL (invisibly). Saves a network visualization as a TIFF file.

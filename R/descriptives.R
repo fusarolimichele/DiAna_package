@@ -5,13 +5,20 @@
 #' @param pids_cases A vector of primary IDs for cases.
 #' @param RG A vector of primary IDs: reference group. Default is NULL.
 #' @param drug A vector of drug names. Default is NULL.
-#' @param file_name The name of the Excel file to save the results. Default is "Descriptives.xlsx".
+#' @param file_name The name of the Excel file to save the results. Default is "Descriptives.xlsx". It only works if save_in_excel is TRUE.
 #' @param vars A character vector of variable names to include in the analysis.
 #' @param list_pids A list of vectors with primary IDs for custom groups whose distribution should be described. Default is an empty list.
 #' @param method The method for Chi-square test analysis, either "independence_test" or "goodness_of_fit". Default is "independence_test". It applies only for comparisons between cases and non-cases.
-#' @param quarter The quarter for data import. Default is FAERS_version, which we recommend to provide at the beginning of the script.
+#' @param save_in_excel Whether to save the outcome in an excel. Defaults to TRUE
+#' @param temp_demo Demo dataset. Defaults to Demo. Can be se to sample_Demo for testing
+#' @param temp_drug Drug dataset. Can be set to sample_Drug for testing
+#' @param temp_reac Reac dataset. Can be set to sample_Reac for testing
+#' @param temp_indi Indi dataset. Can be set to sample_Indi for testing
+#' @param temp_outc Outc dataset. Can be set to sample_Outc for testing
+#' @param temp_reac Reac dataset. Can be set to sample_Reac for testing
+#' @param temp_ther Ther dataset. Can be set to sample_Ther for testing
 #'
-#' @return The function generates descriptive statistics and saves them to an Excel file.
+#' @return The function generates descriptive statistics as a gt_table and potentially saves them to an Excel file.
 #' @importFrom dplyr distinct left_join
 #' @importFrom writexl write_xlsx
 #' @importFrom tibble as_tibble
@@ -35,7 +42,8 @@
 #' }
 #' @export
 
-descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descriptives.xlsx",
+descriptive <- function(pids_cases, RG = NULL, drug = NULL,
+                        save_in_excel = TRUE, file_name = "Descriptives.xlsx",
                         vars = c(
                           "sex", "Submission", "Reporter",
                           "age_range", "Outcome", "country",
@@ -44,16 +52,18 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
                           "Indications", "Substances", "year", "role_cod", "time_to_onset"
                         ),
                         list_pids = list(), method = "independence_test",
-                        quarter = FAERS_version) {
-  # import data if now already uploaded
+                        temp_demo = Demo, temp_drug = Drug, temp_reac = Reac,
+                        temp_indi = Indi, temp_outc = Outc, temp_ther = Ther) {
+  # import data
   pids_tot <- base::union(pids_cases, RG)
-  temp <- import("DEMO", quarter = quarter, pids = pids_tot, save_in_environment = FALSE)
-  temp_outc <- import("OUTC", quarter = quarter, pids = pids_tot, save_in_environment = FALSE)
-  temp_reac <- import("REAC", quarter = quarter, pids = pids_tot, save_in_environment = FALSE)
-  temp_indi <- import("INDI", quarter = quarter, pids = pids_tot, save_in_environment = FALSE)
-  temp_drug <- import("DRUG", quarter = quarter, pids = pids_tot, save_in_environment = FALSE)
-  temp_ther <- import("THER", quarter = quarter, pids = pids_tot, save_in_environment = FALSE)
+  temp_demo <- temp_demo[primaryid %in% pids_tot]
+  temp_outc <- temp_outc[primaryid %in% pids_tot]
+  temp_reac <- temp_reac[primaryid %in% pids_tot]
+  temp_indi <- temp_indi[primaryid %in% pids_tot]
+  temp_drug <- temp_drug[primaryid %in% pids_tot]
+  temp_ther <- temp_ther[primaryid %in% pids_tot]
 
+  temp <- temp_demo
   temp[, sex := ifelse(sex == "F", "Female", ifelse(sex == "M", "Male", NA))]
   temp[, Submission := ifelse(rept_cod %in% c("30DAY", "5DAY", "EXP"), "Expedited",
     ifelse(rept_cod == "PER", "Periodic",
@@ -85,11 +95,8 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
   temp[is.na(Outcome)]$Outcome <- "Non Serious"
   levels(temp$Outcome) <- c("Other serious", "Congenital anomaly", "Hospitalization", "Required intervention", "Disability", "Life threatening", "Death", "Non Serious")
   temp$Outcome <- factor(temp$Outcome, levels = c("Death", "Life threatening", "Disability", "Required intervention", "Hospitalization", "Congenital anomaly", "Other serious", "Non Serious"), ordered = TRUE)
-  suppressMessages(country_codes <- setDT(readr::read_delim(paste0(paste0(here::here(), "/external_sources/Countries.csv")), ";", escape_double = FALSE, trim_ws = TRUE, show_col_types = FALSE))[
-    , .(country = Country_Name, continent = Continent_Name)
-  ][!is.na(country)] %>% dplyr::distinct())
   temp[, country := ifelse(is.na(as.character(occr_country)), as.character(reporter_country), as.character(occr_country))]
-  temp <- country_codes[temp, on = "country"]
+  temp <-   dplyr::distinct(country_dictionary[,.(country, continent)][!is.na(country)])[temp, on = "country"]
   temp$country <- as.factor(temp$country)
   temp$continent <- factor(temp$continent, levels = c("North America", "Europe", "Asia", "South America", "Oceania", "Africa"), ordered = TRUE)
   temp <- temp_reac[, .N, by = "primaryid"][, .(primaryid, Reactions = N)][temp, on = "primaryid"]
@@ -117,7 +124,7 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
     suppressMessages(temp <- dplyr::left_join(temp, temp_drug))
   } else {
     vars <- setdiff(vars, c("role_cod", "time_to_onset"))
-    print("Variables role_cod and time_to_onset not considered. If you want to include them please provide the drug investigated")
+    warning("Variables role_cod and time_to_onset not considered. If you want to include them please provide the drug investigated")
   }
 
   # descriptive only cases
@@ -138,7 +145,9 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
     ))
     gt_table <- rbind(c("N", tempN_cases, ""), gt_table)
     # save it to the excel
-    writexl::write_xlsx(gt_table, file_name)
+    if (save_in_excel) {
+      writexl::write_xlsx(gt_table, file_name)
+    }
   } else {
     # descriptives cases and non-cases
     vars <- c(vars, "Group", names(list_pids))
@@ -182,8 +191,11 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
     ))
     gt_table <- rbind(c("N", tempN_cases, "", tempN_controls, "", "", ""), gt_table)
     # save it to the excel
-    writexl::write_xlsx(gt_table, file_name)
+    if (save_in_excel) {
+      writexl::write_xlsx(gt_table, file_name)
+    }
   }
+  return(gt_table)
 }
 
 #' Compute Fisher's Exact Test with Simulated p-values
@@ -204,7 +216,6 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL, file_name = "Descrip
 #' @seealso \code{\link[stats:fisher.test]{fisher.test}} for more information on Fisher's Exact Test.
 #'
 #' @keywords internal
-#' @export
 
 fisher.test.simulate.p.values <- function(data, variable, by, ...) {
   result <- list()

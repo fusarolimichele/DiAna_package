@@ -4,10 +4,14 @@
 \alias{get_drugnames}
 \title{Retrieve Drug Names from FAERS Database}
 \usage{
-get_drugnames(drug)
+get_drugnames(drug, temp_d = Drug, temp_d_name = Drug_name)
 }
 \arguments{
 \item{drug}{Character string representing the drug substance for which drug names are to be retrieved.}
+
+\item{temp_d}{Drug database. Can be set to sample_Drug for testing.}
+
+\item{temp_d_name}{Drug_name database. Can be set to sample_Drug_Name for testing.}
 }
 \value{
 A data table containing drug names and their corresponding occurrence percentages.

@@ -20,7 +20,7 @@
 #'                }
 #' @param quarter The quarter from which to import the data.
 #'                For updated analyses use last quarterly update,
-#'                in the format \emph{23Q1}.
+#'                in the format \emph{23Q1}. Defaults to the value assigned to FAERS_version.
 #' @param pids Optional vector of primary IDs to subset the imported data.
 #'             Defaults to the entire population.
 #' @param save_in_environment is a parameter automatically used within functions to avoid that the imported databases are overscribed.
@@ -60,7 +60,7 @@ import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environm
 #'
 #' This function imports MedDRA (Medical Dictionary for Regulatory Activities) data from a CSV file and stores it in the global environment.
 #'
-#' @param env The environment where the data will be assigned. Default to .GlobalEnv
+#' @inheritParams import
 #' @return A data table containing MedDRA data.
 #' @importFrom dplyr distinct
 #' @importFrom here here
@@ -104,7 +104,7 @@ import_MedDRA <- function(env = .GlobalEnv) {
 #' This function reads the ATC (Anatomical Therapeutic Chemical) classification
 #' from an external source and assigns it to a global environment variable.
 #' @param primary Whether only the primary ATC should be retrieved.
-#' @param env The environment where the data will be assigned. Default to .GlobalEnv
+#' @inheritParams import
 #' @return A data frame containing the dataset for ATC linkage.
 #' @importFrom dplyr distinct
 #' @importFrom here here

@@ -9,6 +9,7 @@ time_to_onset_analysis(
   reac_selected,
   temp_d = Drug,
   temp_r = Reac,
+  temp_t = Ther,
   meddra_level = "pt",
   drug_level = "substance",
   restriction = "none",
@@ -25,6 +26,8 @@ time_to_onset_analysis(
 \item{temp_d}{Data table containing drug data (default is Drug). If set to Drug[role_cod \%in\% c("PS","SS")] allows to investigate only suspects.}
 
 \item{temp_r}{Data table containing reaction data (default is Reac).}
+
+\item{temp_t}{Data table containing therapy and temporal data (default is Ther).}
 
 \item{meddra_level}{The desired MedDRA level for analysis (default is "pt"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).}
 

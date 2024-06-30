@@ -29,17 +29,26 @@ disproportionality_analysis <- function(
     ROR_minimum_cases = 3,
     ROR_threshold = 1,
     IC_threshold = 0) {
-
   # custom is deprecated
-  if(drug_level=="custom"|meddra_level=="custom"){warning("the parameter custom is not needed and was deprecated for drug and reac selected to improve the accessibility of the function.")}
+  if (drug_level == "custom" | meddra_level == "custom") {
+    warning("the parameter custom is not needed and was deprecated for drug and reac selected to improve the accessibility of the function.")
+  }
 
   # reformat drug and reac input
   drug_selected <- format_input_disproportionality(drug_selected)
   reac_selected <- format_input_disproportionality(reac_selected)
 
   # print warning if any drug or reaction selected was not found
-  if(length(setdiff(purrr::flatten(drug_selected),unique(temp_d[[drug_level]])))>0){if(askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected),unique(temp_d[[drug_level]])),collapse="; "),". \n Would you like to revise the query?"))){stop("Revise the query and run again the command")}}
-  if(length(setdiff(purrr::flatten(reac_selected),unique(temp_r[[meddra_level]])))>0){if(askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected),unique(temp_r[[meddra_level]])),collapse="; "),". \n Would you like to revise the query?"))){stop("Revise the query and run again the command")}}
+  if (length(setdiff(purrr::flatten(drug_selected), unique(temp_d[[drug_level]]))) > 0) {
+    if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_d[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
+      stop("Revise the query and run again the command")
+    }
+  }
+  if (length(setdiff(purrr::flatten(reac_selected), unique(temp_r[[meddra_level]]))) > 0) {
+    if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_r[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
+      stop("Revise the query and run again the command")
+    }
+  }
 
   # restrict to specific subpopulation
   if (length(restriction) > 1) {
@@ -60,8 +69,8 @@ disproportionality_analysis <- function(
   df_custom <- data.table(
     custom = rep(names(reac_selected), lengths(reac_selected)),
     meddra_level = unlist(reac_selected)
-    )
-  colnames(df_custom) <- c("custom",meddra_level)
+  )
+  colnames(df_custom) <- c("custom", meddra_level)
   temp_r <- df_custom[temp_r, on = meddra_level, allow.cartesian = TRUE]
   reac_selected <- names(reac_selected)
 
@@ -70,7 +79,7 @@ disproportionality_analysis <- function(
     custom = rep(names(drug_selected), lengths(drug_selected)),
     substance = unlist(drug_selected)
   )
-  colnames(df_custom) <- c("custom",drug_level)
+  colnames(df_custom) <- c("custom", drug_level)
   temp_d <- df_custom[temp_d, on = drug_level, allow.cartesian = TRUE]
   drug_selected <- names(drug_selected)
 
@@ -144,7 +153,6 @@ disproportionality_analysis <- function(
   )]
   results <- results[, ROR_color := factor(ROR_color, levels = c("not enough cases", "no signal", "light signal", "strong signal"), ordered = TRUE)]
   results <- results[, IC_color := factor(IC_color, levels = c("no signal", "strong signal"), ordered = TRUE)]
-
 }
 
 
@@ -274,6 +282,7 @@ render_forest <- function(df,
 #' @param event_count An integer representing the number of reports for the event of interest. Default is the length of \code{pids_event}.
 #' @param drug_event_count An integer representing the number of reports for the drug-event combination. Default is the length of the intersection of \code{pids_drug} and \code{pids_event}.
 #' @param tot An integer representing the total number of reports in the dataset. Default is the number of rows in the \code{Demo} table.
+#' @param print_results A logical to control whether the results should also be printed, besides being stored in the results.
 #' @return This function prints a contingency table and several disproportionality metrics (which are also stored in a list):
 #' \itemize{
 #'   \item \code{ROR}: Reporting Odds Ratio with confidence intervals.
@@ -304,10 +313,16 @@ render_forest <- function(df,
 #' }
 #'
 disproportionality_comparison <- function(drug_count = length(pids_drug), event_count = length(pids_event),
-                                          drug_event_count = length(intersect(pids_drug, pids_event)), tot = nrow(Demo),print_results=TRUE) {
-  if (drug_count<drug_event_count){stop("The count of reports recording a drug cannot be lower than the count of reports recording the drug and the event. Please check the provided counts.")}
-  if (event_count<drug_event_count){stop("The count of reports recording an event cannot be lower than the count of reports recording the drug and the event. Please check the provided counts.")}
-  if (event_count>tot|drug_count>tot|drug_event_count>tot){stop("The count of total reports cannot be lower than any other provided count. Please check the provided counts.")}
+                                          drug_event_count = length(intersect(pids_drug, pids_event)), tot = nrow(Demo), print_results = TRUE) {
+  if (drug_count < drug_event_count) {
+    stop("The count of reports recording a drug cannot be lower than the count of reports recording the drug and the event. Please check the provided counts.")
+  }
+  if (event_count < drug_event_count) {
+    stop("The count of reports recording an event cannot be lower than the count of reports recording the drug and the event. Please check the provided counts.")
+  }
+  if (event_count > tot | drug_count > tot | drug_event_count > tot) {
+    stop("The count of total reports cannot be lower than any other provided count. Please check the provided counts.")
+  }
   tab <- as.matrix(data.table(
     E = c(drug_event_count, event_count - drug_event_count),
     nE = c(drug_count - drug_event_count, tot - event_count - (drug_count - drug_event_count))
@@ -342,22 +357,22 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
   PRR_median <- (drug_event_count) / (tot * (drug_count / tot) * ((event_count - drug_event_count) / (tot - drug_count)))
   PRR_lower <- (drug_event_count) / (drug_count * (event_count - drug_event_count) / (tot - drug_count)) * exp(stats::qnorm(.025) * sqrt(1 / drug_event_count - 1 / drug_count + 1 / (event_count - drug_event_count) - 1 / (tot - drug_count)))
   PRR_upper <- (drug_event_count) / (drug_count * (event_count - drug_event_count) / (tot - drug_count)) * exp(stats::qnorm(.975) * sqrt(1 / drug_event_count - 1 / drug_count + 1 / (event_count - drug_event_count) - 1 / (tot - drug_count)))
-  ROR = paste0(ROR_median, " (", ROR_lower, "-", ROR_upper, ")")
-  PRR = paste0(round(PRR_median, 2), " (", round(PRR_lower, 2), "-", round(PRR_upper, 2), ")")
-  RRR = paste0(round(RRR_median, 2), " (", round(RRR_lower, 2), "-", round(RRR_upper, 2), ")")
-  IC = paste0(IC_median, " (", IC_lower, "-", IC_upper, ")")
-  IC_gamma = paste0(round(gamma_median, 2), " (", round(gamma_lower, 2), "-", round(gamma_upper, 2), ")")
-  if (print_results){
+  ROR <- paste0(ROR_median, " (", ROR_lower, "-", ROR_upper, ")")
+  PRR <- paste0(round(PRR_median, 2), " (", round(PRR_lower, 2), "-", round(PRR_upper, 2), ")")
+  RRR <- paste0(round(RRR_median, 2), " (", round(RRR_lower, 2), "-", round(RRR_upper, 2), ")")
+  IC <- paste0(IC_median, " (", IC_lower, "-", IC_upper, ")")
+  IC_gamma <- paste0(round(gamma_median, 2), " (", round(gamma_lower, 2), "-", round(gamma_upper, 2), ")")
+  if (print_results) {
     print(tab)
     cat("\n")
     cat("\n")
-    cat(paste0("ROR = ",ROR, "\n"))
-    cat(paste0("PRR = ",PRR ,"\n"))
-    cat(paste0("RRR = ",RRR, "\n"))
-    cat(paste0("IC = " , IC, "\n"))
+    cat(paste0("ROR = ", ROR, "\n"))
+    cat(paste0("PRR = ", PRR, "\n"))
+    cat(paste0("RRR = ", RRR, "\n"))
+    cat(paste0("IC = ", IC, "\n"))
     cat(paste0("IC_gamma = ", IC_gamma))
   }
-  results <- list("ROR"=ROR,"PRR"=PRR,"RRR"=RRR,"IC"=IC,"IC_gamma"=IC_gamma)
+  results <- list("ROR" = ROR, "PRR" = PRR, "RRR" = RRR, "IC" = IC, "IC_gamma" = IC_gamma)
 }
 
 
@@ -371,8 +386,8 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' @param temp_r Data frame containing reaction data. Defaults to `Reac`.
 #' @param temp_demo Data frame containing demographic data. Defaults to `Demo`.
 #' @param temp_demo_supp Data frame containing supplementary demographic data, and in particular the quarter. Defaults to `Demo_supp\[, .(primaryid, quarter)\]`.
-#' @param meddra_level Character string specifying the MedDRA level. Options are "pt" (preferred term) or "custom". Defaults to "pt".
-#' @param drug_level Character string specifying the drug level. Options are "substance" or "custom". Defaults to "substance".
+#' @param meddra_level Character string specifying the MedDRA level. Defaults to "pt".
+#' @param drug_level Character string specifying the drug level. Defaults to "substance".
 #' @param restriction Character vector of primary IDs to restrict the analysis. Defaults to "none".
 #' @param time_granularity Character string specifying the time granularity. Options are "year", "quarter", or "month". Defaults to "year".
 #' @param cumulative Logical indicating whether to calculate cumulative values. Defaults to `TRUE`.
@@ -584,25 +599,30 @@ plot_disproportionality_trend <- function(disproportionality_trend_results, metr
 #'
 #' @return A formatted list of drugs or events suitable for disproportionality analysis
 #'
-format_input_disproportionality <- function(input){
+format_input_disproportionality <- function(input) {
   t <- input
-  if(!is.list(t)){t <- as.list(t)}
-  if (identical(purrr::flatten(t),t)&!is.null(names(t))){
-    t <- split(unname(t), gsub("[[:digit:]]+$","",names(t)))
+  if (!is.list(t)) {
+    t <- as.list(t)
+  }
+  if (identical(purrr::flatten(t), t) & !is.null(names(t))) {
+    t <- split(unname(t), gsub("[[:digit:]]+$", "", names(t)))
     t1 <- t
-    for(n in 1:length(t)){
-      t1[n] <- t[length(t)-n+1]
-      names(t1)[n] <- names(t)[length(t)-n+1]
+    for (n in 1:length(t)) {
+      t1[n] <- t[length(t) - n + 1]
+      names(t1)[n] <- names(t)[length(t) - n + 1]
     }
     t <- t1
   }
   t1 <- t
-  for(n in 1:length(t)){
-    if(is.character(t[n][[1]])){t1[n] <- list(transpose(t[n]))}
+  for (n in 1:length(t)) {
+    if (is.character(t[n][[1]])) {
+      t1[n] <- list(transpose(t[n]))
+    }
   }
   t <- t1
-  if(is.null(names(t))){
+  if (is.null(names(t))) {
     t <- purrr::flatten(t1)
-    names(t) <- unlist(purrr::flatten(t1))}
+    names(t) <- unlist(purrr::flatten(t1))
+  }
   return(t)
 }

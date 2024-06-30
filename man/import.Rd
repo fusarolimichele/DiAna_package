@@ -30,7 +30,7 @@ It can be one of the following:
 
 \item{quarter}{The quarter from which to import the data.
 For updated analyses use last quarterly update,
-in the format \emph{23Q1}.}
+in the format \emph{23Q1}. Defaults to the value assigned to FAERS_version.}
 
 \item{pids}{Optional vector of primary IDs to subset the imported data.
 Defaults to the entire population.}

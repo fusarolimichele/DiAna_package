@@ -52,7 +52,7 @@ FAERS_quarter_specifics <- function(quarter = FAERS_version, print = TRUE) {
         )
       )
     } else {
-      c("No information available for the specified quarter. Note that information is available only from 24Q1 onward")
+      c("No information concerning the MedDRA version used available for the specified quarter. Note that information is available only from 24Q1 onward")
     }
   )
 }

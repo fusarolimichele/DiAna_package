@@ -7,7 +7,7 @@ utils::globalVariables(c(
   "drug_seq", "role_cod", "substance", "sex", "Submission",
   "rept_cod", "Reporter", "occp_cod", "age_in_years",
   "age_in_days", "age_range", "outc_cod", "Outcome",
-  "Country_Name", "Continent_Name", "country",
+  "Country_Name", "Continent_Name", "country", "custom",
   "occr_country", "reporter_country", "N", "time_to_onset",
   "event_dt", "init_fda_dt", "fda_dt", "..vars", "Group",
   "Drug", "Reac", "MedDRA", "D_E", "primaryid_substance",
@@ -33,7 +33,8 @@ utils::globalVariables(c(
   "ttos_event", "ad_event", "ad_drug", "index", "D_event",
   "p_event", "D_drug", "ad_drug", "p_drug", "n_cases_with_tto",
   "Q1", "Q2", "Q3", "ks_event", "ks_drug", "path", "label_ROR", "label", ".",
-  "V<-"
+  "V<-", "sample_Demo", "sample_Drug", "sample_Reac", "sample_Indi", "sample_Outc",
+  "sample_Ther", "sample_Drug_Supp", "Ther","Outc","country_dictionary","continent"
 ))
 
 .onAttach <- function(libname, pkgname) {

@@ -2,7 +2,8 @@
 #'
 #' This function performs network analysis on the provided data and generates a visualization of the network. It uses IsingFit to model the network structure, clusters nodes using Louvain method, and visualizes the resulting network graph.
 #'
-#' @param pids Numeric vector of unique identifiers for data import.
+#' @inheritParams descriptive
+#' @param pids Numeric vector of unique identifiers on which the network analysis should be performed.
 #' @param entity Character specifying the type of entity to analyze ("reaction", "indication", or "substance").
 #' @param remove_singlet Logical indicating whether to remove singleton nodes (nodes with no edges). Default is TRUE.
 #' @param remove_negative_edges Logical indicating whether to remove edges with negative weights. Default is TRUE.
@@ -11,7 +12,8 @@
 #' @param height Numeric specifying the height of the saved image in pixels. Default is 1500.
 #' @param labs_size Size of labels in network visualization. Default is 1. It can be changed if visualization is not good.
 #' @param restriction Restriction performed in the analysis. Default is NA. It could be setted to 'suspects' if entity is 'substance' to restrict the analysis to primary and secondary suspects
-#'
+#' @param save_plot Whether the plot should be saved as a tiff. Defaults to true
+
 #' @return NULL (invisibly). Saves a network visualization as a TIFF file.
 #'
 #' @importFrom dplyr distinct left_join select
@@ -38,14 +40,14 @@
 network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
                              remove_negative_edges = TRUE,
                              file_name = paste0(project_path, "network.tiff"), width = 1500, height = 1500,
-                             labs_size = 1, restriction = NA) {
+                             labs_size = 1, restriction = NA,temp_reac=Reac,temp_indi=Indi,temp_drug=Drug,
+                             save_plot=TRUE) {
   if (entity == "reaction") {
-    df <- import("REAC", pids = pids)[, .(primaryid, pt)]
+    df <- temp_reac[, .(primaryid, pt)][primaryid%in%pids]
   } else if (entity == "indication") {
-    df <- import("INDI", pids = pids)
-    df <- df[, .(primaryid, indi_pt)] # removal of drug_seq
+    df <- temp_indi[, .(primaryid, indi_pt)][primaryid%in%pids]
   } else if (entity == "substance") {
-    df <- import("DRUG", pids = pids)
+    df <- temp_drug[primaryid%in%pids]
     if (restriction == "suspects") {
       df <- df[role_cod %in% c("PS", "SS")]
 
@@ -110,10 +112,13 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   G_igraph <- igraph::set_vertex_attr(G_igraph, "label", value = labs$s)
 
   V(G_igraph)$label.cex <- labs_size
-  grDevices::tiff(file_name, width = width, height = height, res = 300)
-  plot(comm_lv, G_igraph,
-    layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
-    vertex.label.degree = pi / 2
-  )
-  grDevices::dev.off()
+  if(save_plot){
+    grDevices::tiff(file_name, width = width, height = height, res = 300)
+    plot(comm_lv, G_igraph,
+         layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
+         vertex.label.degree = pi / 2
+    )
+    grDevices::dev.off()
+  }
+  return(G_igraph)
 }
