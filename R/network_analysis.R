@@ -40,14 +40,14 @@
 network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
                              remove_negative_edges = TRUE,
                              file_name = paste0(project_path, "network.tiff"), width = 1500, height = 1500,
-                             labs_size = 1, restriction = NA,temp_reac=Reac,temp_indi=Indi,temp_drug=Drug,
-                             save_plot=TRUE) {
+                             labs_size = 1, restriction = NA, temp_reac = Reac, temp_indi = Indi, temp_drug = Drug,
+                             save_plot = TRUE) {
   if (entity == "reaction") {
-    df <- temp_reac[, .(primaryid, pt)][primaryid%in%pids]
+    df <- temp_reac[, .(primaryid, pt)][primaryid %in% pids]
   } else if (entity == "indication") {
-    df <- temp_indi[, .(primaryid, indi_pt)][primaryid%in%pids]
+    df <- temp_indi[, .(primaryid, indi_pt)][primaryid %in% pids]
   } else if (entity == "substance") {
-    df <- temp_drug[primaryid%in%pids]
+    df <- temp_drug[primaryid %in% pids]
     if (restriction == "suspects") {
       df <- df[role_cod %in% c("PS", "SS")]
 
@@ -112,11 +112,11 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   G_igraph <- igraph::set_vertex_attr(G_igraph, "label", value = labs$s)
 
   V(G_igraph)$label.cex <- labs_size
-  if(save_plot){
+  if (save_plot) {
     grDevices::tiff(file_name, width = width, height = height, res = 300)
     plot(comm_lv, G_igraph,
-         layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
-         vertex.label.degree = pi / 2
+      layout = L0, label = labs$s, vertex.label.dist = .4, # Distance between the label and the vertex
+      vertex.label.degree = pi / 2
     )
     grDevices::dev.off()
   }

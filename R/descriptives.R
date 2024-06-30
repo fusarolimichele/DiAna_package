@@ -96,7 +96,7 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL,
   levels(temp$Outcome) <- c("Other serious", "Congenital anomaly", "Hospitalization", "Required intervention", "Disability", "Life threatening", "Death", "Non Serious")
   temp$Outcome <- factor(temp$Outcome, levels = c("Death", "Life threatening", "Disability", "Required intervention", "Hospitalization", "Congenital anomaly", "Other serious", "Non Serious"), ordered = TRUE)
   temp[, country := ifelse(is.na(as.character(occr_country)), as.character(reporter_country), as.character(occr_country))]
-  temp <-   dplyr::distinct(country_dictionary[,.(country, continent)][!is.na(country)])[temp, on = "country"]
+  temp <- dplyr::distinct(country_dictionary[, .(country, continent)][!is.na(country)])[temp, on = "country"]
   temp$country <- as.factor(temp$country)
   temp$continent <- factor(temp$continent, levels = c("North America", "Europe", "Asia", "South America", "Oceania", "Africa"), ordered = TRUE)
   temp <- temp_reac[, .N, by = "primaryid"][, .(primaryid, Reactions = N)][temp, on = "primaryid"]

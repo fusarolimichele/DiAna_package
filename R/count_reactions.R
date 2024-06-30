@@ -31,7 +31,7 @@
 #' reporting_rates(pids, "indication", "pt")
 #' reporting_rates(pids, entity = "substance", level = "Class3")
 #' }
-reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_role = c("PS", "SS", "I", "C"), drug_indi = NA, temp_reac=Reac,temp_drug=Drug,temp_indi=Indi) {
+reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_role = c("PS", "SS", "I", "C"), drug_indi = NA, temp_reac = Reac, temp_drug = Drug, temp_indi = Indi) {
   if (entity == "reaction") {
     temp <- temp_reac
   } else if (entity == "indication") {
