@@ -7,8 +7,8 @@
 disproportionality_analysis(
   drug_selected,
   reac_selected,
-  temp_d = Drug,
-  temp_r = Reac,
+  temp_drug = Drug,
+  temp_reac = Reac,
   meddra_level = "pt",
   drug_level = "substance",
   restriction = "none",
@@ -22,9 +22,9 @@ disproportionality_analysis(
 
 \item{reac_selected}{A list of adverse events for analysis. Can be a list of lists (to collapse terms together).}
 
-\item{temp_d}{Data table containing drug data (default is Drug). If set to Drug[role_cod \%in\% c("PS","SS")] allows to investigate only suspects.}
+\item{temp_drug}{Drug dataset. Can be set to sample_Drug for testing}
 
-\item{temp_r}{Data table containing reaction data (default is Reac).}
+\item{temp_reac}{Reac dataset. Can be set to sample_Reac for testing}
 
 \item{meddra_level}{The desired MedDRA level for analysis (default is "pt").}
 

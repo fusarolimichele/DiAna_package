@@ -48,18 +48,18 @@ test_that("Time to onset analysis works when changing the max tto", {
 
 test_that("Plot KS works", {
   expect_snapshot(t <- plot_KS(time_to_onset_analysis(list("potential anti-acneic" = list("skin care", "adapalene")),
-                                      list("skin irritated" = list("erythema", "skin irritation", "dry skin")),
-                                      temp_d = sample_Drug, temp_r = sample_Reac,
-                                      temp_t = sample_Ther, minimum_cases = 1, max_TTO = 20,
-                                      restriction = sample_Demo[sex == "F"]$primaryid
+    list("skin irritated" = list("erythema", "skin irritation", "dry skin")),
+    temp_d = sample_Drug, temp_r = sample_Reac,
+    temp_t = sample_Ther, minimum_cases = 1, max_TTO = 20,
+    restriction = sample_Demo[sex == "F"]$primaryid
   )))
 })
 
 test_that("Render TTO works", {
   expect_snapshot(t <- render_tto(time_to_onset_analysis(list("potential anti-acneic" = list("skin care", "adapalene")),
-                                                      list("skin irritated" = list("erythema", "skin irritation", "dry skin")),
-                                                      temp_d = sample_Drug, temp_r = sample_Reac,
-                                                      temp_t = sample_Ther, minimum_cases = 1,
-                                                      restriction = sample_Demo[sex == "F"]$primaryid
+    list("skin irritated" = list("erythema", "skin irritation", "dry skin")),
+    temp_d = sample_Drug, temp_r = sample_Reac,
+    temp_t = sample_Ther, minimum_cases = 1,
+    restriction = sample_Demo[sex == "F"]$primaryid
   )))
 })

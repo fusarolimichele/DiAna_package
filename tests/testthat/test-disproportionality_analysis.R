@@ -236,34 +236,33 @@ test_that("Disproportionality trend works also using quarters and months", {
   )
 })
 
-test_that("Render forest works as usual",{
+test_that("Render forest works as usual", {
   expect_snapshot(t <- render_forest(disproportionality_analysis("paracetamol", "nausea", sample_Drug, sample_Reac)))
 })
 
-test_that("Plot disproportionality trend works as usual",{
+test_that("Plot disproportionality trend works as usual", {
   expect_snapshot(t <- plot_disproportionality_trend(disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
-                                                                         list("injection site pain", "injection site reaction", "injection site discomfort"),
-                                                                         temp_drug = sample_Drug, temp_reac = sample_Reac,
-                                                                         temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
-                                                                         time_granularity = "quarter"
+    list("injection site pain", "injection site reaction", "injection site discomfort"),
+    temp_drug = sample_Drug, temp_reac = sample_Reac,
+    temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
+    time_granularity = "quarter"
   )))
   expect_snapshot(t <- plot_disproportionality_trend(disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
-                                                                              list("injection site pain", "injection site reaction", "injection site discomfort"),
-                                                                              temp_drug = sample_Drug, temp_reac = sample_Reac,
-                                                                              temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
-                                                                              time_granularity = "month"
+    list("injection site pain", "injection site reaction", "injection site discomfort"),
+    temp_drug = sample_Drug, temp_reac = sample_Reac,
+    temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
+    time_granularity = "month"
   ), time_granularity = "month"))
   expect_snapshot(t <- plot_disproportionality_trend(disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
-                                                                              list("injection site pain", "injection site reaction", "injection site discomfort"),
-                                                                              temp_drug = sample_Drug, temp_reac = sample_Reac,
-                                                                              temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
-                                                                              time_granularity = "quarter"
-  ),metric = "ROR", time_granularity = "quarter"))
+    list("injection site pain", "injection site reaction", "injection site discomfort"),
+    temp_drug = sample_Drug, temp_reac = sample_Reac,
+    temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
+    time_granularity = "quarter"
+  ), metric = "ROR", time_granularity = "quarter"))
   expect_snapshot(t <- plot_disproportionality_trend(disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
-                                                                              list("injection site pain", "injection site reaction", "injection site discomfort"),
-                                                                              temp_drug = sample_Drug, temp_reac = sample_Reac,
-                                                                              temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
-                                                                              time_granularity = "month"
-  ),metric = "ROR", time_granularity = "month"))
+    list("injection site pain", "injection site reaction", "injection site discomfort"),
+    temp_drug = sample_Drug, temp_reac = sample_Reac,
+    temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
+    time_granularity = "month"
+  ), metric = "ROR", time_granularity = "month"))
 })
-
