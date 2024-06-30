@@ -310,7 +310,7 @@ render_tto <- function(df,
   ) +
     {
       if (nested == FALSE) {
-        geom_linerange(aes(col = color), size = 1)
+        geom_linerange(aes(col = color), linewidth = 1)
       }
     } +
     {
@@ -319,7 +319,7 @@ render_tto <- function(df,
       }
     } +
     {
-      if (nested != FALSE) geom_linerange(aes(color = nested, position = position_dodge(dodge)), size = 1)
+      if (nested != FALSE) geom_linerange(aes(color = nested, position = position_dodge(dodge)), linewidth = 1)
     } +
     {
       if (nested != FALSE) geom_point(aes(color = nested, position = position_dodge(dodge)))

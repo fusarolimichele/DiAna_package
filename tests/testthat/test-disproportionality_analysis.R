@@ -71,7 +71,7 @@ test_that("Disproportionality trend works", {
 test_that("Disproportionality trend works with customized queries", {
   expect_equal(
     disproportionality_trend(list("adalimumab", "etanercept", "infliximab"), "injection site pain",
-      temp_d = sample_Drug, temp_r = sample_Reac,
+      temp_drug = sample_Drug, temp_reac = sample_Reac,
       temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp
     )$label_ROR,
     c(
@@ -86,7 +86,7 @@ test_that("Disproportionality trend works with customized queries", {
   expect_equal(
     disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
       list("injection site pain", "injection site reaction", "injection site discomfort"),
-      temp_d = sample_Drug, temp_r = sample_Reac,
+      temp_drug = sample_Drug, temp_reac = sample_Reac,
       temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp
     )$label_ROR,
     c(
@@ -105,7 +105,7 @@ test_that("Disproportionality trend works also in a incidental way", {
   expect_equal(
     disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
       list("injection site pain", "injection site reaction", "injection site discomfort"),
-      temp_d = sample_Drug, temp_r = sample_Reac,
+      temp_drug = sample_Drug, temp_reac = sample_Reac,
       temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
       cumulative = FALSE
     )$label_ROR,
@@ -124,7 +124,7 @@ test_that("Disproportionality trend works also using quarters and months", {
   expect_equal(
     disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
       list("injection site pain", "injection site reaction", "injection site discomfort"),
-      temp_d = sample_Drug, temp_r = sample_Reac,
+      temp_drug = sample_Drug, temp_reac = sample_Reac,
       temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
       time_granularity = "quarter"
     )$label_ROR,
@@ -159,7 +159,7 @@ test_that("Disproportionality trend works also using quarters and months", {
   expect_equal(
     disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
       list("injection site pain", "injection site reaction", "injection site discomfort"),
-      temp_d = sample_Drug, temp_r = sample_Reac,
+      temp_drug = sample_Drug, temp_reac = sample_Reac,
       temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
       time_granularity = "month"
     )$label_ROR,
@@ -235,3 +235,35 @@ test_that("Disproportionality trend works also using quarters and months", {
     )
   )
 })
+
+test_that("Render forest works as usual",{
+  expect_snapshot(t <- render_forest(disproportionality_analysis("paracetamol", "nausea", sample_Drug, sample_Reac)))
+})
+
+test_that("Plot disproportionality trend works as usual",{
+  expect_snapshot(t <- plot_disproportionality_trend(disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
+                                                                         list("injection site pain", "injection site reaction", "injection site discomfort"),
+                                                                         temp_drug = sample_Drug, temp_reac = sample_Reac,
+                                                                         temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
+                                                                         time_granularity = "quarter"
+  )))
+  expect_snapshot(t <- plot_disproportionality_trend(disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
+                                                                              list("injection site pain", "injection site reaction", "injection site discomfort"),
+                                                                              temp_drug = sample_Drug, temp_reac = sample_Reac,
+                                                                              temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
+                                                                              time_granularity = "month"
+  ), time_granularity = "month"))
+  expect_snapshot(t <- plot_disproportionality_trend(disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
+                                                                              list("injection site pain", "injection site reaction", "injection site discomfort"),
+                                                                              temp_drug = sample_Drug, temp_reac = sample_Reac,
+                                                                              temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
+                                                                              time_granularity = "quarter"
+  ),metric = "ROR", time_granularity = "quarter"))
+  expect_snapshot(t <- plot_disproportionality_trend(disproportionality_trend(list("adalimumab", "etanercept", "infliximab"),
+                                                                              list("injection site pain", "injection site reaction", "injection site discomfort"),
+                                                                              temp_drug = sample_Drug, temp_reac = sample_Reac,
+                                                                              temp_demo = sample_Demo, temp_demo_supp = sample_Demo_Supp,
+                                                                              time_granularity = "month"
+  ),metric = "ROR", time_granularity = "month"))
+})
+

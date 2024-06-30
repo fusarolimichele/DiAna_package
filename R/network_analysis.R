@@ -80,7 +80,7 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
     as.matrix()
   rownames(binary_data) <- row_names
   binary_data[is.na(binary_data[, ])] <- 0
-  g1 <- IsingFit::IsingFit(binary_data)
+  suppressWarnings(g1 <- IsingFit::IsingFit(binary_data))
   G_igraph <- igraph::graph_from_adjacency_matrix(g1$weiadj, mode = "undirected", weighted = TRUE)
   if (remove_singlet) {
     G_igraph <- igraph::delete_vertices(igraph::simplify(G_igraph), igraph::degree(G_igraph) == 0)
@@ -111,7 +111,7 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   G_igraph <- igraph::set_vertex_attr(G_igraph, "size", value = log(labs$s2))
   G_igraph <- igraph::set_vertex_attr(G_igraph, "label", value = labs$s)
 
-  V(G_igraph)$label.cex <- labs_size
+  igraph::V(G_igraph)$label.cex <- labs_size
   if (save_plot) {
     grDevices::tiff(file_name, width = width, height = height, res = 300)
     plot(comm_lv, G_igraph,

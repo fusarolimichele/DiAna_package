@@ -2,10 +2,9 @@
 #'
 #' performs disproportionality analysis and returns the results.
 #'
+#' @inheritParams descriptive
 #' @param drug_selected A list of drugs for analysis. Can be a list of lists (to collapse terms together).
 #' @param reac_selected A list of adverse events for analysis. Can be a list of lists (to collapse terms together).
-#' @param temp_d Data table containing drug data (default is Drug). If set to Drug\[role_cod %in% c("PS","SS")\] allows to investigate only suspects.
-#' @param temp_r Data table containing reaction data (default is Reac).
 #' @param meddra_level The desired MedDRA level for analysis (default is "pt").
 #' @param drug_level The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
 #' @param restriction Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo\[!RB_duplicates_only_susp\]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.
@@ -22,7 +21,7 @@
 #' @export
 disproportionality_analysis <- function(
     drug_selected, reac_selected,
-    temp_d = Drug, temp_r = Reac,
+    temp_drug = Drug, temp_reac = Reac,
     meddra_level = "pt",
     drug_level = "substance",
     restriction = "none",
@@ -39,21 +38,20 @@ disproportionality_analysis <- function(
   reac_selected <- format_input_disproportionality(reac_selected)
 
   # print warning if any drug or reaction selected was not found
-  if (length(setdiff(purrr::flatten(drug_selected), unique(temp_d[[drug_level]]))) > 0) {
-    if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_d[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
+  if (length(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]]))) > 0) {
+    if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
       stop("Revise the query and run again the command")
     }
   }
-  if (length(setdiff(purrr::flatten(reac_selected), unique(temp_r[[meddra_level]]))) > 0) {
-    if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_r[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
+  if (length(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]]))) > 0) {
+    if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
       stop("Revise the query and run again the command")
     }
   }
-
   # restrict to specific subpopulation
   if (length(restriction) > 1) {
-    temp_d <- temp_d[primaryid %in% restriction] %>% droplevels()
-    temp_r <- temp_r[primaryid %in% restriction] %>% droplevels()
+    temp_drug <- temp_drug[primaryid %in% restriction] %>% droplevels()
+    temp_reac <- temp_reac[primaryid %in% restriction] %>% droplevels()
   }
 
   # change MedDRA level if requested and possible
@@ -62,7 +60,7 @@ disproportionality_analysis <- function(
       stop("The MedDRA dictionary is not uploaded.
                                 Without it, only analyses at the PT level are possible")
     }
-    temp_r <- MedDRA[, c(meddra_level, "pt"), with = FALSE][temp_r, on = "pt"]
+    temp_reac <- MedDRA[, c(meddra_level, "pt"), with = FALSE][temp_reac, on = "pt"]
   }
 
   # consider reac groupings
@@ -71,7 +69,7 @@ disproportionality_analysis <- function(
     meddra_level = unlist(reac_selected)
   )
   colnames(df_custom) <- c("custom", meddra_level)
-  temp_r <- df_custom[temp_r, on = meddra_level, allow.cartesian = TRUE]
+  temp_reac <- df_custom[temp_reac, on = meddra_level, allow.cartesian = TRUE]
   reac_selected <- names(reac_selected)
 
   # consider drug groupings
@@ -80,17 +78,17 @@ disproportionality_analysis <- function(
     substance = unlist(drug_selected)
   )
   colnames(df_custom) <- c("custom", drug_level)
-  temp_d <- df_custom[temp_d, on = drug_level, allow.cartesian = TRUE]
+  temp_drug <- df_custom[temp_drug, on = drug_level, allow.cartesian = TRUE]
   drug_selected <- names(drug_selected)
 
   # simplify the databases
-  temp_r <- temp_r[, c("custom", "primaryid"), with = FALSE] %>% dplyr::distinct()
-  temp_d <- temp_d[, c("custom", "primaryid"), with = FALSE] %>% dplyr::distinct()
+  temp_reac <- temp_reac[, c("custom", "primaryid"), with = FALSE] %>% dplyr::distinct()
+  temp_drug <- temp_drug[, c("custom", "primaryid"), with = FALSE] %>% dplyr::distinct()
 
   # calculate disproportionality
-  TOT <- length(unique(temp_d$primaryid))
-  temp_d1 <- temp_d[custom %in% drug_selected][, .(primaryid_substance = list(primaryid)), by = custom]
-  temp_r1 <- temp_r[custom %in% reac_selected][, .(primaryid_event = list(primaryid)), by = custom]
+  TOT <- length(unique(temp_drug$primaryid))
+  temp_d1 <- temp_drug[custom %in% drug_selected][, .(primaryid_substance = list(primaryid)), by = custom]
+  temp_r1 <- temp_reac[custom %in% reac_selected][, .(primaryid_event = list(primaryid)), by = custom]
   colnames(temp_r1) <- c("event", "primaryid_event")
   colnames(temp_d1) <- c("substance", "primaryid_substance")
   results <- setDT(expand.grid("substance" = unlist(drug_selected), "event" = unlist(reac_selected)))
@@ -240,7 +238,7 @@ render_forest <- function(df,
       }
     } +
     {
-      if (nested != FALSE) geom_linerange(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8)), position = position_dodge(dodge), size = 1)
+      if (nested != FALSE) geom_linerange(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8)), position = position_dodge(dodge), linewidth = 1)
     } +
     {
       if (nested != FALSE) geom_point(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8), size = (log10(D_E))), position = position_dodge(dodge))
@@ -380,15 +378,11 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #'
 #' This function calculates the disproportionality time trend for a given drug-event combination.
 #'
+#' @inheritParams descriptive
+#' @inheritParams disproportionality_analysis
 #' @param drug_selected Drug selected
 #' @param reac_selected Event selected
-#' @param temp_d Data frame containing drug data. Defaults to `Drug`.
-#' @param temp_r Data frame containing reaction data. Defaults to `Reac`.
-#' @param temp_demo Data frame containing demographic data. Defaults to `Demo`.
 #' @param temp_demo_supp Data frame containing supplementary demographic data, and in particular the quarter. Defaults to `Demo_supp\[, .(primaryid, quarter)\]`.
-#' @param meddra_level Character string specifying the MedDRA level. Defaults to "pt".
-#' @param drug_level Character string specifying the drug level. Defaults to "substance".
-#' @param restriction Character vector of primary IDs to restrict the analysis. Defaults to "none".
 #' @param time_granularity Character string specifying the time granularity. Options are "year", "quarter", or "month". Defaults to "year".
 #' @param cumulative Logical indicating whether to calculate cumulative values. Defaults to `TRUE`.
 #'
@@ -429,7 +423,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' @export
 disproportionality_trend <- function(
     drug_selected, reac_selected,
-    temp_d = Drug, temp_r = Reac,
+    temp_drug = Drug, temp_reac = Reac,
     temp_demo = Demo, temp_demo_supp = Demo_supp[, .(primaryid, quarter)],
     meddra_level = "pt",
     drug_level = "substance",
@@ -437,8 +431,8 @@ disproportionality_trend <- function(
     time_granularity = "year",
     cumulative = TRUE) {
   if (length(restriction) > 1) {
-    temp_d <- temp_d[primaryid %in% restriction] %>% droplevels()
-    temp_r <- temp_r[primaryid %in% restriction] %>% droplevels()
+    temp_drug <- temp_drug[primaryid %in% restriction] %>% droplevels()
+    temp_reac <- temp_reac[primaryid %in% restriction] %>% droplevels()
     temp_demo <- temp_demo[primaryid %in% restriction] %>% droplevels()
   }
   if (time_granularity == "year") {
@@ -456,11 +450,11 @@ disproportionality_trend <- function(
     ))][, period := ifelse(period < 200401, 200401, period)]
   }
   temp_demo <- temp_demo[, .(primaryid, period)][, .(pids = list(primaryid)), by = "period"]
-  temp_r <- temp_r[, c(meddra_level, "primaryid"), with = FALSE] %>% dplyr::distinct()
-  temp_d <- temp_d[, c(drug_level, "primaryid"), with = FALSE] %>% dplyr::distinct()
+  temp_reac <- temp_reac[, c(meddra_level, "primaryid"), with = FALSE] %>% dplyr::distinct()
+  temp_drug <- temp_drug[, c(drug_level, "primaryid"), with = FALSE] %>% dplyr::distinct()
   temp_demo <- temp_demo[, TOT := unlist(purrr::map(pids, \(x) length(x)))]
-  pids_d <- unique(temp_d[get(drug_level) %in% drug_selected]$primaryid)
-  pids_r <- unique(temp_r[get(meddra_level) %in% reac_selected]$primaryid)
+  pids_d <- unique(temp_drug[get(drug_level) %in% drug_selected]$primaryid)
+  pids_r <- unique(temp_reac[get(meddra_level) %in% reac_selected]$primaryid)
   results <- temp_demo
   results <- results[, pids_drug := purrr::map(pids, \(x) intersect(pids_d, x))]
   results <- results[, pids_reac := purrr::map(pids, \(x) intersect(pids_r, x))]
