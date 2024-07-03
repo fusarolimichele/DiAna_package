@@ -16,7 +16,7 @@
 #' @return A data.table containing disproportionality analysis results.
 #'
 #' @importFrom questionr odds.ratio
-#' @importFrom dplyr distinct
+#' @importFrom dplyr distinct rename
 #' @importFrom purrr map map2
 #'
 #' @export
@@ -39,16 +39,21 @@ disproportionality_analysis <- function(
   reac_selected <- format_input_disproportionality(reac_selected)
 
   # print warning if any drug or reaction selected was not found
-  if (length(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]]))) > 0) {
-    if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
-      stop("Revise the query and run again the command")
+  if (meddra_level == "pt") {
+    if (length(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]]))) > 0) {
+      if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
+        stop("Revise the query and run again the command")
+      }
     }
   }
-  if (length(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]]))) > 0) {
-    if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
-      stop("Revise the query and run again the command")
+  if (drug_level == "substance") {
+    if (length(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]]))) > 0) {
+      if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
+        stop("Revise the query and run again the command")
+      }
     }
   }
+
   # restrict to specific subpopulation
   if (length(restriction) > 1) {
     temp_drug <- temp_drug[primaryid %in% restriction] %>% droplevels()
@@ -65,22 +70,31 @@ disproportionality_analysis <- function(
   }
 
   # consider reac groupings
-  df_custom <- data.table(
-    custom = rep(names(reac_selected), lengths(reac_selected)),
-    meddra_level = unlist(reac_selected)
-  )
-  colnames(df_custom) <- c("custom", meddra_level)
-  temp_reac <- df_custom[temp_reac, on = meddra_level, allow.cartesian = TRUE]
-  reac_selected <- names(reac_selected)
+  if (length(reac_selected) != length(purrr::list_flatten(reac_selected))) {
+    df_custom <- data.table(
+      custom = rep(names(reac_selected), lengths(reac_selected)),
+      meddra_level = unlist(reac_selected)
+    )
+    colnames(df_custom) <- c("custom", meddra_level)
+    temp_reac <- df_custom[temp_reac, on = meddra_level, allow.cartesian = TRUE]
+    reac_selected <- names(reac_selected)
+  } else {
+    temp_reac <- temp_reac[, .(primaryid, custom = get(meddra_level))]
+  }
+
 
   # consider drug groupings
-  df_custom <- data.table(
-    custom = rep(names(drug_selected), lengths(drug_selected)),
-    substance = unlist(drug_selected)
-  )
-  colnames(df_custom) <- c("custom", drug_level)
-  temp_drug <- df_custom[temp_drug, on = drug_level, allow.cartesian = TRUE]
-  drug_selected <- names(drug_selected)
+  if (length(drug_selected) != length(purrr::list_flatten(drug_selected))) {
+    df_custom <- data.table(
+      custom = rep(names(drug_selected), lengths(drug_selected)),
+      substance = unlist(drug_selected)
+    )
+    colnames(df_custom) <- c("custom", drug_level)
+    temp_drug <- df_custom[temp_drug, on = drug_level, allow.cartesian = TRUE]
+    drug_selected <- names(drug_selected)
+  } else {
+    temp_drug <- temp_drug[, .(primaryid, custom = get(drug_level))]
+  }
 
   # simplify the databases
   temp_reac <- temp_reac[, c("custom", "primaryid"), with = FALSE] %>% dplyr::distinct()
@@ -173,6 +187,7 @@ disproportionality_analysis <- function(
 #' @param custom_threshold Threshold value for analysis (default is 1).
 #' @param dodge Position adjustment for dodging (default is 0.3).
 #' @param show_legend Logical indicating whether to show the legend (default is FALSE).
+#' @param legend_position Where to place the legend.
 #'
 #' @return A ggplot object representing the forest plot visualization.
 #'
@@ -191,7 +206,8 @@ render_forest <- function(df,
                           dodge = .3,
                           nested_colors = NA,
                           facet_v = NA,
-                          facet_h = NA) {
+                          facet_h = NA,
+                          legend_position = "right") {
   if (length(levs_row) == 1) {
     levs_row <- factor(unique(df[[row]])) %>% droplevels()
   }
@@ -213,7 +229,7 @@ render_forest <- function(df,
   if (nested != FALSE) {
     df$nested <- df[[nested]]
     colors <- nested_colors
-    if (is.na(colors)) {
+    if (sum(is.na(colors) > 0)) {
       colors <- c(
         "goldenrod", "steelblue", "salmon2",
         "green4", "brown", "violet", "blue4"
@@ -267,7 +283,7 @@ render_forest <- function(df,
     } +
     scale_color_manual(values = colors, drop = FALSE) +
     theme(
-      strip.placement = "outside", strip.text.y.left = element_text(angle = 0, size = 7), legend.position = "bottom",
+      strip.placement = "outside", strip.text.y.left = element_text(angle = 0, size = 7), legend.position = legend_position,
       legend.justification = "left",
       legend.title = element_blank()
     ) +

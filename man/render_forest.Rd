@@ -17,7 +17,8 @@ render_forest(
   dodge = 0.3,
   nested_colors = NA,
   facet_v = NA,
-  facet_h = NA
+  facet_h = NA,
+  legend_position = "right"
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ render_forest(
 \item{facet_v}{Variable for vertical facetting (default is "event").}
 
 \item{facet_h}{Variable for horizontal facetting (default is NA).}
+
+\item{legend_position}{Where to place the legend.}
 }
 \value{
 A ggplot object representing the forest plot visualization.

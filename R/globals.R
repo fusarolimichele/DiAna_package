@@ -34,7 +34,8 @@ utils::globalVariables(c(
   "p_event", "D_drug", "ad_drug", "p_drug", "n_cases_with_tto",
   "Q1", "Q2", "Q3", "ks_event", "ks_drug", "path", "label_ROR", "label", ".",
   "V<-", "sample_Demo", "sample_Drug", "sample_Reac", "sample_Indi", "sample_Outc",
-  "sample_Ther", "sample_Drug_Supp", "Ther", "Outc", "country_dictionary", "continent"
+  "sample_Ther", "sample_Drug_Supp", "Ther", "Outc", "country_dictionary", "continent",
+  "Doses"
 ))
 
 .onAttach <- function(libname, pkgname) {

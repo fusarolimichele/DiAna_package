@@ -117,17 +117,22 @@ import_MedDRA <- function(env = .GlobalEnv) {
 #'
 #' @export
 import_ATC <- function(primary = T, env = .GlobalEnv) {
-  suppressMessages(ATC <- setDT(
-    readr::read_delim(paste0(here::here(), "/external_sources/ATC_DiAna.csv"),
-      show_col_types = FALSE, ";", escape_double = FALSE, trim_ws = TRUE
-    )
-  )[, .(
-    substance = Substance, code, primary_code, Lvl4, Class4, Lvl3, Class3,
-    Lvl2, Class2, Lvl1, Class1
-  )] %>% dplyr::distinct())
-  if (primary == T) {
-    ATC <- ATC[code == primary_code]
+  path <- paste0(here::here(), "/external_sources/ATC_DiAna.csv")
+  if (!file.exists(path)) {
+    stop("The ATC cannot be found in external sources. It should have been downloaded with setup_diana. Please investigate the problem.")
+  } else {
+    suppressMessages(ATC <- setDT(
+      readr::read_delim(path,
+        show_col_types = FALSE, ";", escape_double = FALSE, trim_ws = TRUE
+      )
+    )[, .(
+      substance = Substance, code, primary_code, Lvl4, Class4, Lvl3, Class3,
+      Lvl2, Class2, Lvl1, Class1
+    )] %>% dplyr::distinct())
+    if (primary == T) {
+      ATC <- ATC[code == primary_code]
+    }
+    assign("ATC", ATC, envir = env)
+    ATC
   }
-  assign("ATC", ATC, envir = env)
-  ATC
 }
