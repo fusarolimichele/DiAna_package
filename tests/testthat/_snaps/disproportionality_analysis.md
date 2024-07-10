@@ -3,10 +3,6 @@
     Code
       t <- render_forest(disproportionality_analysis("paracetamol", "nausea",
         sample_Drug, sample_Reac))
-    Condition
-      Warning:
-      Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-      i Please use `linewidth` instead.
 
 # Plot disproportionality trend works as usual
 

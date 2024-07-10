@@ -9,10 +9,11 @@
 #' @param meddra_level The desired MedDRA level for analysis (default is "pt").
 #' @param drug_level The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
 #' @param restriction Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo\[!RB_duplicates_only_susp\]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.
-#' @param ROR_minimum_cases Threshold of minimum cases for calculating Reporitng Odds Ratio (default is 3).
-#' @param IC_threshold Threshold for defining the significance of the lower limit of the Information Component (default is 0).
-#' @param ROR_threshold Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).
-#'
+#' @param minimum_cases Threshold of minimum cases for calculating identifyin a signal (default is 3).
+#' @param log2_threshold Threshold for defining the significance of the lower limit of the Information Component (default is 0).
+#' @param multiple_comparison Logical specifying whether to perform Bonferroni correction for multiple testing on the ROR. Default to TRUE. Particularly important when running the disproportionality on many combinations.
+#' @param frequentist_threshold Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).
+#' @param store_pids Logical specifying whether to store primaryids recording the drug and primaryids recording the event as lists. Default to FALSE.
 #' @return A data.table containing disproportionality analysis results.
 #'
 #' @importFrom questionr odds.ratio
@@ -26,9 +27,13 @@ disproportionality_analysis <- function(
     meddra_level = "pt",
     drug_level = "substance",
     restriction = "none",
-    ROR_minimum_cases = 3,
-    ROR_threshold = 1,
-    IC_threshold = 0) {
+    minimum_cases = 3,
+    frequentist_threshold = 1,
+    log2_threshold = 0,
+    multiple_comparison = TRUE,
+    store_pids = FALSE,
+    save_in_excel = FALSE,
+    file_name = "disproportionality_results") {
   # custom is deprecated
   if (drug_level == "custom" | meddra_level == "custom") {
     warning("the parameter custom is not needed and was deprecated for drug and reac selected to improve the accessibility of the function.")
@@ -102,8 +107,8 @@ disproportionality_analysis <- function(
 
   # calculate disproportionality
   TOT <- length(unique(temp_drug$primaryid))
-  temp_d1 <- temp_drug[custom %in% drug_selected][, .(primaryid_substance = list(primaryid)), by = custom]
-  temp_r1 <- temp_reac[custom %in% reac_selected][, .(primaryid_event = list(primaryid)), by = custom]
+  temp_d1 <- temp_drug[custom %in% unlist(drug_selected)][, .(primaryid_substance = list(primaryid)), by = custom]
+  temp_r1 <- temp_reac[custom %in% unlist(reac_selected)][, .(primaryid_event = list(primaryid)), by = custom]
   colnames(temp_r1) <- c("event", "primaryid_event")
   colnames(temp_d1) <- c("substance", "primaryid_substance")
   results <- setDT(expand.grid("substance" = unlist(drug_selected), "event" = unlist(reac_selected)))
@@ -134,7 +139,6 @@ disproportionality_analysis <- function(
   ][
     , p_value_fisher := as.numeric(purrr::map(ROR, \(x) x[[4]]))
   ]
-  results <- results[, Bonferroni := results$p_value_fisher * sum(results$D_E >= 3)]
   IC <- lapply(seq(1:nrow(results)), function(x) {
     IC_median <- log2((results$D_E[[x]] + .5) / (((results$D[[x]] * results$E[[x]]) / TOT) + .5))
     IC_lower <- floor((IC_median - 3.3 * (results$D_E[[x]] + .5)^(-1 / 2) - 2 * (results$D_E[[x]] + .5)^(-3 / 2)) * 100) / 100
@@ -151,21 +155,13 @@ disproportionality_analysis <- function(
   results <- results[, label_ROR := paste0(ROR_median, " (", ROR_lower, "-", ROR_upper, ") [", D_E, "]")]
   results <- results[, label_IC := paste0(IC_median, " (", IC_lower, "-", IC_upper, ") [", D_E, "]")]
   # correct for multiple comparisons
-  results <- results[, Bonferroni := p_value_fisher < 0.05 / nrow(results[D_E >= ROR_minimum_cases])]
-  results <- results[, ROR_color := ifelse(D_E < ROR_minimum_cases, "not enough cases", ifelse(is.nan(ROR_lower), "all_associated",
-    ifelse(ROR_lower <= ROR_threshold, "no signal",
-      ifelse(Bonferroni == FALSE, "light signal",
-        "strong signal"
-      )
-    )
-  ))]
-  results <- results[, IC_color := ifelse(is.nan(IC_lower), "all_associated",
-    ifelse(IC_lower <= IC_threshold, "no signal",
-      "strong signal"
-    )
-  )]
-  results <- results[, ROR_color := factor(ROR_color, levels = c("not enough cases", "no signal", "light signal", "strong signal"), ordered = TRUE)]
-  results <- results[, IC_color := factor(IC_color, levels = c("no signal", "strong signal"), ordered = TRUE)]
+  results <- results[, Bonferroni := ROR_lower > 1 & (p_value_fisher < (0.05 / nrow(results[D_E >= minimum_cases])))]
+  results <- results %>% select(-p_value_fisher)
+  results <- tailor_disproportionality_threshold(results, minimum_cases, log2_threshold, frequentist_threshold, multiple_comparison)
+  if (!store_pids) {
+    results <- results %>% dplyr::select(-primaryid_substance, -primaryid_event)
+  }
+  results <- results %>% droplevels()
 }
 
 
@@ -174,7 +170,7 @@ disproportionality_analysis <- function(
 #' This function generates a forest plot visualization of disproportions.
 #'
 #' @family visualization functions
-#' @param df Data.table containing the data for rendering the forest plot.
+#' @param disproportionality_df A data frame containing disproportionality metrics. Generated by disproportionality_analysis.
 #' @param index Type of data to use for rendering: "ROR" or "IC".
 #' @param row Variable for the rows of the forest plot (default is "drug").
 #' @param levs_row Levels for the rows of the forest plot.
@@ -194,7 +190,7 @@ disproportionality_analysis <- function(
 #'
 #' @export
 
-render_forest <- function(df,
+render_forest <- function(disproportionality_df,
                           index = "IC",
                           row = "substance",
                           levs_row = NA,
@@ -209,36 +205,36 @@ render_forest <- function(df,
                           facet_h = NA,
                           legend_position = "right") {
   if (length(levs_row) == 1) {
-    levs_row <- factor(unique(df[[row]])) %>% droplevels()
+    levs_row <- factor(unique(disproportionality_df[[row]])) %>% droplevels()
   }
   if (index == "ROR") {
     colors <- c("gray25", "gray", "yellow", "red")
     threshold <- 1
   }
   if (index == "IC") {
-    colors <- c("gray", "red")
+    colors <- c("gray25", "gray", "red")
     threshold <- 0
   }
   if (!is.na(custom_threshold)) {
     threshold <- custom_threshold
   }
-  df$median <- df[[paste0(index, "_median")]]
-  df$lower <- df[[paste0(index, "_lower")]]
-  df$upper <- df[[paste0(index, "_upper")]]
-  df$color <- df[[paste0(index, "_color")]]
+  disproportionality_df$median <- disproportionality_df[[paste0(index, "_median")]]
+  disproportionality_df$lower <- disproportionality_df[[paste0(index, "_lower")]]
+  disproportionality_df$upper <- disproportionality_df[[paste0(index, "_upper")]]
+  disproportionality_df$color <- disproportionality_df[[paste0(index, "_signal")]]
   if (nested != FALSE) {
-    df$nested <- df[[nested]]
+    disproportionality_df$nested <- disproportionality_df[[nested]]
     colors <- nested_colors
     if (sum(is.na(colors) > 0)) {
       colors <- c(
         "goldenrod", "steelblue", "salmon2",
         "green4", "brown", "violet", "blue4"
-      )[1:length(unique(df[[nested]]))]
+      )[1:length(unique(disproportionality_df[[nested]]))]
     }
   }
 
   ggplot(
-    data = df, aes(
+    data = disproportionality_df, aes(
       x = median, xmin = lower, xmax = upper,
       y = factor(get(row), levels = levs_row)
     ),
@@ -247,7 +243,7 @@ render_forest <- function(df,
   ) +
     {
       if (nested == FALSE) {
-        geom_linerange(aes(color = color), size = 1)
+        geom_linerange(aes(color = color), linewidth = 1)
       }
     } +
     {
@@ -639,4 +635,49 @@ format_input_disproportionality <- function(input) {
     names(t) <- unlist(purrr::flatten(t1))
   }
   return(t)
+}
+
+
+#' Tailor Disproportionality Threshold
+#'
+#' This function analyzes a data frame of disproportionality metrics and categorizes signals based on specified thresholds.
+#' @inheritParams disproportionality_analysis
+#' @inheritParams render_forest
+#' @param minimum_cases An integer specifying the minimum number of cases required to consider the signal. Defaults to 3.
+#' @param log2_threshold A numeric value specifying the threshold for the Information Component (IC) signal. Defaults to 0.
+#' @param frequentist_threshold A numeric value specifying the threshold for the Reporting Odds Ratio (ROR) signal. Defaults to 1.
+#' @param multiple_comparison A logical value indicating whether to apply multiple comparison adjustments (e.g., Bonferroni correction). Defaults to TRUE.
+#'
+#' @return A data frame with two new columns: `ROR_signal` and `IC_signal`, categorizing the signals based on the provided thresholds.
+#'
+#' @details
+#' The function categorizes signals into four levels:
+#' - "not enough cases": when the number of cases is less than `minimum_cases`.
+#' - "no SDR": when the signal does not meet the specified threshold.
+#' - "weak SDR": when the signal disappear under multiple comparison adjustments.
+#' - "SDR": when the signal remain after multiple comparison.
+#'
+tailor_disproportionality_threshold <- function(disproportionality_df, minimum_cases = 3,
+                                                log2_threshold = 0, frequentist_threshold = 1,
+                                                multiple_comparison = TRUE) {
+  results <- disproportionality_df
+  results <- results[, ROR_signal := ifelse(D_E < minimum_cases, "not enough cases",
+    ifelse(ROR_lower <= frequentist_threshold, "no SDR",
+      ifelse(multiple_comparison,
+        ifelse(Bonferroni == FALSE,
+          "weak SDR",
+          "SDR"
+        ),
+        "SDR"
+      )
+    )
+  )]
+  results <- results[, IC_signal := ifelse(D_E < minimum_cases, "not enough cases",
+    ifelse(IC_lower <= log2_threshold,
+      "no SDR",
+      "SDR"
+    )
+  )]
+  results <- results[, ROR_signal := factor(ROR_signal, levels = c("not enough cases", "no SDR", "weak SDR", "SDR"), ordered = TRUE)]
+  results <- results[, IC_signal := factor(IC_signal, levels = c("not enough cases", "no SDR", "SDR"), ordered = TRUE)]
 }

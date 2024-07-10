@@ -12,9 +12,13 @@ disproportionality_analysis(
   meddra_level = "pt",
   drug_level = "substance",
   restriction = "none",
-  ROR_minimum_cases = 3,
-  ROR_threshold = 1,
-  IC_threshold = 0
+  minimum_cases = 3,
+  frequentist_threshold = 1,
+  log2_threshold = 0,
+  multiple_comparison = TRUE,
+  store_pids = FALSE,
+  save_in_excel = FALSE,
+  file_name = "disproportionality_results"
 )
 }
 \arguments{
@@ -32,11 +36,19 @@ disproportionality_analysis(
 
 \item{restriction}{Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo[!RB_duplicates_only_susp]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.}
 
-\item{ROR_minimum_cases}{Threshold of minimum cases for calculating Reporitng Odds Ratio (default is 3).}
+\item{minimum_cases}{Threshold of minimum cases for calculating identifyin a signal (default is 3).}
 
-\item{ROR_threshold}{Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).}
+\item{frequentist_threshold}{Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).}
 
-\item{IC_threshold}{Threshold for defining the significance of the lower limit of the Information Component (default is 0).}
+\item{log2_threshold}{Threshold for defining the significance of the lower limit of the Information Component (default is 0).}
+
+\item{multiple_comparison}{Logical specifying whether to perform Bonferroni correction for multiple testing on the ROR. Default to TRUE. Particularly important when running the disproportionality on many combinations.}
+
+\item{store_pids}{Logical specifying whether to store primaryids recording the drug and primaryids recording the event as lists. Default to FALSE.}
+
+\item{save_in_excel}{Whether to save the outcome in an excel. Defaults to TRUE}
+
+\item{file_name}{The name of the Excel file to save the results. Default is "Descriptives.xlsx". It only works if save_in_excel is TRUE.}
 }
 \value{
 A data.table containing disproportionality analysis results.
