@@ -7,7 +7,7 @@
 retrieve_pregnancy_pids(quarter = FAERS_version)
 }
 \arguments{
-\item{quarter}{A character string specifying the FAERS quarter to retrieve data for. Default is the current FAERS version (\code{FAERS_version}).}
+\item{quarter}{A character string specifying the FAERS quarter to retrieve data for. Default is the current FAERS version (\code{FAERS_version}). It can also be set to "sample" to use instead sample data, mainly for testing.}
 }
 \value{
 A list containing five elements:

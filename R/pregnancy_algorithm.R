@@ -2,7 +2,7 @@
 #'
 #' This function retrieves the identifiers of pregnancy-related reports from the FDA Adverse Event Reporting System (FAERS) for a specified quarter.
 #'
-#' @param quarter A character string specifying the FAERS quarter to retrieve data for. Default is the current FAERS version (\code{FAERS_version}).
+#' @param quarter A character string specifying the FAERS quarter to retrieve data for. Default is the current FAERS version (\code{FAERS_version}). It can also be set to "sample" to use instead sample data, mainly for testing.
 #' @return A list containing five elements:
 #' \describe{
 #'   \item{\code{high_specificity}}{A vector of identifiers with high specificity for pregnancy-related reports.}
@@ -11,6 +11,8 @@
 #'   \item{\code{paternal_exposure}}{A vector of identifiers for paternal exposure-related reports.}
 #'   \item{\code{flowchart}}{An editable flowchart showing case retrieval}
 #' }
+#' @importFrom tibble tibble
+#' @importFrom ggflowchart ggflowchart
 #' @details
 #' The function processes data from multiple FAERS tables (\code{DEMO}, \code{DRUG}, \code{REAC}, \code{INDI}, \code{OUTC}, \code{THER}, and \code{DRUG_SUPP}) to identify pregnancy-related reports based on specific indications, reactions, and drug routes. The results are filtered to exclude reports unlikely to be related to pregnancy (e.g., reports involving males, children, or older adults). The algorithm is an implementation and evolution of the original pregnancy algorithm by Sakai,ref. 10.3389/fphar.2022.1063625
 #' #' @references
@@ -976,21 +978,30 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
     "maternal exposure via partner during pregnancy"
   )
 
-
-  import("DEMO")
-  import("DRUG")
-  import("REAC")
-  import("INDI")
-  import("OUTC")
-  import("THER")
-  import("DRUG_SUPP")
+  if (quarter == "sample") {
+    Demo <- sample_Demo
+    Drug <- sample_Drug
+    Reac <- sample_Reac
+    Indi <- sample_Indi
+    Outc <- sample_Outc
+    Ther <- sample_Ther
+    Drug_supp <- sample_Drug_Supp
+  } else {
+    import("DEMO")
+    import("DRUG")
+    import("REAC")
+    import("INDI")
+    import("OUTC")
+    import("THER")
+    import("DRUG_SUPP")
+  }
   # Step 1 - Pregnancy reports---------------------------------
   indi_preg <- unique(Indi[indi_pt %in% pregnancy_indication]$primaryid)
 
   reac_preg <- unique(Reac[pt %in% pregnancy_reaction]$primaryid)
 
-  route_preg <- union(
-    union(
+  route_preg <- base::union(
+    base::union(
       Indi[indi_pt %in% exposure_def]$primaryid,
       Reac[pt %in% exposure_def]$primaryid
     ),
@@ -1000,15 +1011,15 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
     )]$primaryid
   )
 
-  low_specificity <- union(union(indi_preg, reac_preg), route_preg)
+  low_specificity <- base::union(base::union(indi_preg, reac_preg), route_preg)
   # Definitive pregnancy---------------------------------
-  paternal_exposure <- union(
+  paternal_exposure <- base::union(
     Indi[indi_pt %in% exposure_pat_def]$primaryid,
     Reac[pt %in% exposure_pat_def]$primaryid
   )
   low_specificity_not_pat <- setdiff(low_specificity, paternal_exposure)
   preg_exp_pids <- intersect(
-    union(
+    base::union(
       Indi[indi_pt %in% exposure_def]$primaryid,
       Reac[pt %in% exposure_def]$primaryid
     ),
@@ -1023,7 +1034,7 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
     low_specificity_not_pat
   )
 
-  high_specificity <- union(preg_exp_pids, transp_pids)
+  high_specificity <- base::union(preg_exp_pids, transp_pids)
   # Exclusion criteria -----------------------------------
   other_pregnancy_pids <- setdiff(low_specificity_not_pat, high_specificity)
   N9 <- paste0(
@@ -1032,7 +1043,7 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
   )
 
   children_pids <- intersect(
-    union(
+    base::union(
       Indi[indi_pt %in% child_def]$primaryid,
       Demo[age_in_days < 15 * 365]$primaryid
     ),
@@ -1049,7 +1060,7 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
 
   other_pregnancy_pids <- setdiff(other_pregnancy_pids, age_ineligible)
 
-  medium_specificity <- union(high_specificity, other_pregnancy_pids)
+  medium_specificity <- base::union(high_specificity, other_pregnancy_pids)
   N1 <- paste0("FAERS version ", quarter, "\n", "N = ", nrow(Demo))
   N2 <- paste0(
     "Any PT from pregnancy SMQs among reactions:", "\n",
@@ -1104,7 +1115,7 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
     type = c(rep("white", 4), "yellow", "lightblue", rep("white", 3), "coral4", rep("white", 4), "salmon")
   )
 
-  flowchart <- ggflowchart(data, node_data, fill = type, text_size = 1.5) +
+  flowchart <- ggflowchart::ggflowchart(data, node_data, fill = type, text_size = 1.5) +
     scale_fill_manual(values = c("coral4", "lightblue", "salmon", "white", "yellow")) +
     theme(legend.position = "none")
 

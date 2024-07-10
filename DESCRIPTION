@@ -1,10 +1,10 @@
 Package: DiAna
-Title: Advanced Disproportionality Analysis in the FAERS for Drug Safety
+Title: DIsproportionality ANAlysis and Pharmacovigilance in the FAERS
 Version: 2.1.0
 Authors@R: c(
     person("Michele", "Fusaroli", , "michele.fusaroli2@unibo.it", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0254-2212")),
-    person("Valentina", "Giunchi", , "valentina.giunchi2@unibo.it", role = c("aut"),
+    person("Valentina", "Giunchi", , "valentina.giunchi2@unibo.it", role = "aut",
            comment = c(ORCID = "0000-0001-5841-8520")),
     person("Violetta", "Zoffoli", role = "ctb"),
     person("Lionel", "Van Holle", , "lionel.vanholle@opensourcepv.com", role = "ctb",
@@ -12,30 +12,45 @@ Authors@R: c(
     person("Takamasa", "Sakai", , "tksakai@meijo-u.ac.jp", role = "ctb"),
     person("Nhung", "Trinh", , "nhung.trinh@farmasi.uio.no", role = "ctb")
   )
-Description: The `DiAna` (Disproportionality Analysis) package allows for
-    downloading FAERS cleaned data, and import relational datasets.  It
-    allows to identify cases and select controls to reduce confounding.
+Description: The 'DiAna' (Disproportionality Analysis) package offers
+    advanced tools for analyzing FDA Adverse Event Reporting System
+    (FAERS) data, enhancing drug safety research. It enables users to
+    download cleaned FAERS data and import relational datasets,
+    facilitating case identification and control selection to minimize
+    confounding in analyses. The package includes functions for
+    descriptive and disproportionality analysis, time-to-onset analysis,
+    network analysis, retrieval algorithms, and visualization.
 License: MIT + file LICENSE
-URL: https://github.com/fusarolimichele/DiAna_package,
-    https://github.com/fusarolimichele/DiAna, https://osf.io/zqu89/
+URL: 
+    https://github.com/fusarolimichele/DiAna_package,https://github.com/fusarolimichele/DiAna,
+    https://osf.io/zqu89/
 BugReports: https://github.com/fusarolimichele/DiAna_package/issues
 Depends: 
     data.table,
+    ggplot2,
+    R (>= 2.10)
+Imports: 
+    dplyr,
     ggflowchart,
+    gridExtra,
     gtsummary,
+    here,
+    httr,
     igraph,
     IsingFit,
-    psych,
+    jsonlite,
+    lubridate,
+    magrittr,
+    purrr,
     questionr,
+    readr,
     readxl,
-    tidyverse,
+    stringr,
+    tibble,
+    tidyr,
     twosamples,
+    utils,
     writexl
-Imports: 
-    ggplot2,
-    gridExtra,
-    here,
-    tidyr
 Suggests: 
     knitr,
     rmarkdown,
@@ -44,5 +59,6 @@ VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
+LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1

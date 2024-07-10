@@ -7,8 +7,8 @@
 disproportionality_trend(
   drug_selected,
   reac_selected,
-  temp_d = Drug,
-  temp_r = Reac,
+  temp_drug = Drug,
+  temp_reac = Reac,
   temp_demo = Demo,
   temp_demo_supp = Demo_supp[, .(primaryid, quarter)],
   meddra_level = "pt",
@@ -23,17 +23,19 @@ disproportionality_trend(
 
 \item{reac_selected}{Event selected}
 
-\item{temp_d}{Data frame containing drug data. Defaults to \code{Drug}.}
+\item{temp_drug}{Drug dataset. Can be set to sample_Drug for testing}
 
-\item{temp_r}{Data frame containing reaction data. Defaults to \code{Reac}.}
+\item{temp_reac}{Reac dataset. Can be set to sample_Reac for testing}
 
-\item{temp_demo}{Data frame containing demographic data. Defaults to \code{Demo}.}
+\item{temp_demo}{Demo dataset. Defaults to Demo. Can be se to sample_Demo for testing}
 
-\item{meddra_level}{Character string specifying the MedDRA level. Options are "pt" (preferred term) or "custom". Defaults to "pt".}
+\item{temp_demo_supp}{Data frame containing supplementary demographic data, and in particular the quarter. Defaults to \verb{Demo_supp\[, .(primaryid, quarter)\]}.}
 
-\item{drug_level}{Character string specifying the drug level. Options are "substance" or "custom". Defaults to "substance".}
+\item{meddra_level}{The desired MedDRA level for analysis (default is "pt").}
 
-\item{restriction}{Character vector of primary IDs to restrict the analysis. Defaults to "none".}
+\item{drug_level}{The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).}
+
+\item{restriction}{Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo[!RB_duplicates_only_susp]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.}
 
 \item{time_granularity}{Character string specifying the time granularity. Options are "year", "quarter", or "month". Defaults to "year".}
 
@@ -75,3 +77,9 @@ result <- disproportionality_trend(drug_selected, reac_selected)
 }
 
 }
+\seealso{
+Other disproportionality functions: 
+\code{\link{disproportionality_analysis}()},
+\code{\link{disproportionality_comparison}()}
+}
+\concept{disproportionality functions}

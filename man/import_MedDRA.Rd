@@ -4,7 +4,10 @@
 \alias{import_MedDRA}
 \title{Import MedDRA Data}
 \usage{
-import_MedDRA()
+import_MedDRA(env = .GlobalEnv)
+}
+\arguments{
+\item{env}{The environment where the data will be assigned. Default to .GlobalEnv}
 }
 \value{
 A data table containing MedDRA data.

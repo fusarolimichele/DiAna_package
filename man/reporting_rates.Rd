@@ -9,7 +9,10 @@ reporting_rates(
   entity = "reaction",
   level = "pt",
   drug_role = c("PS", "SS", "I", "C"),
-  drug_indi = NA
+  drug_indi = NA,
+  temp_reac = Reac,
+  temp_drug = Drug,
+  temp_indi = Indi
 )
 }
 \arguments{
@@ -27,6 +30,12 @@ reporting_rates(
 \item{drug_role}{is only used for substances. By default both suspect and concomitant drugs are included.}
 
 \item{drug_indi}{is only used for indications. By default the indications of all the drugs of the selected primaryids are considered, but you can specify a vector of drugs.}
+
+\item{temp_reac}{Reac dataset. Can be set to sample_Reac for testing}
+
+\item{temp_drug}{Drug dataset. Can be set to sample_Drug for testing}
+
+\item{temp_indi}{Indi dataset. Can be set to sample_Indi for testing}
 }
 \value{
 A data.table containing counts and percentages of the investigated entity

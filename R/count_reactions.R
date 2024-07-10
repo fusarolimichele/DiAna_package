@@ -4,6 +4,7 @@
 #' for a given set of primary IDs.
 #' Calculates % as the proportion of individuals recording the event.
 #'
+#' @inheritParams descriptive
 #' @param pids_cases Vector of primary IDs to consider for counting reactions.
 #' @param entity Entity investigated. It can be one of the following:
 #'       \itemize{
@@ -20,7 +21,7 @@
 #' @return A data.table containing counts and percentages of the investigated entity
 #'         at the specified level and in descending order.
 #'
-#' @import tidyverse
+#' @importFrom dplyr distinct
 #'
 #' @export
 #'
@@ -30,13 +31,13 @@
 #' reporting_rates(pids, "indication", "pt")
 #' reporting_rates(pids, entity = "substance", level = "Class3")
 #' }
-reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_role = c("PS", "SS", "I", "C"), drug_indi = NA) {
+reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_role = c("PS", "SS", "I", "C"), drug_indi = NA, temp_reac = Reac, temp_drug = Drug, temp_indi = Indi) {
   if (entity == "reaction") {
-    temp <- import("REAC", pids = pids_cases, save_in_environment = FALSE)
+    temp <- temp_reac
   } else if (entity == "indication") {
-    temp <- import("INDI", pids = pids_cases, save_in_environment = FALSE)
+    temp <- temp_indi
     if (sum(!is.na(drug_indi)) > 0) {
-      temp <- import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
+      temp <- temp_drug[
         temp,
         on = c("primaryid", "drug_seq")
       ][substance %in% drug_indi]
@@ -47,13 +48,13 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
       "therapeutic procedures and supportive care nec"
     )]
   } else if (entity == "substance") {
-    temp <- distinct(import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
+    temp <- dplyr::distinct(temp_drug)[
       role_cod %in% drug_role
-    ][, .(primaryid, substance)])
+    ][, .(primaryid, substance)]
   }
   if (level %in% c("hlt", "hlgt", "soc")) {
     import_MedDRA()
-    temp <- distinct(distinct(MedDRA[, c("pt", level), with = FALSE])[
+    temp <- dplyr::distinct(dplyr::distinct(MedDRA[, c("pt", level), with = FALSE])[
       temp,
       on = "pt"
     ][
@@ -66,7 +67,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
       level <- "substance"
     } else if (level %in% c("Class1", "Class2", "Class3", "Class4")) {
       import_ATC()[code == primary_code]
-      temp <- distinct(distinct(ATC[, c("substance", level), with = FALSE])[
+      temp <- dplyr::distinct(dplyr::distinct(ATC[, c("substance", level), with = FALSE])[
         temp,
         on = "substance"
       ][
@@ -75,7 +76,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
       ])
     }
   }
-  temp <- distinct(temp)[, .N, by = get(level)][order(-N)][, perc := N / length(unique(temp$primaryid))]
+  temp <- dplyr::distinct(temp)[, .N, by = get(level)][order(-N)][, perc := N / length(unique(temp$primaryid))]
   colnames(temp) <- c(level, "N", "perc")
   temp <- temp[, label := paste0(get(level), " (", round(perc * 100, 2), "%) [", N, "]")]
   temp <- temp[, .(get(level), label, N)]
@@ -108,6 +109,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
 #' @return None. The function generates and writes the hierarchy to the xlsx.
 #'         For indications and reactions, SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
 #'         For substances, the ATC hierarchy is followed.
+#' @importFrom writexl write_xlsx
 #' @export
 #'
 #' @examples
@@ -118,7 +120,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
 #' }
 hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx"), drug_role = c("PS", "SS", "I", "C")) {
   if (entity %in% c("reaction", "indication")) {
-    pts <- reporting_rates(pids_cases, entity = entity, "pt", )
+    pts <- reporting_rates(pids_cases, entity = entity, "pt")
     hlts <- reporting_rates(pids_cases, entity = entity, "hlt")
     hlgts <- reporting_rates(pids_cases, entity = entity, "hlgt")
     socs <- reporting_rates(pids_cases, entity = entity, "soc")

@@ -13,11 +13,15 @@ network_analysis(
   width = 1500,
   height = 1500,
   labs_size = 1,
-  restriction = NA
+  restriction = NA,
+  temp_reac = Reac,
+  temp_indi = Indi,
+  temp_drug = Drug,
+  save_plot = TRUE
 )
 }
 \arguments{
-\item{pids}{Numeric vector of unique identifiers for data import.}
+\item{pids}{Numeric vector of unique identifiers on which the network analysis should be performed.}
 
 \item{entity}{Character specifying the type of entity to analyze ("reaction", "indication", or "substance").}
 
@@ -34,6 +38,14 @@ network_analysis(
 \item{labs_size}{Size of labels in network visualization. Default is 1. It can be changed if visualization is not good.}
 
 \item{restriction}{Restriction performed in the analysis. Default is NA. It could be setted to 'suspects' if entity is 'substance' to restrict the analysis to primary and secondary suspects}
+
+\item{temp_reac}{Reac dataset. Can be set to sample_Reac for testing}
+
+\item{temp_indi}{Indi dataset. Can be set to sample_Indi for testing}
+
+\item{temp_drug}{Drug dataset. Can be set to sample_Drug for testing}
+
+\item{save_plot}{Whether the plot should be saved as a tiff. Defaults to true}
 }
 \value{
 NULL (invisibly). Saves a network visualization as a TIFF file.
@@ -52,5 +64,5 @@ network_analysis(pids = c(1, 2, 3), entity = "reaction")
 \references{
 Fusaroli M, Raschi E, Gatti M, De Ponti F, Poluzzi E. Development of a Network-Based Signal Detection Tool: The COVID-19 Adversome in the FDA Adverse Event Reporting System. Front Pharmacol. 2021 Dec 8;12:740707. doi: 10.3389/fphar.2021.740707. PMID: 34955821; PMCID: PMC8694570.
 
-Fusaroli M, Polizzi S, Menestrina L, Giunchi V, Pellegrini L, Raschi E, et al. Unveiling the Hidden Toll of Drug-Induced Impulsivity: A Network Analysis of the FDA Adverse Event Reporting System. 2023; : 2023.11.17.23298635. \link{Cited 2023 Nov 29} Available from https://www.medrxiv.org/content/10.1101/2023.11.17.23298635v1
+Fusaroli M, Polizzi S, Menestrina L, Giunchi V, Pellegrini L, Raschi E, et al. Unveiling the Hidden Toll of Drug-Induced Impulsivity: A Network Analysis of the FDA Adverse Event Reporting System. 2023; : 2023.11.17.23298635. [Cited 2023 Nov 29] Available from https://www.medrxiv.org/content/10.1101/2023.11.17.23298635v1
 }

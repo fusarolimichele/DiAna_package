@@ -1,4 +1,42 @@
-utils::globalVariables(c("primaryid"))
+#' @importFrom utils globalVariables
+#' @importFrom magrittr "%>%"
+.SD <- .N <- .I <- .GRP <- .BY <- .EACHI <- NULL
+
+utils::globalVariables(c(
+  "primaryid", "FAERS_version", "Drug_name", "drugname",
+  "drug_seq", "role_cod", "substance", "sex", "Submission",
+  "rept_cod", "Reporter", "occp_cod", "age_in_years",
+  "age_in_days", "age_range", "outc_cod", "Outcome",
+  "Country_Name", "Continent_Name", "country", "custom",
+  "occr_country", "reporter_country", "N", "time_to_onset",
+  "event_dt", "init_fda_dt", "fda_dt", "..vars", "Group",
+  "Drug", "Reac", "MedDRA", "D_E", "primaryid_substance",
+  "primaryid_event", "D_nE", "ROR_median", "ROR_lower",
+  "ROR_upper", "p_value_fisher", "Bonferroni", "IC_median",
+  "IC_lower", "IC_upper", "label_IC", "ROR_color",
+  "IC_color", "pids_drug", "pids_event", "Demo", "Demo_supp",
+  "period", "TOT", "pids", "pids_reac", "D", "E", "nD_E",
+  "nD_nE", "cum_D_nE", "cum_D_E", "cum_D", "cum_nD_E", "cum_E",
+  "cum_nD_nE", "cum_TOT", "perc", "project_path", "N_soc",
+  "label_soc", "N_hlgt", "N_hlt", "label_hlgt", "label_hlt",
+  "N_pt", "label_pt", "ATC", "N_Class1", "label_Class1",
+  "N_Class2", "label_Class2", "N_Class3", "label_Class3",
+  "N_Class4", "label_Class4", "N_substance",
+  "label_substance", "Substance", "code", "primary_code",
+  "Lvl4", "Class4", "Lvl3", "Class3", "Lvl2", "Class2", "Lvl1",
+  "Class1", "def", "soc", "hlgt", "pt", "hlt", "indi_pt",
+  "value", "s2", "KSD", "period", "median", "lower", "upper",
+  "color", "V1", "drug_rec_act", "pt_rechallenged",
+  "rpsr_cod", "dose", "dose_amt", "dose_unit", "dose_freq",
+  "cum_dose", "cum_dose_unit", "cum_dose_chr", "Indi",
+  "Drug_supp", "route", "type", "line", "snippet", "ttos_drug",
+  "ttos_event", "ad_event", "ad_drug", "index", "D_event",
+  "p_event", "D_drug", "ad_drug", "p_drug", "n_cases_with_tto",
+  "Q1", "Q2", "Q3", "ks_event", "ks_drug", "path", "label_ROR", "label", ".",
+  "V<-", "sample_Demo", "sample_Drug", "sample_Reac", "sample_Indi", "sample_Outc",
+  "sample_Ther", "sample_Drug_Supp", "Ther", "Outc", "country_dictionary", "continent",
+  "Doses", "IC_signal", "ROR_signal"
+))
 
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage("Welcome to DiAna package. A tool for standardized, flexible, and transparent pharmacovigilance analyses on the FAERS.")

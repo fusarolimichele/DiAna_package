@@ -4,12 +4,16 @@
 #'
 #' @param repo Character. The GitHub repository containing the snippets. Default is "fusarolimichele/DiAna_snippets".
 #' @return None. This function is called for its side effects, which include installing RStudio snippets.
+#' @importFrom stringr str_detect str_match str_split
+#' @importFrom tibble tibble
+#' @importFrom jsonlite fromJSON
+#' @importFrom httr content GET status_code
+#' @importFrom utils modifyList
 #' @examples
 #' \dontrun{
 #' snippets_install_github()
 #' snippets_install_github(repo = "anotheruser/snippets_repo")
 #' }
-#' @import httr jsonlite stringr dplyr
 #' @export
 snippets_install_github <- function(repo = "fusarolimichele/DiAna_snippets") {
   # Determine the snippet directory based on the operating system
@@ -31,7 +35,7 @@ snippets_install_github <- function(repo = "fusarolimichele/DiAna_snippets") {
   }
   files <- parsed
   for (f in files) {
-    if (f$type != "file" || !str_detect(f$name, "\\.snippets$")) {
+    if (f$type != "file" || !stringr::str_detect(f$name, "\\.snippets$")) {
       message("Skipping ", f$name)
       next
     }
@@ -39,9 +43,9 @@ snippets_install_github <- function(repo = "fusarolimichele/DiAna_snippets") {
     req <- httr::GET(f$download_url)
     txt <- httr::content(req, as = "text")
     lines <- do.call(c, stringr::str_split(txt, "\\n"))
-    d <- dplyr::data_frame(
+    d <- tibble::tibble(
       line = lines,
-      snippet = str_match(line, "^snippet (.*)")[, 2],
+      snippet = stringr::str_match(line, "^snippet (.*)")[, 2],
       group = cumsum(!is.na(snippet))
     )
     snippets <- d %>%
@@ -55,9 +59,9 @@ snippets_install_github <- function(repo = "fusarolimichele/DiAna_snippets") {
     }
     lines <- readLines(path)
     lines <- do.call(c, stringr::str_split(txt, "\\n"))
-    d <- dplyr::data_frame(
+    d <- tibble::tibble(
       line = lines,
-      snippet = str_match(line, "^snippet (.*)")[, 2],
+      snippet = stringr::str_match(line, "^snippet (.*)")[, 2],
       group = cumsum(!is.na(snippet))
     )
     snippets <- d %>%
@@ -67,7 +71,7 @@ snippets_install_github <- function(repo = "fusarolimichele/DiAna_snippets") {
     snippets <- Filter(function(s) s != "", snippets)
     names(snippets) <- d$snippet[!is.na(d$snippet)]
     current <- snippets
-    current <- modifyList(current, snippets)
+    current <- utils::modifyList(current, snippets)
     snippet_txt <- paste0("snippet ", names(snippets), "\n",
       as.character(snippets),
       collapse = "\n"
