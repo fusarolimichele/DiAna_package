@@ -8,7 +8,7 @@
 A data.table with 2 variables:
 \describe{
 \item{primaryid}{Unique identifier for each individual (\code{numeric}).}
-\item{outc_cod}{Outcome code indicating the severity or outcome of the adverse event (\code{ordered}).}
+\item{outc_cod}{Outcome code indicating the severity or outcome of the adverse event (\code{ordered}), with levels \code{DE} for death, \code{LT} for life-threatening, \code{HO} for hospitalization, \code{DS} for disability, \code{RI} for required intervention, \code{OT} for other}
 }
 }
 \source{
