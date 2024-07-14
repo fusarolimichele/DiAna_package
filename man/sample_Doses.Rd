@@ -9,7 +9,7 @@ A data.table with 7 variables:
 \describe{
 \item{primaryid}{Unique identifier for each individual (\code{numeric}).}
 \item{drug_seq}{Sequence number identifying the specific drug in the report (\code{integer}).}
-\item{dose_vbm}{Verbatim dose description (\code{character}).}
+\item{dose_vbm}{Verbatim (free-text) dose description (\code{character}).}
 \item{dose_unit}{Unit of dose (\code{character}).}
 \item{cum_dose_chr}{Cumulative dose as character (\code{numeric}).}
 \item{dose_amt}{Amount of dose (\code{character}).}

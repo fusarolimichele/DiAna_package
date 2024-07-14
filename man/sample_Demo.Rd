@@ -13,12 +13,12 @@ A data frame with 15 variables:
 \item{wt_in_kgs}{Weight of the individual in kilograms (\code{numeric}).}
 \item{occr_country}{Country where the event occurred (\code{factor}).}
 \item{event_dt}{Date of the event (\code{integer}), in the format YYYYMMDD.}
-\item{occp_cod}{Occupation code of the individual (\code{factor}).}
+\item{occp_cod}{Occupation of the reporter (\code{factor}), with levels \code{CN} for consumers/patients, \code{MD} for medical doctors, \code{PH} for pharmacist, \code{RN} for registered nurse, \code{HP} for other healthcare professional, \code{LW} for lawyer, \code{OT} for other occupation.}
 \item{reporter_country}{Country of the reporter (\code{factor}).}
-\item{rept_cod}{Report code (\code{factor}).}
-\item{init_fda_dt}{Initial FDA date (\code{integer}), in the format YYYYMMDD.}
-\item{fda_dt}{FDA date (\code{integer}), in the format YYYYMMDD.}
-\item{premarketing}{Logical indicator if the case is premarketing (\code{logical}).}
+\item{rept_cod}{Report code (\code{factor}), with levels \code{EXP} for expedited (i.e., a serious and unexpected reaction which should be reported within 30 days from the first reception by the pharmaceutical company), \code{PER} for periodic (i.e., expected non-serious event, sent by the pharmaceutical company to the regulatory agency on a yearly basis), \code{DIR} for directed reports (i.e., submitted directly by the reporter through the MedWatch form, without going through pharmaceutical companies).}
+\item{init_fda_dt}{First date of reception by the FDA (\code{integer}), in the format YYYYMMDD.}
+\item{fda_dt}{Date of reception of the last update by the FDA (\code{integer}), in the format YYYYMMDD.}
+\item{premarketing}{Logical indicator if the case is premarketing (i.e., from clinical trials) (\code{logical}).}
 \item{literature}{Logical indicator if the case is from literature (\code{logical}).}
 \item{RB_duplicates}{Logical indicator if the case is a duplicate based on the Rule Based algorithm (\code{logical}).}
 \item{RB_duplicates_only_susp}{Logical indicator if the case is a duplicate based on the Rule Based algorithm considering only suspected drugs (\code{logical}).}

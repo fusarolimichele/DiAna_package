@@ -13,12 +13,12 @@
 #'   \item{wt_in_kgs}{Weight of the individual in kilograms (\code{numeric}).}
 #'   \item{occr_country}{Country where the event occurred (\code{factor}).}
 #'   \item{event_dt}{Date of the event (\code{integer}), in the format YYYYMMDD.}
-#'   \item{occp_cod}{Occupation code of the individual (\code{factor}).}
+#'   \item{occp_cod}{Occupation of the reporter (\code{factor}), with levels \code{CN} for consumers/patients, \code{MD} for medical doctors, \code{PH} for pharmacist, \code{RN} for registered nurse, \code{HP} for other healthcare professional, \code{LW} for lawyer, \code{OT} for other occupation.}
 #'   \item{reporter_country}{Country of the reporter (\code{factor}).}
-#'   \item{rept_cod}{Report code (\code{factor}).}
-#'   \item{init_fda_dt}{Initial FDA date (\code{integer}), in the format YYYYMMDD.}
-#'   \item{fda_dt}{FDA date (\code{integer}), in the format YYYYMMDD.}
-#'   \item{premarketing}{Logical indicator if the case is premarketing (\code{logical}).}
+#'   \item{rept_cod}{Report code (\code{factor}), with levels \code{EXP} for expedited (i.e., a serious and unexpected reaction which should be reported within 30 days from the first reception by the pharmaceutical company), \code{PER} for periodic (i.e., expected non-serious event, sent by the pharmaceutical company to the regulatory agency on a yearly basis), \code{DIR} for directed reports (i.e., submitted directly by the reporter through the MedWatch form, without going through pharmaceutical companies).}
+#'   \item{init_fda_dt}{First date of reception by the FDA (\code{integer}), in the format YYYYMMDD.}
+#'   \item{fda_dt}{Date of reception of the last update by the FDA (\code{integer}), in the format YYYYMMDD.}
+#'   \item{premarketing}{Logical indicator if the case is premarketing (i.e., from clinical trials) (\code{logical}).}
 #'   \item{literature}{Logical indicator if the case is from literature (\code{logical}).}
 #'   \item{RB_duplicates}{Logical indicator if the case is a duplicate based on the Rule Based algorithm (\code{logical}).}
 #'   \item{RB_duplicates_only_susp}{Logical indicator if the case is a duplicate based on the Rule Based algorithm considering only suspected drugs (\code{logical}).}
@@ -84,7 +84,7 @@
 #' @format A data.table with 2 variables:
 #'   \describe{
 #'     \item{primaryid}{Unique identifier for each individual (\code{numeric}).}
-#'     \item{outc_cod}{Outcome code indicating the severity or outcome of the adverse event (\code{ordered}).}
+#'     \item{outc_cod}{Outcome code indicating the severity or outcome of the adverse event (\code{ordered}), with levels \code{DE} for death, \code{LT} for life-threatening, \code{HO} for hospitalization, \code{DS} for disability, \code{RI} for required intervention, \code{OT} for other}
 #'   }
 #' @details
 #' This dataset provides information on outcomes associated with reported adverse drug reactions,
@@ -104,11 +104,11 @@
 #'   \describe{
 #'     \item{primaryid}{Unique identifier for each individual (\code{numeric}).}
 #'     \item{drug_seq}{Sequence number identifying the specific drug within the report (\code{integer}).}
-#'     \item{start_dt}{Start date of therapy (\code{numeric}), in YYYYMMDD format.}
+#'     \item{start_dt}{Date of first administration of the therapy (\code{numeric}), in YYYYMMDD format.}
 #'     \item{dur_in_days}{Duration of therapy in days (\code{numeric}).}
-#'     \item{end_dt}{End date of therapy (\code{numeric}), in YYYYMMDD format.}
-#'     \item{time_to_onset}{Time to onset of related events in days (\code{numeric}). We only have a TTO since we only have an event date for each report}
-#'     \item{event_dt}{Date of the related events (\code{integer}), in YYYYMMDD format.}
+#'     \item{end_dt}{Date of last administration of the therapy (\code{numeric}), in YYYYMMDD format.}
+#'     \item{time_to_onset}{Time to onset of related events in days (\code{numeric}). We only have a TTO per drug, independently of the event, since we only have an event date for each report. The TTO is calculated as the difference between the event date and the start date.}
+#'     \item{event_dt}{Date of occurrence of the events (one per report even if there are multiple events) (\code{integer}), in YYYYMMDD format.}
 #'   }
 #' @details
 #' This subset dataset provides detailed information on therapeutic interventions,
@@ -128,7 +128,7 @@
 #'   \describe{
 #'     \item{primaryid}{Unique identifier for each individual (\code{numeric}).}
 #'     \item{drug_seq}{Sequence number identifying the specific drug in the report (\code{integer}).}
-#'     \item{dose_vbm}{Verbatim dose description (\code{character}).}
+#'     \item{dose_vbm}{Verbatim (free-text) dose description (\code{character}).}
 #'     \item{dose_unit}{Unit of dose (\code{character}).}
 #'     \item{cum_dose_chr}{Cumulative dose as character (\code{numeric}).}
 #'     \item{dose_amt}{Amount of dose (\code{character}).}
@@ -155,8 +155,8 @@
 #'   \describe{
 #'     \item{primaryid}{Unique identifier for each individual (\code{numeric}).}
 #'     \item{drug_seq}{Sequence number identifying the specific drug in the report (\code{integer}).}
-#'     \item{substance}{Name of the drug substance, as standardized using DiAna_Dictionary (\code{factor}).}
-#'     \item{role_cod}{Role code indicating the role of the drug (i.e., Primary Suspect, Secondary Suspect, Concomitant, or Interacting) (\code{ordered}).}
+#'     \item{substance}{Name of the drug substance (active ingredient), as standardized using DiAna_Dictionary (\code{factor}).}
+#'     \item{role_cod}{Role code indicating the role of the drug (\code{ordered}), with levels \code{PS} for primary suspect, \code{SS} for secondary suspect, \code{C} for concomitant, \code{I} for interacting.}
 #'   }
 #' @details
 #' This subset of Drug provides detailed information on drugs administered to individuals,

@@ -9,8 +9,8 @@ A data.table with 4 variables:
 \describe{
 \item{primaryid}{Unique identifier for each individual (\code{numeric}).}
 \item{drug_seq}{Sequence number identifying the specific drug in the report (\code{integer}).}
-\item{substance}{Name of the drug substance, as standardized using DiAna_Dictionary (\code{factor}).}
-\item{role_cod}{Role code indicating the role of the drug (i.e., Primary Suspect, Secondary Suspect, Concomitant, or Interacting) (\code{ordered}).}
+\item{substance}{Name of the drug substance (active ingredient), as standardized using DiAna_Dictionary (\code{factor}).}
+\item{role_cod}{Role code indicating the role of the drug (\code{ordered}), with levels \code{PS} for primary suspect, \code{SS} for secondary suspect, \code{C} for concomitant, \code{I} for interacting.}
 }
 }
 \source{
