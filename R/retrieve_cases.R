@@ -91,13 +91,13 @@ retrieve <- function(pids, file_name = "individual_cases",
   t <- t_drug1[temp_reac, on = "primaryid"]
 
   ## Demo
-  temp_demo <- temp_demo[primaryid %in% pids][
+  t <- temp_demo[primaryid %in% pids][
     , age_in_years := round(age_in_days / 365)
   ][
     t,
     on = "primaryid"
   ]
-  temp_demo_supp <- temp_demo_supp[order(-rpsr_cod)][
+  t <- temp_demo_supp[order(-rpsr_cod)][
     , .(rpsr_cod = paste0(rpsr_cod, collapse = "; ")),
     by = "primaryid"
   ][
@@ -105,7 +105,7 @@ retrieve <- function(pids, file_name = "individual_cases",
     on = "primaryid"
   ]
   ## Outc
-  temp_outc <- temp_outc[order(-outc_cod)][
+  t <- temp_outc[order(-outc_cod)][
     , .(outc_cod = paste0(outc_cod, collapse = "; ")),
     by = "primaryid"
   ][
