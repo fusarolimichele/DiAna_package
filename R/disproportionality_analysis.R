@@ -46,14 +46,14 @@ disproportionality_analysis <- function(
   # print warning if any drug or reaction selected was not found
   if (meddra_level == "pt") {
     if (length(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]]))) > 0) {
-      if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
+      if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"), default = FALSE)) {
         stop("Revise the query and run again the command")
       }
     }
   }
   if (drug_level == "substance") {
     if (length(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]]))) > 0) {
-      if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
+      if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"), default = FALSE)) {
         stop("Revise the query and run again the command")
       }
     }
@@ -157,11 +157,11 @@ disproportionality_analysis <- function(
   # correct for multiple comparisons
   results <- results[, Bonferroni := ROR_lower > 1 & (p_value_fisher < (0.05 / nrow(results[D_E >= minimum_cases])))]
   results <- results %>% select(-p_value_fisher)
+  results <- results %>% droplevels()
   results <- tailor_disproportionality_threshold(results, minimum_cases, log2_threshold, frequentist_threshold, multiple_comparison)
   if (!store_pids) {
     results <- results %>% dplyr::select(-primaryid_substance, -primaryid_event)
   }
-  results <- results %>% droplevels()
 }
 
 
@@ -479,6 +479,7 @@ disproportionality_trend <- function(
   results <- results[, nD_E := as.numeric(purrr::map2(pids_reac, pids_drug, \(x, y)length(setdiff(x, y))))]
   results <- results[, E := D_E + nD_E]
   results <- results[, nD_nE := TOT - (D_E + D_nE + nD_E)]
+  results <- results[order(period)]
   if (cumulative == TRUE) {
     results <- results[, cum_D_E := Reduce(function(x, y) sum(x[[1]], y), D_E, accumulate = TRUE)]
     results <- results[, cum_D_nE := Reduce(function(x, y) sum(x[[1]], y), D_nE, accumulate = TRUE)]

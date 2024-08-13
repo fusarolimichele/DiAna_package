@@ -8,3 +8,5 @@ external_sources
 Developer
 ^codecov\.yml$
 ^\.github$
+data/24Q1
+^vignettes/articles$
