@@ -2,7 +2,7 @@
 title: "v01_Start_Subproject"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Start_Subproject}
+  %\VignetteIndexEntry{v01_Start_Subproject}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

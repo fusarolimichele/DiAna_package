@@ -10,3 +10,6 @@ Developer
 ^\.github$
 data/24Q1
 ^vignettes/articles$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
