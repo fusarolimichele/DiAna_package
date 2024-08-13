@@ -166,13 +166,17 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL,
       gtsummary::tbl_summary(
         by = Group, statistic = list(
           gtsummary::all_continuous() ~ "{median} ({p25}-{p75}) [{min}-{max}] {p_nonmiss}",
-          gtsummary::all_continuous2() ~ "{median} ({p25}-{p75}) [{min}-{max}] {p_nonmiss}",
+          gtsummary::all_continuous2() ~ "{median} ({p25}-{p75}) [{min}-{max}] {p_nonmiss}%",
           gtsummary::all_categorical() ~ "{n};{p}"
         ),
-        digits = colnames(temp) ~ c(0, 2)
+        digits = everything() ~ c(0, 2)
       ) %>%
       gtsummary::add_p(
-        test = list(gtsummary::all_categorical() ~ "fisher.test.simulate.p.values"), # this applies the custom test to all categorical variables
+        test = list(gtsummary::all_categorical() ~ "fisher.test"),
+        test.args = list(
+          gtsummary::all_categorical() ~ list(simulate.p.value = TRUE),
+          gtsummary::all_continuous() ~ list(exact = FALSE)
+        ),
         pvalue_fun = function(x) gtsummary::style_pvalue(x, digits = 3)
       ) %>%
       gtsummary::add_q("holm") %>%
