@@ -21,7 +21,9 @@ Description: The 'DiAna' (Disproportionality Analysis) package offers
     descriptive and disproportionality analysis, time-to-onset analysis,
     network analysis, retrieval algorithms, and visualization.
 License: MIT + file LICENSE
-URL: https://github.com/fusarolimichele/DiAna_package, https://github.com/fusarolimichele/DiAna, https://osf.io/zqu89/, https://fusarolimichele.github.io/DiAna_package/
+URL: https://github.com/fusarolimichele/DiAna_package,
+    https://github.com/fusarolimichele/DiAna, https://osf.io/zqu89/,
+    https://fusarolimichele.github.io/DiAna_package/
 BugReports: https://github.com/fusarolimichele/DiAna_package/issues
 Depends: 
     data.table,
