@@ -159,9 +159,13 @@ disproportionality_df <- disproportionality_analysis(
   reac_selected = reac_selected
 )
 disproportionality_df
+```
+```{r query_forest, eval=FALSE}
 render_forest(disproportionality_df)
 ```
-
+```{r query_figure, fig.height=3, fig.width=9, echo=FALSE}
+knitr::include_graphics("extend_query-1.png", dpi = 144)
+```
 You see now that the number of cases has increased from 286 to 701, and we still find a SDR.
 
 #### Multiple queries
