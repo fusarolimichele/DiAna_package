@@ -323,7 +323,7 @@ disproportionality_df
 render_forest(disproportionality_df, row = "event")
 ```
 
-![plot of chunk multiple_definitions](figure/multiple_definitions-1.png)
+![plot of chunk multiple_definitions](multiple_definitions-1.png)
 
 The results now show 16 rows (one per drug-event combination), for which we have found all SDR apart that for excessive exercise and overwork for which we have found less than 3 cases (the minimum to identify an SDR with the IC. We can see in the render forests how the confidence interval is larger for combinations in which there are fewer cases (compare with the different size of the dots).
 
