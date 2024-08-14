@@ -130,9 +130,13 @@ disproportionality_df
 
 This time no error appears, and after few seconds we can see that our environment (window pane usually on the upper right) has been populated with a dataset called disproportionalitY_df. Calling the name of the object prints it in the console, and we can see that the object is now a dataset with one row (per drug-event combination) and 19 columns, including the name of the substance and the event, the instances of the contingency table, the median and 95% confidence interval of the Reporting Odds Ratio ROR and of the Information component, these same results summarised as a string in the following format "median (lower limit-upper limit) [N cases]". A Bonferroni column that specifies whether the ROR was still significant after correcting for multiple comparison, and two columns that summarise whether a signal exists (SDR) or not (no SDR) or exists but disappear at the correction for multiple comparison (weak SDR). In this case we have found a signal of disproportionate reporting using both the analyses. These columns exist to simplify input to further functions, such as, for example, the visualization using render_forest.
 
-```{r render_forest, fig.height=3, fig.width=9}
+```{r render_forest, eval=FALSE}
 render_forest(disproportionality_df)
 render_forest(disproportionality_df, index = "ROR")
+```
+```{r render_forest_figure, fig.height=3, fig.width=9}
+knitr::include_graphics("render_forest-1.png", dpi = 144)
+knitr::include_graphics("render_forest-2.png", dpi = 144)
 ```
 
 In these forest plots we see on the x axis the information component (by default) or the ROR if we specify it in the index parameter. The median is shown using the dot, whose size is proportional to the number of cases. The 95% confidence interval is shown by the line. A dashed vertical axis (on the 0 for the IC and on the 1 for the ROR) highlights the threshold of statistical significance, compared to which the lower limit of the confidence interval must be higher to identify a signal of disproportionate reporting. In this case, we identified a clear signal of disproportionate reporting using both methods.
