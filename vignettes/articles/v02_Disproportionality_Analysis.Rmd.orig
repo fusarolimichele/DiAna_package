@@ -35,5 +35,5 @@ It is also recommended, but not necessary, that you have read the previous vigne
 From the DiAna main project, we open a new R script and run the snippet 'new_FAERS_project' to set up a project.
 
 ```{r render_forest_figure, fig.height=3, fig.width=9, echo=FALSE}
-knitr::include_graphics(paste0(here::here,"\figure\render_forest-1.png"), dpi = 144)
+knitr::include_graphics(paste0(here::here(),"\figure\render_forest-1.png"), dpi = 144)
 ```

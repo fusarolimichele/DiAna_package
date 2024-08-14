@@ -31,5 +31,5 @@ From the DiAna main project, we open a new R script and run the snippet 'new_FAE
 
 
 ```
-#> Error in paste0(here::here, "\figure\render_forest-1.png"): cannot coerce type 'closure' to vector of type 'character'
+#> Error in knitr::include_graphics(paste0(here::here(), "\figure\render_forest-1.png"), : Cannot find the file(s): "igureender_forest-1.png"
 ```
