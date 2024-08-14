@@ -566,7 +566,7 @@ disproportionality_df
 render_forest(disproportionality_df, row = "event", facet_v = "substance")
 ```
 
-![plot of chunk including controls](figure/including controls-1.png)
+![plot of chunk including_controls](figure/including_controls-1.png)
 
 Here we see an extensive association of impulsive manifestations with aripiprazole, its class (which is in fact almost the same as aripiprazole as the other two drugs are far less used), and the positive control pramipexole (which shows also enough cases with excessive exercise, even if not enough cases with pyromania). Aripiprazole is not associated with liver injury and headache (as expected), while instead paracetamol is associated with both, the first a known reaction, the second a reverse causality (you take paracetamol to treat headache). Paracetamol is not associated with many of the impulsivity manifestations, but it is still associated with impulsivity, ICD, gambling and overwork (you see the red dots that in this plot identify an SDR). Some possible explanations may be present: overwork and the use of paracetamol to fight the subsequent migraine have a comprehensible association, but also impulsivity intended as a more general irritability due to the pain.
 

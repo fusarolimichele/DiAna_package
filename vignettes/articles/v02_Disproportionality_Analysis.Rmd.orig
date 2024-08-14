@@ -239,7 +239,7 @@ The same considerations can in fact be performed also on the drug (we may want t
 
 In this case we may want to add to the render forest the option to give each its drug its facet, as seen in the script.
 
-```{r including controls, fig.height=3, fig.width=9}
+```{r including_controls, fig.height=3, fig.width=9}
 ## Definitions --------------------------------------------------------------------------
 drug_selected <- list(
   "aripiprazole" = list("aripiprazole"),

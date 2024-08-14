@@ -201,30 +201,3 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL,
   }
   return(gt_table)
 }
-
-#' Compute Fisher's Exact Test with Simulated p-values
-#'
-#' This function performs Fisher's Exact Test with simulated p-values for association between two categorical variables.
-#'
-#' @param data A data frame containing the variables of interest.
-#' @param variable The name of the first categorical variable.
-#' @param by The name of the second categorical variable.
-#' @param ... Additional arguments to be passed to the \code{\link[stats:fisher.test]{fisher.test}} function.
-#'
-#' @return A list containing the following elements:
-#' \describe{
-#'   \item{p}{The simulated p-value for the Fisher's Exact Test.}
-#'   \item{test}{The name of the test method, which is "Fisher's Exact Test with Simulation".}
-#' }
-#' @importFrom stats fisher.test
-#' @seealso \code{\link[stats:fisher.test]{fisher.test}} for more information on Fisher's Exact Test.
-#'
-#' @keywords internal
-
-fisher.test.simulate.p.values <- function(data, variable, by, ...) {
-  result <- list()
-  test_results <- stats::fisher.test(data[[variable]], data[[by]], simulate.p.value = TRUE)
-  result$p <- test_results$p.value
-  result$test <- test_results$method
-  result
-}
