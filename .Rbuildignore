@@ -13,4 +13,4 @@ data/24Q1
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-figure\
+figure
