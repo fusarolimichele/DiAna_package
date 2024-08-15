@@ -275,7 +275,15 @@ visualization using render_forest.</p>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"figure/render_forest-2.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in knitr::include_graphics("figure/render_forest-2.png", dpi = 144): Cannot find the file(s): "figure/render_forest-2.png"</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"render_forest-2.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("render_forest-2.png", dpi = 144): Cannot find the file(s): "render_forest-2.png"</span></span></code></pre></div>
+<span><span class="co">#&gt; Error in knitr::include_graphics("render_forest-2.png", dpi = 144): Cannot find the file(s): "render_forest-2.png"</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"../man/figures/render_forest-1.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in knitr::include_graphics("../man/figures/render_forest-1.png", : Cannot find the file(s): "../man/figures/render_forest-1.png"</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"man/figures/render_forest-1.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in knitr::include_graphics("man/figures/render_forest-1.png", dpi = 144): Cannot find the file(s): "man/figures/render_forest-1.png"</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"../man/figures/render_forest-2.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in knitr::include_graphics("../man/figures/render_forest-2.png", : Cannot find the file(s): "../man/figures/render_forest-2.png"</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"man/figures/render_forest-2.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in knitr::include_graphics("man/figures/render_forest-2.png", dpi = 144): Cannot find the file(s): "man/figures/render_forest-2.png"</span></span></code></pre></div>
 <p>In these forest plots we see on the x axis the information component
 (by default) or the ROR if we specify it in the index parameter. The
 median is shown using the dot, whose size is proportional to the number
@@ -285,9 +293,6 @@ the threshold of statistical significance, compared to which the lower
 limit of the confidence interval must be higher to identify a signal of
 disproportionate reporting. In this case, we identified a clear signal
 of disproportionate reporting using both methods.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
