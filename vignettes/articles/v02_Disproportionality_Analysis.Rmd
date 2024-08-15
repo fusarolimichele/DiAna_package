@@ -1,10 +1,10 @@
 ---
-title: "v02_Disproportionality_Analysis"
+  title: "v02_Disproportionality_Analysis"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{v02_Disproportionality_Analysis}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteEncoding{UTF-8}
 ---
 
 
@@ -169,12 +169,19 @@ This time no error appears, and after few seconds we can see that our environmen
 
 ``` r
 render_forest(disproportionality_df)
+```
+
+![plot of chunk render_forest](figure/render_forest-1.png)
+
+``` r
 render_forest(disproportionality_df, index = "ROR")
 ```
 
+![plot of chunk render_forest](figure/render_forest-2.png)
+
 ```
-#> Error in knitr::include_graphics("figure\render_forest-1.png", dpi = 144): Cannot find the file(s): "render_forest-1.png"
-#> Error in knitr::include_graphics("figure\render_forest-2.png", dpi = 144): Cannot find the file(s): "render_forest-2.png"
+#> Error in knitr::include_graphics("render_forest-1.png", dpi = 144): Cannot find the file(s): "render_forest-1.png"
+#> Error in knitr::include_graphics("render_forest-2.png", dpi = 144): Cannot find the file(s): "render_forest-2.png"
 ```
 
 In these forest plots we see on the x axis the information component (by default) or the ROR if we specify it in the index parameter. The median is shown using the dot, whose size is proportional to the number of cases. The 95% confidence interval is shown by the line. A dashed vertical axis (on the 0 for the IC and on the 1 for the ROR) highlights the threshold of statistical significance, compared to which the lower limit of the confidence interval must be higher to identify a signal of disproportionate reporting. In this case, we identified a clear signal of disproportionate reporting using both methods.
@@ -323,7 +330,7 @@ disproportionality_df
 render_forest(disproportionality_df, row = "event")
 ```
 
-![plot of chunk multiple_definitions](multiple_definitions-1.png)
+![plot of chunk multiple_definitions](figure/multiple_definitions-1.png)
 
 The results now show 16 rows (one per drug-event combination), for which we have found all SDR apart that for excessive exercise and overwork for which we have found less than 3 cases (the minimum to identify an SDR with the IC. We can see in the render forests how the confidence interval is larger for combinations in which there are fewer cases (compare with the different size of the dots).
 
