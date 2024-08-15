@@ -8,6 +8,7 @@ vignette: >
 resource_files:
   - '../figure/render_forest-1.png'
   - 'figure/render_forest-1.png'
+  - 'render_forest-1.png'
 ---
 
 
