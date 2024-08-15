@@ -138,7 +138,7 @@ This time no error appears, and after few seconds we can see that our environmen
 render_forest(disproportionality_df)
 render_forest(disproportionality_df, index = "ROR")
 ```
-```{r render_forest_figure, fig.height=3, fig.width=9, echo=FALSE}
+```{r render_forest_figure, fig.height=3, fig.width=9}
 knitr::include_graphics("../figure/render_forest-1.png", dpi = 144)
 knitr::include_graphics("figure/render_forest-1.png", dpi = 144)
 knitr::include_graphics("render_forest-1.png", dpi = 144)
