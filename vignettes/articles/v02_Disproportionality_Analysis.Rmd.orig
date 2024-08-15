@@ -6,7 +6,8 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 resource_files:
-  - '../man/figure/render_forest-1.png'
+  - '../figure/render_forest-1.png'
+  - 'figure/render_forest-1.png'
 ---
 
 ```{r, include = FALSE}
@@ -137,8 +138,8 @@ render_forest(disproportionality_df)
 render_forest(disproportionality_df, index = "ROR")
 ```
 ```{r render_forest_figure, fig.height=3, fig.width=9, echo=FALSE}
-knitr::include_graphics("figure/render_forest-1.png", dpi = 144)
-knitr::include_graphics("render_forest-2.png", dpi = 144)
+knitr::include_graphics("../figure/render_forest-1.png", dpi = 144)
+knitr::include_graphics("figure/render_forest-2.png", dpi = 144)
 ```
 
 In these forest plots we see on the x axis the information component (by default) or the ROR if we specify it in the index parameter. The median is shown using the dot, whose size is proportional to the number of cases. The 95% confidence interval is shown by the line. A dashed vertical axis (on the 0 for the IC and on the 1 for the ROR) highlights the threshold of statistical significance, compared to which the lower limit of the confidence interval must be higher to identify a signal of disproportionate reporting. In this case, we identified a clear signal of disproportionate reporting using both methods.
