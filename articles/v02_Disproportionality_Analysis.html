@@ -108,22 +108,6 @@ snippet ‘new_FAERS_project’ to set up a project.</p>
 <span><span class="co"># Set up ----------------------------------------------------------------------</span></span>
 <span><span class="co">## upload DiAna ---------------------------------------------------------------</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/fusarolimichele/DiAna_package" class="external-link">DiAna</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: data.table</span></span>
-<span><span class="co">#&gt; data.table 1.15.4 using 1 threads (see ?getDTthreads).  Latest news: r-datatable.com</span></span>
-<span><span class="co">#&gt; **********</span></span>
-<span><span class="co">#&gt; This installation of data.table has not detected OpenMP support. It should still work but in single-threaded mode.</span></span>
-<span><span class="co">#&gt; This is a Mac. Please read https://mac.r-project.org/openmp/. Please engage with Apple and ask them for support. Check r-datatable.com for updates, and our Mac instructions here: https://github.com/Rdatatable/data.table/wiki/Installation. After several years of many reports of installation problems on Mac, it's time to gingerly point out that there have been no similar problems on Windows or Linux.</span></span>
-<span><span class="co">#&gt; **********</span></span>
-<span><span class="co">#&gt; Loading required package: ggplot2</span></span>
-<span><span class="co">#&gt; Welcome to DiAna package. A tool for standardized, flexible, and transparent pharmacovigilance analyses on the FAERS.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; To cite this package in your work and publications use: Fusaroli M., Giunchi V. - DiAna version 2.1.0 (2024-08-13). An open access toolkit for DIsproportionality ANAlysis and other pharmacovigilance investigations in the FAERS. https://github.com/fusarolimichele/DiAna_package; https://github.com/fusarolimichele/DiAna; https://osf.io/zqu89/.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; DiAna contributors for specific functions were: Zoffoli V. for helping developing the cleaning procedure for the FAERS, Van Holle L. for time to onset analysis (cfr. https://doi.org/10.1002/pds.3226), Sakai T. and Trinh N. for pregnancy algorithm (cfr. 10.3389/fphar.2022.1063625)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Additional reference: Fusaroli M, Giunchi V, Battini V, Puligheddu S, Khouri C, Carnovale C, Raschi E, Poluzzi E. Enhancing Transparency in Defining Studied Drugs: The Open-Source Living DiAna Dictionary for Standardizing Drug Names in the FAERS. Drug Saf. 2024 Mar;47(3):271-284. doi: 10.1007/s40264-023-01391-4.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The MedDRA version used is 26.1</span></span>
 <span></span>
 <span><span class="co">## Project_path ---------------------------------------------------------------</span></span>
 <span><span class="va">DiAna_path</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -279,8 +263,8 @@ visualization using render_forest.</p>
 <div class="float">
 <img src="figure/render_forest-2.png" alt="plot of chunk render_forest"><div class="figcaption">plot of chunk render_forest</div>
 </div>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("figure/render_forest-1.png", dpi = 144): Cannot find the file(s): "figure/render_forest-1.png"</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("render_forest-2.png", dpi = 144): Cannot find the file(s): "render_forest-2.png"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("../figure/render_forest-1.png", dpi = 144): Cannot find the file(s): "../figure/render_forest-1.png"</span></span>
+<span><span class="co">#&gt; Error in knitr::include_graphics("figure/render_forest-2.png", dpi = 144): Cannot find the file(s): "figure/render_forest-2.png"</span></span></code></pre>
 <p>In these forest plots we see on the x axis the information component
 (by default) or the ROR if we specify it in the index parameter. The
 median is shown using the dot, whose size is proportional to the number
