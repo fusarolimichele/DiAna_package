@@ -174,8 +174,8 @@ snippet ‘new_FAERS_project’ to set up a project.</p>
 </h4>
 <p>Let’s explore the disproportionality_analysis function. We are
 investigating the possibility of a role of “aripiprazole” in causing
-“impulse control disorder”, and we therefore draft the definitions of
-our objects of study.</p>
+“impulse control disorder” (ICD), and we therefore draft the definitions
+of our objects of study.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Definitions --------------------------------------------------------------------------</span></span>
 <span><span class="va">drug_selected</span> <span class="op">&lt;-</span> <span class="st">"aripiprazole"</span></span>
@@ -203,11 +203,25 @@ it, or more quickly search directly in the database with the following
 command, that could be run just in the console since we do not need to
 keep it in our script.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Reac</span><span class="op">[</span>, <span class="va">.N</span>, by <span class="op">=</span> <span class="st">"pt"</span><span class="op">]</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="op">-</span><span class="va">N</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"impuls"</span>, <span class="va">pt</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="co">#&gt;                          pt     N</span></span>
-<span><span class="co">#&gt;                       &lt;ord&gt; &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1:      impulsive behaviour  3264</span></span>
-<span><span class="co">#&gt; 2: impulse-control disorder  1733</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Reac</span><span class="op">[</span>, <span class="va">.N</span>, by <span class="op">=</span> <span class="st">"pt"</span><span class="op">]</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="op">-</span><span class="va">N</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"impuls"</span>, <span class="va">pt</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<table class="table">
+<caption>Tab 1: MedDRA Preferred Terms including the substring
+impuls.</caption>
+<thead><tr class="header">
+<th align="left">pt</th>
+<th align="right">N</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">impulsive behaviour</td>
+<td align="right">3264</td>
+</tr>
+<tr class="even">
+<td align="left">impulse-control disorder</td>
+<td align="right">1733</td>
+</tr>
+</tbody>
+</table>
 <p>The previous command can be read as: “within the database Reac, count
 how many times (.N) each preferred term occurs (by=”pt”). Then order the
 pt by decreasing N (order(-N)). Finally, filter only the rows with the
@@ -228,14 +242,76 @@ disproportionality analysis:</p>
 <span><span class="va">disproportionality_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disproportionality_analysis.html">disproportionality_analysis</a></span><span class="op">(</span></span>
 <span>  drug_selected <span class="op">=</span> <span class="va">drug_selected</span>,</span>
 <span>  reac_selected <span class="op">=</span> <span class="va">reac_selected</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">disproportionality_df</span></span>
-<span><span class="co">#&gt;       substance                    event   D_E   D_nE      D  nD_E     E    nD_nE ROR_median ROR_lower ROR_upper</span></span>
-<span><span class="co">#&gt;          &lt;fctr&gt;                    &lt;ord&gt; &lt;num&gt;  &lt;num&gt;  &lt;num&gt; &lt;num&gt; &lt;num&gt;    &lt;num&gt;      &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1: aripiprazole impulse-control disorder   286 111261 111547  1447  1733 17485485      31.06     27.28     35.25</span></span>
-<span><span class="co">#&gt;    IC_median IC_lower IC_upper                 label_ROR               label_IC Bonferroni ROR_signal IC_signal</span></span>
-<span><span class="co">#&gt;        &lt;num&gt;    &lt;num&gt;    &lt;num&gt;                    &lt;char&gt;                 &lt;char&gt;     &lt;lgcl&gt;      &lt;ord&gt;     &lt;ord&gt;</span></span>
-<span><span class="co">#&gt; 1:      4.64     4.44     4.78 31.06 (27.28-35.25) [286] 4.64 (4.44-4.78) [286]       TRUE        SDR       SDR</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Definitions --------------------------------------------------------------------------</span></span>
+<span><span class="va">disproportionality_df</span></span></code></pre></div>
+<table style="width:100%;" class="table">
+<caption>Tab 2: Disproportionality dataframe structure.</caption>
+<colgroup>
+<col width="6%">
+<col width="11%">
+<col width="1%">
+<col width="3%">
+<col width="3%">
+<col width="2%">
+<col width="2%">
+<col width="4%">
+<col width="5%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="4%">
+<col width="12%">
+<col width="10%">
+<col width="5%">
+<col width="5%">
+<col width="4%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">substance</th>
+<th align="left">event</th>
+<th align="right">D_E</th>
+<th align="right">D_nE</th>
+<th align="right">D</th>
+<th align="right">nD_E</th>
+<th align="right">E</th>
+<th align="right">nD_nE</th>
+<th align="right">ROR_median</th>
+<th align="right">ROR_lower</th>
+<th align="right">ROR_upper</th>
+<th align="right">IC_median</th>
+<th align="right">IC_lower</th>
+<th align="right">IC_upper</th>
+<th align="left">label_ROR</th>
+<th align="left">label_IC</th>
+<th align="left">Bonferroni</th>
+<th align="left">ROR_signal</th>
+<th align="left">IC_signal</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="left">aripiprazole</td>
+<td align="left">impulse-control disorder</td>
+<td align="right">286</td>
+<td align="right">111261</td>
+<td align="right">111547</td>
+<td align="right">1447</td>
+<td align="right">1733</td>
+<td align="right">17485485</td>
+<td align="right">31.06</td>
+<td align="right">27.28</td>
+<td align="right">35.25</td>
+<td align="right">4.64</td>
+<td align="right">4.44</td>
+<td align="right">4.78</td>
+<td align="left">31.06 (27.28-35.25) [286]</td>
+<td align="left">4.64 (4.44-4.78) [286]</td>
+<td align="left">TRUE</td>
+<td align="left">SDR</td>
+<td align="left">SDR</td>
+</tr></tbody>
+</table>
 <p>This time no error appears, and after few seconds we can see that our
 environment (window pane usually on the upper right) has been populated
 with a dataset called disproportionalitY_df. Calling the name of the
@@ -253,37 +329,16 @@ comparison (weak SDR). In this case we have found a signal of
 disproportionate reporting using both the analyses. These columns exist
 to simplify input to further functions, such as, for example, the
 visualization using render_forest.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="figure/render_forest-1.png" alt="plot of chunk render_forest"><div class="figcaption">plot of chunk render_forest</div>
-</div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>, index <span class="op">=</span> <span class="st">"ROR"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>, index <span class="op">=</span> <span class="st">"IC"</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="figure/render_forest-2.png" alt="plot of chunk render_forest"><div class="figcaption">plot of chunk render_forest</div>
+<img src="render_forest-1.png" alt="Fig 1: IC (aripiprazole , ICD)"><div class="figcaption">Fig 1: IC (aripiprazole , ICD)</div>
 </div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"../figure/render_forest-1.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("../figure/render_forest-1.png", dpi = 144): Cannot find the file(s): "../figure/render_forest-1.png"</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"figure/render_forest-1.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("figure/render_forest-1.png", dpi = 144): Cannot find the file(s): "figure/render_forest-1.png"</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"render_forest-1.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("render_forest-1.png", dpi = 144): Cannot find the file(s): "render_forest-1.png"</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"../figure/render_forest-2.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("../figure/render_forest-2.png", dpi = 144): Cannot find the file(s): "../figure/render_forest-2.png"</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"figure/render_forest-2.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("figure/render_forest-2.png", dpi = 144): Cannot find the file(s): "figure/render_forest-2.png"</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"render_forest-2.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("render_forest-2.png", dpi = 144): Cannot find the file(s): "render_forest-2.png"</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"../man/figures/render_forest-1.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("../man/figures/render_forest-1.png", : Cannot find the file(s): "../man/figures/render_forest-1.png"</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"man/figures/render_forest-1.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("man/figures/render_forest-1.png", dpi = 144): Cannot find the file(s): "man/figures/render_forest-1.png"</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"../man/figures/render_forest-2.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("../man/figures/render_forest-2.png", : Cannot find the file(s): "../man/figures/render_forest-2.png"</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"man/figures/render_forest-2.png"</span>, dpi <span class="op">=</span> <span class="fl">144</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in knitr::include_graphics("man/figures/render_forest-2.png", dpi = 144): Cannot find the file(s): "man/figures/render_forest-2.png"</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>, index <span class="op">=</span> <span class="st">"ROR"</span><span class="op">)</span></span></code></pre></div>
+<div class="float">
+<img src="render_forest-2.png" alt="Fig 2: ROR (aripiprazole , ICD)"><div class="figcaption">Fig 2: ROR (aripiprazole , ICD)</div>
+</div>
 <p>In these forest plots we see on the x axis the information component
 (by default) or the ROR if we specify it in the index parameter. The
 median is shown using the dot, whose size is proportional to the number
