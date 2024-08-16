@@ -1,16 +1,12 @@
 ---
 title: "v02_Disproportionality_Analysis"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    df_print: "kable"
 vignette: >
   %\VignetteIndexEntry{v02_Disproportionality_Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-resource_files:
-  - '../figure/render_forest-1.png'
-  - 'figure/render_forest-1.png'
-  - 'render_forest-1.png'
-  - '../man/figures/render_forest-1.png'
-  - 'man/figures/render_forest-1.png'
 ---
 
 ```{r, include = FALSE}
@@ -26,7 +22,7 @@ This tutorial will show you how to perform simple and advanced disproportionalit
 
 This tutorial requires that you have first:
 
-  1.  installed R and R Studio,
+1.  installed R and R Studio,
 
 2.  installed the DiAna package,
 
@@ -95,7 +91,7 @@ import("REAC")
 
 #### Basic application
 
-Let's explore the disproportionality_analysis function. We are investigating the possibility of a role of "aripiprazole" in causing "impulse control disorder", and we therefore draft the definitions of our objects of study.
+Let's explore the disproportionality_analysis function. We are investigating the possibility of a role of "aripiprazole" in causing "impulse control disorder" (ICD), and we therefore draft the definitions of our objects of study.
 
 ```{r Definitions}
 ## Definitions --------------------------------------------------------------------------
@@ -115,9 +111,14 @@ disproportionality_df <- disproportionality_analysis(
 
 As you run the command a message appears in the console: "Not all the events selected were found in the database, check the following terms for any misspelling or alternative nomenclature: impulse control disorder. Would you like to revise the query? (Yes/no/cancel)". This message implies that the exact term "impulse control disorder" does not exists in our database. How can we proceed? We write "Yes" in the console and run the command with "return". The function warns us once again to revise our query, or definition of the object of study. How can we check the correct spelling? We can look into the MedDRA if we have it, or more quickly search directly in the database with the following command, that could be run just in the console since we do not need to keep it in our script.
 
-```{r check_misspelling_query}
+```{r check_misspelling_query, eval=FALSE}
 Reac[, .N, by = "pt"][order(-N)][grepl("impuls", pt)]
 ```
+
+```{r check_misspelling_query_echo, echo=FALSE}
+knitr::kable(Reac[, .N, by = "pt"][order(-N)][grepl("impuls", pt)], caption = "Tab 1: MedDRA Preferred Terms including the substring impuls.")
+```
+
 
 The previous command can be read as: "within the database Reac, count how many times (.N) each preferred term occurs (by="pt"). Then order the pt by decreasing N (order(-N)). Finally, filter only the rows with the pattern "impuls" in the pt. As you can see there are two terms that we should plausibly include in out analysis: impulsive behaviour, which is the term most used even if we did not even consider it, and "impulse-control disorder" which is the term we wanted to consider but has also a dash between the first two words. First, let's fix the definition. We get back to the definition section of our script and we fix it including the dash in the reaction pt as follows and we rerun the disproportionality analysis:
 
@@ -131,26 +132,34 @@ disproportionality_df <- disproportionality_analysis(
   drug_selected = drug_selected,
   reac_selected = reac_selected
 )
+```
+```{r fix_misspelling_query_show,eval=FALSE}
+## Definitions --------------------------------------------------------------------------
 disproportionality_df
 ```
+```{r fix_misspelling_query_show_echo,echo=FALSE}
+## Definitions --------------------------------------------------------------------------
+knitr::kable(disproportionality_df, caption = "Tab 2: Disproportionality dataframe structure.")
+```
+
 
 This time no error appears, and after few seconds we can see that our environment (window pane usually on the upper right) has been populated with a dataset called disproportionalitY_df. Calling the name of the object prints it in the console, and we can see that the object is now a dataset with one row (per drug-event combination) and 19 columns, including the name of the substance and the event, the instances of the contingency table, the median and 95% confidence interval of the Reporting Odds Ratio ROR and of the Information component, these same results summarised as a string in the following format "median (lower limit-upper limit) [N cases]". A Bonferroni column that specifies whether the ROR was still significant after correcting for multiple comparison, and two columns that summarise whether a signal exists (SDR) or not (no SDR) or exists but disappear at the correction for multiple comparison (weak SDR). In this case we have found a signal of disproportionate reporting using both the analyses. These columns exist to simplify input to further functions, such as, for example, the visualization using render_forest.
 
-```{r render_forest}
-render_forest(disproportionality_df)
+```{r render_forest1, fig.show="hide"}
+render_forest(disproportionality_df, index = "IC")
+```
+
+```{r render_forest_figure1, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 1: IC (aripiprazole , ICD)'}
+knitr::include_graphics("render_forest-1.png", dpi = 144)
+```
+
+```{r render_forest2,fig.show="hide"}
 render_forest(disproportionality_df, index = "ROR")
 ```
-```{r render_forest_figure, fig.height=3, fig.width=9}
-knitr::include_graphics("../figure/render_forest-1.png", dpi = 144)
-knitr::include_graphics("figure/render_forest-1.png", dpi = 144)
-knitr::include_graphics("render_forest-1.png", dpi = 144)
-knitr::include_graphics("../figure/render_forest-2.png", dpi = 144)
-knitr::include_graphics("figure/render_forest-2.png", dpi = 144)
+
+```{r render_forest_figure2, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 2: ROR (aripiprazole , ICD)'}
 knitr::include_graphics("render_forest-2.png", dpi = 144)
-knitr::include_graphics("../man/figures/render_forest-1.png", dpi = 144)
-knitr::include_graphics("man/figures/render_forest-1.png", dpi = 144)
-knitr::include_graphics("../man/figures/render_forest-2.png", dpi = 144)
-knitr::include_graphics("man/figures/render_forest-2.png", dpi = 144)
 ```
+
 
 In these forest plots we see on the x axis the information component (by default) or the ROR if we specify it in the index parameter. The median is shown using the dot, whose size is proportional to the number of cases. The 95% confidence interval is shown by the line. A dashed vertical axis (on the 0 for the IC and on the 1 for the ROR) highlights the threshold of statistical significance, compared to which the lower limit of the confidence interval must be higher to identify a signal of disproportionate reporting. In this case, we identified a clear signal of disproportionate reporting using both methods.

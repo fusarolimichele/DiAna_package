@@ -4,5 +4,8 @@ pkgdown_sha: ~
 articles:
   v01_Start_Subproject: v01_Start_Subproject.html
   v02_Disproportionality_Analysis: v02_Disproportionality_Analysis.html
-last_built: 2024-08-13T19:45Z
+last_built: 2024-08-16T08:23Z
+urls:
+  reference: https://fusarolimichele.github.io/DiAna_package/reference
+  article: https://fusarolimichele.github.io/DiAna_package/articles
 
