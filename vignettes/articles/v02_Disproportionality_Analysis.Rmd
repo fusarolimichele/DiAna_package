@@ -1081,6 +1081,8 @@ plot_disproportionality_trend(disproportionality_trend_results = disproportional
 ```
 
 ![Fig 10: IC trend (aripiprazole , ICD_query_with_behaviors), looking only at suspected agents before warning.](disproportionality_trend-1.png)
+
+
 #### Comparing several disproportionality metrics
 
 The ROR and the IC, while extremely common in pharmacovigilance, are not the only disproportionality metrics. To compare their results with other disproportionality metrics you can use the disproportionality_comparison function

@@ -689,6 +689,8 @@ plot_disproportionality_trend(disproportionality_trend_results = disproportional
 ```{r plot_trend_figure, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 10: IC trend (aripiprazole , ICD_query_with_behaviors), looking only at suspected agents before warning.'}
 knitr::include_graphics("disproportionality_trend-1.png", dpi = 144)
 ```
+
+
 #### Comparing several disproportionality metrics
 
 The ROR and the IC, while extremely common in pharmacovigilance, are not the only disproportionality metrics. To compare their results with other disproportionality metrics you can use the disproportionality_comparison function
