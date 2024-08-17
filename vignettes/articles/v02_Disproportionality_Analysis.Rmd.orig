@@ -197,7 +197,7 @@ render_forest(disproportionality_df)
 ```
 
 ```{r render_query_figure, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 3: IC (aripiprazole , ICD_query)'}
-knitr::include_graphics("extend_query.png", dpi = 144)
+knitr::include_graphics("render_query-1.png", dpi = 144)
 ```
 
 You see now that the number of cases has increased from 286 to 701, and we still find a SDR.
