@@ -8,6 +8,8 @@
 * Names of parameters have been standardized across functions
 * Requires the databases to be uploaded, to make clear to the user which databases are used in each function.
 * Give the user the decision to whether save in excel or just keep results of descriptive and retrieve function in the environment. Necessary for testing.
+* Added website
+* Added articles/tutorials for setting up subproject and performing a disproportionality analysis on the website
 
 ## Minor changes and bug fixes
 * Disproportionality functions are more robust:
@@ -17,3 +19,4 @@
 * Render forest function is more flexible:
   _It allows for changing the position of the legend.
   _Fixed a bug in providing the colors to be shown.
+*Updating descriptive to comply with the most recent version of gtsummary.

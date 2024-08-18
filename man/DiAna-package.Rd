@@ -11,8 +11,10 @@ The 'DiAna' (Disproportionality Analysis) package offers advanced tools for anal
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/fusarolimichele/DiAna_package,https://github.com/fusarolimichele/DiAna}
+  \item \url{https://github.com/fusarolimichele/DiAna_package}
+  \item \url{https://github.com/fusarolimichele/DiAna}
   \item \url{https://osf.io/zqu89/}
+  \item \url{https://fusarolimichele.github.io/DiAna_package/}
   \item Report bugs at \url{https://github.com/fusarolimichele/DiAna_package/issues}
 }
 
