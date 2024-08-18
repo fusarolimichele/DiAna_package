@@ -2,3 +2,115 @@ url: https://fusarolimichele.github.io/DiAna_package/
 template:
   bootstrap: 5
 
+home:
+  links:
+  - text: Learn more
+    href: https://www.youtube.com/playlist?list=PLkYXTqkBTxnvScXwjRxjGhRzSshHqZq7M
+
+
+reference:
+
+- title: Setup
+  desc: >
+    Functions to download cleaned FAERS data from the internet and snippet to automatically structure a script.
+  contents:
+  - setup_DiAna
+  - snippets_install_github
+
+
+- title: Datasets
+  desc: >
+    Datasets made available with the DiAna package.
+- subtitle: "Sample datasets with documentation"
+  contents:
+  - sample_Demo
+  - sample_Demo_Supp
+  - sample_Doses
+  - sample_Drug
+  - sample_Drug_Name
+  - sample_Drug_Supp
+  - sample_Indi
+  - sample_Outc
+  - sample_Reac
+  - sample_Ther
+
+- subtitle: "Importing fuctions for the full downloaded FAERS data"
+  contents:
+  - import
+  - import_ATC
+  - import_MedDRA
+
+- subtitle: "Additional datasets provided for internal use by functions"
+  contents:
+  - country_dictionary
+
+- title: "Case retrieval"
+  desc: >
+    Functions to retrieve cases or specific subpopulations.
+- subtitle: "Retrieve cases for manual inspection"
+  contents:
+  - retrieve
+
+- subtitle: "Tailor drug definition"
+  contents:
+  - get_drugnames
+  - Fix_DiAna_dictionary_locally
+
+- subtitle: "Identify specific subpopulations"
+  contents:
+  - retrieve_pregnancy_pids
+
+- title: "Descriptive functions"
+  desc: >
+    Functions to perform descriptive analyses.
+  contents:
+  - descriptive
+  - hierarchycal_rates
+  - reporting_rates
+  - render_tto
+
+- title: "Disproportionality functions"
+  desc: >
+    Functions to perform disproportionality analyses.
+  contents:
+  - disproportionality_analysis
+  - disproportionality_comparison
+  - disproportionality_trend
+  - format_input_disproportionality
+  - tailor_disproportionality_threshold
+  - plot_disproportionality_trend
+  - render_forest
+
+- title: "Advanced analyses"
+  desc: >
+    Functions to perform advanced analyses, including time to onset analysis and network analysis.
+- subtitle: "Time to onset analyses"
+  contents:
+  - time_to_onset_analysis
+  - plot_KS
+
+- subtitle: "Network Analysis"
+  contents:
+  - network_analysis
+
+
+- title: "DiAna specifics"
+  desc: >
+    Functions to retrieve DiAna reference and information about the used quarter.
+  contents:
+  - DiAna_reference
+  - FAERS_quarter_specifics
+
+
+articles:
+- title: Get started
+  navbar: Get started
+  contents:
+  - articles/Start_Subproject
+
+- title: Disproportionality Analysis
+  navbar: Disproportionality Analysis
+  contents:
+  - articles/Disproportionality_Analysis
+
+

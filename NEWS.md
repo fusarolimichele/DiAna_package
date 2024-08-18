@@ -1,22 +1,19 @@
 # DiAna 2.1.0
 
-## Major changes
-* Removed dependency from tidyverse to make the download faster
+## Breaking changes
+* Download now faster because dependencies are reduced
 * Included tests (coverage > 80%)
-* Improved documentation
-* Included sample data and country dictionary in the package
-* Names of parameters have been standardized across functions
+* Names of parameters are standardized across functions
 * Requires the databases to be uploaded, to make clear to the user which databases are used in each function.
 * Give the user the decision to whether save in excel or just keep results of descriptive and retrieve function in the environment. Necessary for testing.
+
+## New features
+* Included documented sample data and country dictionary in the package
 * Added website
 * Added articles/tutorials for setting up subproject and performing a disproportionality analysis on the website
+* Improved documentation
 
-## Minor changes and bug fixes
-* Disproportionality functions are more robust:
-  _they accept different formatting of drug_selected and event selected;
-  _they warn about unexpected drug or event terms in the input;
-  _meddra/pt_level == "custom" is deprecated as inferred from input.
-* Render forest function is more flexible:
-  _It allows for changing the position of the legend.
-  _Fixed a bug in providing the colors to be shown.
+## Minor improvements and fixes
+* Disproportionality functions are more robust: as they accept different formatting of drug_selected and event selected; they warn about unexpected drug or event terms in the input. meddra/pt_level == "custom" is deprecated as inferred from input.
+* `render_forest()` function is more flexible: as it allows for changing the position of the legend. Fixed a bug in providing the colors to be shown.
 *Updating descriptive to comply with the most recent version of gtsummary.

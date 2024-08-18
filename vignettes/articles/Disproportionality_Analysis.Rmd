@@ -1,10 +1,10 @@
 ---
-title: "v02_Disproportionality_Analysis"
+title: "Disproportionality_Analysis"
 output:
   rmarkdown::html_vignette:
     df_print: "kable"
 vignette: >
-  %\VignetteIndexEntry{v02_Disproportionality_Analysis}
+  %\VignetteIndexEntry{Disproportionality_Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
