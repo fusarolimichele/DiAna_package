@@ -6,6 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>DIsproportionality ANAlysis and Pharmacovigilance in the FAERS • DiAna</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
@@ -36,8 +42,12 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/v01_Start_Subproject.html">v01_Start_Subproject</a></li>
-    <li><a class="dropdown-item" href="articles/v02_Disproportionality_Analysis.html">v02_Disproportionality_Analysis</a></li>
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Get started</h6></li>
+    <li><a class="dropdown-item" href="articles/Start_Subproject.html">Start_Subproject</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Disproportionality Analysis</h6></li>
+    <li><a class="dropdown-item" href="articles/Disproportionality_Analysis.html">Disproportionality_Analysis</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -89,7 +99,7 @@
 <li>Setup the DiAna project: The first time we use DiAna, we have to set up the folder where the data will be stored together with the results of the analyses. This command will require a good internet connection. The better your internet connection, the faster the download. It usually takes between a few minutes and 20 minutes. On the console, we run the two rows below (note that rows preceded by a # are comments and not commands):</li>
 </ol>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/fusarolimichele/DiAna_package" class="external-link">DiAna</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://fusarolimichele.github.io/DiAna_package/">DiAna</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/setup_DiAna.html">setup_DiAna</a></span><span class="op">(</span>quarter <span class="op">=</span> <span class="st">"24Q1"</span><span class="op">)</span></span>
 <span><span class="co"># input yes when asked to download the FAERS</span></span></code></pre></div>
 <p>With library DiAna we have imported the DiAna package (i.e., the toolbox with all the functions that we will use in our analyses). With setup_DiAna(quarter=“24Q1”) we are automaticatilly setting up the project: it will create a folder to store cleaned FAERS data, that will be downloaded from an OSF repository (in particular we are downloading the entire FAERS database, including all the quarters up to the 24Q1). The entire cleaning process is made transparent on the github (<a href="https://github.com/fusarolimichele/DiAna" class="external-link uri">https://github.com/fusarolimichele/DiAna</a>). It will also create a folder for external sources and a folder to store projects. In the external sources, it will also download the DiAna dictionary used to translate free text drug names into active ingredients, a linkage to the ATC code, and other useful data sources.</p>
@@ -101,6 +111,7 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/fusarolimichele/DiAna_package/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/fusarolimichele/DiAna_package/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://www.youtube.com/playlist?list=PLkYXTqkBTxnvScXwjRxjGhRzSshHqZq7M" class="external-link">Learn more</a></li>
 </ul>
 </div>
 
