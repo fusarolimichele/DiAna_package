@@ -281,13 +281,15 @@ render_forest <- function(disproportionality_df,
     } +
     scale_color_manual(values = colors, drop = FALSE) +
     theme(
-      axis.text = element_text(size=text_size_axis),
-      strip.placement = "outside", strip.text.y.left = element_text(angle = 0,
-                                                                    size = 7),
+      axis.text = element_text(size = text_size_axis),
+      strip.placement = "outside", strip.text.y.left = element_text(
+        angle = 0,
+        size = 7
+      ),
       legend.position = legend_position,
       legend.justification = "left",
       legend.title = element_blank(),
-      legend.text = element_text(size=text_size_legend),
+      legend.text = element_text(size = text_size_legend),
     ) +
     guides(shape = guide_legend(override.aes = list(size = 5)))
 }
