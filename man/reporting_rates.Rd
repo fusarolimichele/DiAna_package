@@ -48,8 +48,22 @@ Calculates \% as the proportion of individuals recording the event.
 }
 \examples{
 \dontrun{
-reporting_rates(pids, "reaction", "hlt")
-reporting_rates(pids, "indication", "pt")
-reporting_rates(pids, entity = "substance", level = "Class3")
+# select only reports recording paracetamol from the sample dataset,
+# and provide the most reported events (at the hlt level),
+# drugs (at the ATC class3 level), and indications (at the PT level).
+pids_cases <- unique(sample_Drug[substance == "paracetamol"]$primaryid)
+reporting_rates(pids, "reaction", "hlt",
+  temp_reac = sample_Reac,
+  temp_drug = sample_Drug, temp_indi = sample_Indi
+)
+reporting_rates(pids, "indication", "pt",
+  temp_reac = sample_Reac,
+  temp_drug = sample_Drug, temp_indi = sample_Indi
+)
+reporting_rates(pids,
+  entity = "substance", level = "Class3",
+  temp_reac = sample_Reac, temp_drug = sample_Drug,
+  temp_indi = sample_Indi
+)
 }
 }

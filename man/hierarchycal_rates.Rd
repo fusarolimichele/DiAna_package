@@ -26,7 +26,7 @@ hierarchycal_rates(
 \item{drug_role}{If entity is substance, it is possible to specify the drug roles that should be considered}
 }
 \value{
-None. The function generates and writes the hierarchy to the xlsx.
+An excel file with the hierarchy of interest.
 For indications and reactions, SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
 For substances, the ATC hierarchy is followed.
 }

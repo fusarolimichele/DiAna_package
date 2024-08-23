@@ -14,6 +14,7 @@ render_forest(
   transformation = "identity",
   custom_threshold = NA,
   text_size_legend = 15,
+  text_size_axis = 15,
   dodge = 0.3,
   nested_colors = NA,
   facet_v = NA,
@@ -39,6 +40,8 @@ render_forest(
 \item{custom_threshold}{Threshold value for analysis (default is 1).}
 
 \item{text_size_legend}{Size of text in the legend (default is 15).}
+
+\item{text_size_axis}{Size of text in the axes (default is 15).}
 
 \item{dodge}{Position adjustment for dodging (default is 0.3).}
 
