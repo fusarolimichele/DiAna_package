@@ -177,6 +177,7 @@ disproportionality_analysis <- function(
 #' @param facet_v Variable for vertical facetting (default is "event").
 #' @param facet_h Variable for horizontal facetting (default is NA).
 #' @param nested Variable indicating if nested plotting is required (default is FALSE). If nested plotting is required the name of the variable should replace FALSE.
+#' @param text_size_axis Size of text in the axes (default is 15).
 #' @param text_size_legend Size of text in the legend (default is 15).
 #' @param transformation Transformation for the x-axis (default is "identity").
 #' @param nested_colors Vector of colors for plot elements.
@@ -199,6 +200,7 @@ render_forest <- function(disproportionality_df,
                           transformation = "identity",
                           custom_threshold = NA,
                           text_size_legend = 15,
+                          text_size_axis = 15,
                           dodge = .3,
                           nested_colors = NA,
                           facet_v = NA,
@@ -279,9 +281,13 @@ render_forest <- function(disproportionality_df,
     } +
     scale_color_manual(values = colors, drop = FALSE) +
     theme(
-      strip.placement = "outside", strip.text.y.left = element_text(angle = 0, size = 7), legend.position = legend_position,
+      axis.text = element_text(size=text_size_axis),
+      strip.placement = "outside", strip.text.y.left = element_text(angle = 0,
+                                                                    size = 7),
+      legend.position = legend_position,
       legend.justification = "left",
-      legend.title = element_blank()
+      legend.title = element_blank(),
+      legend.text = element_text(size=text_size_legend),
     ) +
     guides(shape = guide_legend(override.aes = list(size = 5)))
 }

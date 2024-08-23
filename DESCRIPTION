@@ -2,7 +2,7 @@ Package: DiAna
 Title: DIsproportionality ANAlysis and Pharmacovigilance in the FAERS
 Version: 2.1.0
 Authors@R: c(
-    person("Michele", "Fusaroli", , "michele.fusaroli2@unibo.it", role = c("aut", "cre"),
+    person("Michele", "Fusaroli", , "michele.fusaroli@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0254-2212")),
     person("Valentina", "Giunchi", , "valentina.giunchi2@unibo.it", role = "aut",
            comment = c(ORCID = "0000-0001-5841-8520")),
