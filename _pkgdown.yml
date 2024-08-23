@@ -112,5 +112,6 @@ articles:
   navbar: Disproportionality Analysis
   contents:
   - articles/Disproportionality_Analysis
+  - articles/Causal_inference
 
 

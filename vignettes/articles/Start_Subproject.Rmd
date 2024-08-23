@@ -1,5 +1,5 @@
 ---
-title: "Start_Subproject"
+title: "Start Subproject"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Start_Subproject}
