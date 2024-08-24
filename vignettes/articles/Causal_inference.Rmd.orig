@@ -156,8 +156,7 @@ paste0("IC = ",disproportionality_df$label_IC)
 render_forest(disproportionality_df)
 ```
 ```{r Forest_EDA_ALS_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (Edaravone , AmyotrophicLateralSclerosis)'}
- knitr::include_graphics("causal_inference-Forest_EDA_AL
- S-1.png", dpi = 144)
+ knitr::include_graphics("causal_inference-Forest_EDA_ALS-1.png", dpi = 144)
 ```
 
 ### Confounding bias
@@ -360,7 +359,7 @@ render_forest(disproportionality_df,nested = "nested",nested_colors=c("gray45","
 #### Collider bias by outcome
 
 ```{r collider_outc, fig.height=4, fig.width=12, echo = FALSE, fig.cap='Collider bias introduced by selecting on outcome. For example, when we select on the outcome death when investigate the relationship between a medication (CAR-Ts) that reduces fatality and an outcome that increases it.'}
-knitr::include_graphics("causal_inference-collider_outc.png", dpi = 144)
+knitr::include_graphics("causal_inference-outc.png", dpi = 144)
 ```
 
 If we investigate the causal dependence between Chimeric Antigen Receptor T (CAR-T) therapy and infections, we find a positive statistical association (grey estimate). Were we to limit our analysis to reports that mention death as one of the outcomes we would find an even stronger association (red estimate). This is because CAR-T therapies reduce mortality, and infections themselves may lead to mortality, thus restricting to reports mentioning death opens a path and likely introduces a positive distortion into the data. Again, were we to restrict to reports not mentioning death, we would produce a noisy inference (blue estimate).
@@ -393,7 +392,7 @@ render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gr
 #### Collider bias by prophylaxis
 
 ```{r collider_proph, fig.height=4, fig.width=12, echo = FALSE, fig.cap='Collider bias introduced by selecting on the prophilaxis (PPI) given together with a drug (ASA) to prevent the outcome (gastric ulcer).'}
-knitr::include_graphics("causal_inference-collider_proph.png", dpi = 144)
+knitr::include_graphics("causal_inference-proph.png", dpi = 144)
 ```
 If we investigate the relation between aspirin and gastric ulcer, we find a positive statistical association (grey estimate). However, we should be wary of conditioning on whether the report also mentions proton pump inhibitors (PPIs). PPIs can indeed be used to treat gastric ulcer or – if administered together with aspirin - to prevent it. In this case, if we condition on the use of proton pump inhibitors (red estimate), the expected association between aspirin and gastric ulcer is going to be biased towards the null: among patients taking PPIs, those not taking aspirin are more likely to not be in prophylaxis and therefore to already have gastric ulcer. Therefore, by conditioning on a collider we risk losing a potential signal. Once more, we observe that restricting to reports that do not mention PPIs (blue estimate) has minimal impact on the IC estimate. This is likely because the reporting rate of PPIs when they are not the suspected drug is presumed to be very low.
 
@@ -420,13 +419,13 @@ disproportionality_df[,.(nested,label_IC)]
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","red"))
 ```
 ```{r Forest_proph_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (ASA , gastric ulcer) | PPIs'}
- knitr::include_graphics("causal_inference-Forest_outc-1.png", dpi = 144)
+ knitr::include_graphics("causal_inference-Forest_proph-1.png", dpi = 144)
 ```
 
 #### Collider bias by double mechanism
 
 ```{r collider_double, fig.height=4, fig.width=12, echo = FALSE, fig.cap='Collider bias introduced by selecting on an effect (weight loss) of the medication (GLP1-agonists) which is also caused by the outcome (anxiety).'}
-knitr::include_graphics("causal_inference-collider_double.png", dpi = 144)
+knitr::include_graphics("causal_inference-double.png", dpi = 144)
 ```
 Another scenario arises when we are aware that a drug induces an event, and the suspected reaction itself may contribute to that event (i.e., a potential indirect effect of the drug). For example, if we are interested in the causal dependence between Glucagone Like Peptide GLP 1-agonists and anxiety, their statistical association is negative (grey estimate). However, we have to be wary that both GLP 1-agonists and anxiety cause weight-loss. Therefore, if we were to condition on weight-loss we would open a path and introduce a negative collider bias (red estimate). In this case, the direction of the statistical association does not change, but we can anticipate and then confirm the shift towards a more negative estimate. Once again, restricting to reports that do not mention weight loss does not change the outcome (blue estimate).
 
@@ -540,7 +539,7 @@ Up to this point, our discussion has assumed direct access to drug exposure and 
 #### Notoriety bias
 
 ```{r reporting_notoriety, fig.height=4, fig.width=12, echo = FALSE, fig.cap='Reporting bias can be introduced by notoriety of a specific drug (aripiprazole) - event (hypersexuality) combination.'}
-knitr::include_graphics("causal_inference-collider_double.png", dpi = 144)
+knitr::include_graphics("causal_inference-notoriety.png", dpi = 144)
 ```
 
 Let us take the example of the notoriety bias, which may affect both healthcare professionals and patients. When regulatory warnings are issued, healthcare professionals may become more aware of and inclined to report specific drug-event combinations. Similarly, a few highly publicized cases can attract media attention, leading the public to higher awareness and inclination to report. This inflates the DE\* reporting rate compared to reporting just the drug or the event alone, and therefore inflates the IC (grey estimate). To address this bias, we can, for instance, restrict the DPA to the reports collected before the regulatory warning, if enough cases are available, thereby conditioning on the source of the bias (gold estimate). As a proof of concept, we can restrict to the cases following the regulatory warning and obtain an inflated statistical dependence (blue estimate).
@@ -609,7 +608,7 @@ Masking/cloaking is an additional example of reporting bias and can take the for
 ##### Drug competition bias
 
 ```{r reporting_drug_comp, fig.height=4, fig.width=12, echo = FALSE, fig.cap='Reporting bias can be introduced by competition because of the consistent reporting of the same event (gambling disorder) with another drug (dopamine agonists).'}
-knitr::include_graphics("causal_inference-lawyer.png", dpi = 144)
+knitr::include_graphics("causal_inference-drug_comp.png", dpi = 144)
 ```
 Investigating the causal dependence between cariprazine and gambling, we find a statistical dependence (grey estimate) which nonetheless increases even more when we remove reports of gambling with the competing dopamine agonists (gold estimate).
 
