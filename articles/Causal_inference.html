@@ -44,7 +44,7 @@
     <li><a class="dropdown-item" href="../articles/Start_Subproject.html">Start Subproject</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Disproportionality Analysis</h6></li>
-    <li><a class="dropdown-item" href="../articles/Disproportionality_Analysis.html">Disproportionality_Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/Disproportionality_Analysis.html">Disproportionality Analysis</a></li>
     <li><a class="dropdown-item" href="../articles/Causal_inference.html">Causal inference</a></li>
   </ul>
 </li>
@@ -402,8 +402,10 @@ clinical reasoning is crucial to correctly assess the association.</p>
 <span><span class="co">#&gt; [1] "IC = 7.7 (7.46-7.88) [189]"</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("causal_inference-Forest_EDA_AL\n S-1.png", : Cannot find the file(s): "causal_inference-Forest_EDA_AL</span></span>
-<span><span class="co">#&gt;  S-1.png"</span></span></code></pre>
+<div class="float">
+<img src="causal_inference-Forest_EDA_ALS-1.png" alt="IC (Edaravone , AmyotrophicLateralSclerosis)"><div class="figcaption">IC (Edaravone ,
+AmyotrophicLateralSclerosis)</div>
+</div>
 </div>
 </div>
 </div>
@@ -458,7 +460,7 @@ likely not representative of patients with the same susceptibility to
 the event but not being administered the drug. Whether a causal
 inference informed pharmacovigilance could make better use of negative
 associations is outside the scope of this tutorial.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_schizophrenia</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Indi</span><span class="op">[</span><span class="va">indi_pt</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">MedDRA</span><span class="op">[</span><span class="va">hlgt</span><span class="op">==</span><span class="st">"schizophrenia and other psychotic disorders"</span><span class="op">]</span><span class="op">$</span><span class="va">pt</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">restrictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,<span class="st">"schizophrenia"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pids_schizophrenia</span><span class="op">)</span><span class="op">)</span><span class="co">#,"not_schizophrenia"=list(setdiff(unique(Demo$primaryid),pids_schizophrenia)))</span></span>
@@ -481,7 +483,7 @@ associations is outside the scope of this tutorial.</p>
 <span><span class="co">#&gt;            &lt;ord&gt;                  &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:          main   2.19 (1.69-2.54) [45]</span></span>
 <span><span class="co">#&gt; 2: schizophrenia -0.91 (-1.64--0.4) [21]</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>,<span class="st">"gray45"</span>,<span class="st">"goldenrod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_halo_gamb-1.png" alt="IC (haloperidol , gambling) | schizophrenia"><div class="figcaption">IC (haloperidol , gambling) |
@@ -523,7 +525,7 @@ alcoholism is drastically under-reported in ICSRs, and the conditioning
 unlikely to be effective in closing the backdoor path - information
 would still flow through the reports from alcoholic patients, not
 reporting alcoholism.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alcoholism</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"alcoholism"</span>,<span class="st">"alcohol problem"</span>,<span class="st">"alcoholic encephalopathy"</span>,<span class="st">"alcoholic coma"</span>,</span>
 <span>                <span class="st">"alcohol use disorder"</span>,<span class="st">"alcoholic ketoacidosis"</span>,<span class="st">"ex-alcohol user"</span>,</span>
 <span>                <span class="st">"alcoholic pancreopathy"</span>,<span class="st">"ex-alcoholic"</span>,<span class="st">"alcoholic pancreatitis"</span>,</span>
@@ -558,7 +560,7 @@ reporting alcoholism.</p>
 <span><span class="co">#&gt;         &lt;ord&gt;                 &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:       main 0.59 (0.44-0.69) [526]</span></span>
 <span><span class="co">#&gt; 2: alcoholism  0.21 (-1.86-1.41) [3]</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>,<span class="st">"gray45"</span>,<span class="st">"goldenrod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_comorb-1.png" alt="IC (quetiapine , osteoporosis) | alcoholism"><div class="figcaption">IC (quetiapine , osteoporosis) |
@@ -588,7 +590,7 @@ Restricting to cases of pregnancy, a positive association between
 nivolumab and preterm birth emerges (gold estimate). In this instance,
 not conditioning on the confounder would have led to missing a potential
 safety signal during signal detection.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_pregnancy_indi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Indi</span><span class="op">[</span><span class="va">indi_pt</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">MedDRA</span><span class="op">[</span><span class="va">soc</span><span class="op">==</span><span class="st">"pregnancy, puerperium and perinatal conditions"</span><span class="op">]</span><span class="op">$</span><span class="va">pt</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span></span>
 <span><span class="va">pids_pregnancy_reac</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Reac</span><span class="op">[</span><span class="va">pt</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">MedDRA</span><span class="op">[</span><span class="va">soc</span><span class="op">==</span><span class="st">"pregnancy, puerperium and perinatal conditions"</span><span class="op">]</span><span class="op">$</span><span class="va">pt</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span></span>
 <span><span class="va">pids_pregnancy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">union</a></span><span class="op">(</span><span class="va">pids_pregnancy_indi</span>,<span class="va">pids_pregnancy_reac</span><span class="op">)</span></span>
@@ -610,7 +612,7 @@ safety signal during signal detection.</p>
 <span><span class="co">#&gt;        &lt;ord&gt;                   &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:      main -2.11 (-2.62--1.74) [42]</span></span>
 <span><span class="co">#&gt; 2: pregnancy    1.04 (0.53-1.41) [42]</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gray45"</span>,<span class="st">"goldenrod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_prescr-1.png" alt="IC (nivolumab , premature delivery) | pregnancy"><div class="figcaption">IC (nivolumab , premature delivery) |
@@ -638,7 +640,7 @@ the co-prescription with valsartan. In both confounding by comorbidity
 and by co-prescription we see again that restricting to reports not
 recording the value (blue estimate) does not seem to affect the IC
 estimate, likely due to residual unaccounted confounding.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_valsartan</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Drug</span><span class="op">[</span><span class="va">substance</span><span class="op">==</span><span class="st">"valsartan"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">restrictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,<span class="st">"valsartan"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pids_valsartan</span><span class="op">)</span><span class="op">)</span><span class="co">#,</span></span>
@@ -661,7 +663,7 @@ estimate, likely due to residual unaccounted confounding.</p>
 <span><span class="co">#&gt;        &lt;ord&gt;                  &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:      main 0.91 (0.83-0.97) [1678]</span></span>
 <span><span class="co">#&gt; 2: valsartan 0.01 (-0.23-0.18) [193]</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>,<span class="st">"gray45"</span>,<span class="st">"goldenrod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_copresc-1.png" alt="IC (hydrochlorothiazide , dysphonia) | valsartan"><div class="figcaption">IC (hydrochlorothiazide , dysphonia) |
@@ -680,7 +682,7 @@ and thus at risk of prostate cancer. This demographic confounding can
 decrease the statistical dependence (grey estimate), although it remains
 statistically not significant when focusing solely on males (gold
 estimate).</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_male</span> <span class="op">&lt;-</span> <span class="va">Demo</span><span class="op">[</span><span class="va">sex</span><span class="op">==</span><span class="st">"M"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span></span>
 <span></span>
 <span><span class="va">restrictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,<span class="st">"male"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pids_male</span><span class="op">)</span><span class="op">)</span></span>
@@ -701,7 +703,7 @@ estimate).</p>
 <span><span class="co">#&gt;     &lt;ord&gt;                  &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:   main  -6.69 (-9.28--5.3) [2]</span></span>
 <span><span class="co">#&gt; 2:   male -3.77 (-6.36--2.38) [2]</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gray45"</span>,<span class="st">"goldenrod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_demo-1.png" alt="IC (trastuzumab , prostate cancer) | male"><div class="figcaption">IC (trastuzumab , prostate cancer) | male</div>
@@ -714,7 +716,7 @@ estimate).</p>
 <div class="section level4">
 <h4 id="collider-bias-by-outcome">Collider bias by outcome<a class="anchor" aria-label="anchor" href="#collider-bias-by-outcome"></a>
 </h4>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("causal_inference-collider_outc.png", : Cannot find the file(s): "causal_inference-collider_outc.png"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("causal_inference-outc.png", dpi = 144): Cannot find the file(s): "causal_inference-outc.png"</span></span></code></pre>
 <p>If we investigate the causal dependence between Chimeric Antigen
 Receptor T (CAR-T) therapy and infections, we find a positive
 statistical association (grey estimate). Were we to limit our analysis
@@ -725,7 +727,7 @@ mortality, thus restricting to reports mentioning death opens a path and
 likely introduces a positive distortion into the data. Again, were we to
 restrict to reports not mentioning death, we would produce a noisy
 inference (blue estimate).</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_death</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Outc</span><span class="op">[</span><span class="va">outc_cod</span><span class="op">==</span><span class="st">"DE"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span></span>
 <span><span class="va">restrictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,<span class="st">"Dead"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pids_death</span><span class="op">)</span><span class="op">)</span><span class="co">#,"non_Dead"=list(setdiff(unique(Demo$primaryid),pids_death)))</span></span>
 <span><span class="va">disproportionality_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -745,7 +747,7 @@ inference (blue estimate).</p>
 <span><span class="co">#&gt;     &lt;ord&gt;                  &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:   main 0.52 (0.41-0.59) [1047]</span></span>
 <span><span class="co">#&gt; 2:   Dead     1 (0.84-1.12) [416]</span></span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>,<span class="st">"gray45"</span>,<span class="st">"red"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_outc-1.png" alt="IC (CAR-T , infection) | death"><div class="figcaption">IC (CAR-T , infection) | death</div>
@@ -754,8 +756,8 @@ inference (blue estimate).</p>
 <div class="section level4">
 <h4 id="collider-bias-by-prophylaxis">Collider bias by prophylaxis<a class="anchor" aria-label="anchor" href="#collider-bias-by-prophylaxis"></a>
 </h4>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("causal_inference-collider_proph.png", : Cannot find the file(s): "causal_inference-collider_proph.png"</span></span></code></pre>
-<p>If we investigate the relation between aspirin and gastric ulcer, we
+<p><img src="causal_inference-proph.png" alt="Collider bias introduced by selecting on the prophilaxis (PPI) given together with a drug (ASA) to prevent the outcome (gastric ulcer).">
+If we investigate the relation between aspirin and gastric ulcer, we
 find a positive statistical association (grey estimate). However, we
 should be wary of conditioning on whether the report also mentions
 proton pump inhibitors (PPIs). PPIs can indeed be used to treat gastric
@@ -770,7 +772,7 @@ restricting to reports that do not mention PPIs (blue estimate) has
 minimal impact on the IC estimate. This is likely because the reporting
 rate of PPIs when they are not the suspected drug is presumed to be very
 low.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_PPI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Drug</span><span class="op">[</span><span class="va">substance</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">ATC</span><span class="op">[</span><span class="va">Class4</span><span class="op">==</span><span class="st">"Proton pump inhibitors"</span><span class="op">]</span><span class="op">$</span><span class="va">substance</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">restrictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,<span class="st">"PPI"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pids_PPI</span><span class="op">)</span><span class="op">)</span><span class="co">#,"non_PPI"=list(setdiff(unique(Demo$primaryid),pids_PPI)))</span></span>
@@ -791,19 +793,19 @@ low.</p>
 <span><span class="co">#&gt;     &lt;ord&gt;                  &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:   main 1.91 (1.85-1.95) [2852]</span></span>
 <span><span class="co">#&gt; 2:    PPI  0.15 (0.03-0.24) [746]</span></span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>,<span class="st">"gray45"</span>,<span class="st">"red"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="causal_inference-Forest_outc-1.png" alt="IC (ASA , gastric ulcer) | PPIs"><div class="figcaption">IC (ASA , gastric ulcer) | PPIs</div>
+<img src="causal_inference-Forest_proph-1.png" alt="IC (ASA , gastric ulcer) | PPIs"><div class="figcaption">IC (ASA , gastric ulcer) | PPIs</div>
 </div>
 </div>
 <div class="section level4">
 <h4 id="collider-bias-by-double-mechanism">Collider bias by double mechanism<a class="anchor" aria-label="anchor" href="#collider-bias-by-double-mechanism"></a>
 </h4>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("causal_inference-collider_double.png", : Cannot find the file(s): "causal_inference-collider_double.png"</span></span></code></pre>
-<p>Another scenario arises when we are aware that a drug induces an
-event, and the suspected reaction itself may contribute to that event
-(i.e., a potential indirect effect of the drug). For example, if we are
+<p><img src="causal_inference-double.png" alt="Collider bias introduced by selecting on an effect (weight loss) of the medication (GLP1-agonists) which is also caused by the outcome (anxiety).">
+Another scenario arises when we are aware that a drug induces an event,
+and the suspected reaction itself may contribute to that event (i.e., a
+potential indirect effect of the drug). For example, if we are
 interested in the causal dependence between Glucagone Like Peptide GLP
 1-agonists and anxiety, their statistical association is negative (grey
 estimate). However, we have to be wary that both GLP 1-agonists and
@@ -814,7 +816,7 @@ association does not change, but we can anticipate and then confirm the
 shift towards a more negative estimate. Once again, restricting to
 reports that do not mention weight loss does not change the outcome
 (blue estimate).</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_weight</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">union</a></span><span class="op">(</span><span class="va">Reac</span><span class="op">[</span><span class="va">pt</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"weight decreased"</span><span class="op">)</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span>,</span>
 <span>                     <span class="va">Indi</span><span class="op">[</span><span class="va">indi_pt</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"weight decreased"</span><span class="op">)</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span></span>
 <span><span class="va">restrictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,<span class="st">"weight loss"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pids_weight</span><span class="op">)</span><span class="op">)</span><span class="co">#</span></span>
@@ -838,7 +840,7 @@ reports that do not mention weight loss does not change the outcome
 <span><span class="co">#&gt;          &lt;ord&gt;                     &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:        main -0.26 (-0.31--0.23) [5114]</span></span>
 <span><span class="co">#&gt; 2: weight loss  -1.31 (-1.42--1.23) [906]</span></span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>,<span class="st">"gray45"</span>,<span class="st">"red"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_double-1.png" alt="IC (GLP-1 agonists , anxiety) | weight loss"><div class="figcaption">IC (GLP-1 agonists , anxiety) | weight
@@ -865,7 +867,7 @@ blood tests and higher probability of detecting and reporting
 hyperkalaemia. For this reason, the analysis on the entire population
 (grey estimate), gives a higher (but still not significant) IC than when
 we restrict to reports recording any investigation (gold estimate).</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_investigations</span> <span class="op">&lt;-</span> <span class="va">Reac</span><span class="op">[</span><span class="va">pt</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">MedDRA</span><span class="op">[</span><span class="va">soc</span><span class="op">==</span><span class="st">"investigations"</span><span class="op">]</span><span class="op">$</span><span class="va">pt</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span></span>
 <span><span class="va">restrictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,<span class="st">"investigation"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pids_investigations</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">disproportionality_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -884,7 +886,7 @@ we restrict to reports recording any investigation (gold estimate).</p>
 <span><span class="co">#&gt;            &lt;ord&gt;                   &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:          main  -1.7 (-2.13--1.39) [60]</span></span>
 <span><span class="co">#&gt; 2: investigation -2.25 (-2.94--1.77) [24]</span></span></code></pre></div>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gray45"</span>,<span class="st">"goldenrod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_ascert-1.png" alt="IC (clozapine , hyperkalemia) | blood tests"><div class="figcaption">IC (clozapine , hyperkalemia) | blood
@@ -910,7 +912,7 @@ agent (blue estimates), but this may lead to a small sample and reduced
 accuracy because of missing information. To address this challenge, we
 might restrict to reports satisfying any of the two inclusion criteria
 (gold estimate).</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_onco_indi</span> <span class="op">&lt;-</span> <span class="va">Indi</span><span class="op">[</span><span class="va">indi_pt</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">MedDRA</span><span class="op">[</span><span class="va">soc</span><span class="op">==</span><span class="st">"neoplasms benign, malignant and unspecified (incl cysts and polyps)"</span><span class="op">]</span><span class="op">$</span><span class="va">pt</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span></span>
 <span><span class="va">pids_onco_drug</span> <span class="op">&lt;-</span> <span class="va">Drug</span><span class="op">[</span><span class="va">substance</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ATC</span><span class="op">[</span><span class="va">Class2</span><span class="op">==</span><span class="st">"Antineoplastic"</span><span class="op">]</span><span class="op">$</span><span class="va">substance</span>,</span>
 <span>                                      <span class="st">"navitoclax"</span><span class="op">)</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span></span>
@@ -936,7 +938,7 @@ might restrict to reports satisfying any of the two inclusion criteria
 <span><span class="co">#&gt; 2:     onco_drug    0.19 (0.02-0.32) [376]</span></span>
 <span><span class="co">#&gt; 3:     onco_indi -0.52 (-0.71--0.38) [300]</span></span>
 <span><span class="co">#&gt; 4: onco_drugindi -0.24 (-0.41--0.11) [376]</span></span></code></pre></div>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>,<span class="st">"blue"</span>,<span class="st">"gray45"</span>,<span class="st">"goldenrod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_miss-1.png" alt="IC (cisplatin , thrombosis) | cancer"><div class="figcaption">IC (cisplatin , thrombosis) | cancer</div>
@@ -1007,7 +1009,11 @@ of the distortion can be predicted.</p>
 <div class="section level4">
 <h4 id="notoriety-bias">Notoriety bias<a class="anchor" aria-label="anchor" href="#notoriety-bias"></a>
 </h4>
-<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("causal_inference-collider_double.png", : Cannot find the file(s): "causal_inference-collider_double.png"</span></span></code></pre>
+<div class="float">
+<img src="causal_inference-notoriety.png" alt="Reporting bias can be introduced by notoriety of a specific drug (aripiprazole) - event (hypersexuality) combination."><div class="figcaption">Reporting bias can be introduced by notoriety of
+a specific drug (aripiprazole) - event (hypersexuality)
+combination.</div>
+</div>
 <p>Let us take the example of the notoriety bias, which may affect both
 healthcare professionals and patients. When regulatory warnings are
 issued, healthcare professionals may become more aware of and inclined
@@ -1021,7 +1027,7 @@ regulatory warning, if enough cases are available, thereby conditioning
 on the source of the bias (gold estimate). As a proof of concept, we can
 restrict to the cases following the regulatory warning and obtain an
 inflated statistical dependence (blue estimate).</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_warning</span> <span class="op">&lt;-</span> <span class="va">Demo</span><span class="op">[</span><span class="va">init_fda_dt</span><span class="op">&lt;</span><span class="fl">20160503</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span></span>
 <span><span class="va">restrictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,<span class="st">"pre-warning"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pids_warning</span><span class="op">)</span>,</span>
 <span>                     <span class="st">"post-warning"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span>,<span class="va">pids_warning</span><span class="op">)</span><span class="op">)</span></span>
@@ -1042,7 +1048,7 @@ inflated statistical dependence (blue estimate).</p>
 <span><span class="co">#&gt; 1:         main 5.19 (5.03-5.32) [383]</span></span>
 <span><span class="co">#&gt; 2:  pre-warning  2.68 (1.84-3.27) [16]</span></span>
 <span><span class="co">#&gt; 3: post-warning 5.45 (5.28-5.58) [367]</span></span></code></pre></div>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>,<span class="st">"gray45"</span>,<span class="st">"goldenrod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_notor-1.png" alt="IC (aripiprazole , hypersexuality) | FDA warning"><div class="figcaption">IC (aripiprazole , hypersexuality) | FDA
@@ -1082,7 +1088,7 @@ specific subpopulations to account for expected biases. When conducting
 such sensitivity analyses, both the raw disproportionality result and
 the result of the sensitivity analysis should be reported and discussed
 together.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_lawyers</span> <span class="op">&lt;-</span> <span class="va">Demo</span><span class="op">[</span><span class="va">occp_cod</span><span class="op">==</span><span class="st">"LW"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span></span>
 <span><span class="va">restrictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,<span class="st">"lawyers"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pids_lawyers</span><span class="op">)</span>,</span>
 <span>                     <span class="st">"non-lawyers"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span>,<span class="va">pids_lawyers</span><span class="op">)</span><span class="op">)</span></span>
@@ -1103,7 +1109,7 @@ together.</p>
 <span><span class="co">#&gt; 1:        main 6.27 (6.19-6.32) [2014]</span></span>
 <span><span class="co">#&gt; 2:     lawyers 7.68 (7.58-7.75) [1118]</span></span>
 <span><span class="co">#&gt; 3: non-lawyers  5.56 (5.45-5.64) [896]</span></span></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>,<span class="st">"gray45"</span>,<span class="st">"goldenrod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_lawyer-1.png" alt="IC (aripiprazole , gambling) | reporter"><div class="figcaption">IC (aripiprazole , gambling) | reporter</div>
@@ -1126,12 +1132,12 @@ importance.</p>
 <div class="section level5">
 <h5 id="drug-competition-bias">Drug competition bias<a class="anchor" aria-label="anchor" href="#drug-competition-bias"></a>
 </h5>
-<p><img src="causal_inference-lawyer.png" alt="Reporting bias can be introduced by competition because of the consistent reporting of the same event (gambling disorder) with another drug (dopamine agonists).">
+<p><img src="causal_inference-drug_comp.png" alt="Reporting bias can be introduced by competition because of the consistent reporting of the same event (gambling disorder) with another drug (dopamine agonists).">
 Investigating the causal dependence between cariprazine and gambling, we
 find a statistical dependence (grey estimate) which nonetheless
 increases even more when we remove reports of gambling with the
 competing dopamine agonists (gold estimate).</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_unmasked</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span>,<span class="va">Drug</span><span class="op">[</span><span class="va">substance</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">ATC</span><span class="op">[</span><span class="va">Class4</span><span class="op">==</span><span class="st">"Dopamine agonists"</span><span class="op">]</span><span class="op">$</span><span class="va">substance</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span></span>
 <span><span class="va">pids_unmasked</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span>,<span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">Drug</span><span class="op">[</span><span class="va">substance</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">ATC</span><span class="op">[</span><span class="va">Class4</span><span class="op">==</span><span class="st">"Dopamine agonists"</span><span class="op">]</span><span class="op">$</span><span class="va">substance</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span>,<span class="va">Reac</span><span class="op">[</span><span class="va">pt</span><span class="op">==</span><span class="st">"gambling disorder"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">restrictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,<span class="st">"unmasked"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pids_unmasked</span><span class="op">)</span><span class="op">)</span></span>
@@ -1151,7 +1157,7 @@ competing dopamine agonists (gold estimate).</p>
 <span><span class="co">#&gt;      &lt;char&gt;                &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     main 3.23 (2.43-3.78) [18]</span></span>
 <span><span class="co">#&gt; 2: unmasked    3.79 (3-4.34) [18]</span></span></code></pre></div>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gray45"</span>,<span class="st">"goldenrod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_drug_comp-1.png" alt="IC (cariprazine , gambling) | dopamine agonists"><div class="figcaption">IC (cariprazine , gambling) | dopamine
@@ -1165,7 +1171,7 @@ agonists</div>
 and skin discoloration we observe a statistical dependence (grey
 estimate) which even increase when we remove reports of warfarin with
 the competing event bleeding (gold estimate).</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pids_unmasked</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span>,<span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">Reac</span><span class="op">[</span><span class="va">pt</span><span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span><span class="va">MedDRA</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"bleeding|haemorrhage"</span>,<span class="va">pt</span><span class="op">)</span><span class="op">]</span><span class="op">$</span><span class="va">pt</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span>,<span class="va">Drug</span><span class="op">[</span><span class="va">substance</span><span class="op">==</span><span class="st">"warfarin"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">restrictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"main"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Demo</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,<span class="st">"unmasked"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">pids_unmasked</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">disproportionality_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -1184,7 +1190,7 @@ the competing event bleeding (gold estimate).</p>
 <span><span class="co">#&gt;      &lt;char&gt;                 &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     main 0.99 (0.88-1.06) [967]</span></span>
 <span><span class="co">#&gt; 2: unmasked    1 (0.88-1.08) [835]</span></span></code></pre></div>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>,nested <span class="op">=</span> <span class="st">"nested"</span>,nested_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gray45"</span>,<span class="st">"goldenrod"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="causal_inference-Forest_event_comp-1.png" alt="IC (warfarin , skin discolouration) | bleeding"><div class="figcaption">IC (warfarin , skin discolouration) |
