@@ -1,0 +1,28 @@
+---
+title: "Descriptive_Analysis"
+---
+
+
+
+
+``` r
+library(DiAna)
+```
+
+``` r
+## Definitions --------------------------------------------------------------------------
+drug_selected <- "aripiprazole"
+reac_selected <- "impulse-control disorder"
+
+## Disproportionality analysis ----------------------------------------------------------
+disproportionality_df <- disproportionality_analysis(
+  drug_selected = drug_selected,
+  reac_selected = reac_selected
+)
+```
+
+``` r
+render_forest(disproportionality_df, index = "IC")
+```
+
+![IC (Paracetamol , BreastCancer)](render_forest1_resized-1.png)

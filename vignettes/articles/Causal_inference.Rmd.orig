@@ -103,7 +103,7 @@ disproportionality_df <- disproportionality_analysis(
 paste0("IC = ",disproportionality_df$label_IC)
 ```
 
-```{r Forest_Par_BrK, fig.show="hide", fig.height=4, fig.width=12}
+```{r Forest_Par_BrK, fig.show="hide", fig.height=2, fig.width=6}
 render_forest(disproportionality_df)
 ```
 
@@ -130,7 +130,7 @@ disproportionality_df <- disproportionality_analysis(
 )
 paste0("IC = ",disproportionality_df$label_IC)
 ```
-```{r Forest_Pram_ICD, fig.show="hide", fig.height=4, fig.width=12}
+```{r Forest_Pram_ICD, fig.show="hide", fig.height=2, fig.width=6}
 render_forest(disproportionality_df)
 ```
 ```{r Forest_Pram_ICD_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (Pramipexole , ImpulseControlDisorder)'}
@@ -152,7 +152,7 @@ disproportionality_df <- disproportionality_analysis(
 )
 paste0("IC = ",disproportionality_df$label_IC)
 ```
-```{r Forest_EDA_ALS, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_EDA_ALS, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df)
 ```
 ```{r Forest_EDA_ALS_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (Edaravone , AmyotrophicLateralSclerosis)'}
@@ -195,7 +195,7 @@ disproportionality_df <- disproportionality_df[,nested:=factor(nested, levels=c(
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_halo_gamb, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_halo_gamb, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","goldenrod"))
 ```
 ```{r Forest_halo_gamb_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (haloperidol , gambling) | schizophrenia'}
@@ -244,7 +244,7 @@ disproportionality_df <- disproportionality_df[,nested:=factor(nested, levels=c(
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_comorb, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_comorb, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","goldenrod"))
 ```
 ```{r Forest_comorb_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (quetiapine , osteoporosis) | alcoholism'}
@@ -278,7 +278,7 @@ disproportionality_df <- disproportionality_df[,nested:=factor(nested, levels=c(
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_prescr, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_prescr, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("gray45","goldenrod"))
 ```
 ```{r Forest_prescr_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (nivolumab , premature delivery) | pregnancy'}
@@ -315,7 +315,7 @@ disproportionality_df <- disproportionality_df[,nested:=factor(nested, levels=c(
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_copresc, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_copresc, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","goldenrod"))
 ```
 ```{r Forest_copresc_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (hydrochlorothiazide , dysphonia) | valsartan'}
@@ -348,7 +348,7 @@ disproportionality_df <- disproportionality_df[,nested:=factor(nested, levels=c(
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_demo, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_demo, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("gray45","goldenrod"))
 ```
 ```{r Forest_demo_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (trastuzumab , prostate cancer) | male'}
@@ -382,7 +382,7 @@ for (n in 1:length(restrictions)){
 disproportionality_df <- disproportionality_df[,nested:=factor(nested, levels=c("non_Dead","main","Dead"),ordered=TRUE)]
 disproportionality_df[,.(nested,label_IC)]
 ```
-```{r Forest_outc, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_outc, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","red"))
 ```
 ```{r Forest_outc_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (CAR-T , infection) | death'}
@@ -416,7 +416,7 @@ disproportionality_df <- disproportionality_df[,nested:=factor(nested, levels=c(
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_proph, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_proph, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","red"))
 ```
 ```{r Forest_proph_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (ASA , gastric ulcer) | PPIs'}
@@ -452,7 +452,7 @@ disproportionality_df <- disproportionality_df[,nested:=factor(nested, levels=c(
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_double, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_double, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","red"))
 ```
 ```{r Forest_double_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (GLP-1 agonists , anxiety) | weight loss'}
@@ -486,7 +486,7 @@ disproportionality_df <- disproportionality_df[,nested:=factor(nested, levels=c(
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_ascert, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_ascert, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("gray45","goldenrod"))
 ```
 ```{r Forest_ascert_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (clozapine , hyperkalemia) | blood tests'}
@@ -525,7 +525,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 
-```{r Forest_miss, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_miss, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","blue","gray45","goldenrod"))
 ```
 ```{r Forest_miss_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (cisplatin , thrombosis) | cancer'}
@@ -563,7 +563,7 @@ disproportionality_df <- disproportionality_df[,nested:=factor(nested, levels=c(
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_notor, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_notor, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","goldenrod"))
 ```
 ```{r Forest_notor_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (aripiprazole , hypersexuality) | FDA warning'}
@@ -595,7 +595,7 @@ for (n in 1:length(restrictions)){
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_lawyer, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_lawyer, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","goldenrod"))
 ```
 ```{r Forest_lawyer_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (aripiprazole , gambling) | reporter'}
@@ -631,7 +631,7 @@ for (n in 1:length(restrictions)){
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_drug_comp, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_drug_comp, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("gray45","goldenrod"))
 ```
 ```{r Forest_drug_comp_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (cariprazine , gambling) | dopamine agonists'}
@@ -659,7 +659,7 @@ for (n in 1:length(restrictions)){
 disproportionality_df[,.(nested,label_IC)]
 ```
 
-```{r Forest_event_comp, fig.height=4, fig.width=12, fig.show="hide"}
+```{r Forest_event_comp, fig.height=2, fig.width=6, fig.show="hide"}
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("gray45","goldenrod"))
 ```
 ```{r Forest_event_comp_figure, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (warfarin , skin discolouration) | bleeding'}
