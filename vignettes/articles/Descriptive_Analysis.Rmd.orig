@@ -1,0 +1,32 @@
+---
+title: "Descriptive_Analysis"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(DiAna)
+```
+```{r fix_misspelling_query}
+## Definitions --------------------------------------------------------------------------
+drug_selected <- "aripiprazole"
+reac_selected <- "impulse-control disorder"
+
+## Disproportionality analysis ----------------------------------------------------------
+disproportionality_df <- disproportionality_analysis(
+  drug_selected = drug_selected,
+  reac_selected = reac_selected
+)
+```
+```{r render_forest1_resized, fig.show="hide",fig.height=2, fig.width=6}
+render_forest(disproportionality_df, index = "IC")
+```
+
+```{r Forest_Par_BrK_figure_resized, fig.height=4, fig.width=12, echo = FALSE, fig.cap='IC (Paracetamol , BreastCancer)'}
+ knitr::include_graphics("render_forest1_resized-1.png", dpi = 300)
+```
