@@ -113,8 +113,7 @@ at the specified level and in descending order.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="co"># select only reports recording paracetamol from the sample dataset,</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># select only reports recording paracetamol from the sample dataset,</span></span></span>
 <span class="r-in"><span><span class="co"># and provide the most reported events (at the hlt level),</span></span></span>
 <span class="r-in"><span><span class="co"># drugs (at the ATC class3 level), and indications (at the PT level).</span></span></span>
 <span class="r-in"><span><span class="va">pids_cases</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">sample_Drug</span><span class="op">[</span><span class="va">substance</span> <span class="op">==</span> <span class="st">"paracetamol"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span></span></span>
@@ -122,16 +121,45 @@ at the specified level and in descending order.</p>
 <span class="r-in"><span>  temp_reac <span class="op">=</span> <span class="va">sample_Reac</span>,</span></span>
 <span class="r-in"><span>  temp_drug <span class="op">=</span> <span class="va">sample_Drug</span>, temp_indi <span class="op">=</span> <span class="va">sample_Indi</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in import_MedDRA():</span> The MedDRA is not available with DiAna since the subscription must be done with MEDDRA MSSO.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>          Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>          to make it ready for download.</span>
 <span class="r-in"><span><span class="fu">reporting_rates</span><span class="op">(</span><span class="va">pids</span>, <span class="st">"indication"</span>, <span class="st">"pt"</span>,</span></span>
 <span class="r-in"><span>  temp_reac <span class="op">=</span> <span class="va">sample_Reac</span>,</span></span>
 <span class="r-in"><span>  temp_drug <span class="op">=</span> <span class="va">sample_Drug</span>, temp_indi <span class="op">=</span> <span class="va">sample_Indi</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                   pt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                &lt;ord&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:            rheumatoid arthritis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:             plasma cell myeloma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:              multiple sclerosis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                       psoriasis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                    hypertension</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 378:                   endometriosis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 379:                 fabry's disease</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 380:        ovarian cancer recurrent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 381: pancreatic carcinoma metastatic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 382:          antibiotic prophylaxis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                         label_pt  N_pt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                           &lt;char&gt; &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:           rheumatoid arthritis (7.58%) [55]    55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:            plasma cell myeloma (3.99%) [29]    29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:             multiple sclerosis (3.44%) [25]    25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                      psoriasis (3.44%) [25]    25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                   hypertension (3.03%) [22]    22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 378:                   endometriosis (0.14%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 379:                 fabry's disease (0.14%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 380:        ovarian cancer recurrent (0.14%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 381: pancreatic carcinoma metastatic (0.14%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 382:          antibiotic prophylaxis (0.14%) [1]     1</span>
 <span class="r-in"><span><span class="fu">reporting_rates</span><span class="op">(</span><span class="va">pids</span>,</span></span>
 <span class="r-in"><span>  entity <span class="op">=</span> <span class="st">"substance"</span>, level <span class="op">=</span> <span class="st">"Class3"</span>,</span></span>
 <span class="r-in"><span>  temp_reac <span class="op">=</span> <span class="va">sample_Reac</span>, temp_drug <span class="op">=</span> <span class="va">sample_Drug</span>,</span></span>
 <span class="r-in"><span>  temp_indi <span class="op">=</span> <span class="va">sample_Indi</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in import_ATC():</span> The ATC cannot be found in external sources. It should have been downloaded with setup_diana. Please investigate the problem.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
