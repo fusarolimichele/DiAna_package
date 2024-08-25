@@ -18,5 +18,5 @@ Specifics
 This function provides specifics on dictionaries used for cleaning the specified database version
 }
 \examples{
-FAERS_quarter_specifics()
+FAERS_quarter_specifics("24Q1")
 }
