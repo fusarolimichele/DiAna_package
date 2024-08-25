@@ -129,6 +129,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt",
 #'
 #' @examples
 #' \dontrun{
+#' # The following examples require the MedDRA and the ATC to be imported
 #' hierarchycal_rates(pids, "reaction", "reactions_rates.xlsx")
 #' hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
 #' hierarchycal_rates(pids, "substance", "substances_rates.xlsx")

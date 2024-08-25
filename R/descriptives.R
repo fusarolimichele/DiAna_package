@@ -27,19 +27,24 @@
 #' @importFrom tidyr separate
 #' @importFrom readr read_delim
 #' @examples
-#' \dontrun{
-#' import("DEMO", quarter = "23Q1")
-#' pids_cases <- sample(Demo$primaryid, 100)
-#' RG <- sample(Demo[!primaryid %in% pids_cases]$primaryid, 100)
+#' pids_cases <- unique(sample_Demo[sex == "M"]$primaryid)
+#' RG <- unique(sample_Demo[sex == "M"]$primaryid)
 #'
 #' # Generate descriptive statistics for cases
-#' descriptive(pids_cases = pids_cases)
-#' descriptive(pids_cases = pids_cases, drug = "paracetamol")
+#' descriptive(
+#'   pids_cases = pids_cases, save_in_excel = FALSE,
+#'   temp_demo = sample_Demo, temp_drug = sample_Drug,
+#'   temp_reac = sample_Reac, temp_indi = sample_Indi,
+#'   temp_outc = sample_Outc, temp_ther = sample_Ther
+#' )
 #'
 #' # Generate descriptive statistics for cases and non-cases
-#' descriptive(pids_cases = pids_cases, RG = RG)
-#' descriptive(pids_cases = pids_cases, RG = RG, drug = "paracetamol")
-#' }
+#' descriptive(
+#'   pids_cases = pids_cases, RG = RG, save_in_excel = FALSE,
+#'   temp_demo = sample_Demo, temp_drug = sample_Drug,
+#'   temp_reac = sample_Reac, temp_indi = sample_Indi,
+#'   temp_outc = sample_Outc, temp_ther = sample_Ther
+#' )
 #' @export
 
 descriptive <- function(pids_cases, RG = NULL, drug = NULL,
