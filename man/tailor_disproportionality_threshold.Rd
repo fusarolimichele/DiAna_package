@@ -38,3 +38,15 @@ The function categorizes signals into four levels:
 \item "SDR": when the signal remain after multiple comparison.
 }
 }
+\examples{
+disproportionality_df <- disproportionality_analysis(
+  drug_selected = "paracetamol",
+  reac_selected = "headache",
+  temp_drug = sample_Drug,
+  temp_reac = sample_Reac
+)
+
+disproportionality_df <- tailor_disproportionality_threshold(disproportionality_df,
+  minimum_cases = 5
+)
+}

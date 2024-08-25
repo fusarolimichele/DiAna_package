@@ -47,13 +47,11 @@ The function constructs a contingency table for the drug-event combination and c
 }
 }
 \examples{
-\dontrun{
 # Example usage
 disproportionality_comparison(
   drug_count = 100, event_count = 50,
   drug_event_count = 10, tot = 10000
 )
-}
 
 }
 \seealso{

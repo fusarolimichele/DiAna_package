@@ -62,6 +62,17 @@ A ggplot object representing the forest plot visualization.
 \description{
 This function generates a forest plot visualization of disproportions.
 }
+\examples{
+disproportionality_df <- disproportionality_analysis(
+  drug_selected = "paracetamol",
+  reac_selected = "headache",
+  temp_drug = sample_Drug,
+  temp_reac = sample_Reac
+)
+
+render_forest(disproportionality_df)
+
+}
 \seealso{
 Other visualization functions: 
 \code{\link{plot_disproportionality_trend}()}
