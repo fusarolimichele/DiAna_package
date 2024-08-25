@@ -199,7 +199,16 @@ disproportionality_analysis <- function(
 #'
 #'
 #' @export
-
+#' @examples
+#' disproportionality_df <- disproportionality_analysis(
+#'   drug_selected = "paracetamol",
+#'   reac_selected = "headache",
+#'   temp_drug = sample_Drug,
+#'   temp_reac = sample_Reac
+#' )
+#'
+#' render_forest(disproportionality_df)
+#'
 render_forest <- function(disproportionality_df,
                           index = "IC",
                           row = "substance",
@@ -336,13 +345,11 @@ render_forest <- function(disproportionality_df,
 #' @importFrom stats qgamma qnorm
 #' @export
 #' @examples
-#' \dontrun{
 #' # Example usage
 #' disproportionality_comparison(
 #'   drug_count = 100, event_count = 50,
 #'   drug_event_count = 10, tot = 10000
 #' )
-#' }
 #'
 disproportionality_comparison <- function(drug_count = length(pids_drug), event_count = length(pids_event),
                                           drug_event_count = length(intersect(pids_drug, pids_event)), tot = nrow(Demo), print_results = TRUE) {
@@ -447,13 +454,12 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' The function processes the provided data to calculate the reporting odds ratio (ROR) and the information component (IC) for the specified drug-event combination over time.
 #'
 #' @examples
-#' \dontrun{
-#' # Example usage
 #' drug_selected <- "aspirin"
 #' reac_selected <- "headache"
-#' result <- disproportionality_trend(drug_selected, reac_selected)
-#' }
-#'
+#' result <- disproportionality_trend(drug_selected, reac_selected,
+#'   temp_drug = sample_Drug, temp_reac = sample_Reac, temp_demo = sample_Demo,
+#'   temp_demo_supp = sample_Demo_supp[, .(primaryid, quarter)]
+#' )
 #' @export
 disproportionality_trend <- function(
     drug_selected, reac_selected,
@@ -562,12 +568,17 @@ disproportionality_trend <- function(
 #' The function creates a plot to visualize the disproportionality trend of a drug-event combination over time. Depending on the selected metric, it plots either the information component (IC) or the reporting odds ratio (ROR) with corresponding confidence intervals.
 #'
 #' @examples
-#' \dontrun{
-#' # Example usage
-#' trend_results <- disproportionality_trend(drug_selected = "aspirin", reac_selected = "headache")
-#' plot_IC <- plot_disproportionality_trend(trend_results, metric = "IC")
-#' plot_ROR <- plot_disproportionality_trend(trend_results, metric = "ROR")
-#' }
+#' drug_selected <- "aspirin"
+#' reac_selected <- "headache"
+#' result <- disproportionality_trend(drug_selected, reac_selected,
+#'   temp_drug = sample_Drug,
+#'   temp_reac = sample_Reac,
+#'   temp_demo = sample_Demo,
+#'   temp_demo_supp = sample_Demo_supp[
+#'     , .(primaryid, quarter)
+#'   ]
+#' )
+#' plot_disproportionality_trend(trend_results, metric = "IC")
 #'
 #' @export
 plot_disproportionality_trend <- function(disproportionality_trend_results, metric = "IC", time_granularity = "year") {
@@ -629,6 +640,13 @@ plot_disproportionality_trend <- function(disproportionality_trend_results, metr
 #'
 #' @return A formatted list of drugs or events suitable for disproportionality analysis
 #'
+#' @examples
+#' input <- format_input_disproportionality(c("TGA" = list(
+#'   "aripiprazole",
+#'   "brexpiprazole",
+#'   "cariprazine"
+#' )))
+#'
 format_input_disproportionality <- function(input) {
   t <- input
   if (!is.list(t)) {
@@ -677,6 +695,17 @@ format_input_disproportionality <- function(input) {
 #' - "weak SDR": when the signal disappear under multiple comparison adjustments.
 #' - "SDR": when the signal remain after multiple comparison.
 #'
+#' @examples
+#' disproportionality_df <- disproportionality_analysis(
+#'   drug_selected = "paracetamol",
+#'   reac_selected = "headache",
+#'   temp_drug = sample_Drug,
+#'   temp_reac = sample_Reac
+#' )
+#'
+#' disproportionality_df <- tailor_disproportionality_threshold(disproportionality_df,
+#'   minimum_cases = 5
+#' )
 tailor_disproportionality_threshold <- function(disproportionality_df, minimum_cases = 3,
                                                 log2_threshold = 0, frequentist_threshold = 1,
                                                 multiple_comparison = TRUE) {

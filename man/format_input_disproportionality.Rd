@@ -17,3 +17,11 @@ This function formats the input of drug and reac selected for disproportionality
 It ensures the input is in the correct list format and processes it
 to meet specific structural requirements, allowing the researcher for a greater freedom in calling the function.
 }
+\examples{
+input <- format_input_disproportionality(c("TGA" = list(
+  "aripiprazole",
+  "brexpiprazole",
+  "cariprazine"
+)))
+
+}
