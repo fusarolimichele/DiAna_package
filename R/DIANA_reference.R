@@ -34,9 +34,7 @@ DiAna_reference <- function(print = TRUE) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' # FAERS_quarter_specifics()
-#' }
+#' FAERS_quarter_specifics()
 FAERS_quarter_specifics <- function(quarter = FAERS_version, print = TRUE) {
   base::union(
     c(

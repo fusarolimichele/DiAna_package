@@ -21,6 +21,14 @@
 #' @importFrom purrr map map2
 #'
 #' @export
+#'
+#' @examples
+#' disproportionality_analysis(
+#'   drug_selected = "paracetamol",
+#'   reac_selected = "headache",
+#'   temp_drug = sample_Drug,
+#'   temp_reac = sample_Reac
+#' )
 disproportionality_analysis <- function(
     drug_selected, reac_selected,
     temp_drug = Drug, temp_reac = Reac,

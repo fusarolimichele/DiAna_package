@@ -18,7 +18,5 @@ Specifics
 This function provides specifics on dictionaries used for cleaning the specified database version
 }
 \examples{
-\dontrun{
-# FAERS_quarter_specifics()
-}
+FAERS_quarter_specifics()
 }

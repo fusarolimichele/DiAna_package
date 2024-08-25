@@ -56,6 +56,14 @@ A data.table containing disproportionality analysis results.
 \description{
 performs disproportionality analysis and returns the results.
 }
+\examples{
+disproportionality_analysis(
+  drug_selected = "paracetamol",
+  reac_selected = "headache",
+  temp_drug = sample_Drug,
+  temp_reac = sample_Reac
+)
+}
 \seealso{
 Other disproportionality functions: 
 \code{\link{disproportionality_comparison}()},
