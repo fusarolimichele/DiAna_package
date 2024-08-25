@@ -189,14 +189,14 @@ This time no error appears, and after few seconds we can see that our environmen
 render_forest(disproportionality_df, index = "IC")
 ```
 
-![Fig 1: IC (aripiprazole , ICD)](render_forest-1.png)
+![Fig 1: IC (aripiprazole , ICD)](disproportionality_analysis-render_forest1-1.png)
 
 
 ``` r
 render_forest(disproportionality_df, index = "ROR")
 ```
 
-![Fig 2: ROR (aripiprazole , ICD)](render_forest-2.png)
+![Fig 2: ROR (aripiprazole , ICD)](disproportionality_analysis-render_forest2-1.png)
 
 
 In these forest plots we see on the x axis the information component (by default) or the ROR if we specify it in the index parameter. The median is shown using the dot, whose size is proportional to the number of cases. The 95% confidence interval is shown by the line. A dashed vertical axis (on the 0 for the IC and on the 1 for the ROR) highlights the threshold of statistical significance, compared to which the lower limit of the confidence interval must be higher to identify a signal of disproportionate reporting. In this case, we identified a clear signal of disproportionate reporting using both methods.
@@ -241,7 +241,7 @@ Table: Tab 3: Disproportionality results when extending the query to impulsivity
 render_forest(disproportionality_df)
 ```
 
-![Fig 3: IC (aripiprazole , ICD_query)](render_query-1.png)
+![Fig 3: IC (aripiprazole , ICD_query)](disproportionality_analysis-render_query-1.png)
 
 You see now that the number of cases has increased from 286 to 701, and we still find a SDR.
 
@@ -643,7 +643,7 @@ Table: Tab 6: Disproportionality results when considering only suspected drugs.
 render_forest(disproportionality_df, row = "event", facet_v = "substance")
 ```
 
-![Fig 5: IC (aripiprazole , ICD_query_with_behaviors), and controls, looking only at suspected agents.](only_suspect-1.png)
+![Fig 5: IC (aripiprazole , ICD_query_with_behaviors), and controls, looking only at suspected agents.](disproportionality_analysis-only_suspect_forest-1.png)
 
 You see this way how all the associations between impulsivity and paracetamol disappear, including, interestingly, also the one with headache (but not the one with overwork).
 
@@ -655,32 +655,45 @@ Duplicates may also distort our results. The problem is that we are not sure whi
 ``` r
 ## Import data ----------------------------------------------------------------
 import("DEMO")
-#>           primaryid    sex age_in_days wt_in_kgs occr_country event_dt occp_cod          reporter_country
-#>               <num> <fctr>       <num>     <num>       <fctr>    <int>   <fctr>                    <fctr>
-#>        1:  45217461      M        9855        NA         <NA> 19861106       MD  United States of America
-#>        2:  57910401   <NA>          NA        NA         <NA>       NA     <NA>  United States of America
-#>        3:  56962401   <NA>          NA        NA         <NA> 19960123     <NA>  United States of America
-#>        4:  54662121      F       22630        NA         <NA> 19960919       CN South Africa, Republic of
-#>        5:  31231172      F       21535        68         <NA> 19970927       MD  United States of America
-#>       ---                                                                                                
-#> 17598475: 236937711      F        9490        68         <NA> 20240318       CN  United States of America
-#> 17598476: 236937721      M        6205        NA         <NA> 20240101       CN  United States of America
-#> 17598477: 236937741      F       13140       134         <NA> 20240322       CN  United States of America
-#> 17598478: 237079261      F       15695        90         <NA>       NA       CN  United States of America
-#> 17598479: 237079291      M       22265       108         <NA> 20240228       CN  United States of America
-#>           rept_cod init_fda_dt   fda_dt premarketing literature RB_duplicates RB_duplicates_only_susp
-#>             <fctr>       <int>    <int>       <lgcl>     <lgcl>        <lgcl>                  <lgcl>
-#>        1:      DIR    19861224 19861224        FALSE      FALSE         FALSE                   FALSE
-#>        2:      DIR    19920917 19920917        FALSE      FALSE         FALSE                   FALSE
-#>        3:      DIR    19960126 19960126        FALSE      FALSE         FALSE                   FALSE
-#>        4:      EXP    19961022 19961022        FALSE      FALSE         FALSE                   FALSE
-#>        5:      EXP    19971203 19971212        FALSE      FALSE         FALSE                   FALSE
-#>       ---                                                                                            
-#> 17598475:      DIR    20240331 20240331        FALSE      FALSE         FALSE                   FALSE
-#> 17598476:      DIR    20240331 20240331        FALSE      FALSE         FALSE                   FALSE
-#> 17598477:      DIR    20240331 20240331        FALSE      FALSE         FALSE                   FALSE
-#> 17598478:      DIR    20240331 20240331        FALSE      FALSE         FALSE                   FALSE
-#> 17598479:      DIR    20240331 20240331        FALSE      FALSE         FALSE                   FALSE
+#>           primaryid    sex age_in_days wt_in_kgs occr_country event_dt
+#>               <num> <fctr>       <num>     <num>       <fctr>    <int>
+#>        1:  45217461      M        9855        NA         <NA> 19861106
+#>        2:  57910401   <NA>          NA        NA         <NA>       NA
+#>        3:  56962401   <NA>          NA        NA         <NA> 19960123
+#>        4:  54662121      F       22630        NA         <NA> 19960919
+#>        5:  31231172      F       21535        68         <NA> 19970927
+#>       ---                                                             
+#> 17598475: 236937711      F        9490        68         <NA> 20240318
+#> 17598476: 236937721      M        6205        NA         <NA> 20240101
+#> 17598477: 236937741      F       13140       134         <NA> 20240322
+#> 17598478: 237079261      F       15695        90         <NA>       NA
+#> 17598479: 237079291      M       22265       108         <NA> 20240228
+#>           occp_cod          reporter_country rept_cod init_fda_dt   fda_dt
+#>             <fctr>                    <fctr>   <fctr>       <int>    <int>
+#>        1:       MD  United States of America      DIR    19861224 19861224
+#>        2:     <NA>  United States of America      DIR    19920917 19920917
+#>        3:     <NA>  United States of America      DIR    19960126 19960126
+#>        4:       CN South Africa, Republic of      EXP    19961022 19961022
+#>        5:       MD  United States of America      EXP    19971203 19971212
+#>       ---                                                                 
+#> 17598475:       CN  United States of America      DIR    20240331 20240331
+#> 17598476:       CN  United States of America      DIR    20240331 20240331
+#> 17598477:       CN  United States of America      DIR    20240331 20240331
+#> 17598478:       CN  United States of America      DIR    20240331 20240331
+#> 17598479:       CN  United States of America      DIR    20240331 20240331
+#>           premarketing literature RB_duplicates RB_duplicates_only_susp
+#>                 <lgcl>     <lgcl>        <lgcl>                  <lgcl>
+#>        1:        FALSE      FALSE         FALSE                   FALSE
+#>        2:        FALSE      FALSE         FALSE                   FALSE
+#>        3:        FALSE      FALSE         FALSE                   FALSE
+#>        4:        FALSE      FALSE         FALSE                   FALSE
+#>        5:        FALSE      FALSE         FALSE                   FALSE
+#>       ---                                                              
+#> 17598475:        FALSE      FALSE         FALSE                   FALSE
+#> 17598476:        FALSE      FALSE         FALSE                   FALSE
+#> 17598477:        FALSE      FALSE         FALSE                   FALSE
+#> 17598478:        FALSE      FALSE         FALSE                   FALSE
+#> 17598479:        FALSE      FALSE         FALSE                   FALSE
 ```
 
 In the printed dataset we see that the last two columns are RB_duplicates and RB_duplicates_only_susp: the first is more conservative, considering as duplicates all the reports that have not only the same sex, age, country, event list, event date, and suspected drug list, but also the concomitants. The second algorithm considers instead only suspected drugs in the drug list.
@@ -752,7 +765,7 @@ Table: Tab 7: Disproportionality results when considering deduplication algorith
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
-![Fig 6: IC (aripiprazole , ICD_query_with_behaviors), and controls, looking only at suspected agents and deduplicated data.](deduplication_algorithms-1.png)
+![Fig 6: IC (aripiprazole , ICD_query_with_behaviors), and controls, looking only at suspected agents and deduplicated data.](disproportionality_analysis-deduplication_forest-1.png)
 
 
 The forest plot shows in fact almost no difference when using the raw analysis compared to the two different rule-based deduplication algorithms available in DiAna for the investigated drug-event combination, resulting in a significant difference only for paracetamol (a signal for impulsivity appears when deduplicating, independently of the algorithm). For most drug-event combinations, we expect to find small differences when deduplicating, but it is always recommended to provide both raw and deduplicated analyses.
@@ -854,7 +867,7 @@ Table: Tab 8: Disproportionality results when considering only reports recording
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
-![Fig 7: IC (aripiprazole , ICD_query_with_behaviors | bipolar disorder), and controls, looking only at suspected agents.](retrieve_bipolar-1.png)
+![Fig 7: IC (aripiprazole , ICD_query_with_behaviors | bipolar disorder), and controls, looking only at suspected agents.](disproportionality_analysis-retrieve_bipolar_forest-1.png)
 
 In this forest plot we see that in general, restricting to the confounder bipolar disorder, we see a smaller IC. Only paracetamol does not show a difference, as bipolar disorder configures more as a competitive exposure rather than a confounder (i.e., to be a confounder, a factor has to cause both the drug and the event, but bipolar disorder does not increase the chance of being prescribed paracetamol). We also see that the confidence interval is smaller when we manage to retrieve bigger background reference groups, and therefore using the information included in both Indi, Drug, and Reac is suggested.
 
@@ -880,19 +893,32 @@ import_MedDRA()
 #> 25410:   surg                surgical and medical procedures
 #> 25411:   surg                surgical and medical procedures
 #> 25412:  blood           blood and lymphatic system disorders
-#>                                                         hlgt                                           hlt
-#>                                                       <char>                                        <char>
-#>     1:        metabolic and nutritional disorders congenital            inborn errors of steroid synthesis
-#>     2:          endocrine investigations (incl sex hormones)                 reproductive hormone analyses
-#>     3:          endocrine investigations (incl sex hormones)                 reproductive hormone analyses
-#>     4:          endocrine investigations (incl sex hormones)                 reproductive hormone analyses
-#>     5:          endocrine investigations (incl sex hormones)                 reproductive hormone analyses
-#>    ---                                                                                                    
-#> 25408:     procedural related injuries and complications nec    non-site specific procedural complications
-#> 25409: pregnancy, labour, delivery and postpartum conditions         normal pregnancy, labour and delivery
-#> 25410:   obstetric and gynaecological therapeutic procedures                 cervix therapeutic procedures
-#> 25411:             male genital tract therapeutic procedures male genital tract therapeutic procedures nec
-#> 25412:                            white blood cell disorders                        eosinophilic disorders
+#>                                                         hlgt
+#>                                                       <char>
+#>     1:        metabolic and nutritional disorders congenital
+#>     2:          endocrine investigations (incl sex hormones)
+#>     3:          endocrine investigations (incl sex hormones)
+#>     4:          endocrine investigations (incl sex hormones)
+#>     5:          endocrine investigations (incl sex hormones)
+#>    ---                                                      
+#> 25408:     procedural related injuries and complications nec
+#> 25409: pregnancy, labour, delivery and postpartum conditions
+#> 25410:   obstetric and gynaecological therapeutic procedures
+#> 25411:             male genital tract therapeutic procedures
+#> 25412:                            white blood cell disorders
+#>                                                  hlt
+#>                                               <char>
+#>     1:            inborn errors of steroid synthesis
+#>     2:                 reproductive hormone analyses
+#>     3:                 reproductive hormone analyses
+#>     4:                 reproductive hormone analyses
+#>     5:                 reproductive hormone analyses
+#>    ---                                              
+#> 25408:    non-site specific procedural complications
+#> 25409:         normal pregnancy, labour and delivery
+#> 25410:                 cervix therapeutic procedures
+#> 25411: male genital tract therapeutic procedures nec
+#> 25412:                        eosinophilic disorders
 #>                                      pt
 #>                                  <char>
 #>     1:   11-beta-hydroxylase deficiency
@@ -966,7 +992,10 @@ Table: Tab 9: Disproportionality results when restricting to bipolar disorder us
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
-![Fig 8: IC (aripiprazole , ICD_query_with_behaviors | bipolar disorder_HLGT), and controls, looking only at suspected agents.](retrieve_with_MedDRA-1.png)
+
+```
+#> Error in knitr::include_graphics("disproportionality_analysis-retrieve_with_MedDRA_forest-1.png", : Cannot find the file(s): "disproportionality_analysis-retrieve_with_MedDRA_forest-1.png"
+```
 
 #### Addressing notoriety bias
 
@@ -1048,7 +1077,10 @@ Table: Tab 10: Disproportionality results when addressing notoriety bias.
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
-![Fig 9: IC (aripiprazole , ICD_query_with_behaviors | bipolar disorder_HLGT), and controls, looking only at suspected agents before warning.](notoriety_bias-1.png)
+
+```
+#> Error in knitr::include_graphics("disproportionality_analysis-notoriety_bias_forest-1.png", : Cannot find the file(s): "disproportionality_analysis-notoriety_bias_forest-1.png"
+```
 
 Here you see in green the results of the analysis restricting to the pre-warning. You can see that this analysis does not affect bipolar disorder nor headache, but it affects all the impulse control disorders apart gambling. Plausibly the FDA warning was based mainly on suspect aripiprazole-induced gambling disorder.
 
@@ -1064,32 +1096,45 @@ For this inquiry, DiAna proposes a specific function: disproportionality_trend, 
 ``` r
 ## Import data --------------------------------------------------------------------------
 import("DEMO_SUPP")
-#>           primaryid rpsr_cod   caseid caseversion i_f_cod auth_num  e_sub lit_ref  rept_dt to_mfr
-#>               <num>   <fctr>    <int>      <fctr>  <fctr>   <char> <fctr>  <char>    <int> <char>
-#>        1:  45217461       HP  4521746           1       I     <NA>      N    <NA>       NA   <NA>
-#>        2:  57910401     <NA>  5791040           1       I     <NA>      N    <NA>       NA   <NA>
-#>        3:  56962401     <NA>  5696240           1       I     <NA>      N    <NA>       NA   <NA>
-#>        4:  54662121      FGN  5466212           1       I     <NA>      N    <NA> 19961015   <NA>
-#>        5:  54662121       HP  5466212           1       I     <NA>      N    <NA> 19961015   <NA>
-#>       ---                                                                                        
-#> 18283734: 236937711      CSM 23693771           1       I   697702      N    <NA> 20240331      N
-#> 18283735: 236937721      CSM 23693772           1       I   697662      N    <NA> 20240331      N
-#> 18283736: 236937741      CSM 23693774           1       I   697678      N    <NA> 20240331   <NA>
-#> 18283737: 237079261      CSM 23707926           1       I   697660      N    <NA> 20240331      Y
-#> 18283738: 237079291      CSM 23707929           1       I   697693      N    <NA> 20240331      Y
-#>                   mfr_sndr     mfr_num   mfr_dt quarter
-#>                     <char>      <char>    <int>  <fctr>
-#>        1:             <NA>        <NA>       NA    20Q3
-#>        2:             <NA>        <NA>       NA    20Q3
-#>        3:             <NA>        <NA>       NA    20Q3
-#>        4: ELI LILLY AND CO ZA96101984A 19961010    20Q3
-#>        5: ELI LILLY AND CO ZA96101984A 19961010    20Q3
-#>       ---                                              
-#> 18283734:          FDA-CTU        <NA> 20240331    24Q1
-#> 18283735:          FDA-CTU        <NA> 20240331    24Q1
-#> 18283736:          FDA-CTU        <NA> 20240331    24Q1
-#> 18283737:          FDA-CTU        <NA> 20240331    24Q1
-#> 18283738:          FDA-CTU        <NA> 20240331    24Q1
+#>           primaryid rpsr_cod   caseid caseversion i_f_cod auth_num  e_sub
+#>               <num>   <fctr>    <int>      <fctr>  <fctr>   <char> <fctr>
+#>        1:  45217461       HP  4521746           1       I     <NA>      N
+#>        2:  57910401     <NA>  5791040           1       I     <NA>      N
+#>        3:  56962401     <NA>  5696240           1       I     <NA>      N
+#>        4:  54662121      FGN  5466212           1       I     <NA>      N
+#>        5:  54662121       HP  5466212           1       I     <NA>      N
+#>       ---                                                                
+#> 18283734: 236937711      CSM 23693771           1       I   697702      N
+#> 18283735: 236937721      CSM 23693772           1       I   697662      N
+#> 18283736: 236937741      CSM 23693774           1       I   697678      N
+#> 18283737: 237079261      CSM 23707926           1       I   697660      N
+#> 18283738: 237079291      CSM 23707929           1       I   697693      N
+#>           lit_ref  rept_dt to_mfr         mfr_sndr     mfr_num   mfr_dt
+#>            <char>    <int> <char>           <char>      <char>    <int>
+#>        1:    <NA>       NA   <NA>             <NA>        <NA>       NA
+#>        2:    <NA>       NA   <NA>             <NA>        <NA>       NA
+#>        3:    <NA>       NA   <NA>             <NA>        <NA>       NA
+#>        4:    <NA> 19961015   <NA> ELI LILLY AND CO ZA96101984A 19961010
+#>        5:    <NA> 19961015   <NA> ELI LILLY AND CO ZA96101984A 19961010
+#>       ---                                                              
+#> 18283734:    <NA> 20240331      N          FDA-CTU        <NA> 20240331
+#> 18283735:    <NA> 20240331      N          FDA-CTU        <NA> 20240331
+#> 18283736:    <NA> 20240331   <NA>          FDA-CTU        <NA> 20240331
+#> 18283737:    <NA> 20240331      Y          FDA-CTU        <NA> 20240331
+#> 18283738:    <NA> 20240331      Y          FDA-CTU        <NA> 20240331
+#>           quarter
+#>            <fctr>
+#>        1:    20Q3
+#>        2:    20Q3
+#>        3:    20Q3
+#>        4:    20Q3
+#>        5:    20Q3
+#>       ---        
+#> 18283734:    24Q1
+#> 18283735:    24Q1
+#> 18283736:    24Q1
+#> 18283737:    24Q1
+#> 18283738:    24Q1
 ## Disproportionality analysis ----------------------------------------------------------
 disproportionality_trend_df <- disproportionality_trend(
   drug_selected = "brexpiprazole",
@@ -1103,7 +1148,7 @@ disproportionality_trend_df <- disproportionality_trend(
 plot_disproportionality_trend(disproportionality_trend_results = disproportionality_trend_df)
 ```
 
-![Fig 10: IC trend (aripiprazole , ICD_query_with_behaviors), looking only at suspected agents before warning.](disproportionality_trend-1.png)
+![Fig 10: IC trend (aripiprazole , ICD_query_with_behaviors), looking only at suspected agents before warning.](disproportionality_analysis-plot_trend-1.png)
 
 
 #### Comparing several disproportionality metrics

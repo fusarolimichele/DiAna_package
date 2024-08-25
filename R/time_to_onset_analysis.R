@@ -40,6 +40,7 @@
 #' @references
 #' Van Holle, L., Zeinoun, Z., Bauchau, V. and Verstraeten, T. (2012), Using time-to-onset for detecting safety signals in spontaneous reports of adverse events following immunization: a proof of concept study. Pharmacoepidemiol Drug Saf, 21: 603-610. https://doi.org/10.1002/pds.3226
 #'
+#' Scholl JHG, van Hunsel FPAM, Hak E, van Puijenbroek EP. Time to onset in statistical signal detection revisited: A follow-up study in long-term onset adverse drug reactions. Pharmacoepidemiology and Drug Safety. 2019;28:1283–9.
 #'
 #' @export
 time_to_onset_analysis <- function(
