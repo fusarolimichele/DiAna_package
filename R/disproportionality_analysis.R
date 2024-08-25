@@ -179,6 +179,7 @@ disproportionality_analysis <- function(
 #' @param nested Variable indicating if nested plotting is required (default is FALSE). If nested plotting is required the name of the variable should replace FALSE.
 #' @param text_size_axis Size of text in the axes (default is 15).
 #' @param text_size_legend Size of text in the legend (default is 15).
+#' @param text_size_strip Size of text in the axes (default is 15).
 #' @param transformation Transformation for the x-axis (default is "identity").
 #' @param nested_colors Vector of colors for plot elements.
 #' @param custom_threshold Threshold value for analysis (default is 1).
@@ -201,6 +202,7 @@ render_forest <- function(disproportionality_df,
                           custom_threshold = NA,
                           text_size_legend = 15,
                           text_size_axis = 15,
+                          text_size_strip = 15,
                           dodge = .3,
                           nested_colors = NA,
                           facet_v = NA,
@@ -286,6 +288,7 @@ render_forest <- function(disproportionality_df,
         angle = 0,
         size = 7
       ),
+      strip.text = element_text(size = text_size_strip),
       legend.position = legend_position,
       legend.justification = "left",
       legend.title = element_blank(),

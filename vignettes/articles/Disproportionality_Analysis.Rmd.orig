@@ -145,20 +145,20 @@ knitr::kable(disproportionality_df, caption = "Tab 2: Disproportionality datafra
 
 This time no error appears, and after few seconds we can see that our environment (window pane usually on the upper right) has been populated with a dataset called disproportionalitY_df. Calling the name of the object prints it in the console, and we can see that the object is now a dataset with one row (per drug-event combination) and 19 columns, including the name of the substance and the event, the instances of the contingency table, the median and 95% confidence interval of the Reporting Odds Ratio ROR and of the Information component, these same results summarised as a string in the following format "median (lower limit-upper limit) [N cases]". A Bonferroni column that specifies whether the ROR was still significant after correcting for multiple comparison, and two columns that summarise whether a signal exists (SDR) or not (no SDR) or exists but disappear at the correction for multiple comparison (weak SDR). In this case we have found a signal of disproportionate reporting using both the analyses. These columns exist to simplify input to further functions, such as, for example, the visualization using render_forest.
 
-```{r render_forest1, fig.show="hide"}
+```{r disproportionality_analysis_render_forest1, fig.show="hide", fig.height=2, fig.width=6}
 render_forest(disproportionality_df, index = "IC")
 ```
 
 ```{r render_forest_figure1, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 1: IC (aripiprazole , ICD)'}
-knitr::include_graphics("render_forest-1.png", dpi = 144)
+knitr::include_graphics("disproportionality_analysis-render_forest1-1.png", dpi = 144)
 ```
 
-```{r render_forest2,fig.show="hide"}
+```{r disproportionality_analysis_render_forest2,fig.show="hide", fig.height=2, fig.width=6}
 render_forest(disproportionality_df, index = "ROR")
 ```
 
 ```{r render_forest_figure2, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 2: ROR (aripiprazole , ICD)'}
-knitr::include_graphics("render_forest-2.png", dpi = 144)
+knitr::include_graphics("disproportionality_analysis-render_forest2-1.png", dpi = 144)
 ```
 
 
@@ -192,12 +192,12 @@ disproportionality_df
 knitr::kable(disproportionality_df, caption = "Tab 3: Disproportionality results when extending the query to impulsivity.")
 ```
 
-```{r render_query, fig.show="hide"}
+```{r disproportionality_analysis_render_query, fig.show="hide", fig.height=2, fig.width=6}
 render_forest(disproportionality_df)
 ```
 
 ```{r render_query_figure, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 3: IC (aripiprazole , ICD_query)'}
-knitr::include_graphics("render_query-1.png", dpi = 144)
+knitr::include_graphics("disproportionality_analysis-render_query-1.png", dpi = 144)
 ```
 
 You see now that the number of cases has increased from 286 to 701, and we still find a SDR.
@@ -279,7 +279,7 @@ disproportionality_df
 ## Definitions --------------------------------------------------------------------------
 knitr::kable(disproportionality_df, caption = "Tab 4: Disproportionality results when considering also specific behaviors.")
 ```
-```{r render_multiple_definitions_forest, fig.show="hide"}
+```{r disproportionality_analysis_render_multiple_definitions_forest, fig.show="hide", fig.height=3, fig.width=9}
 render_forest(disproportionality_df, row = "event")
 ```
 
@@ -377,7 +377,7 @@ knitr::kable(disproportionality_df, caption = "Tab 5: Disproportionality results
 ```
 
 
-```{r including_controls_forest, fig.show="hide"}
+```{r disproportionality_analysis_including_controls_forest, fig.show="hide", fig.height=3, fig.width=9}
 render_forest(disproportionality_df, row = "event", facet_v = "substance")
 ```
 
@@ -411,12 +411,12 @@ disproportionality_df
 knitr::kable(disproportionality_df, caption = "Tab 6: Disproportionality results when considering only suspected drugs.")
 ```
 
-```{r only_suspect_forest, fig.show="hide"}
+```{r disproportionality_analysis_only_suspect_forest, fig.show="hide", fig.height=3, fig.width=9}
 render_forest(disproportionality_df, row = "event", facet_v = "substance")
 ```
 
 ```{r only_suspect_figure, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 5: IC (aripiprazole , ICD_query_with_behaviors), and controls, looking only at suspected agents.'}
-knitr::include_graphics("only_suspect-1.png", dpi = 144)
+knitr::include_graphics("disproportionality_analysis-only_suspect_forest-1.png", dpi = 144)
 ```
 
 You see this way how all the associations between impulsivity and paracetamol disappear, including, interestingly, also the one with headache (but not the one with overwork).
@@ -476,12 +476,12 @@ disproportionality_df
 knitr::kable(disproportionality_df, caption = "Tab 7: Disproportionality results when considering deduplication algorithms.")
 ```
 
-```{r deduplication_forest, fig.show="hide"}
+```{r disproportionality_analysis_deduplication_forest, fig.show="hide", fig.height=2, fig.width=6}
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
 ```{r deduplication_figure, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 6: IC (aripiprazole , ICD_query_with_behaviors), and controls, looking only at suspected agents and deduplicated data.'}
-knitr::include_graphics("deduplication_algorithms-1.png", dpi = 144)
+knitr::include_graphics("disproportionality_analysis-deduplication_forest-1.png", dpi = 144)
 ```
 
 
@@ -539,12 +539,12 @@ disproportionality_df
 knitr::kable(disproportionality_df, caption = "Tab 8: Disproportionality results when considering only reports recording bipolar disorder.")
 ```
 
-```{r retrieve_bipolar_forest, fig.show="hide"}
+```{r disproportionality_analysis_retrieve_bipolar_forest, fig.show="hide", fig.height=3, fig.width=9}
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
 ```{r retrieve_bipolar_figure, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 7: IC (aripiprazole , ICD_query_with_behaviors | bipolar disorder), and controls, looking only at suspected agents.'}
-knitr::include_graphics("retrieve_bipolar-1.png", dpi = 144)
+knitr::include_graphics("disproportionality_analysis-retrieve_bipolar_forest-1.png", dpi = 144)
 ```
 
 In this forest plot we see that in general, restricting to the confounder bipolar disorder, we see a smaller IC. Only paracetamol does not show a difference, as bipolar disorder configures more as a competitive exposure rather than a confounder (i.e., to be a confounder, a factor has to cause both the drug and the event, but bipolar disorder does not increase the chance of being prescribed paracetamol). We also see that the confidence interval is smaller when we manage to retrieve bigger background reference groups, and therefore using the information included in both Indi, Drug, and Reac is suggested.
@@ -595,12 +595,12 @@ disproportionality_df
 knitr::kable(disproportionality_df, caption = "Tab 9: Disproportionality results when restricting to bipolar disorder using MedDRA.")
 ```
 
-```{r retrieve_MedDRA_forest, fig.show="hide"}
+```{r disproportionality_analysis_retrieve_MedDRA_forest, fig.show="hide", fig.height=3, fig.width=9}
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
 ```{r retrieve_MedDRA_figure, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 8: IC (aripiprazole , ICD_query_with_behaviors | bipolar disorder_HLGT), and controls, looking only at suspected agents.'}
-knitr::include_graphics("retrieve_with_MedDRA-1.png", dpi = 144)
+knitr::include_graphics("disproportionality_analysis-retrieve_with_MedDRA_forest-1.png", dpi = 144)
 ```
 
 #### Addressing notoriety bias
@@ -652,12 +652,12 @@ disproportionality_df
 knitr::kable(disproportionality_df, caption = "Tab 10: Disproportionality results when addressing notoriety bias.")
 ```
 
-```{r notoriety_forest, fig.show="hide"}
+```{r disproportionality_analysis_notoriety_forest, fig.show="hide", fig.height=3, fig.width=9}
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
 ```{r notoriety_figure, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 9: IC (aripiprazole , ICD_query_with_behaviors | bipolar disorder_HLGT), and controls, looking only at suspected agents before warning.'}
-knitr::include_graphics("notoriety_bias-1.png", dpi = 144)
+knitr::include_graphics("disproportionality_analysis-notoriety_bias_forest-1.png", dpi = 144)
 ```
 
 Here you see in green the results of the analysis restricting to the pre-warning. You can see that this analysis does not affect bipolar disorder nor headache, but it affects all the impulse control disorders apart gambling. Plausibly the FDA warning was based mainly on suspect aripiprazole-induced gambling disorder.
@@ -682,12 +682,12 @@ disproportionality_trend_df <- disproportionality_trend(
 )
 
 ```
-```{r plot_trend, fig.show="hide"}
+```{r disproportionality_analysis_plot_trend, fig.show="hide", fig.height=2, fig.width=6}
 plot_disproportionality_trend(disproportionality_trend_results = disproportionality_trend_df)
 ```
 
 ```{r plot_trend_figure, fig.height=3, fig.width=9, echo = FALSE, fig.cap='Fig 10: IC trend (aripiprazole , ICD_query_with_behaviors), looking only at suspected agents before warning.'}
-knitr::include_graphics("disproportionality_trend-1.png", dpi = 144)
+knitr::include_graphics("disproportionality_analysis-plot_trend-1.png", dpi = 144)
 ```
 
 
