@@ -117,13 +117,21 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="co"># Example usage</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example usage</span></span></span>
 <span class="r-in"><span><span class="fu">disproportionality_comparison</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  drug_count <span class="op">=</span> <span class="fl">100</span>, event_count <span class="op">=</span> <span class="fl">50</span>,</span></span>
 <span class="r-in"><span>  drug_event_count <span class="op">=</span> <span class="fl">10</span>, tot <span class="op">=</span> <span class="fl">10000</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     E   nE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D  10   90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nD 40 9860</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ROR = 27.32 (11.81-57.83)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PRR = 24.75 (12.74-48.1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RRR = 20 (10.44-38.3)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> IC = 3.39 (2.31-4.11)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> IC_gamma = 2.53 (2.36-4.15)</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
