@@ -34,7 +34,7 @@ DiAna_reference <- function(print = TRUE) {
 #' @export
 #'
 #' @examples
-#' FAERS_quarter_specifics()
+#' FAERS_quarter_specifics("24Q1")
 FAERS_quarter_specifics <- function(quarter = FAERS_version, print = TRUE) {
   base::union(
     c(
