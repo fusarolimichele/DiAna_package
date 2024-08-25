@@ -47,7 +47,6 @@ for a given set of primary IDs.
 Calculates \% as the proportion of individuals recording the event.
 }
 \examples{
-\dontrun{
 # select only reports recording paracetamol from the sample dataset,
 # and provide the most reported events (at the hlt level),
 # drugs (at the ATC class3 level), and indications (at the PT level).
@@ -65,5 +64,4 @@ reporting_rates(pids,
   temp_reac = sample_Reac, temp_drug = sample_Drug,
   temp_indi = sample_Indi
 )
-}
 }
