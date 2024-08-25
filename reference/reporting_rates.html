@@ -114,16 +114,39 @@ at the specified level and in descending order.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># select only reports recording paracetamol from the sample dataset,</span></span></span>
-<span class="r-in"><span><span class="co"># and provide the most reported events (at the hlt level),</span></span></span>
+<span class="r-in"><span><span class="co"># and provide the most reported events (at the pt level),</span></span></span>
 <span class="r-in"><span><span class="co"># drugs (at the ATC class3 level), and indications (at the PT level).</span></span></span>
 <span class="r-in"><span><span class="va">pids_cases</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">sample_Drug</span><span class="op">[</span><span class="va">substance</span> <span class="op">==</span> <span class="st">"paracetamol"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">reporting_rates</span><span class="op">(</span><span class="va">pids</span>, <span class="st">"reaction"</span>, <span class="st">"hlt"</span>,</span></span>
+<span class="r-in"><span><span class="fu">reporting_rates</span><span class="op">(</span><span class="va">pids</span>, <span class="st">"reaction"</span>, <span class="st">"pt"</span>,</span></span>
 <span class="r-in"><span>  temp_reac <span class="op">=</span> <span class="va">sample_Reac</span>,</span></span>
 <span class="r-in"><span>  temp_drug <span class="op">=</span> <span class="va">sample_Drug</span>, temp_indi <span class="op">=</span> <span class="va">sample_Indi</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in import_MedDRA():</span> The MedDRA is not available with DiAna since the subscription must be done with MEDDRA MSSO.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span>          Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span>          to make it ready for download.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  pt                                 label_pt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               &lt;ord&gt;                                   &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:              drug ineffective             drug ineffective (5.9%) [59]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:                      headache                       headache (4%) [40]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:                 off label use                off label use (3.6%) [36]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:                         death                        death (3.5%) [35]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:                          pain                         pain (3.2%) [32]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ---                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1136:     infusion related reaction     infusion related reaction (0.1%) [1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1137: peripheral sensory neuropathy peripheral sensory neuropathy (0.1%) [1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1138:         therapeutic procedure         therapeutic procedure (0.1%) [1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1139:         stress cardiomyopathy         stress cardiomyopathy (0.1%) [1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1140:  vancomycin infusion reaction  vancomycin infusion reaction (0.1%) [1]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        N_pt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1:    59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    2:    40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    3:    36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    4:    35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    5:    32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ---      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1136:     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1137:     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1138:     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1139:     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1140:     1</span>
 <span class="r-in"><span><span class="fu">reporting_rates</span><span class="op">(</span><span class="va">pids</span>, <span class="st">"indication"</span>, <span class="st">"pt"</span>,</span></span>
 <span class="r-in"><span>  temp_reac <span class="op">=</span> <span class="va">sample_Reac</span>,</span></span>
 <span class="r-in"><span>  temp_drug <span class="op">=</span> <span class="va">sample_Drug</span>, temp_indi <span class="op">=</span> <span class="va">sample_Indi</span></span></span>
