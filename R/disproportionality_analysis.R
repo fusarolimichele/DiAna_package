@@ -639,7 +639,7 @@ plot_disproportionality_trend <- function(disproportionality_trend_results, metr
 #' @param input A list or an object that can be converted to a list (specifically, drug_selected and reac_selected).
 #'
 #' @return A formatted list of drugs or events suitable for disproportionality analysis
-#'
+#' @export
 #' @examples
 #' input <- format_input_disproportionality(c("TGA" = list(
 #'   "aripiprazole",
@@ -694,7 +694,7 @@ format_input_disproportionality <- function(input) {
 #' - "no SDR": when the signal does not meet the specified threshold.
 #' - "weak SDR": when the signal disappear under multiple comparison adjustments.
 #' - "SDR": when the signal remain after multiple comparison.
-#'
+#' @export
 #' @examples
 #' disproportionality_df <- disproportionality_analysis(
 #'   drug_selected = "paracetamol",
