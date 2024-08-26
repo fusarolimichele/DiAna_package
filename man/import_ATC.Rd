@@ -19,7 +19,7 @@ This function reads the ATC (Anatomical Therapeutic Chemical) classification
 from an external source and assigns it to a global environment variable.
 }
 \examples{
-if (file.exist("external_source/ATC_DiAna.csv")) {
+if (file.exists("external_source/ATC_DiAna.csv")) {
   import_ATC()
 }
 }

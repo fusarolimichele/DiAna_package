@@ -22,7 +22,7 @@ If the file exists, it will load the data, select specific columns (def, soc, hl
 }
 \examples{
 # This example requires a specific file that can only be available with a MeDRA subscription.
-if (file.exist("external_source/meddra_primary.csv")) {
+if (file.exists("external_source/meddra_primary.csv")) {
   import_MedDRA()
 }
 

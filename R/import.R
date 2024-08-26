@@ -31,7 +31,7 @@
 #' @examples
 #' # This example requires that setup_DiAna has been run to download data
 #' FAERS_version <- "24Q1"
-#' if (file.exist("data/24Q1/DRUG.rds")) {
+#' if (file.exists("data/24Q1/DRUG.rds")) {
 #'   import("DRUG")
 #' }
 #'
@@ -73,7 +73,7 @@ import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environm
 #'
 #' @examples
 #' # This example requires a specific file that can only be available with a MeDRA subscription.
-#' if (file.exist("external_source/meddra_primary.csv")) {
+#' if (file.exists("external_source/meddra_primary.csv")) {
 #'   import_MedDRA()
 #' }
 #'
@@ -109,7 +109,7 @@ import_MedDRA <- function(env = .GlobalEnv) {
 #' @importFrom readr read_delim
 #'
 #' @examples
-#' if (file.exist("external_source/ATC_DiAna.csv")) {
+#' if (file.exists("external_source/ATC_DiAna.csv")) {
 #'   import_ATC()
 #' }
 #' @export
