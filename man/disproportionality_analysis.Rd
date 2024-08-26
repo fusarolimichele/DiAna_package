@@ -59,7 +59,7 @@ performs disproportionality analysis and returns the results.
 \examples{
 disproportionality_analysis(
   drug_selected = "paracetamol",
-  reac_selected = "headache",
+  reac_selected = "overdose",
   temp_drug = sample_Drug,
   temp_reac = sample_Reac
 )
