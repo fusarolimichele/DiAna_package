@@ -48,7 +48,7 @@ Imports the specified FAERS relational database.
 \examples{
 # This example requires that setup_DiAna has been run to download data
 FAERS_version <- "24Q1"
-if (file.exist("data/24Q1/DRUG.rds")) {
+if (file.exists("data/24Q1/DRUG.rds")) {
   import("DRUG")
 }
 
