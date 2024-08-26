@@ -12,8 +12,9 @@
 #' @examples
 #' \dontrun{
 #' # This example is using internet connection to download snippets to initialize scripts.
+#' # It automatically includes snippets among the ones available to the user.
+#' # It should not be run at the check.
 #' snippets_install_github()
-#' snippets_install_github(repo = "anotheruser/snippets_repo")
 #' }
 #' @export
 snippets_install_github <- function(repo = "fusarolimichele/DiAna_snippets") {

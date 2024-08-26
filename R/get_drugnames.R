@@ -16,13 +16,12 @@
 #' @examples
 #' \dontrun{
 #' # This example needs that setup_DiAna has been run before, to download DiAna dictionary
-#' FAERS_version <- "24Q1"
-#' result <- get_drugnames("aripiprazole")
-#' print(result)
-#' result <- get_drugnames("atogepant")
-#' print(result)
+#' if (file.exist("external_source/DiAna_dictionary.csv")) {
+#'   FAERS_version <- "24Q1"
+#'   result <- get_drugnames("aripiprazole")
+#'   print(result)
 #' }
-#'
+#' }
 #' @export
 get_drugnames <- function(drug, temp_d = Drug, temp_d_name = Drug_name) {
   t <- temp_d[substance == drug]
@@ -48,10 +47,10 @@ get_drugnames <- function(drug, temp_d = Drug, temp_d_name = Drug_name) {
 #' @importFrom readxl read_xlsx
 #' @importFrom dplyr distinct
 #' @examples
-#' \dontrun{
 #' # This example needs that DiAna dictionary is downloaded (using setup_DiAna),
 #' # and that an excel file with intended changes is available
-#' Drug <- Fix_DiAna_dictionary_locally("changes.xlsx")
+#' if (file.exist("changes.xlsx") & file.exist("external_source/DiAna_dictionary.csv")) {
+#'   Drug <- Fix_DiAna_dictionary_locally("changes.xlsx")
 #' }
 #' @export
 Fix_DiAna_dictionary_locally <- function(changes_xlsx_name) {

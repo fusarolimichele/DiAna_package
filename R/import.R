@@ -29,10 +29,10 @@
 #' @importFrom stringr str_to_title
 #' @importFrom here here
 #' @examples
-#' \dontrun{
 #' # This example requires that setup_DiAna has been run to download data
 #' FAERS_version <- "24Q1"
-#' import("DRUG")
+#' if (file.exist("data/24Q1/DRUG.rds")) {
+#'   import("DRUG")
 #' }
 #'
 #' @export
@@ -72,9 +72,9 @@ import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environm
 #' You can find more information and instructions for obtaining MedDRA data at https://github.com/fusarolimichele/DiAna.
 #'
 #' @examples
-#' \dontrun{
 #' # This example requires a specific file that can only be available with a MeDRA subscription.
-#' import_MedDRA()
+#' if (file.exist("external_source/meddra_primary.csv")) {
+#'   import_MedDRA()
 #' }
 #'
 #' @export
@@ -109,11 +109,9 @@ import_MedDRA <- function(env = .GlobalEnv) {
 #' @importFrom readr read_delim
 #'
 #' @examples
-#' \dontrun{
-#' # This example requires that setup_DiAna has been run to download data
-#' import_ATC()
+#' if (file.exist("external_source/ATC_DiAna.csv")) {
+#'   import_ATC()
 #' }
-#'
 #' @export
 import_ATC <- function(primary = T, env = .GlobalEnv) {
   path <- paste0(here::here(), "/external_sources/ATC_DiAna.csv")

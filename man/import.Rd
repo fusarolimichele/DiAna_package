@@ -46,10 +46,10 @@ A data.table containing the imported data.
 Imports the specified FAERS relational database.
 }
 \examples{
-\dontrun{
 # This example requires that setup_DiAna has been run to download data
 FAERS_version <- "24Q1"
-import("DRUG")
+if (file.exist("data/24Q1/DRUG.rds")) {
+  import("DRUG")
 }
 
 }
