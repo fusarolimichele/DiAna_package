@@ -15,9 +15,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Specify the FAERS_version variable before calling the function
-#' FAERS_version <- "2023Q2"
-#' # Retrieve drug names for the substance "example_drug"
+#' # This example needs that setup_DiAna has been run before, to download DiAna dictionary
+#' FAERS_version <- "24Q1"
 #' result <- get_drugnames("aripiprazole")
 #' print(result)
 #' result <- get_drugnames("atogepant")
@@ -50,6 +49,8 @@ get_drugnames <- function(drug, temp_d = Drug, temp_d_name = Drug_name) {
 #' @importFrom dplyr distinct
 #' @examples
 #' \dontrun{
+#' # This example needs that DiAna dictionary is downloaded (using setup_DiAna),
+#' # and that an excel file with intended changes is available
 #' Drug <- Fix_DiAna_dictionary_locally("changes.xlsx")
 #' }
 #' @export

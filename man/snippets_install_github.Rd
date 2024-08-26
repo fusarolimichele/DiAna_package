@@ -17,6 +17,7 @@ This function installs RStudio code snippets from a specified GitHub repository.
 }
 \examples{
 \dontrun{
+# This example is using internet connection to download snippets to initialize scripts.
 snippets_install_github()
 snippets_install_github(repo = "anotheruser/snippets_repo")
 }

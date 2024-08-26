@@ -25,11 +25,13 @@
 #' @importFrom grDevices dev.off tiff
 #'
 #' @examples
-#' \dontrun{
-#' # Example usage:
 #' # Perform network analysis for reactions with specified pids
-#' network_analysis(pids = c(1, 2, 3), entity = "reaction")
-#' }
+#' net_plot <- network_analysis(
+#'   pids = sample_Demo$primaryid,
+#'   entity = "reaction", temp_reac = sample_Reac,
+#'   save_plot = FALSE
+#' )
+#' plot(net_plot)
 #'
 #' @references
 #' Fusaroli M, Raschi E, Gatti M, De Ponti F, Poluzzi E. Development of a Network-Based Signal Detection Tool: The COVID-19 Adversome in the FDA Adverse Event Reporting System. Front Pharmacol. 2021 Dec 8;12:740707. doi: 10.3389/fphar.2021.740707. PMID: 34955821; PMCID: PMC8694570.

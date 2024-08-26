@@ -47,3 +47,21 @@ A ggplot object representing the forest plot visualization.
 \description{
 This function generates a forest plot visualization of time to onset analysis
 }
+\examples{
+df <- time_to_onset_analysis(
+  drug_selected = "skin care",
+  reac_selected = list("skin affection" = list(
+    "dry skin",
+    "skin burning sensation",
+    "skin irritation",
+    "erythema",
+    "rash macular",
+    "acne",
+    "skin haemorrhage"
+  )),
+  temp_drug = sample_Drug, temp_reac = sample_Reac,
+  temp_ther = sample_Ther
+)
+render_tto(df)
+
+}

@@ -27,6 +27,8 @@ The function performs the following steps:
 }
 \examples{
 \dontrun{
+# This example needs that DiAna dictionary is downloaded (using setup_DiAna),
+# and that an excel file with intended changes is available
 Drug <- Fix_DiAna_dictionary_locally("changes.xlsx")
 }
 }

@@ -54,11 +54,13 @@ NULL (invisibly). Saves a network visualization as a TIFF file.
 This function performs network analysis on the provided data and generates a visualization of the network. It uses IsingFit to model the network structure, clusters nodes using Louvain method, and visualizes the resulting network graph.
 }
 \examples{
-\dontrun{
-# Example usage:
 # Perform network analysis for reactions with specified pids
-network_analysis(pids = c(1, 2, 3), entity = "reaction")
-}
+net_plot <- network_analysis(
+  pids = sample_Demo$primaryid,
+  entity = "reaction", temp_reac = sample_Reac,
+  save_plot = FALSE
+)
+plot(net_plot)
 
 }
 \references{

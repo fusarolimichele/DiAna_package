@@ -22,7 +22,7 @@ If the file exists, it will load the data, select specific columns (def, soc, hl
 }
 \examples{
 \dontrun{
-# Import MedDRA data
+# This example requires a specific file that can only be available with a MeDRA subscription.
 import_MedDRA()
 }
 

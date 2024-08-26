@@ -30,11 +30,9 @@
 #' @importFrom here here
 #' @examples
 #' \dontrun{
-#' # Import full DRUG dataset up to 23Q1
-#' import("DRUG", "23Q1")
-#'
-#' # Import reac data for specific primary IDs in quarters up to 23Q1
-#' import("REAC", "23Q1", pids = c("pid1", "pid2"))
+#' # This example requires that setup_DiAna has been run to download data
+#' FAERS_version <- "24Q1"
+#' import("DRUG")
 #' }
 #'
 #' @export
@@ -75,7 +73,7 @@ import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environm
 #'
 #' @examples
 #' \dontrun{
-#' # Import MedDRA data
+#' # This example requires a specific file that can only be available with a MeDRA subscription.
 #' import_MedDRA()
 #' }
 #'
@@ -112,6 +110,7 @@ import_MedDRA <- function(env = .GlobalEnv) {
 #'
 #' @examples
 #' \dontrun{
+#' # This example requires that setup_DiAna has been run to download data
 #' import_ATC()
 #' }
 #'
