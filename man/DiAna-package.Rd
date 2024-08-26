@@ -22,7 +22,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Michele Fusaroli \email{michele.fusaroli@gmail.com} (\href{https://orcid.org/0000-0002-0254-2212}{ORCID})
+\strong{Maintainer}: Michele Fusaroli \email{michele.fusaroli@gmail.com} (\href{https://orcid.org/0000-0002-0254-2212}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
