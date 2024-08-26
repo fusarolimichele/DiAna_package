@@ -77,10 +77,9 @@ If the file exists, it will load the data, select specific columns (def, soc, hl
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># This example requires a specific file that can only be available with a MeDRA subscription.</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">file.exist</span><span class="op">(</span><span class="st">"external_source/meddra_primary.csv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"external_source/meddra_primary.csv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu">import_MedDRA</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in file.exist("external_source/meddra_primary.csv"):</span> could not find function "file.exist"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
