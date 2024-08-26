@@ -3,9 +3,9 @@
 #' This function conducts a time-to-onset analysis for associations between drugs and events based on user-specified parameters.
 #' @param drug_selected A list of drugs for analysis. Can be a list of lists (to collapse terms together) if drug_level is set to custom.
 #' @param reac_selected A list of adverse events for analysis. Can be a list of lists (to collapse terms together) if meddra_level is set to custom.
-#' @param temp_d Data table containing drug data (default is Drug). If set to Drug\[role_cod %in% c("PS","SS")\] allows to investigate only suspects.
-#' @param temp_r Data table containing reaction data (default is Reac).
-#' @param temp_t Data table containing therapy and temporal data (default is Ther).
+#' @param temp_drug Data table containing drug data (default is Drug). If set to Drug\[role_cod %in% c("PS","SS")\] allows to investigate only suspects.
+#' @param temp_reac Data table containing reaction data (default is Reac).
+#' @param temp_ther Data table containing therapy and temporal data (default is Ther).
 #' @param meddra_level The desired MedDRA level for analysis (default is "pt"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
 #' @param drug_level The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
 #' @param restriction Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo\[!RB_duplicates_only_susp\]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.
@@ -18,21 +18,21 @@
 #' @importFrom stats ks.test
 #' @importFrom twosamples ad_test
 #' @examples
-#' \dontrun{
-#' # Example usage:
-#' df <- time_to_onset_analysis("aripiprazole", "gambling")
-#' df1 <- time_to_onset_analysis(c("aripiprazole", "pramipexole"), c("gambling", "gambling disorder"))
-#' df2 <- time_to_onset_analysis(c("aripiprazole", "pramipexole"),
-#'   list(
-#'     "gambling_PT" = c("gambling"),
-#'     "gambling_disorder_PT" = c("gambling disorder"),
-#'     "gambling_query" = c("gambling", "gambling disorder")
-#'   ),
-#'   temp_d = Drug[role_cod %in% c("PS", "SS")],
-#'   meddra_level = "custom",
-#'   max_TTO = 3 * 365
+#' # This is just an example of how to use the function, as sample_Data has only little information about time to onset.
+#' df <- time_to_onset_analysis(
+#'   drug_selected = "skin care",
+#'   reac_selected = list("skin affection" = list(
+#'     "dry skin",
+#'     "skin burning sensation",
+#'     "skin irritation",
+#'     "erythema",
+#'     "rash macular",
+#'     "acne",
+#'     "skin haemorrhage"
+#'   )),
+#'   temp_drug = sample_Drug, temp_reac = sample_Reac,
+#'   temp_ther = sample_Ther
 #' )
-#' }
 #'
 #' @seealso
 #' \code{\link{ks.test}} for information about the Kolmogorov-Smirnov test.
@@ -45,8 +45,8 @@
 #' @export
 time_to_onset_analysis <- function(
     drug_selected, reac_selected,
-    temp_d = Drug, temp_r = Reac,
-    temp_t = Ther,
+    temp_drug = Drug, temp_reac = Reac,
+    temp_ther = Ther,
     meddra_level = "pt",
     drug_level = "substance",
     restriction = "none",
@@ -58,22 +58,22 @@ time_to_onset_analysis <- function(
   reac_selected <- format_input_disproportionality(reac_selected)
 
   # print warning if any drug or reaction selected was not found
-  if (length(setdiff(purrr::flatten(drug_selected), unique(temp_d[[drug_level]]))) > 0) {
-    if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_d[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
+  if (length(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]]))) > 0) {
+    if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
       stop("Revise the query and run again the command")
     }
   }
-  if (length(setdiff(purrr::flatten(reac_selected), unique(temp_r[[meddra_level]]))) > 0) {
-    if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_r[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
+  if (length(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]]))) > 0) {
+    if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
       stop("Revise the query and run again the command")
     }
   }
   if (length(restriction) > 1) {
-    temp_d <- temp_d[primaryid %in% restriction] %>% droplevels()
-    temp_r <- temp_r[primaryid %in% restriction] %>% droplevels()
+    temp_drug <- temp_drug[primaryid %in% restriction] %>% droplevels()
+    temp_reac <- temp_reac[primaryid %in% restriction] %>% droplevels()
   }
   ##
-  temp_t <- temp_t[, .(primaryid, drug_seq, time_to_onset)][
+  temp_ther <- temp_ther[, .(primaryid, drug_seq, time_to_onset)][
     !is.na(time_to_onset) & time_to_onset >= 0 & time_to_onset <= max_TTO
   ]
 
@@ -82,7 +82,7 @@ time_to_onset_analysis <- function(
       stop("The MedDRA dictionary is not uploaded.
                                 Without it, only analyses at the PT level are possible")
     }
-    temp_r <- MedDRA[, c(meddra_level, "pt"), with = FALSE][temp_r, on = "pt"]
+    temp_reac <- MedDRA[, c(meddra_level, "pt"), with = FALSE][temp_reac, on = "pt"]
   }
 
   # consider reac groupings
@@ -91,7 +91,7 @@ time_to_onset_analysis <- function(
     meddra_level = unlist(reac_selected)
   )
   colnames(df_custom) <- c("custom", meddra_level)
-  temp_r <- df_custom[temp_r, on = meddra_level, allow.cartesian = TRUE]
+  temp_reac <- df_custom[temp_reac, on = meddra_level, allow.cartesian = TRUE]
   reac_selected <- names(reac_selected)
 
   # consider drug groupings
@@ -100,37 +100,37 @@ time_to_onset_analysis <- function(
     substance = unlist(drug_selected)
   )
   colnames(df_custom) <- c("custom", drug_level)
-  temp_d <- df_custom[temp_d, on = drug_level, allow.cartesian = TRUE]
+  temp_drug <- df_custom[temp_drug, on = drug_level, allow.cartesian = TRUE]
   drug_selected <- names(drug_selected)
 
-  temp_d <- temp_t[
-    temp_d[, c("primaryid", "custom", "drug_seq")],
+  temp_drug <- temp_ther[
+    temp_drug[, c("primaryid", "custom", "drug_seq")],
     on = c("primaryid", "drug_seq")
   ][
     !is.na(time_to_onset)
   ]
-  temp_r <- temp_t[ # mean
+  temp_reac <- temp_ther[ # mean
     , .(time_to_onset = min(time_to_onset)),
     by = "primaryid"
   ][
-    temp_r[, c("primaryid", "custom"), with = FALSE],
+    temp_reac[, c("primaryid", "custom"), with = FALSE],
     on = "primaryid"
   ][
     !is.na(time_to_onset)
   ]
 
   #
-  temp_d <- temp_d[, c("custom", "primaryid", "time_to_onset"), with = FALSE] %>% dplyr::distinct()
-  temp_d <- temp_d[, .(time_to_onset = max(time_to_onset)), by = c("custom", "primaryid")]
-  temp_r <- temp_r[, c("custom", "primaryid", "time_to_onset"), with = FALSE] %>% dplyr::distinct()
-  temp_r <- temp_r[, .(time_to_onset = min(time_to_onset)), by = c("custom", "primaryid")]
-  temp_d1 <- temp_d[custom %in% drug_selected][, .(primaryid_substance = list(primaryid), ttos = list(time_to_onset)), by = "custom"]
-  temp_r1 <- temp_r[custom %in% reac_selected][, .(primaryid_event = list(primaryid), ttos = list(time_to_onset)), by = "custom"]
-  colnames(temp_r1) <- c("event", "primaryid_event", "ttos_event")
-  colnames(temp_d1) <- c("substance", "primaryid_substance", "ttos_drug")
+  temp_drug <- temp_drug[, c("custom", "primaryid", "time_to_onset"), with = FALSE] %>% dplyr::distinct()
+  temp_drug <- temp_drug[, .(time_to_onset = max(time_to_onset)), by = c("custom", "primaryid")]
+  temp_reac <- temp_reac[, c("custom", "primaryid", "time_to_onset"), with = FALSE] %>% dplyr::distinct()
+  temp_reac <- temp_reac[, .(time_to_onset = min(time_to_onset)), by = c("custom", "primaryid")]
+  temp_drug1 <- temp_drug[custom %in% drug_selected][, .(primaryid_substance = list(primaryid), ttos = list(time_to_onset)), by = "custom"]
+  temp_reac1 <- temp_reac[custom %in% reac_selected][, .(primaryid_event = list(primaryid), ttos = list(time_to_onset)), by = "custom"]
+  colnames(temp_reac1) <- c("event", "primaryid_event", "ttos_event")
+  colnames(temp_drug1) <- c("substance", "primaryid_substance", "ttos_drug")
   results <- setDT(expand.grid("substance" = unlist(drug_selected), "event" = unlist(reac_selected)))
-  results <- results[temp_d1, on = "substance"]
-  results <- results[temp_r1, on = "event"]
+  results <- results[temp_drug1, on = "substance"]
+  results <- results[temp_reac1, on = "event"]
   results <- results[, D_E := map2(primaryid_substance, primaryid_event, \(x, y) x %in% y)]
   results <- results[, D_E := map2(ttos_drug, D_E, \(x, y) x[y])]
   results <- results[, D_nE := map2(primaryid_substance, primaryid_event, \(x, y) !x %in% y)]
@@ -141,9 +141,9 @@ time_to_onset_analysis <- function(
   #### Perform test
   if (test == "AD") {
     results <- results[lengths(D_E) > 0]
-    results <- results[lengths(nD_E) > 0]
+    # results <- results[lengths(nD_E) > 0]
     results <- results[, ad_event := map2(D_E, nD_E, \(x, y) twosamples::ad_test(unlist(x), unlist(y)))]
-    results <- results[lengths(D_nE) > 0]
+    # results <- results[lengths(D_nE) > 0]
     results <- results[, ad_drug := map2(D_E, nD_E, \(x, y) twosamples::ad_test(unlist(x), unlist(y)))]
     results <- results[, index := .I]
     results <- results[, D_event := map2(index, D_E, \(x, y) ifelse(length(unlist(y)) >= minimum_cases, ad_event[[x]][[1]], NA))]
@@ -206,10 +206,21 @@ time_to_onset_analysis <- function(
 #' of the two groups.
 #'
 #' @examples
-#' \dontrun{
-#' # Example usage:
-#' plot_KS(results_tto_analysis, RG = "drug")
-#' }
+#' df <- time_to_onset_analysis(
+#'   drug_selected = "skin care",
+#'   reac_selected = list("skin affection" = list(
+#'     "dry skin",
+#'     "skin burning sensation",
+#'     "skin irritation",
+#'     "erythema",
+#'     "rash macular",
+#'     "acne",
+#'     "skin haemorrhage"
+#'   )),
+#'   temp_drug = sample_Drug, temp_reac = sample_Reac,
+#'   temp_ther = sample_Ther
+#' )
+#' plot_KS(df, RG = "event")
 #'
 #' @export
 plot_KS <- function(results_tto_analysis, RG = "drug") {
@@ -266,6 +277,22 @@ plot_KS <- function(results_tto_analysis, RG = "drug") {
 #'
 #' @return A ggplot object representing the forest plot visualization.
 #'
+#' @examples
+#' df <- time_to_onset_analysis(
+#'   drug_selected = "skin care",
+#'   reac_selected = list("skin affection" = list(
+#'     "dry skin",
+#'     "skin burning sensation",
+#'     "skin irritation",
+#'     "erythema",
+#'     "rash macular",
+#'     "acne",
+#'     "skin haemorrhage"
+#'   )),
+#'   temp_drug = sample_Drug, temp_reac = sample_Reac,
+#'   temp_ther = sample_Ther
+#' )
+#' render_tto(df)
 #'
 #' @export
 

@@ -47,11 +47,9 @@ Imports the specified FAERS relational database.
 }
 \examples{
 \dontrun{
-# Import full DRUG dataset up to 23Q1
-import("DRUG", "23Q1")
-
-# Import reac data for specific primary IDs in quarters up to 23Q1
-import("REAC", "23Q1", pids = c("pid1", "pid2"))
+# This example requires that setup_DiAna has been run to download data
+FAERS_version <- "24Q1"
+import("DRUG")
 }
 
 }

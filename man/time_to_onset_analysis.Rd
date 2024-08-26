@@ -7,9 +7,9 @@
 time_to_onset_analysis(
   drug_selected,
   reac_selected,
-  temp_d = Drug,
-  temp_r = Reac,
-  temp_t = Ther,
+  temp_drug = Drug,
+  temp_reac = Reac,
+  temp_ther = Ther,
   meddra_level = "pt",
   drug_level = "substance",
   restriction = "none",
@@ -23,11 +23,11 @@ time_to_onset_analysis(
 
 \item{reac_selected}{A list of adverse events for analysis. Can be a list of lists (to collapse terms together) if meddra_level is set to custom.}
 
-\item{temp_d}{Data table containing drug data (default is Drug). If set to Drug[role_cod \%in\% c("PS","SS")] allows to investigate only suspects.}
+\item{temp_drug}{Data table containing drug data (default is Drug). If set to Drug[role_cod \%in\% c("PS","SS")] allows to investigate only suspects.}
 
-\item{temp_r}{Data table containing reaction data (default is Reac).}
+\item{temp_reac}{Data table containing reaction data (default is Reac).}
 
-\item{temp_t}{Data table containing therapy and temporal data (default is Ther).}
+\item{temp_ther}{Data table containing therapy and temporal data (default is Ther).}
 
 \item{meddra_level}{The desired MedDRA level for analysis (default is "pt"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).}
 
@@ -48,21 +48,21 @@ A data.table containing results of the time-to-onset analysis, including drug-ev
 This function conducts a time-to-onset analysis for associations between drugs and events based on user-specified parameters.
 }
 \examples{
-\dontrun{
-# Example usage:
-df <- time_to_onset_analysis("aripiprazole", "gambling")
-df1 <- time_to_onset_analysis(c("aripiprazole", "pramipexole"), c("gambling", "gambling disorder"))
-df2 <- time_to_onset_analysis(c("aripiprazole", "pramipexole"),
-  list(
-    "gambling_PT" = c("gambling"),
-    "gambling_disorder_PT" = c("gambling disorder"),
-    "gambling_query" = c("gambling", "gambling disorder")
-  ),
-  temp_d = Drug[role_cod \%in\% c("PS", "SS")],
-  meddra_level = "custom",
-  max_TTO = 3 * 365
+# This is just an example of how to use the function, as sample_Data has only little information about time to onset.
+df <- time_to_onset_analysis(
+  drug_selected = "skin care",
+  reac_selected = list("skin affection" = list(
+    "dry skin",
+    "skin burning sensation",
+    "skin irritation",
+    "erythema",
+    "rash macular",
+    "acne",
+    "skin haemorrhage"
+  )),
+  temp_drug = sample_Drug, temp_reac = sample_Reac,
+  temp_ther = sample_Ther
 )
-}
 
 }
 \references{

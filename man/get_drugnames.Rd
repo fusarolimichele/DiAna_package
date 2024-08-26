@@ -24,9 +24,8 @@ The function imports data from the "DRUG" and "DRUG_NAME" tables in the specifie
 }
 \examples{
 \dontrun{
-# Specify the FAERS_version variable before calling the function
-FAERS_version <- "2023Q2"
-# Retrieve drug names for the substance "example_drug"
+# This example needs that setup_DiAna has been run before, to download DiAna dictionary
+FAERS_version <- "24Q1"
 result <- get_drugnames("aripiprazole")
 print(result)
 result <- get_drugnames("atogepant")
