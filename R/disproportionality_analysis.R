@@ -570,7 +570,7 @@ disproportionality_trend <- function(
 #' @examples
 #' drug_selected <- "aspirin"
 #' reac_selected <- "headache"
-#' result <- disproportionality_trend(drug_selected, reac_selected,
+#' trend_results <- disproportionality_trend(drug_selected, reac_selected,
 #'   temp_drug = sample_Drug,
 #'   temp_reac = sample_Reac,
 #'   temp_demo = sample_Demo,
