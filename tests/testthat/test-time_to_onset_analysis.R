@@ -4,10 +4,10 @@ test_that("Time to onset analysis works", {
     temp_ther = sample_Ther
   )$Q2, 13)
   expect_equal(time_to_onset_analysis("skin care",
-    list("erythema", "skin irritation", "dry skin"),
+    list("skin affection" = list("erythema", "skin irritation", "dry skin")),
     temp_drug = sample_Drug, temp_reac = sample_Reac,
     temp_ther = sample_Ther, minimum_cases = 1
-  )$Q2, 8)
+  )$Q1, 8)
 })
 
 test_that("Time to onset analysis accepts complex queries", {
@@ -42,7 +42,7 @@ test_that("Time to onset analysis works when changing the max tto", {
     temp_drug = sample_Drug, temp_reac = sample_Reac,
     temp_ther = sample_Ther, minimum_cases = 1, max_TTO = 20,
     restriction = sample_Demo[sex == "F"]$primaryid
-  )$Q2, 15)
+  )$Q2, list(13, 15))
 })
 
 
