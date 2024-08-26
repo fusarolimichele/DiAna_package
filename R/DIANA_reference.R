@@ -7,9 +7,8 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' # DiAna_reference()
-#' }
+#' DiAna_reference()
+#'
 DiAna_reference <- function(print = TRUE) {
   c(
     paste0("To cite this package in your work and publications use:"),

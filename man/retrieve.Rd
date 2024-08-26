@@ -64,8 +64,10 @@ allowing for in-depth case-by-case evaluation and clinical reasoning.
 If MedDRA is available PTs are clustered by HLGT.
 }
 \examples{
-\dontrun{
-retrieve(c(1, 2, 3), "output_data")
+FAERS_version <- "24Q1"
+pids <- sample_Demo[sex == "M"]$primaryid
+if (file.exist("data/24Q1.csv")) {
+  retrieve(pids, save_in_excel = FALSE)
 }
 
 }

@@ -22,8 +22,10 @@
 #' @importFrom here here
 #'
 #' @examples
-#' \dontrun{
-#' retrieve(c(1, 2, 3), "output_data")
+#' FAERS_version <- "24Q1"
+#' pids <- sample_Demo[sex == "M"]$primaryid
+#' if (file.exist("data/24Q1.csv")) {
+#'   retrieve(pids, save_in_excel = FALSE)
 #' }
 #'
 #' @export

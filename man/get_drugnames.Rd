@@ -25,13 +25,12 @@ The function imports data from the "DRUG" and "DRUG_NAME" tables in the specifie
 \examples{
 \dontrun{
 # This example needs that setup_DiAna has been run before, to download DiAna dictionary
-FAERS_version <- "24Q1"
-result <- get_drugnames("aripiprazole")
-print(result)
-result <- get_drugnames("atogepant")
-print(result)
+if (file.exist("external_source/DiAna_dictionary.csv")) {
+  FAERS_version <- "24Q1"
+  result <- get_drugnames("aripiprazole")
+  print(result)
 }
-
+}
 }
 \seealso{
 \code{\link{import}}

@@ -16,7 +16,6 @@ DiAna reference
 This function provides the DiAna reference, that should be used when using DiAna.
 }
 \examples{
-\dontrun{
-# DiAna_reference()
-}
+DiAna_reference()
+
 }

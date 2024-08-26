@@ -29,7 +29,8 @@
 #' @examples
 #' \dontrun{
 #' # Set up DiAna environment for the default quarter
-#' # Run only when needed to download the FAERS datasets for the first time and at new quarter updates.
+#' # Run only when needed to download the FAERS datasets for the first time
+#' # and at new quarter updates.
 #' setup_DiAna()
 #' }
 setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {

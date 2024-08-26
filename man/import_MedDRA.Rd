@@ -21,9 +21,9 @@ If the file does not exist, it will stop execution and provide instructions on h
 If the file exists, it will load the data, select specific columns (def, soc, hlgt, hlt, pt), remove duplicates, and store it in the global environment as "MedDRA".
 }
 \examples{
-\dontrun{
 # This example requires a specific file that can only be available with a MeDRA subscription.
-import_MedDRA()
+if (file.exist("external_source/meddra_primary.csv")) {
+  import_MedDRA()
 }
 
 }
