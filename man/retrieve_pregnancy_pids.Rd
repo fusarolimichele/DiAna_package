@@ -31,7 +31,7 @@ Sakai T, Mori C, Ohtsu F. Potential safety signal of pregnancy loss with vascula
 # This function retrieves the pregnancy FAERS from the entire database.
 # therefore it requires the data to have been downloaded.
 FAERS_version <- "24Q1"
-if (file.exist("data/24Q1/DEMO.rds")) {
+if (file.exists("data/24Q1/DEMO.rds")) {
   pids_pregnancy <- retrieve_pregnancy_pids()
   pids_pregnancy$medium_specificity
 }
