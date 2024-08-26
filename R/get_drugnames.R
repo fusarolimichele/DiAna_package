@@ -16,7 +16,7 @@
 #' @examples
 #' \dontrun{
 #' # This example needs that setup_DiAna has been run before, to download DiAna dictionary
-#' if (file.exist("external_source/DiAna_dictionary.csv")) {
+#' if (file.exists("external_source/DiAna_dictionary.csv")) {
 #'   FAERS_version <- "24Q1"
 #'   result <- get_drugnames("aripiprazole")
 #'   print(result)
@@ -49,7 +49,7 @@ get_drugnames <- function(drug, temp_d = Drug, temp_d_name = Drug_name) {
 #' @examples
 #' # This example needs that DiAna dictionary is downloaded (using setup_DiAna),
 #' # and that an excel file with intended changes is available
-#' if (file.exist("changes.xlsx") & file.exist("external_source/DiAna_dictionary.csv")) {
+#' if (file.exists("changes.xlsx") & file.exists("external_source/DiAna_dictionary.csv")) {
 #'   Drug <- Fix_DiAna_dictionary_locally("changes.xlsx")
 #' }
 #' @export
