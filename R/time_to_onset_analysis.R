@@ -18,7 +18,8 @@
 #' @importFrom stats ks.test
 #' @importFrom twosamples ad_test
 #' @examples
-#' # This is just an example of how to use the function, as sample_Data has only little information about time to onset.
+#' # This is just an example of how to use the function,
+#' # as sample_Data has only little information about time to onset.
 #' df <- time_to_onset_analysis(
 #'   drug_selected = "skin care",
 #'   reac_selected = list("skin affection" = list(

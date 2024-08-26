@@ -42,7 +42,7 @@ test_that("Time to onset analysis works when changing the max tto", {
     temp_drug = sample_Drug, temp_reac = sample_Reac,
     temp_ther = sample_Ther, minimum_cases = 1, max_TTO = 20,
     restriction = sample_Demo[sex == "F"]$primaryid
-  )$Q2, list(13, 15))
+  )$Q2, list(15, 13))
 })
 
 

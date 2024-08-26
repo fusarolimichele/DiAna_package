@@ -48,7 +48,8 @@ A data.table containing results of the time-to-onset analysis, including drug-ev
 This function conducts a time-to-onset analysis for associations between drugs and events based on user-specified parameters.
 }
 \examples{
-# This is just an example of how to use the function, as sample_Data has only little information about time to onset.
+# This is just an example of how to use the function,
+# as sample_Data has only little information about time to onset.
 df <- time_to_onset_analysis(
   drug_selected = "skin care",
   reac_selected = list("skin affection" = list(

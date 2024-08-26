@@ -29,7 +29,8 @@ Sakai T, Mori C, Ohtsu F. Potential safety signal of pregnancy loss with vascula
 }
 \examples{
 \dontrun{
-# This function retrieves the pregnancy FAERS from the entire database and therefore requires the data to have been downloaded.
+# This function retrieves the pregnancy FAERS from the entire database.
+# therefore it requires the data to have been downloaded.
 # Retrieve pregnancy-related report identifiers for the default quarter
 FAERS_version <- "23Q4"
 pids_pregnancy <- retrieve_pregnancy_pids()
