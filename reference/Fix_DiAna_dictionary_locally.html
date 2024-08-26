@@ -76,10 +76,9 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># This example needs that DiAna dictionary is downloaded (using setup_DiAna),</span></span></span>
 <span class="r-in"><span><span class="co"># and that an excel file with intended changes is available</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">file.exist</span><span class="op">(</span><span class="st">"changes.xlsx"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu">file.exist</span><span class="op">(</span><span class="st">"external_source/DiAna_dictionary.csv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"changes.xlsx"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"external_source/DiAna_dictionary.csv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="va">Drug</span> <span class="op">&lt;-</span> <span class="fu">Fix_DiAna_dictionary_locally</span><span class="op">(</span><span class="st">"changes.xlsx"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in file.exist("changes.xlsx"):</span> could not find function "file.exist"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
