@@ -36,10 +36,14 @@ for a specified entity and based on different MedDRA or ATC levels
 and writes the result to a xlsx file.
 }
 \examples{
-\dontrun{
 # The following examples require the MedDRA and the ATC to be imported
-hierarchycal_rates(pids, "reaction", "reactions_rates.xlsx")
-hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
-hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
+if (file.exists("external_sources/meddra_primary")) {
+  hierarchycal_rates(pids, "reaction", "reactions_rates.xlsx")
+}
+if (file.exists("external_sources/meddra_primary")) {
+  hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
+}
+if (file.exists("external_sources/ATC_DiAna")) {
+  hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
 }
 }

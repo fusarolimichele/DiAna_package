@@ -128,11 +128,15 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt",
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' # The following examples require the MedDRA and the ATC to be imported
-#' hierarchycal_rates(pids, "reaction", "reactions_rates.xlsx")
-#' hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
-#' hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
+#' if (file.exists("external_sources/meddra_primary")) {
+#'   hierarchycal_rates(pids, "reaction", "reactions_rates.xlsx")
+#' }
+#' if (file.exists("external_sources/meddra_primary")) {
+#'   hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
+#' }
+#' if (file.exists("external_sources/ATC_DiAna")) {
+#'   hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
 #' }
 hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx"), drug_role = c("PS", "SS", "I", "C")) {
   if (entity %in% c("reaction", "indication")) {
