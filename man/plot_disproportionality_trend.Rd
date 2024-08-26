@@ -27,8 +27,8 @@ This function plots the disproportionality trend over time for a given metric.
 The function creates a plot to visualize the disproportionality trend of a drug-event combination over time. Depending on the selected metric, it plots either the information component (IC) or the reporting odds ratio (ROR) with corresponding confidence intervals.
 }
 \examples{
-drug_selected <- "aspirin"
-reac_selected <- "headache"
+drug_selected <- "paracetamol"
+reac_selected <- "overdose"
 trend_results <- disproportionality_trend(drug_selected, reac_selected,
   temp_drug = sample_Drug,
   temp_reac = sample_Reac,

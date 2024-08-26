@@ -69,8 +69,8 @@ This function calculates the disproportionality time trend for a given drug-even
 The function processes the provided data to calculate the reporting odds ratio (ROR) and the information component (IC) for the specified drug-event combination over time.
 }
 \examples{
-drug_selected <- "aspirin"
-reac_selected <- "headache"
+drug_selected <- "paracetamol"
+reac_selected <- "overdose"
 result <- disproportionality_trend(drug_selected, reac_selected,
   temp_drug = sample_Drug, temp_reac = sample_Reac, temp_demo = sample_Demo,
   temp_demo_supp = sample_Demo_supp[, .(primaryid, quarter)]

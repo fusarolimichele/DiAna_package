@@ -25,7 +25,7 @@
 #' @examples
 #' disproportionality_analysis(
 #'   drug_selected = "paracetamol",
-#'   reac_selected = "headache",
+#'   reac_selected = "overdose",
 #'   temp_drug = sample_Drug,
 #'   temp_reac = sample_Reac
 #' )
@@ -202,7 +202,7 @@ disproportionality_analysis <- function(
 #' @examples
 #' disproportionality_df <- disproportionality_analysis(
 #'   drug_selected = "paracetamol",
-#'   reac_selected = "headache",
+#'   reac_selected = "overdose",
 #'   temp_drug = sample_Drug,
 #'   temp_reac = sample_Reac
 #' )
@@ -454,8 +454,8 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' The function processes the provided data to calculate the reporting odds ratio (ROR) and the information component (IC) for the specified drug-event combination over time.
 #'
 #' @examples
-#' drug_selected <- "aspirin"
-#' reac_selected <- "headache"
+#' drug_selected <- "paracetamol"
+#' reac_selected <- "overdose"
 #' result <- disproportionality_trend(drug_selected, reac_selected,
 #'   temp_drug = sample_Drug, temp_reac = sample_Reac, temp_demo = sample_Demo,
 #'   temp_demo_supp = sample_Demo_supp[, .(primaryid, quarter)]
@@ -568,8 +568,8 @@ disproportionality_trend <- function(
 #' The function creates a plot to visualize the disproportionality trend of a drug-event combination over time. Depending on the selected metric, it plots either the information component (IC) or the reporting odds ratio (ROR) with corresponding confidence intervals.
 #'
 #' @examples
-#' drug_selected <- "aspirin"
-#' reac_selected <- "headache"
+#' drug_selected <- "paracetamol"
+#' reac_selected <- "overdose"
 #' trend_results <- disproportionality_trend(drug_selected, reac_selected,
 #'   temp_drug = sample_Drug,
 #'   temp_reac = sample_Reac,
