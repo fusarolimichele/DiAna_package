@@ -12,8 +12,9 @@
 * Added website
 * Added articles/tutorials for setting up subproject and performing a disproportionality analysis on the website
 * Improved documentation
+* Included running examples
 
 ## Minor improvements and fixes
-* Disproportionality functions are more robust: as they accept different formatting of drug_selected and event selected; they warn about unexpected drug or event terms in the input. meddra/pt_level == "custom" is deprecated as inferred from input.
+* `disproportionality_analysis()` and related functions are more robust: as they accept different formatting of drug_selected and event selected; they warn about unexpected drug or event terms in the input. meddra/pt_level == "custom" is deprecated as inferred from input.
 * `render_forest()` function is more flexible: as it allows for changing the position of the legend. Fixed a bug in providing the colors to be shown.
 *Updating descriptive to comply with the most recent version of gtsummary.

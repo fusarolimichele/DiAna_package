@@ -60,7 +60,8 @@ render_forest(
 A ggplot object representing the forest plot visualization.
 }
 \description{
-This function generates a forest plot visualization of disproportions.
+This function generates a forest plot visualization of disproportions
+visualizing the results of \code{disproportionality_analysis()}.
 }
 \examples{
 disproportionality_df <- disproportionality_analysis(

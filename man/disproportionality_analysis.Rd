@@ -54,7 +54,12 @@ disproportionality_analysis(
 A data.table containing disproportionality analysis results.
 }
 \description{
-performs disproportionality analysis and returns the results.
+performs disproportionality analysis and returns the results, which can be plotted using \code{render_forest()}.
+Look at the DiAna website fore extensive tutorials to practically use the function (\code{vignette("Disproportionality Analysis", package = "DiAna")})
+and to design and run disproportionality analysis based on expected biases (\code{vignette("Causal Inference", package = "DiAna")})
+Contrary to \code{disproportionality_comparison()}, it calculates the association based on the Drug and Reac database,
+and not based on number of reports.
+See \code{disproportionality_trend()} for investigating how disproportionality changed through time.
 }
 \examples{
 disproportionality_analysis(

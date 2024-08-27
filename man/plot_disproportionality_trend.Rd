@@ -22,6 +22,7 @@ A ggplot object representing the disproportionality trend plot for the specified
 }
 \description{
 This function plots the disproportionality trend over time for a given metric.
+Visualizes the results of\code{disproportionality_trend()}.
 }
 \details{
 The function creates a plot to visualize the disproportionality trend of a drug-event combination over time. Depending on the selected metric, it plots either the information component (IC) or the reporting odds ratio (ROR) with corresponding confidence intervals.
