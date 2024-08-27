@@ -64,6 +64,8 @@ A data frame containing the disproportionality results over time, including:
 }
 \description{
 This function calculates the disproportionality time trend for a given drug-event combination.
+Check \code{disproportionality_analysis()} for more options to address biases.
+Its results can be visualized using \code{plot_disproportionality_trend()}.
 }
 \details{
 The function processes the provided data to calculate the reporting odds ratio (ROR) and the information component (IC) for the specified drug-event combination over time.
