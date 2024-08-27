@@ -148,10 +148,9 @@ and one with drug information and multiple rows per ICSR.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">FAERS_version</span> <span class="op">&lt;-</span> <span class="st">"24Q1"</span></span></span>
 <span class="r-in"><span><span class="va">pids</span> <span class="op">&lt;-</span> <span class="va">sample_Demo</span><span class="op">[</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">file.exist</span><span class="op">(</span><span class="st">"data/24Q1.csv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"data/24Q1.csv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu">retrieve</span><span class="op">(</span><span class="va">pids</span>, save_in_excel <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in file.exist("data/24Q1.csv"):</span> could not find function "file.exist"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
