@@ -3,12 +3,6 @@
 
 # DiAna
 
-<!-- badges: start -->
-
-[![CRAN
-status](https://www.r-pkg.org/badges/version/DiAna)](https://CRAN.R-project.org/package=DiAna)
-<!-- badges: end -->
-
 The goal of DiAna is to enchance the transparency,
 flexibility,replicability, and tool exchange capabilities within the
 domain of pharmacovigilance studies. This specialized R package has been

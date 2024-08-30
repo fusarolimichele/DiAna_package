@@ -328,7 +328,7 @@ render_forest <- function(disproportionality_df,
 #' Contrary to `disproportionality_analysis()`, it calculates the association based on number of reports,
 #' and not based on the Drug and Reac database.
 #' For a more flexible application of other disproportionality measures,
-#' you can look at [this vignette](https://cran.r-project.org/web/packages/pvda/vignettes/Disproportionality_analysis.html)
+#' you can look at [this vignette](https://CRAN.R-project.org/package=pvda)
 #' of the pvda R package.
 #'
 #'

@@ -12,16 +12,15 @@ Authors@R: c(
     person("Takamasa", "Sakai", , "tksakai@meijo-u.ac.jp", role = "ctb"),
     person("Nhung", "Trinh", , "nhung.trinh@farmasi.uio.no", role = "ctb")
   )
-Description: The 'DiAna' (Disproportionality Analysis) package offers
-    advanced tools for analyzing FDA Adverse Event Reporting System
-    (FAERS) data, enhancing drug safety research. It enables users to
-    download cleaned FAERS data and import relational datasets,
-    facilitating case identification and control selection to minimize
-    confounding in analyses. The package includes functions for
-    descriptive and disproportionality analysis, time-to-onset analysis,
-    network analysis, retrieval algorithms, and visualization.
+Description: Advanced tools for analyzing the FDA Adverse Event Reporting
+    System (FAERS) data, enhancing drug safety research. Provides
+    functions to download cleaned FAERS data and import relational
+    datasets, facilitating case identification and control selection to
+    address confounding in analyses. Provides functions for descriptive
+    and disproportionality analysis, time-to-onset analysis, network
+    analysis, retrieval algorithms, and visualization.
 License: MIT + file LICENSE
-URL:https://fusarolimichele.github.io/DiAna_package/,
+URL: https://fusarolimichele.github.io/DiAna_package/,
     https://github.com/fusarolimichele/DiAna_package,
     https://github.com/fusarolimichele/DiAna, https://osf.io/zqu89/
 BugReports: https://github.com/fusarolimichele/DiAna_package/issues
@@ -32,6 +31,7 @@ Depends:
 Imports: 
     dplyr,
     ggflowchart,
+    grDevices,
     gridExtra,
     gtsummary,
     here,
@@ -45,6 +45,7 @@ Imports:
     questionr,
     readr,
     readxl,
+    stats,
     stringr,
     tibble,
     tidyr,
@@ -53,7 +54,6 @@ Imports:
     writexl
 Suggests: 
     knitr,
-    rlist,
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

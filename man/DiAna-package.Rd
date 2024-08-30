@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-The 'DiAna' (Disproportionality Analysis) package offers advanced tools for analyzing FDA Adverse Event Reporting System (FAERS) data, enhancing drug safety research. It enables users to download cleaned FAERS data and import relational datasets, facilitating case identification and control selection to minimize confounding in analyses. The package includes functions for descriptive and disproportionality analysis, time-to-onset analysis, network analysis, retrieval algorithms, and visualization.
+Advanced tools for analyzing the FDA Adverse Event Reporting System (FAERS) data, enhancing drug safety research. Provides functions to download cleaned FAERS data and import relational datasets, facilitating case identification and control selection to address confounding in analyses. Provides functions for descriptive and disproportionality analysis, time-to-onset analysis, network analysis, retrieval algorithms, and visualization.
 }
 \seealso{
 Useful links:

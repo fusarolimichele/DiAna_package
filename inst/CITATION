@@ -1,6 +1,6 @@
 bibentry(
   bibtype  = "Misc",
-  title    = "DiAna version 2.1.0. An open access toolkit for DIsproportionality ANAlysis and other pharmacovigilance investigations in the FAERS.",
+  title    = "DiAna version 2.1.0. An open-source toolkit for DIsproportionality ANAlysis and other pharmacovigilance investigations in the FAERS.",
   author   = c(
   person("Michele", "Fusaroli", role = c("aut", "cre"),
          comment = c(ORCID = "0000-0002-0254-2212",

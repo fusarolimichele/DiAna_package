@@ -40,7 +40,7 @@ Relative Reporting Ratio (RRR), and Information Component (IC).
 Contrary to \code{disproportionality_analysis()}, it calculates the association based on number of reports,
 and not based on the Drug and Reac database.
 For a more flexible application of other disproportionality measures,
-you can look at \href{https://cran.r-project.org/web/packages/pvda/vignettes/Disproportionality_analysis.html}{this vignette}
+you can look at \href{https://CRAN.R-project.org/package=pvda}{this vignette}
 of the pvda R package.
 }
 \details{

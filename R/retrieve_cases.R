@@ -35,13 +35,6 @@ retrieve <- function(pids, file_name = "individual_cases",
                      temp_doses = Doses, temp_drug_supp = Drug_supp, temp_indi = Indi,
                      temp_drug_name = Drug_name, temp_meddra = NA, temp_atc = NA,
                      save_in_excel = TRUE) {
-  ## this function is intended to retrieve all the useful information inherent
-  ## to a specific group of primaryids, to allow for in-deep case-by case
-  ## evaluation and clinical reasoning.
-
-  ## Args: pids= primaryids of interest
-  ##      file_name
-
   path_MedDRA <- paste0(here::here(), "/external_sources/meddra_primary.csv")
 
   ## Reactions

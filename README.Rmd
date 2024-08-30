@@ -15,9 +15,6 @@ knitr::opts_chunk$set(
 
 # DiAna
 
-<!-- badges: start -->
-[![CRAN status](https://www.r-pkg.org/badges/version/DiAna)](https://CRAN.R-project.org/package=DiAna)
-<!-- badges: end -->
 
 The goal of DiAna is to enchance the transparency, flexibility,replicability, and tool exchange capabilities within the domain of pharmacovigilance studies. This specialized R package has been meticulously crafted to facilitate the intricate process of disproportionality analysis on the FDA Adverse Event Reporting System (FAERS) data.
 DiAna empowers researchers and pharmacovigilance professionals with a comprehensive toolkit to conduct rigorous and transparent analyses. By providing customizable functions and clear documentation, the package ensures that each step of the analysis is fully understood and reproducible. Pharmacovigilance studies often require tailored approaches due to the diverse nature of adverse event data. The package offers a range of versatile tools that can be seamlessly adapted to different study designs, data structures, and analytical goals. Researchers can effortlessly modify parameters and methods to suit their specific requirements. Collaboration and knowledge-sharing are fundamental to advancing pharmacovigilance research. DiAna plays a pivotal role in enabling the exchange of tools and methodologies among researchers. Its modular design encourages the development and integration of new analysis techniques, fostering a dynamic environment for innovation.

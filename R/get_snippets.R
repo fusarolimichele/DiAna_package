@@ -18,6 +18,13 @@
 #' }
 #' @export
 snippets_install_github <- function(repo = "fusarolimichele/DiAna_snippets") {
+  if (!askYesNo(paste0(
+    "This command will download snippets from a github.",
+    "\n If you have snippets with the same name it may overwrite them.",
+    "\n Do you want to continue?"
+  ), default = FALSE)) {
+    stop("The snippets were not downloaded.")
+  }
   # Determine the snippet directory based on the operating system
   if (Sys.info()["sysname"] %in% c("Darwin", "Linux")) {
     SNIPPET_DIRECTORY <- "~/.config/rstudio/snippets"
