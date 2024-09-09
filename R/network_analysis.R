@@ -52,9 +52,8 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
     df <- temp_drug[primaryid %in% pids]
     if (restriction == "suspects") {
       df <- df[role_cod %in% c("PS", "SS")]
-
-      df <- df[, .(primaryid, substance)]
     }
+    df <- df[, .(primaryid, substance)]
   }
   df <- dplyr::distinct(df)
   binary_data <- df
