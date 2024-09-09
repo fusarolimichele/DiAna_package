@@ -16,3 +16,4 @@ data/24Q1
 figure
 cran-comments.md
 ^dev$
+^revdep$

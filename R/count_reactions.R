@@ -30,16 +30,18 @@
 #' # select only reports recording paracetamol from the sample dataset,
 #' # and provide the most reported events (at the pt level),
 #' # drugs, and indications (at the PT level).
-#' pids_cases <- unique(sample_Drug[substance == "paracetamol"]$primaryid)
-#' reporting_rates(pids, "reaction", "pt",
+#' pids_cases <-
+#' reporting_rates(unique(sample_Drug[substance == "paracetamol"]$primaryid),
+#'  "reaction", "pt",
 #'   temp_reac = sample_Reac,
 #'   temp_drug = sample_Drug, temp_indi = sample_Indi
 #' )
-#' reporting_rates(pids, "indication", "pt",
+#' reporting_rates(unique(sample_Drug[substance == "paracetamol"]$primaryid),
+#'   "indication", "pt",
 #'   temp_reac = sample_Reac,
 #'   temp_drug = sample_Drug, temp_indi = sample_Indi
 #' )
-#' reporting_rates(pids,
+#' reporting_rates(unique(sample_Drug[substance == "paracetamol"]$primaryid),
 #'   entity = "substance",
 #'   temp_reac = sample_Reac, temp_drug = sample_Drug,
 #'   temp_indi = sample_Indi

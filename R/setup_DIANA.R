@@ -18,6 +18,10 @@
 #'        \itemize{
 #'                \item \emph{24Q1}
 #'                }
+#'        \itemize{
+#'                \item \emph{24Q2}
+#'                }
+#'
 #' @param timeout The amount of time after which R stops a task if it is still unfinished.
 #'                Default 100000It may be necessary to increase it in the case of a slow connection.
 #'
@@ -54,6 +58,8 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
       DiAna_url <- "https://osf.io/download/q3jyd/"
     } else if (quarter == "24Q1") {
       DiAna_url <- "https://osf.io/download/7rfgz/"
+    } else if (quarter == "24Q2") {
+      DiAna_url <- "https://osf.io/download/mw5z6/"
     }
     # Download and extract DiAna data
     zip_path <- paste0(here::here(), "/data/", quarter, ".zip")
@@ -65,15 +71,15 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
     if (file.exists(macosx_folder)) {
       unlink(macosx_folder, recursive = TRUE)
     }
-    utils::download.file("https://osf.io/download/ng467/",
+    utils::download.file("https://osf.io/download/6vm5r/",
       destfile = paste0(here::here(), "/external_sources/ATC_DiAna.csv"),
       mode = "wb"
     )
-    utils::download.file("https://osf.io/download/muqa5/",
+    utils::download.file("https://osf.io/download/d7ht4/",
       destfile = paste0(here::here(), "/external_sources/DiAna_dictionary.csv"),
       mode = "wb"
     )
-    utils::download.file("https://osf.io/download/j8saz/",
+    utils::download.file("https://osf.io/download/2tkf3/",
       destfile = paste0(here::here(), "/external_sources/Countries.csv"),
       mode = "wb"
     )

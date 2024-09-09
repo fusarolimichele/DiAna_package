@@ -20,6 +20,9 @@ setup_DiAna(quarter = "23Q1", timeout = 1e+05)
 }
 \itemize{
 \item \emph{24Q1}
+}
+\itemize{
+\item \emph{24Q2}
 }}
 
 \item{timeout}{The amount of time after which R stops a task if it is still unfinished.
