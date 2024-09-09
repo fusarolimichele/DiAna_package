@@ -13,7 +13,7 @@ network_analysis(
   width = 1500,
   height = 1500,
   labs_size = 1,
-  restriction = NA,
+  restriction = "none",
   temp_reac = Reac,
   temp_indi = Indi,
   temp_drug = Drug,
@@ -37,7 +37,7 @@ network_analysis(
 
 \item{labs_size}{Size of labels in network visualization. Default is 1. It can be changed if visualization is not good.}
 
-\item{restriction}{Restriction performed in the analysis. Default is NA. It could be setted to 'suspects' if entity is 'substance' to restrict the analysis to primary and secondary suspects}
+\item{restriction}{Restriction performed in the analysis. Default is none. It could be set to 'suspects' if entity is 'substance' to restrict the analysis to primary and secondary suspects}
 
 \item{temp_reac}{Reac dataset. Can be set to sample_Reac for testing}
 
