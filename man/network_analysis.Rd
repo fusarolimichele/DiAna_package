@@ -13,6 +13,7 @@ network_analysis(
   width = 1500,
   height = 1500,
   labs_size = 1,
+  min_frequency_term = 0.01,
   restriction = "none",
   temp_reac = Reac,
   temp_indi = Indi,
@@ -36,6 +37,8 @@ network_analysis(
 \item{height}{Numeric specifying the height of the saved image in pixels. Default is 1500.}
 
 \item{labs_size}{Size of labels in network visualization. Default is 1. It can be changed if visualization is not good.}
+
+\item{min_frequency_term}{Frequency threshold for a term in the dataset to be included in the analysis. Default to 0.01}
 
 \item{restriction}{Restriction performed in the analysis. Default is none. It could be set to 'suspects' if entity is 'substance' to restrict the analysis to primary and secondary suspects}
 

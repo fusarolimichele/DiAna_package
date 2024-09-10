@@ -11,6 +11,7 @@
 #' @param width Numeric specifying the width of the saved image in pixels. Default is 1500.
 #' @param height Numeric specifying the height of the saved image in pixels. Default is 1500.
 #' @param labs_size Size of labels in network visualization. Default is 1. It can be changed if visualization is not good.
+#' @param min_frequency_term Frequency threshold for a term in the dataset to be included in the analysis. Default to 0.01
 #' @param restriction Restriction performed in the analysis. Default is none. It could be set to 'suspects' if entity is 'substance' to restrict the analysis to primary and secondary suspects
 #' @param save_plot Whether the plot should be saved as a tiff. Defaults to true
 
@@ -42,13 +43,16 @@
 network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
                              remove_negative_edges = TRUE,
                              file_name = paste0(project_path, "network.tiff"), width = 1500, height = 1500,
-                             labs_size = 1, restriction = "none", temp_reac = Reac, temp_indi = Indi, temp_drug = Drug,
+                             labs_size = 1, min_frequency_term = 0.01, restriction = "none", temp_reac = Reac, temp_indi = Indi, temp_drug = Drug,
                              save_plot = TRUE) {
   if (entity == "reaction") {
+    entity_var <- "pt"
     df <- temp_reac[, .(primaryid, pt)][primaryid %in% pids]
   } else if (entity == "indication") {
+    entity_var <- "indi_pt"
     df <- temp_indi[, .(primaryid, indi_pt)][primaryid %in% pids]
   } else if (entity == "substance") {
+    entity_var <- "substance"
     df <- temp_drug[primaryid %in% pids]
     if (restriction == "suspects") {
       df <- df[role_cod %in% c("PS", "SS")]
@@ -56,6 +60,9 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
     df <- df[, .(primaryid, substance)]
   }
   df <- dplyr::distinct(df)
+  df_N <- df[, .N, by = entity_var]
+  df <- df[!get(entity_var) %in% df_N[N <= length(unique(df$primaryid)) * min_frequency_term | N >= length(unique(df$primaryid)) - 1][[entity]]]
+  df <- df[!is.na(get(entity_var))]
   binary_data <- df
   binary_data$value <- 1
   if (entity == "reaction") {
