@@ -175,6 +175,11 @@ disproportionality_analysis <- function(
   if (!store_pids) {
     results <- results %>% dplyr::select(-primaryid_substance, -primaryid_event)
   }
+  # save it to the excel
+  if (save_in_excel) {
+    writexl::write_xlsx(results, file_name)
+  }
+  return(results)
 }
 
 
