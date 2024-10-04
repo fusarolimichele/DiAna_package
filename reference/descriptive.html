@@ -146,20 +146,9 @@
 <span class="r-in"><span>  temp_outc <span class="op">=</span> <span class="va">sample_Outc</span>, temp_ther <span class="op">=</span> <span class="va">sample_Ther</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Variables role_cod and time_to_onset not considered. If you want to include them please provide the drug investigated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 113 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    `**Characteristic**`    N_cases `%_cases`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> N                       355     <span style="color: #949494;">""</span>       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> sex                     <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Male                    355     <span style="color: #949494;">"</span>100.00<span style="color: #949494;">"</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> Submission              <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Direct                  24      <span style="color: #949494;">"</span>6.76<span style="color: #949494;">"</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Expedited               181     <span style="color: #949494;">"</span>50.99<span style="color: #949494;">"</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Periodic                150     <span style="color: #949494;">"</span>42.25<span style="color: #949494;">"</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> Reporter                <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Consumer                163     <span style="color: #949494;">"</span>48.37<span style="color: #949494;">"</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Healthcare practitioner 20      <span style="color: #949494;">"</span>5.93<span style="color: #949494;">"</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 103 more rows</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in dplyr::mutate(.data = .y, stat = as.character(glue::glue(statistic[[.data$variable[1]]],     .envir = cards::get_ard_statistics(.x, .column = "stat_fmt")))):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `stat = as.character(...)`.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error in `glue_data()`:</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> is.environment(.envir) is not TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate descriptive statistics for cases and non-cases</span></span></span>
 <span class="r-in"><span><span class="fu">descriptive</span><span class="op">(</span></span></span>
@@ -169,22 +158,9 @@
 <span class="r-in"><span>  temp_outc <span class="op">=</span> <span class="va">sample_Outc</span>, temp_ther <span class="op">=</span> <span class="va">sample_Ther</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Variables role_cod and time_to_onset not considered. If you want to include them please provide the drug investigated</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NAs introduced by coercion</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of columns of result, 6, is not a multiple of vector length 7 of arg 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 113 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    `**Characteristic**`  N_cases `%_cases` N_controls `%_controls` `**q-value**`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> N                     355     <span style="color: #949494;">""</span>        <span style="color: #BB0000;">NA</span>         <span style="color: #949494;">""</span>           <span style="color: #949494;">""</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> __sex__               <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> Male                  355     <span style="color: #949494;">"</span>100.00<span style="color: #949494;">"</span>  <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> __Submission__        <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> Direct                24      <span style="color: #949494;">"</span>6.76<span style="color: #949494;">"</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> Expedited             181     <span style="color: #949494;">"</span>50.99<span style="color: #949494;">"</span>   <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> Periodic              150     <span style="color: #949494;">"</span>42.25<span style="color: #949494;">"</span>   <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> __Reporter__          <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> Consumer              163     <span style="color: #949494;">"</span>48.37<span style="color: #949494;">"</span>   <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> Healthcare practitio… 20      <span style="color: #949494;">"</span>5.93<span style="color: #949494;">"</span>    <span style="color: #BB0000;">NA</span>         <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 103 more rows</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in dplyr::mutate(.data = .y, stat = as.character(glue::glue(statistic[[.data$variable[1]]],     .envir = cards::get_ard_statistics(.x, .column = "stat_fmt")))):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `stat = as.character(...)`.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error in `glue_data()`:</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> is.environment(.envir) is not TRUE</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -196,7 +172,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
