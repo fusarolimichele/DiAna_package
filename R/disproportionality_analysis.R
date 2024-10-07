@@ -183,7 +183,6 @@ disproportionality_analysis <- function(
 }
 
 
-
 #' Render Forest Plot
 #'
 #' This function generates a forest plot visualization of disproportions
