@@ -127,50 +127,164 @@ at the specified level and in descending order.</p>
 <span class="r-in"><span>  temp_reac <span class="op">=</span> <span class="va">sample_Reac</span>,</span></span>
 <span class="r-in"><span>  temp_drug <span class="op">=</span> <span class="va">sample_Drug</span>, temp_indi <span class="op">=</span> <span class="va">sample_Indi</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                   pt</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                &lt;ord&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:            rheumatoid arthritis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:             plasma cell myeloma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:              multiple sclerosis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                       psoriasis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                    hypertension</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 378:                   endometriosis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 379:                 fabry's disease</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 380:        ovarian cancer recurrent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 381: pancreatic carcinoma metastatic</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 382:          antibiotic prophylaxis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         label_pt  N_pt</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                           &lt;char&gt; &lt;int&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:           rheumatoid arthritis (7.58%) [55]    55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2:            plasma cell myeloma (3.99%) [29]    29</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:             multiple sclerosis (3.44%) [25]    25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                      psoriasis (3.44%) [25]    25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:                   hypertension (3.03%) [22]    22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 378:                   endometriosis (0.14%) [1]     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 379:                 fabry's disease (0.14%) [1]     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 380:        ovarian cancer recurrent (0.14%) [1]     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 381: pancreatic carcinoma metastatic (0.14%) [1]     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 382:          antibiotic prophylaxis (0.14%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                    pt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                 &lt;ord&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                              pain</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:              rheumatoid arthritis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                         back pain</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:                           anxiety</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  gastrooesophageal reflux disease</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:                        depression</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                      hypertension</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:               plasma cell myeloma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:                         psoriasis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:                            asthma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:          type 2 diabetes mellitus</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:                     premedication</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:                          covid-19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:             psoriatic arthropathy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:                affective disorder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:                psychotic disorder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:           intentional self-injury</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:                 candida infection</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:              ill-defined disorder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20: low density lipoprotein increased</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:              abdominal pain upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:                     muscle spasms</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:                         neuralgia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:                 breakthrough pain</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25:                          migraine</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26:                          insomnia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27:      systemic lupus erythematosus</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28:                      chemotherapy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29:                  hypersensitivity</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30:                     contraception</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31:          mucopolysaccharidosis vi</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32:         chronic myeloid leukaemia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33:                multiple sclerosis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34:             oral fungal infection</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35:               atrial fibrillation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36:                postoperative care</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37:        cardiac failure congestive</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38:                          cachexia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39:                       tonsillitis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40:                         dyspepsia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41:                              gout</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42:                calcium deficiency</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43:              vitamin d deficiency</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44:                  blood phosphorus</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45:                     renal failure</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46:                           anaemia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47:                        leukopenia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48:                   crohn's disease</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49:             infection prophylaxis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50:        essential thrombocythaemia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51:  immunodeficiency common variable</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52:           acute myeloid leukaemia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53:              pancreatic carcinoma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54:            influenza like illness</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55:                           pyrexia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56:                            chills</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57:                         infection</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58:           blood pressure abnormal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59:                      renal injury</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60:        blood cholesterol abnormal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61:                  cardiac disorder</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62:                             cough</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63:                       rhinorrhoea</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64:       upper-airway cough syndrome</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65:                   fabry's disease</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66:                colitis ulcerative</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67:             covid-19 immunisation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                    pt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                          label_pt  N_pt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                            &lt;char&gt; &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                             pain (17.95%) [7]     7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2:              rheumatoid arthritis (7.69%) [3]     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                         back pain (7.69%) [3]     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4:                           anxiety (7.69%) [3]     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5:  gastrooesophageal reflux disease (7.69%) [3]     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6:                        depression (7.69%) [3]     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                      hypertension (5.13%) [2]     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8:               plasma cell myeloma (5.13%) [2]     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  9:                         psoriasis (5.13%) [2]     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10:                            asthma (5.13%) [2]     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11:          type 2 diabetes mellitus (5.13%) [2]     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12:                     premedication (5.13%) [2]     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13:                          covid-19 (5.13%) [2]     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14:             psoriatic arthropathy (5.13%) [2]     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15:                affective disorder (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16:                psychotic disorder (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17:           intentional self-injury (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18:                 candida infection (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19:              ill-defined disorder (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20: low density lipoprotein increased (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21:              abdominal pain upper (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22:                     muscle spasms (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23:                         neuralgia (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24:                 breakthrough pain (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25:                          migraine (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26:                          insomnia (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27:      systemic lupus erythematosus (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28:                      chemotherapy (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29:                  hypersensitivity (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30:                     contraception (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31:          mucopolysaccharidosis vi (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32:         chronic myeloid leukaemia (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33:                multiple sclerosis (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34:             oral fungal infection (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35:               atrial fibrillation (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36:                postoperative care (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37:        cardiac failure congestive (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38:                          cachexia (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39:                       tonsillitis (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40:                         dyspepsia (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41:                              gout (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42:                calcium deficiency (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43:              vitamin d deficiency (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44:                  blood phosphorus (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45:                     renal failure (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46:                           anaemia (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47:                        leukopenia (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48:                   crohn's disease (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49:             infection prophylaxis (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50:        essential thrombocythaemia (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51:  immunodeficiency common variable (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52:           acute myeloid leukaemia (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53:              pancreatic carcinoma (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54:            influenza like illness (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55:                           pyrexia (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56:                            chills (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57:                         infection (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58:           blood pressure abnormal (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59:                      renal injury (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60:        blood cholesterol abnormal (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61:                  cardiac disorder (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62:                             cough (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63:                       rhinorrhoea (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64:       upper-airway cough syndrome (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65:                   fabry's disease (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66:                colitis ulcerative (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67:             covid-19 immunisation (2.56%) [1]     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                          label_pt  N_pt</span>
 <span class="r-in"><span><span class="fu">reporting_rates</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">sample_Drug</span><span class="op">[</span><span class="va">substance</span> <span class="op">==</span> <span class="st">"paracetamol"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  entity <span class="op">=</span> <span class="st">"substance"</span>,</span></span>
 <span class="r-in"><span>  temp_reac <span class="op">=</span> <span class="va">sample_Reac</span>, temp_drug <span class="op">=</span> <span class="va">sample_Drug</span>,</span></span>
 <span class="r-in"><span>  temp_indi <span class="op">=</span> <span class="va">sample_Indi</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 substance                  label_substance N_substance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    &lt;fctr&gt;                           &lt;char&gt;       &lt;int&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1:          paracetamol          paracetamol (5.1%) [51]          51</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   2: acetylsalicylic acid acetylsalicylic acid (4.9%) [49]          49</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   3:           adalimumab           adalimumab (4.5%) [45]          45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4:                 &lt;NA&gt;                   NA (3.8%) [38]          38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   5:           etanercept           etanercept (3.8%) [38]          38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 717:                water                 water (0.1%) [1]           1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 718:            entecavir             entecavir (0.1%) [1]           1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 719:        canagliflozin         canagliflozin (0.1%) [1]           1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 720:           ofatumumab            ofatumumab (0.1%) [1]           1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 721:             cefepime              cefepime (0.1%) [1]           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 substance                    label_substance N_substance</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    &lt;fctr&gt;                             &lt;char&gt;       &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:          paracetamol            paracetamol (100%) [51]          51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2:            oxycodone            oxycodone (31.37%) [16]          16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:          hydrocodone          hydrocodone (25.49%) [13]          13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: acetylsalicylic acid acetylsalicylic acid (19.61%) [10]          10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:           salbutamol            salbutamol (17.65%) [9]           9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 264:            enalapril              enalapril (1.96%) [1]           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 265:            aciclovir              aciclovir (1.96%) [1]           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 266:           nifedipine             nifedipine (1.96%) [1]           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 267:         upadacitinib           upadacitinib (1.96%) [1]           1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 268:     covid-19 vaccine       covid-19 vaccine (1.96%) [1]           1</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
