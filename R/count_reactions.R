@@ -64,7 +64,7 @@ reporting_rates <- function (pids_cases, entity = "reaction", level = "pt", drug
                                                    "therapeutic procedures and supportive care nec")]
   }
   else if (entity == "substance") {
-    temp <- dplyr::distinct(temp_drug)[primaryid%in%pids_cases][role_cod %in% drug_role][,
+    temp <- dplyr::distinct(temp_drug[primaryid%in%pids_cases])[role_cod %in% drug_role][,
                                                                                          .(primaryid, substance)]
   }
   if (level %in% c("hlt", "hlgt", "soc")) {
