@@ -617,9 +617,7 @@ plot_disproportionality_trend <- function (disproportionality_trend_results, met
   plot <- ggplot(disproportionality_trend_results)
   for (n in 1:length(unique(disproportionality_trend_results$nested))){
     df_temp <- disproportionality_trend_results[nested==unique(disproportionality_trend_results$nested)[[n]]]
-
-    if (metric == "IC") {
-      plot <- plot +
+    plot <- plot +
         geom_pointrange(aes(x = period, y = median,
                             ymin = lower, ymax = upper,
                             fill = color, size = D_E),
@@ -630,7 +628,6 @@ plot_disproportionality_trend <- function (disproportionality_trend_results, met
         scale_fill_manual(values = c(`no-signal` = "gray",
                                      signal = "red")) +
         theme(legend.title = element_blank())
-    }
   }
   plot <- plot +
     geom_line(aes(x = period, y = median, color=nested), linetype = "dashed",
