@@ -732,17 +732,12 @@ tailor_disproportionality_threshold <- function(disproportionality_df, minimum_c
                                                 log2_threshold = 0, frequentist_threshold = 1,
                                                 multiple_comparison = TRUE) {
   results <- disproportionality_df
-  results <- results[, ROR_signal := ifelse(D_E < minimum_cases, "not enough cases",
-    ifelse(ROR_lower <= frequentist_threshold, "no SDR",
-      ifelse(multiple_comparison,
-        ifelse(Bonferroni == FALSE,
-          "weak SDR",
-          "SDR"
-        ),
-        "SDR"
-      )
-    )
-  )]
+  results[, ROR_signal := "not enough cases"]
+  results[D_E >= minimum_cases, ROR_signal := "no SDR"]
+  results[D_E >= minimum_cases & ROR_lower > frequentist_threshold & multiple_comparison == FALSE, ROR_signal := "SDR"]
+  results[D_E >= minimum_cases & ROR_lower > frequentist_threshold & multiple_comparison == TRUE, ROR_signal := "weak SDR"]
+  results[D_E >= minimum_cases & ROR_lower > frequentist_threshold & multiple_comparison == TRUE & Bonferroni == TRUE, ROR_signal := "SDR"]
+
   results <- results[, IC_signal := ifelse(D_E < minimum_cases, "not enough cases",
     ifelse(IC_lower <= log2_threshold,
       "no SDR",
