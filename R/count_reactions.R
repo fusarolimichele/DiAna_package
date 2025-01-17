@@ -4,6 +4,7 @@
 #' for a given set of primary IDs.
 #' Calculates % as the proportion of individuals recording the event.
 #'
+#' @inheritParams descriptive
 #' @param pids_cases Vector of primary IDs to consider for counting reactions.
 #' @param entity Entity investigated. It can be one of the following:
 #'       \itemize{
@@ -20,72 +21,81 @@
 #' @return A data.table containing counts and percentages of the investigated entity
 #'         at the specified level and in descending order.
 #'
-#' @import tidyverse
+#' @importFrom dplyr distinct
 #'
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' reporting_rates(pids, "reaction", "hlt")
-#' reporting_rates(pids, "indication", "pt")
-#' reporting_rates(pids, entity = "substance", level = "Class3")
-#' }
-reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_role = c("PS", "SS", "I", "C"), drug_indi = NA) {
+
+#' # select only reports recording paracetamol from the sample dataset,
+#' # and provide the most reported events (at the pt level),
+#' # drugs, and indications (at the PT level).
+#' pids_cases <-
+#' reporting_rates(unique(sample_Drug[substance == "paracetamol"]$primaryid),
+#'  "reaction", "pt",
+#'   temp_reac = sample_Reac,
+#'   temp_drug = sample_Drug, temp_indi = sample_Indi
+#' )
+#' reporting_rates(unique(sample_Drug[substance == "paracetamol"]$primaryid),
+#'   "indication", "pt",
+#'   temp_reac = sample_Reac,
+#'   temp_drug = sample_Drug, temp_indi = sample_Indi
+#' )
+#' reporting_rates(unique(sample_Drug[substance == "paracetamol"]$primaryid),
+#'   entity = "substance",
+#'   temp_reac = sample_Reac, temp_drug = sample_Drug,
+#'   temp_indi = sample_Indi
+#' )
+reporting_rates <- function (pids_cases, entity = "reaction", level = "pt", drug_role = c("PS",
+                                                                                          "SS", "I", "C"), drug_indi = NA, temp_reac = Reac, temp_drug = Drug,
+                             temp_indi = Indi)
+{
   if (entity == "reaction") {
-    temp <- import("REAC", pids = pids_cases, save_in_environment = FALSE)
-  } else if (entity == "indication") {
-    temp <- import("INDI", pids = pids_cases, save_in_environment = FALSE)
+    temp <- temp_reac[primaryid%in%pids_cases]
+  }
+  else if (entity == "indication") {
+    temp <- temp_indi[primaryid%in%pids_cases]
     if (sum(!is.na(drug_indi)) > 0) {
-      temp <- import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
-        temp,
-        on = c("primaryid", "drug_seq")
-      ][substance %in% drug_indi]
+      temp <- temp_drug[temp, on = c("primaryid", "drug_seq")][substance %in%
+                                                                 drug_indi]
     }
-    temp <- temp[, .(primaryid, pt = indi_pt)][!pt %in% c(
-      "product used for unknown indication",
-      "therapeutic procedures nec",
-      "therapeutic procedures and supportive care nec"
-    )]
-  } else if (entity == "substance") {
-    temp <- distinct(import("DRUG", pids = pids_cases, save_in_environment = FALSE)[
-      role_cod %in% drug_role
-    ][, .(primaryid, substance)])
+    temp <- temp[, .(primaryid, pt = indi_pt)][!pt %in%
+                                                 c("product used for unknown indication", "therapeutic procedures nec",
+                                                   "therapeutic procedures and supportive care nec")]
+  }
+  else if (entity == "substance") {
+    temp <- dplyr::distinct(temp_drug[primaryid%in%pids_cases])[role_cod %in% drug_role][,
+                                                                                         .(primaryid, substance)]
   }
   if (level %in% c("hlt", "hlgt", "soc")) {
     import_MedDRA()
-    temp <- distinct(distinct(MedDRA[, c("pt", level), with = FALSE])[
-      temp,
-      on = "pt"
-    ][
-      , c("primaryid", level),
-      with = FALSE
-    ])
+    temp <- dplyr::distinct(dplyr::distinct(MedDRA[, c("pt",
+                                                       level), with = FALSE])[temp, on = "pt"][, c("primaryid",
+                                                                                                   level), with = FALSE])
   }
   if (entity == "substance") {
     if (level == "pt") {
       level <- "substance"
-    } else if (level %in% c("Class1", "Class2", "Class3", "Class4")) {
+    }
+    else if (level %in% c("Class1", "Class2", "Class3",
+                          "Class4")) {
       import_ATC()[code == primary_code]
-      temp <- distinct(distinct(ATC[, c("substance", level), with = FALSE])[
-        temp,
-        on = "substance"
-      ][
-        , c("primaryid", level),
-        with = FALSE
-      ])
+      temp <- dplyr::distinct(dplyr::distinct(ATC[, c("substance",
+                                                      level), with = FALSE])[temp, on = "substance"][,
+                                                                                                     c("primaryid", level), with = FALSE])
     }
   }
-  temp <- distinct(temp)[, .N, by = get(level)][order(-N)][, perc := N / length(unique(temp$primaryid))]
+  temp <- dplyr::distinct(temp)[, .N, by = get(level)][order(-N)][,
+                                                                  `:=`(perc, N/length(unique(temp$primaryid)))]
   colnames(temp) <- c(level, "N", "perc")
-  temp <- temp[, label := paste0(get(level), " (", round(perc * 100, 2), "%) [", N, "]")]
+  temp <- temp[, `:=`(label, paste0(get(level), " (", round(perc *
+                                                              100, 2), "%) [", N, "]"))]
   temp <- temp[, .(get(level), label, N)]
   if (level != "substance") {
     temp[is.na(V1)]$label <- NA
   }
-  colnames(temp) <- c(
-    level, paste0("label_", level),
-    paste0("N_", level)
-  )
+  colnames(temp) <- c(level, paste0("label_", level), paste0("N_",
+                                                             level))
   return(temp)
 }
 
@@ -105,20 +115,26 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
 #' @param file_name Path to save the XLSX file containing the hierarchy.
 #' @param drug_role If entity is substance, it is possible to specify the drug roles that should be considered
 #'
-#' @return None. The function generates and writes the hierarchy to the xlsx.
+#' @return An excel file with the hierarchy of interest.
 #'         For indications and reactions, SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
 #'         For substances, the ATC hierarchy is followed.
+#' @importFrom writexl write_xlsx
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' hierarchycal_rates(pids, "reaction", "reactions_rates.xlsx")
-#' hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
-#' hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
+#' # The following examples require the MedDRA and the ATC to be imported
+#' if (file.exists("external_sources/meddra_primary")) {
+#'   hierarchycal_rates(pids, "reaction", "reactions_rates.xlsx")
+#' }
+#' if (file.exists("external_sources/meddra_primary")) {
+#'   hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
+#' }
+#' if (file.exists("external_sources/ATC_DiAna")) {
+#'   hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
 #' }
 hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx"), drug_role = c("PS", "SS", "I", "C")) {
   if (entity %in% c("reaction", "indication")) {
-    pts <- reporting_rates(pids_cases, entity = entity, "pt", )
+    pts <- reporting_rates(pids_cases, entity = entity, "pt")
     hlts <- reporting_rates(pids_cases, entity = entity, "hlt")
     hlgts <- reporting_rates(pids_cases, entity = entity, "hlgt")
     socs <- reporting_rates(pids_cases, entity = entity, "soc")

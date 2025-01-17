@@ -7,40 +7,71 @@
 disproportionality_analysis(
   drug_selected,
   reac_selected,
-  temp_d = Drug,
-  temp_r = Reac,
+  temp_drug = Drug,
+  temp_reac = Reac,
   meddra_level = "pt",
   drug_level = "substance",
   restriction = "none",
-  ROR_minimum_cases = 3,
-  ROR_threshold = 1,
-  IC_threshold = 0
+  minimum_cases = 3,
+  frequentist_threshold = 1,
+  log2_threshold = 0,
+  multiple_comparison = TRUE,
+  store_pids = FALSE,
+  save_in_excel = FALSE,
+  file_name = "disproportionality_results"
 )
 }
 \arguments{
-\item{drug_selected}{A list of drugs for analysis. Can be a list of lists (to collapse terms together) if drug_level is set to custom.}
+\item{drug_selected}{A list of drugs for analysis. Can be a list of lists (to collapse terms together).}
 
-\item{reac_selected}{A list of adverse events for analysis. Can be a list of lists (to collapse terms together) if meddra_level is set to custom.}
+\item{reac_selected}{A list of adverse events for analysis. Can be a list of lists (to collapse terms together).}
 
-\item{temp_d}{Data table containing drug data (default is Drug). If set to Drug\link{role_cod \%in\% c("PS","SS")} allows to investigate only suspects.}
+\item{temp_drug}{Drug dataset. Can be set to sample_Drug for testing}
 
-\item{temp_r}{Data table containing reaction data (default is Reac).}
+\item{temp_reac}{Reac dataset. Can be set to sample_Reac for testing}
 
-\item{meddra_level}{The desired MedDRA level for analysis (default is "pt"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).}
+\item{meddra_level}{The desired MedDRA level for analysis (default is "pt").}
 
 \item{drug_level}{The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).}
 
-\item{restriction}{Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo\link{!RB_duplicates_only_susp}$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.}
+\item{restriction}{Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo[!RB_duplicates_only_susp]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.}
 
-\item{ROR_minimum_cases}{Threshold of minimum cases for calculating Reporitng Odds Ratio (default is 3).}
+\item{minimum_cases}{Threshold of minimum cases for calculating identifyin a signal (default is 3).}
 
-\item{ROR_threshold}{Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).}
+\item{frequentist_threshold}{Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).}
 
-\item{IC_threshold}{Threshold for defining the significance of the lower limit of the Information Component (default is 0).}
+\item{log2_threshold}{Threshold for defining the significance of the lower limit of the Information Component (default is 0).}
+
+\item{multiple_comparison}{Logical specifying whether to perform Bonferroni correction for multiple testing on the ROR. Default to TRUE. Particularly important when running the disproportionality on many combinations.}
+
+\item{store_pids}{Logical specifying whether to store primaryids recording the drug and primaryids recording the event as lists. Default to FALSE.}
+
+\item{save_in_excel}{Whether to save the outcome in an excel. Defaults to TRUE}
+
+\item{file_name}{The name of the Excel file to save the results. Default is "Descriptives.xlsx". It only works if save_in_excel is TRUE.}
 }
 \value{
 A data.table containing disproportionality analysis results.
 }
 \description{
-performs disproportionality analysis and returns the results.
+performs disproportionality analysis and returns the results, which can be plotted using \code{render_forest()}.
+Look at the DiAna website fore extensive tutorials to practically use the function (\code{vignette("Disproportionality Analysis", package = "DiAna")})
+and to design and run disproportionality analysis based on expected biases (\code{vignette("Causal Inference", package = "DiAna")})
+Contrary to \code{disproportionality_comparison()}, it calculates the association based on the Drug and Reac database,
+and not based on number of reports.
+See \code{disproportionality_trend()} for investigating how disproportionality changed through time.
 }
+\examples{
+disproportionality_analysis(
+  drug_selected = "paracetamol",
+  reac_selected = "overdose",
+  temp_drug = sample_Drug,
+  temp_reac = sample_Reac
+)
+}
+\seealso{
+Other disproportionality functions: 
+\code{\link{disproportionality_comparison}()},
+\code{\link{disproportionality_trend}()}
+}
+\concept{disproportionality functions}

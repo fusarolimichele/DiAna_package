@@ -4,28 +4,45 @@
 \alias{plot_disproportionality_trend}
 \title{Plot Disproportionality Trend}
 \usage{
-plot_disproportionality_trend(disproportionality_trend_results, metric = "IC")
+plot_disproportionality_trend(
+  disproportionality_trend_results,
+  metric = "IC",
+  time_granularity = "year"
+)
 }
 \arguments{
 \item{disproportionality_trend_results}{Data frame containing the results from the \code{disproportionality_trend} function.}
 
 \item{metric}{Character string specifying the metric to plot. Options are "IC" (information component) or "ROR" (reporting odds ratio). Defaults to "IC".}
+
+\item{time_granularity}{Character string specifying the time frame. It is recommeded to use the same specified in the 'disproportionality_trend' function. Default is "year". Alternatives are "quarter" and "month".}
 }
 \value{
 A ggplot object representing the disproportionality trend plot for the specified metric.
 }
 \description{
 This function plots the disproportionality trend over time for a given metric.
+Visualizes the results of\code{disproportionality_trend()}.
 }
 \details{
 The function creates a plot to visualize the disproportionality trend of a drug-event combination over time. Depending on the selected metric, it plots either the information component (IC) or the reporting odds ratio (ROR) with corresponding confidence intervals.
 }
 \examples{
-\dontrun{
-# Example usage
-trend_results <- disproportionality_trend(drug_selected = "aspirin", reac_selected = "headache")
-plot_IC <- plot_disproportionality_trend(trend_results, metric = "IC")
-plot_ROR <- plot_disproportionality_trend(trend_results, metric = "ROR")
-}
+drug_selected <- "paracetamol"
+reac_selected <- "overdose"
+trend_results <- disproportionality_trend(drug_selected, reac_selected,
+  temp_drug = sample_Drug,
+  temp_reac = sample_Reac,
+  temp_demo = sample_Demo,
+  temp_demo_supp = sample_Demo_supp[
+    , .(primaryid, quarter)
+  ]
+)
+plot_disproportionality_trend(trend_results, metric = "IC")
 
 }
+\seealso{
+Other visualization functions: 
+\code{\link{render_forest}()}
+}
+\concept{visualization functions}

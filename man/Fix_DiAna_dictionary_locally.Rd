@@ -26,7 +26,9 @@ The function performs the following steps:
 }
 }
 \examples{
-\dontrun{
-Drug <- Fix_DiAna_dictionary_locally("changes.xlsx")
+# This example needs that DiAna dictionary is downloaded (using setup_DiAna),
+# and that an excel file with intended changes is available
+if (file.exists("changes.xlsx") & file.exists("external_source/DiAna_dictionary.csv")) {
+  Drug <- Fix_DiAna_dictionary_locally("changes.xlsx")
 }
 }

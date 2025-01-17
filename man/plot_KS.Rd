@@ -26,9 +26,20 @@ of greatest distance between the cumulative distribution functions (CDFs)
 of the two groups.
 }
 \examples{
-\dontrun{
-# Example usage:
-plot_KS(results_tto_analysis, RG = "drug")
-}
+df <- time_to_onset_analysis(
+  drug_selected = "skin care",
+  reac_selected = list("skin affection" = list(
+    "dry skin",
+    "skin burning sensation",
+    "skin irritation",
+    "erythema",
+    "rash macular",
+    "acne",
+    "skin haemorrhage"
+  )),
+  temp_drug = sample_Drug, temp_reac = sample_Reac,
+  temp_ther = sample_Ther
+)
+plot_KS(df, RG = "event")
 
 }

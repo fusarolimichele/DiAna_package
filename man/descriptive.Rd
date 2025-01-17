@@ -8,13 +8,19 @@ descriptive(
   pids_cases,
   RG = NULL,
   drug = NULL,
+  save_in_excel = TRUE,
   file_name = "Descriptives.xlsx",
   vars = c("sex", "Submission", "Reporter", "age_range", "Outcome", "country",
     "continent", "age_in_years", "wt_in_kgs", "Reactions", "Indications", "Substances",
     "year", "role_cod", "time_to_onset"),
   list_pids = list(),
   method = "independence_test",
-  quarter = FAERS_version
+  temp_demo = Demo,
+  temp_drug = Drug,
+  temp_reac = Reac,
+  temp_indi = Indi,
+  temp_outc = Outc,
+  temp_ther = Ther
 )
 }
 \arguments{
@@ -24,7 +30,9 @@ descriptive(
 
 \item{drug}{A vector of drug names. Default is NULL.}
 
-\item{file_name}{The name of the Excel file to save the results. Default is "Descriptives.xlsx".}
+\item{save_in_excel}{Whether to save the outcome in an excel. Defaults to TRUE}
+
+\item{file_name}{The name of the Excel file to save the results. Default is "Descriptives.xlsx". It only works if save_in_excel is TRUE.}
 
 \item{vars}{A character vector of variable names to include in the analysis.}
 
@@ -32,26 +40,41 @@ descriptive(
 
 \item{method}{The method for Chi-square test analysis, either "independence_test" or "goodness_of_fit". Default is "independence_test". It applies only for comparisons between cases and non-cases.}
 
-\item{quarter}{The quarter for data import. Default is FAERS_version, which we recommend to provide at the beginning of the script.}
+\item{temp_demo}{Demo dataset. Defaults to Demo. Can be se to sample_Demo for testing}
+
+\item{temp_drug}{Drug dataset. Can be set to sample_Drug for testing}
+
+\item{temp_reac}{Reac dataset. Can be set to sample_Reac for testing}
+
+\item{temp_indi}{Indi dataset. Can be set to sample_Indi for testing}
+
+\item{temp_outc}{Outc dataset. Can be set to sample_Outc for testing}
+
+\item{temp_ther}{Ther dataset. Can be set to sample_Ther for testing}
 }
 \value{
-The function generates descriptive statistics and saves them to an Excel file.
+The function generates descriptive statistics as a gt_table and potentially saves them to an Excel file.
 }
 \description{
 This function generates descriptive statistics for a sample of data, including cases and non-cases, and saves the results to an Excel file.
 }
 \examples{
-\dontrun{
-import("DEMO", quarter = "23Q1")
-pids_cases <- sample(Demo$primaryid, 100)
-RG <- sample(Demo[!primaryid \%in\% pids_cases]$primaryid, 100)
+pids_cases <- unique(sample_Demo[sex == "M"]$primaryid)
+RG <- unique(sample_Demo[sex == "M"]$primaryid)
 
 # Generate descriptive statistics for cases
-descriptive(pids_cases = pids_cases)
-descriptive(pids_cases = pids_cases, drug = "paracetamol")
+descriptive(
+  pids_cases = pids_cases, save_in_excel = FALSE,
+  temp_demo = sample_Demo, temp_drug = sample_Drug,
+  temp_reac = sample_Reac, temp_indi = sample_Indi,
+  temp_outc = sample_Outc, temp_ther = sample_Ther
+)
 
 # Generate descriptive statistics for cases and non-cases
-descriptive(pids_cases = pids_cases, RG = RG)
-descriptive(pids_cases = pids_cases, RG = RG, drug = "paracetamol")
-}
+descriptive(
+  pids_cases = pids_cases, RG = RG, save_in_excel = FALSE,
+  temp_demo = sample_Demo, temp_drug = sample_Drug,
+  temp_reac = sample_Reac, temp_indi = sample_Indi,
+  temp_outc = sample_Outc, temp_ther = sample_Ther
+)
 }

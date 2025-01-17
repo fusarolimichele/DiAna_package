@@ -6,6 +6,11 @@
 \usage{
 FAERS_quarter_specifics(quarter = FAERS_version, print = TRUE)
 }
+\arguments{
+\item{quarter}{The quarter for which specifics are needed. Default to FAERS_version.}
+
+\item{print}{Logical, should the output be printed? Default to TRUE.}
+}
 \value{
 Specifics
 }
@@ -13,7 +18,5 @@ Specifics
 This function provides specifics on dictionaries used for cleaning the specified database version
 }
 \examples{
-\dontrun{
-# FAERS_quarter_specifics()
-}
+FAERS_quarter_specifics("24Q1")
 }

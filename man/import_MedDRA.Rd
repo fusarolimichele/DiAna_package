@@ -4,7 +4,10 @@
 \alias{import_MedDRA}
 \title{Import MedDRA Data}
 \usage{
-import_MedDRA()
+import_MedDRA(env = .GlobalEnv)
+}
+\arguments{
+\item{env}{The environment where the data will be assigned. Default to .GlobalEnv}
 }
 \value{
 A data table containing MedDRA data.
@@ -18,9 +21,9 @@ If the file does not exist, it will stop execution and provide instructions on h
 If the file exists, it will load the data, select specific columns (def, soc, hlgt, hlt, pt), remove duplicates, and store it in the global environment as "MedDRA".
 }
 \examples{
-\dontrun{
-# Import MedDRA data
-import_MedDRA()
+# This example requires a specific file that can only be available with a MeDRA subscription.
+if (file.exists("external_source/meddra_primary.csv")) {
+  import_MedDRA()
 }
 
 }

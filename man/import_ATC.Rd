@@ -4,10 +4,12 @@
 \alias{import_ATC}
 \title{Import ATC classification}
 \usage{
-import_ATC(primary = T)
+import_ATC(primary = T, env = .GlobalEnv)
 }
 \arguments{
 \item{primary}{Whether only the primary ATC should be retrieved.}
+
+\item{env}{The environment where the data will be assigned. Default to .GlobalEnv}
 }
 \value{
 A data frame containing the dataset for ATC linkage.
@@ -17,8 +19,7 @@ This function reads the ATC (Anatomical Therapeutic Chemical) classification
 from an external source and assigns it to a global environment variable.
 }
 \examples{
-\dontrun{
-import_ATC()
+if (file.exists("external_source/ATC_DiAna.csv")) {
+  import_ATC()
 }
-
 }

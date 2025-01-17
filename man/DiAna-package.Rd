@@ -4,13 +4,16 @@
 \name{DiAna-package}
 \alias{DiAna}
 \alias{DiAna-package}
-\title{DiAna: Advanced Disproportionality Analysis in the FAERS for Drug Safety}
+\title{DiAna: DIsproportionality ANAlysis and Pharmacovigilance in the FAERS}
 \description{
-The `DiAna` (Disproportionality Analysis) package allows for downloading FAERS cleaned data, and import relational datasets. It allows to identify cases and select controls to reduce confounding.
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
+Advanced tools for analyzing the FDA Adverse Event Reporting System (FAERS) data, enhancing drug safety research. Provides functions to download cleaned FAERS data and import relational datasets, facilitating case identification and control selection to address confounding in analyses. Provides functions for descriptive and disproportionality analysis, time-to-onset analysis, network analysis, retrieval algorithms, and visualization.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://fusarolimichele.github.io/DiAna_package/}
   \item \url{https://github.com/fusarolimichele/DiAna_package}
   \item \url{https://github.com/fusarolimichele/DiAna}
   \item \url{https://osf.io/zqu89/}
@@ -19,7 +22,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Michele Fusaroli \email{michele.fusaroli2@unibo.it} (\href{https://orcid.org/0000-0002-0254-2212}{ORCID})
+\strong{Maintainer}: Michele Fusaroli \email{michele.fusaroli@gmail.com} (\href{https://orcid.org/0000-0002-0254-2212}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
