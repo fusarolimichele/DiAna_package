@@ -399,7 +399,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
     rate = ((drug_count * event_count) / tot) + 0.5
   ))
   gamma_median <- log2(stats::qgamma(
-    p = .05,
+    p = .5,
     shape = drug_event_count + 0.5,
     rate = ((drug_count * event_count) / tot) + 0.5
   ))
