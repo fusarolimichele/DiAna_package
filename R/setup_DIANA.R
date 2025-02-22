@@ -71,7 +71,7 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
     } else if (quarter == "24Q4") {
       DiAna_url <- "https://osf.io/download/w2khx/"
     }
-    
+
     # Download and extract DiAna data
     zip_path <- paste0(here::here(), "/data/", quarter, ".zip")
     utils::download.file(DiAna_url, destfile = zip_path, mode = "wb")

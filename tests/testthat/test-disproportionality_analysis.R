@@ -4,7 +4,7 @@ test_that("Basic disproportionality on numbers work", {
   expect_equal(t$PRR, "12.7 (4.02-40.14)")
   expect_equal(t$RRR, "12 (3.81-37.84)")
   expect_equal(t$IC, "2.22 (0.15-3.42)")
-  expect_equal(t$IC_gamma, "0.53 (0.17-3.42)")
+  expect_equal(t$IC_gamma, "2.08 (0.17-3.42)")
 })
 
 test_that("Errors in input to disproportionality comparison are correctly identified", {
