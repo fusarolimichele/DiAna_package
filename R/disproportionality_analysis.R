@@ -399,7 +399,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
     rate = ((drug_count * event_count) / tot) + 0.5
   ))
   gamma_median <- log2(stats::qgamma(
-    p = .05,
+    p = .5,
     shape = drug_event_count + 0.5,
     rate = ((drug_count * event_count) / tot) + 0.5
   ))
@@ -603,35 +603,45 @@ disproportionality_trend <- function(
 #' plot_disproportionality_trend(trend_results, metric = "IC")
 #'
 #' @export
-plot_disproportionality_trend <- function (disproportionality_trend_results, metric = "IC", time_granularity = "year") {
+plot_disproportionality_trend <- function(disproportionality_trend_results, metric = "IC", time_granularity = "year") {
   if (time_granularity == "month") {
     disproportionality_trend_results$period <- lubridate::ym(disproportionality_trend_results$period)
   }
-  if (is.null(disproportionality_trend_results$nested)){disproportionality_trend_results$nested <- "default"}
+  if (is.null(disproportionality_trend_results$nested)) {
+    disproportionality_trend_results$nested <- "default"
+  }
 
-  disproportionality_trend_results$median <- disproportionality_trend_results[,get(paste0(metric,"_median"))]
-  disproportionality_trend_results$lower <- disproportionality_trend_results[,get(paste0(metric,"_lower"))]
-  disproportionality_trend_results$upper <- disproportionality_trend_results[,get(paste0(metric,"_upper"))]
-  disproportionality_trend_results[,color:=ifelse(metric=="IC"&lower>0 |metric=="ROR"&lower>1,"signal","no-signal")]
+  disproportionality_trend_results$median <- disproportionality_trend_results[, get(paste0(metric, "_median"))]
+  disproportionality_trend_results$lower <- disproportionality_trend_results[, get(paste0(metric, "_lower"))]
+  disproportionality_trend_results$upper <- disproportionality_trend_results[, get(paste0(metric, "_upper"))]
+  disproportionality_trend_results[, color := ifelse(metric == "IC" & lower > 0 | metric == "ROR" & lower > 1, "signal", "no-signal")]
 
   plot <- ggplot(disproportionality_trend_results)
-  for (n in 1:length(unique(disproportionality_trend_results$nested))){
-    df_temp <- disproportionality_trend_results[nested==unique(disproportionality_trend_results$nested)[[n]]]
+  for (n in 1:length(unique(disproportionality_trend_results$nested))) {
+    df_temp <- disproportionality_trend_results[nested == unique(disproportionality_trend_results$nested)[[n]]]
     plot <- plot +
-        geom_pointrange(aes(x = period, y = median,
-                            ymin = lower, ymax = upper,
-                            fill = color, size = D_E),
-                        fatten = ifelse(time_granularity == "month",0.3,1),
-                        show.legend = FALSE,
-                        data = df_temp, shape=21) +
-        ylab(metric) +
-        scale_fill_manual(values = c(`no-signal` = "gray",
-                                     signal = "red")) +
-        theme(legend.title = element_blank())
+      geom_pointrange(
+        aes(
+          x = period, y = median,
+          ymin = lower, ymax = upper,
+          fill = color, size = D_E
+        ),
+        fatten = ifelse(time_granularity == "month", 0.3, 1),
+        show.legend = FALSE,
+        data = df_temp, shape = 21
+      ) +
+      ylab(metric) +
+      scale_fill_manual(values = c(
+        `no-signal` = "gray",
+        signal = "red"
+      )) +
+      theme(legend.title = element_blank())
   }
   plot <- plot +
-    geom_line(aes(x = period, y = median, color=nested), linetype = "dashed",
-              data = disproportionality_trend_results) +
+    geom_line(aes(x = period, y = median, color = nested),
+      linetype = "dashed",
+      data = disproportionality_trend_results
+    ) +
     theme_bw() + xlab("")
   return(plot)
 }

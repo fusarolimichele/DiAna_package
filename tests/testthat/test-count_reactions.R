@@ -8,7 +8,7 @@ test_that("Reporting_rate works for reactions", {
       "drug ineffective", "nausea", "rheumatoid arthritis",
       "crohn's disease",
       "alopecia", "back pain"
-      )
+    )
   )
 })
 
@@ -20,8 +20,10 @@ test_that("Reporting_rate works for indications", {
       temp_reac = sample_Reac, temp_drug = sample_Drug,
       temp_indi = sample_Indi
     )$pt)),
-    c("rheumatoid arthritis", "crohn's disease", "psoriatic arthropathy",
-      "psoriasis", "ankylosing spondylitis", "hidradenitis")
+    c(
+      "rheumatoid arthritis", "crohn's disease", "psoriatic arthropathy",
+      "psoriasis", "ankylosing spondylitis", "hidradenitis"
+    )
   )
 })
 
@@ -32,7 +34,9 @@ test_that("Reporting_rate works for drugs", {
       temp_reac = sample_Reac, temp_drug = sample_Drug,
       temp_indi = sample_Indi
     )$substance)),
-    c("adalimumab", "methotrexate", "prednisone", "etanercept", "vitamin b9",
-      "cetirizine")
+    c(
+      "adalimumab", "methotrexate", "prednisone", "etanercept", "vitamin b9",
+      "cetirizine"
+    )
   )
 })

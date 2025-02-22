@@ -46,56 +46,68 @@
 #'   temp_reac = sample_Reac, temp_drug = sample_Drug,
 #'   temp_indi = sample_Indi
 #' )
-reporting_rates <- function (pids_cases, entity = "reaction", level = "pt", drug_role = c("PS",
-                                                                                          "SS", "I", "C"), drug_indi = NA, temp_reac = Reac, temp_drug = Drug,
-                             temp_indi = Indi)
-{
+reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_role = c(
+                              "PS",
+                              "SS", "I", "C"
+                            ), drug_indi = NA, temp_reac = Reac, temp_drug = Drug,
+                            temp_indi = Indi) {
   if (entity == "reaction") {
-    temp <- temp_reac[primaryid%in%pids_cases]
-  }
-  else if (entity == "indication") {
-    temp <- temp_indi[primaryid%in%pids_cases]
+    temp <- temp_reac[primaryid %in% pids_cases]
+  } else if (entity == "indication") {
+    temp <- temp_indi[primaryid %in% pids_cases]
     if (sum(!is.na(drug_indi)) > 0) {
       temp <- temp_drug[temp, on = c("primaryid", "drug_seq")][substance %in%
-                                                                 drug_indi]
+        drug_indi]
     }
     temp <- temp[, .(primaryid, pt = indi_pt)][!pt %in%
-                                                 c("product used for unknown indication", "therapeutic procedures nec",
-                                                   "therapeutic procedures and supportive care nec")]
-  }
-  else if (entity == "substance") {
-    temp <- dplyr::distinct(temp_drug[primaryid%in%pids_cases])[role_cod %in% drug_role][,
-                                                                                         .(primaryid, substance)]
+      c(
+        "product used for unknown indication", "therapeutic procedures nec",
+        "therapeutic procedures and supportive care nec"
+      )]
+  } else if (entity == "substance") {
+    temp <- dplyr::distinct(temp_drug[primaryid %in% pids_cases])[role_cod %in% drug_role][
+      ,
+      .(primaryid, substance)
+    ]
   }
   if (level %in% c("hlt", "hlgt", "soc")) {
     import_MedDRA()
-    temp <- dplyr::distinct(dplyr::distinct(MedDRA[, c("pt",
-                                                       level), with = FALSE])[temp, on = "pt"][, c("primaryid",
-                                                                                                   level), with = FALSE])
+    temp <- dplyr::distinct(dplyr::distinct(MedDRA[, c(
+      "pt",
+      level
+    ), with = FALSE])[temp, on = "pt"][, c(
+      "primaryid",
+      level
+    ), with = FALSE])
   }
   if (entity == "substance") {
     if (level == "pt") {
       level <- "substance"
-    }
-    else if (level %in% c("Class1", "Class2", "Class3",
-                          "Class4")) {
+    } else if (level %in% c(
+      "Class1", "Class2", "Class3",
+      "Class4"
+    )) {
       import_ATC()[code == primary_code]
       temp <- dplyr::distinct(dplyr::distinct(ATC[, c("substance",
                                                       level), with = FALSE])[temp, on = "substance", allow.cartesian=TRUE][,
                                                                                                      c("primaryid", level), with = FALSE])
     }
   }
-  temp <- dplyr::distinct(temp)[, .N, by = get(level)][order(-N)][,
-                                                                  `:=`(perc, N/length(unique(temp$primaryid)))]
+  temp <- dplyr::distinct(temp)[, .N, by = get(level)][order(-N)][
+    ,
+    `:=`(perc, N / length(unique(temp$primaryid)))
+  ]
   colnames(temp) <- c(level, "N", "perc")
   temp <- temp[, `:=`(label, paste0(get(level), " (", round(perc *
-                                                              100, 2), "%) [", N, "]"))]
+    100, 2), "%) [", N, "]"))]
   temp <- temp[, .(get(level), label, N)]
   if (level != "substance") {
     temp[is.na(V1)]$label <- NA
   }
-  colnames(temp) <- c(level, paste0("label_", level), paste0("N_",
-                                                             level))
+  colnames(temp) <- c(level, paste0("label_", level), paste0(
+    "N_",
+    level
+  ))
   return(temp)
 }
 
