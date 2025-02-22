@@ -449,6 +449,8 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
     nE = c(drug_count - drug_event_count, tot - event_count - (drug_count - drug_event_count))
   ))
   rownames(tab) <- c("D", "nD")
+  drug_count <- as.numeric(drug_count)
+  event_count <- as.numeric(event_count)
   or <- questionr::odds.ratio(tab)
   ROR_median <- floor(or$OR * 100) / 100
   ROR_lower <- floor(or$`2.5 %` * 100) / 100
@@ -462,7 +464,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
     rate = ((drug_count * event_count) / tot) + 0.5
   ))
   gamma_median <- log2(stats::qgamma(
-    p = .5,
+    p = .05,
     shape = drug_event_count + 0.5,
     rate = ((drug_count * event_count) / tot) + 0.5
   ))
