@@ -638,7 +638,7 @@ plot_disproportionality_trend <- function(disproportionality_trend_results, metr
       theme(legend.title = element_blank())
   }
   plot <- plot +
-    geom_line(aes(x = period, y = median, color = nested),
+    geom_line(aes(x = period, y = median, color = nested,group=nested),
       linetype = "dashed",
       data = disproportionality_trend_results
     ) +
