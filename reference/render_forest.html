@@ -67,7 +67,9 @@ visualizing the results of <code><a href="disproportionality_analysis.html">disp
 <span>  nested_colors <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  facet_v <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  facet_h <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  legend_position <span class="op">=</span> <span class="st">"right"</span></span>
+<span>  legend_position <span class="op">=</span> <span class="st">"right"</span>,</span>
+<span>  point_size <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  xcoord_lims <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -137,6 +139,14 @@ visualizing the results of <code><a href="disproportionality_analysis.html">disp
 
 <dt id="arg-legend-position">legend_position<a class="anchor" aria-label="anchor" href="#arg-legend-position"></a></dt>
 <dd><p>Where to place the legend.</p></dd>
+
+
+<dt id="arg-point-size">point_size<a class="anchor" aria-label="anchor" href="#arg-point-size"></a></dt>
+<dd><p>Numeric defining the size of the points, between 0 and 10. Default to 0 scales the size with the log10 of the count of observed.</p></dd>
+
+
+<dt id="arg-xcoord-lims">xcoord_lims<a class="anchor" aria-label="anchor" href="#arg-xcoord-lims"></a></dt>
+<dd><p>Parameter to cut the IC axis. Defaults to NA for auto-setting. It should be in the format c(xmin,xmax)</p></dd>
 
 </dl></div>
     <div class="section level2">
