@@ -20,7 +20,9 @@ render_forest(
   nested_colors = NA,
   facet_v = NA,
   facet_h = NA,
-  legend_position = "right"
+  legend_position = "right",
+  point_size = 0,
+  xcoord_lims = NA
 )
 }
 \arguments{
@@ -55,6 +57,10 @@ render_forest(
 \item{facet_h}{Variable for horizontal facetting (default is NA).}
 
 \item{legend_position}{Where to place the legend.}
+
+\item{point_size}{Numeric defining the size of the points, between 0 and 10. Default to 0 scales the size with the log10 of the count of observed.}
+
+\item{xcoord_lims}{Parameter to cut the IC axis. Defaults to NA for auto-setting. It should be in the format c(xmin,xmax)}
 }
 \value{
 A ggplot object representing the forest plot visualization.

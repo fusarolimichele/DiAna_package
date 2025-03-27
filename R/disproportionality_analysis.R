@@ -205,6 +205,8 @@ disproportionality_analysis <- function(
 #' @param dodge Position adjustment for dodging (default is 0.3).
 #' @param show_legend Logical indicating whether to show the legend (default is FALSE).
 #' @param legend_position Where to place the legend.
+#' @param point_size Numeric defining the size of the points, between 0 and 10. Default to 0 scales the size with the log10 of the count of observed.
+#' @param xcoord_lims Parameter to cut the IC axis. Defaults to NA for auto-setting. It should be in the format c(xmin,xmax)
 #'
 #' @return A ggplot object representing the forest plot visualization.
 #'
@@ -235,7 +237,9 @@ render_forest <- function(disproportionality_df,
                           nested_colors = NA,
                           facet_v = NA,
                           facet_h = NA,
-                          legend_position = "right") {
+                          legend_position = "right",
+                          point_size = 0,
+                          xcoord_lims=NA) {
   if (length(levs_row) == 1) {
     levs_row <- factor(unique(disproportionality_df[[row]])) %>% droplevels()
   }
@@ -280,30 +284,34 @@ render_forest <- function(disproportionality_df,
     } +
     {
       if (nested == FALSE) {
-        geom_point(aes(color = color, size = (log10(D_E))))
+        geom_point(aes(color = color, size = ifelse(point_size == 0,log10(D_E),point_size)))
       }
     } +
     {
       if (nested != FALSE) geom_linerange(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8)), position = position_dodge(dodge), linewidth = 1)
     } +
     {
-      if (nested != FALSE) geom_point(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8), size = (log10(D_E))), position = position_dodge(dodge))
+      if (nested != FALSE) geom_point(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8), size = ifelse(point_size == 0,log10(D_E),point_size)), position = position_dodge(dodge))
     } +
     {
       if (!is.na(facet_v)) facet_wrap(factor(get(facet_v)) ~ ., labeller = label_wrap_gen(width = 15), ncol = 4)
     } +
     {
       if (!is.na(facet_h)) facet_grid(rows = facet_h, labeller = label_wrap_gen(width = 25), scales = "free", space = "free", switch = "y")
-    } +
+    }  +
     geom_vline(aes(xintercept = threshold), linetype = "dashed") +
     xlab(index) +
     ylab("") +
     scale_x_continuous(trans = transformation) +
     theme_bw() +
     scale_alpha_continuous(range = c(0.4, 1), guide = "none") +
-    guides(shape = guide_legend(override.aes = list(size = 5))) +
-    scale_size_area(guide = "none") +
-    {
+    guides(shape = guide_legend(override.aes = list(size = 5))) + {
+      if (point_size != 0)
+        scale_size(lim=c(0,10),guide = "none")
+    } + {
+      if (point_size == 0)
+        scale_size_area(guide = "none")
+    } + {
       if (nested == FALSE) labs(color = "Signal")
     } +
     {
@@ -322,7 +330,10 @@ render_forest <- function(disproportionality_df,
       legend.title = element_blank(),
       legend.text = element_text(size = text_size_legend),
     ) +
-    guides(shape = guide_legend(override.aes = list(size = 5)))
+    guides(shape = guide_legend(override.aes = list(size = 5))) + {
+      if (!is.na(xcoord_lims[[1]]))
+        coord_cartesian(xlim=xcoord_lims)
+    }
 }
 
 #' Disproportionality Analysis for Drug-Event Combinations
