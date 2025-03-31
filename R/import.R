@@ -133,3 +133,84 @@ import_ATC <- function(primary = T, env = .GlobalEnv) {
     ATC
   }
 }
+
+#' Extract Standardised MedDRA Queries (SMQs)
+#'
+#' This function extracts and organizes Standardised MedDRA Queries (SMQs) from an external CSV file.
+#' The function categorizes SMQs into different levels and provides either a "Narrow" scope or all available terms.
+#'
+#' @param Narrow Logical, default is `TRUE`. If `TRUE`, only the "Narrow" scope SMQs are returned.
+#' If `FALSE`, all SMQs are included.
+#'
+#' @return A named list where each element corresponds to an SMQ group. The names represent the SMQ category,
+#' and the values are character vectors of Preferred Terms (PTs) associated with that SMQ.
+#'
+#' @details
+#' The function reads the SMQ dictionary from an external CSV file located at:
+#' `external_sources/smq_dictionary.csv`.
+#' Since MedDRA subscription is required, the user must obtain the SMQ dictionary separately.
+#' Instructions for setting up the required files are provided in the DiAna GitHub repository:
+#' <https://github.com/fusarolimichele/DiAna>.
+#'
+#' The function processes five hierarchical levels (`SMQ_1` to `SMQ_5`) and assigns Preferred Terms (PTs)
+#' accordingly, filtering by "Narrow" scope if requested.
+#'
+#' @note If the required SMQ dictionary file is missing, the function stops execution and returns an error message.
+#'
+#' @examples
+#' \dontrun{
+#' smq_list <- extractSMQ(Narrow = TRUE)
+#' smq_list <- extractSMQ(Narrow = FALSE)
+#' }
+#'
+#' @export
+extractSMQ <- function(Narrow=TRUE){
+  path <- paste0(here::here(), "/external_sources/smq_dictionary.csv")
+  if (!file.exists(path)) {
+    stop("The SMQ_dictionary is not available with DiAna since the subscription must be done with MEDDRA MSSO.\n         Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna\n         to make it ready for download.")
+  }
+  smq_dictionary <- setDT(readr::read_delim(path,
+                                            delim = ";", escape_double = FALSE, trim_ws = TRUE))
+  smq_list <- c()
+  for (n in unique(smq_dictionary$SMQ_1)){
+    ifelse(Narrow,{
+      sublist <- list(smq_dictionary[SMQ_1==n][NB=="Narrow"]$pt)},{
+        sublist <- list(smq_dictionary[SMQ_1==n]$pt)
+      })
+    names(sublist) <- n
+    smq_list <- c(smq_list,sublist)
+  }
+  for (n in setdiff(unique(smq_dictionary$SMQ_2),unique(smq_dictionary$SMQ_1))){
+    ifelse(Narrow,{
+      sublist <- list(smq_dictionary[SMQ_2==n][NB=="Narrow"]$pt)},{
+        sublist <- list(smq_dictionary[SMQ_2==n]$pt)
+      })
+    names(sublist) <- n
+    smq_list <- c(smq_list,sublist)
+  }
+  for (n in setdiff(unique(smq_dictionary$SMQ_3),unique(smq_dictionary$SMQ_2))){
+    ifelse(Narrow,{
+      sublist <- list(smq_dictionary[SMQ_3==n][NB=="Narrow"]$pt)},{
+        sublist <- list(smq_dictionary[SMQ_3==n]$pt)
+      })
+    names(sublist) <- n
+    smq_list <- c(smq_list,sublist)
+  }
+  for (n in setdiff(unique(smq_dictionary$SMQ_4),unique(smq_dictionary$SMQ_3))){
+    ifelse(Narrow,{
+      sublist <- list(smq_dictionary[SMQ_4==n][NB=="Narrow"]$pt)},{
+        sublist <- list(smq_dictionary[SMQ_4==n]$pt)
+      })
+    names(sublist) <- n
+    smq_list <- c(smq_list,sublist)
+  }
+  for (n in setdiff(unique(smq_dictionary$SMQ_5),unique(smq_dictionary$SMQ_4))){
+    ifelse(Narrow,{
+      sublist <- list(smq_dictionary[SMQ_5==n][NB=="Narrow"]$pt)},{
+        sublist <- list(smq_dictionary[SMQ_5==n]$pt)
+      })
+    names(sublist) <- n
+    smq_list <- c(smq_list,sublist)
+  }
+  return(smq_list)
+}

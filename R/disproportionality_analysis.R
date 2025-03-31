@@ -458,6 +458,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' @param temp_demo_supp Data frame containing supplementary demographic data, and in particular the quarter. Defaults to `Demo_supp\[, .(primaryid, quarter)\]`.
 #' @param time_granularity Character string specifying the time granularity. Options are "year", "quarter", or "month". Defaults to "year".
 #' @param cumulative Logical indicating whether to calculate cumulative values. Defaults to `TRUE`.
+#' @param min_2004 Logical indicating whether to start the analysis only from 2004, year of the FDA AERS first implementation. Defaults to `TRUE`.
 #'
 #' @return A data frame containing the disproportionality results over time, including:
 #' \item{period}{Time period. Deafult is 'year'. Other values are 'quarter' and 'month'. When using 'quarter' Demo_supp is required}
@@ -501,7 +502,8 @@ disproportionality_trend <- function(
     drug_level = "substance",
     restriction = "none",
     time_granularity = "year",
-    cumulative = TRUE) {
+    cumulative = TRUE,
+    min_2004 = TRUE) {
   if (length(restriction) > 1) {
     temp_drug <- temp_drug[primaryid %in% restriction] %>% droplevels()
     temp_reac <- temp_reac[primaryid %in% restriction] %>% droplevels()
@@ -513,13 +515,15 @@ disproportionality_trend <- function(
         fda_dt, init_fda_dt
       ),
       1, 4
-    ))][, period := ifelse(period < 2004, 2004, period)]
+    ))]
+    if (min_2004 == TRUE) {temp_demo <- temp_demo[, `:=`(period, ifelse(period < 2004, 2004, period))]}
   } else if (time_granularity == "quarter") {
     temp_demo <- temp_demo_supp[, period := quarter]
   } else if (time_granularity == "month") {
     temp_demo <- temp_demo[, period := as.numeric(substr(
       ifelse(is.na(init_fda_dt), fda_dt, init_fda_dt), 1, 6
-    ))][, period := ifelse(period < 200401, 200401, period)]
+    ))]
+    if (min_2004 == TRUE) {temp_demo <- temp_demo[, `:=`(period, ifelse(period < 200401, 200401, period))]}
   }
   temp_demo <- temp_demo[, .(primaryid, period)][, .(pids = list(primaryid)), by = "period"]
   temp_reac <- temp_reac[, c(meddra_level, "primaryid"), with = FALSE] %>% dplyr::distinct()

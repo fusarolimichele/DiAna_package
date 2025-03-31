@@ -36,5 +36,5 @@ utils::globalVariables(c(
   "V<-", "sample_Demo", "sample_Drug", "sample_Reac", "sample_Indi", "sample_Outc",
   "sample_Ther", "sample_Drug_Supp", "Ther", "Outc", "country_dictionary", "continent",
   "Doses", "IC_signal", "ROR_signal", "nested",
-  "scale_size","coord_cartesian"
+  "scale_size","coord_cartesian", "NB", "SMQ_1", "SMQ_2", "SMQ_3", "SMQ_4", "SMQ_5"
 ))

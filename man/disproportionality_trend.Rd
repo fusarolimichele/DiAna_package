@@ -15,7 +15,8 @@ disproportionality_trend(
   drug_level = "substance",
   restriction = "none",
   time_granularity = "year",
-  cumulative = TRUE
+  cumulative = TRUE,
+  min_2004 = TRUE
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ disproportionality_trend(
 \item{time_granularity}{Character string specifying the time granularity. Options are "year", "quarter", or "month". Defaults to "year".}
 
 \item{cumulative}{Logical indicating whether to calculate cumulative values. Defaults to \code{TRUE}.}
+
+\item{min_2004}{Logical indicating whether to start the analysis only from 2004, year of the FDA AERS first implementation. Defaults to \code{TRUE}.}
 }
 \value{
 A data frame containing the disproportionality results over time, including:
