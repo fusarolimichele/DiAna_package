@@ -302,7 +302,8 @@ new_descriptive <- function(pids_cases, RG = NULL, drug = NULL,
                                           ifelse(occp_cod == "PH", "Pharmacist",
                                                  ifelse(occp_cod == "LW", "Lawyer",
                                                         ifelse(occp_cod == "OT", "Other",
-                                                               as.character(occp_cod)))))))]
+                                                               ifelse(occp_cod == "NULL", NA,
+                                                               as.character(occp_cod))))))))]
 
   temp$Reporter <- as.factor(temp$Reporter)
   temp[, age_in_years := age_in_days / 365]
