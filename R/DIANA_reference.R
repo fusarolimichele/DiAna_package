@@ -48,7 +48,31 @@ FAERS_quarter_specifics <- function(quarter = FAERS_version, print = TRUE) {
           "version 26.1)"
         )
       )
-    } else {
+    } else if (quarter == "24Q2") {
+        c(
+        paste0(""),
+        paste0(
+          "Events are coded according to MedDRA (the international Medical Dictionary for Regulatory Activities terminology developed under the auspices of the International Council for Harmonisation of Technical Requirements for Pharmaceuticals for Human Use (ICH), ",
+          "version 27.0)"
+        )
+      )
+    } else if (quarter == "24Q3") {
+       c(
+        paste0(""),
+        paste0(
+          "Events are coded according to MedDRA (the international Medical Dictionary for Regulatory Activities terminology developed under the auspices of the International Council for Harmonisation of Technical Requirements for Pharmaceuticals for Human Use (ICH), ",
+          "version 27.1)"
+        )
+      )
+    } else if (quarter == "24Q4") {
+      c(
+        paste0(""),
+        paste0(
+          "Events are coded according to MedDRA (the international Medical Dictionary for Regulatory Activities terminology developed under the auspices of the International Council for Harmonisation of Technical Requirements for Pharmaceuticals for Human Use (ICH), ",
+          "version 27.1)"
+        )
+      )
+    }  else {
       c("No information concerning the MedDRA version used available for the specified quarter. Note that information is available only from 24Q1 onward")
     }
   )
