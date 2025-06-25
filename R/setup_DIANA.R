@@ -27,6 +27,9 @@
 #'        \itemize{
 #'                \item \emph{24Q4}
 #'                }
+#'        \itemize{
+#'                \item \emph{25Q1}
+#'                }
 #'
 #' @param timeout The amount of time after which R stops a task if it is still unfinished.
 #'                Default 100000It may be necessary to increase it in the case of a slow connection.
@@ -70,6 +73,8 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
       DiAna_url <- "https://osf.io/download/pg54x/"
     } else if (quarter == "24Q4") {
       DiAna_url <- "https://osf.io/download/w2khx/"
+    } else if (quarter == "25Q1") {
+      DiAna_url <- "https://osf.io/download/c56jv/"
     }
 
     # Download and extract DiAna data
@@ -86,7 +91,7 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
       destfile = paste0(here::here(), "/external_sources/ATC_DiAna.csv"),
       mode = "wb"
     )
-    utils::download.file("https://osf.io/download/z3xb8/",
+    utils::download.file("https://osf.io/download/xjt7e/",
       destfile = paste0(here::here(), "/external_sources/DiAna_dictionary.csv"),
       mode = "wb"
     )
