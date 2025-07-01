@@ -74,7 +74,7 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
     } else if (quarter == "24Q4") {
       DiAna_url <- "https://osf.io/download/w2khx/"
     } else if (quarter == "25Q1") {
-      DiAna_url <- "https://osf.io/download/c56jv/"
+      DiAna_url <- "https://osf.io/download/we635/"
     }
 
     # Download and extract DiAna data
