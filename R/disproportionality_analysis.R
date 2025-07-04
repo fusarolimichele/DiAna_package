@@ -755,3 +755,97 @@ tailor_disproportionality_threshold <- function(disproportionality_df, minimum_c
   results <- results[, ROR_signal := factor(ROR_signal, levels = c("not enough cases", "no SDR", "weak SDR", "SDR"), ordered = TRUE)]
   results <- results[, IC_signal := factor(IC_signal, levels = c("not enough cases", "no SDR", "SDR"), ordered = TRUE)]
 }
+
+#' Render a Forest Plot Table from Disproportionality Data
+#'
+#' This function takes a data frame containing disproportionality analysis results
+#' and generates a forest plot table using the `forestplot` package. It highlights
+#' results with lower confidence intervals greater than zero in red.
+#'
+#' @param disproportionality_df A `data.table` containing the following columns:
+#'   - `nested`: Type of analysis (e.g., "Crude", "Adjusted")
+#'   - `D_E`: Observed count
+#'   - `expected`: Expected count
+#'   - `IC_median`: Median Information Component
+#'   - `IC_lower`: Lower bound of the 95% confidence interval
+#'   - `IC_upper`: Upper bound of the 95% confidence interval
+#'
+#' @return A `forestplot` object representing the forest plot table.
+#'
+#' @details
+#' The function:
+#' - Formats the input data for display
+#' - Highlights rows with significant IC values (lower CI > 0) in red
+#' - Adds horizontal lines and zebra striping for readability
+#' - Sets custom x-axis ticks and labels
+#'
+#' @import data.table
+#' @importFrom forestplot forestplot fpDrawCircleCI fp_set_style fp_add_lines fp_add_header fp_set_zebra_style
+#' @importFrom grid gpar
+#'
+#' @examples
+#' \dontrun{
+#' library(data.table)
+#' df <- data.table(
+#'   nested = c("Crude", "Adjusted"),
+#'   D_E = c(10, 8),
+#'   expected = c(5.5, 6.2),
+#'   IC_median = c(1.2, 0.8),
+#'   IC_lower = c(0.5, -0.2),
+#'   IC_upper = c(1.9, 1.3)
+#' )
+#' render_forest_table(df)
+#' }
+#'
+#' @export
+
+render_forest_table <- function(disproportionality_df){
+  data <- disproportionality_df[,.(Analysis=nested,Observed=D_E,Expected=round(expected),
+                                   `IC (95% CI)`=paste0(
+                                     round(IC_median, 1),
+                                     " (", round(IC_lower,1),
+                                     " ; ", round(IC_upper, 1), ")"
+                                   ),
+                                   mean=IC_median,lower=IC_lower,upper=IC_upper)]
+  data <- rbind(data[Analysis == "Crude"],data[Analysis != "Crude"])
+  line_before_last <- as.character(nrow(data)+2)
+
+  # Create color vector based on condition
+  fn_list <- lapply(rbind(data[Analysis=="Crude"],data[Analysis!="Crude"])$lower, function(lwr) {
+    if (lwr > 0) {
+      # Red circle and red line
+      function(..., clr.line, clr.marker) {
+        fpDrawCircleCI(..., clr.line = "red", clr.marker = "red", shape = "circle")
+      }
+    } else {
+      # Default black circle and black line
+      function(..., clr.line, clr.marker) {
+        fpDrawCircleCI(..., clr.line = "royalblue", clr.marker = "royalblue", shape = "circle")
+      }
+    }
+  })
+  x_min <- min(data$lower, na.rm = TRUE)
+  x_max <- max(data$upper, na.rm = TRUE)
+  x_ticks <- pretty(c(max(-6,x_min), min(6,x_max)), n = 5)
+  table <- data |> forestplot(labeltext = c(Analysis, Observed, Expected, `IC (95% CI)`),
+                              clip = c(-6, 6),
+                              vertices=TRUE,
+                              boxsize=.1,
+                              xticks=x_ticks,
+                              xlab = "Information Component",
+                              fn.ci_norm = fn_list,
+                              hrzl_lines =
+                                setNames(
+                                  list(gpar(lwd = 2, col = "black")),
+                                  line_before_last
+                                )
+  ) |>
+    fp_set_style(hrz_lines = "#999999") |>
+    fp_add_lines(h_2 = gpar(lty = 2)) |>
+    fp_add_header(Analysis = c("Analysis"),
+                  Observed = c("Observed (N)"),
+                  Expected = c("Expected (N)"),
+                  `IC (95% CI)` = c("IC (95% CI)")) |>
+    fp_set_zebra_style("#F5F9F9")
+  return(table)
+}
