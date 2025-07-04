@@ -815,12 +815,12 @@ render_forest_table <- function(disproportionality_df){
     if (lwr > 0) {
       # Red circle and red line
       function(..., clr.line, clr.marker) {
-        fpDrawCircleCI(..., clr.line = "red", clr.marker = "red", shape = "circle")
+        fpDrawCircleCI(..., clr.line = "red", clr.marker = "red")
       }
     } else {
       # Default black circle and black line
       function(..., clr.line, clr.marker) {
-        fpDrawCircleCI(..., clr.line = "royalblue", clr.marker = "royalblue", shape = "circle")
+        fpDrawCircleCI(..., clr.line = "royalblue", clr.marker = "royalblue")
       }
     }
   })

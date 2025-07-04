@@ -30,6 +30,7 @@ Depends:
     R (>= 2.10)
 Imports: 
     dplyr,
+    forestplot,
     ggflowchart,
     grDevices,
     gridExtra,
