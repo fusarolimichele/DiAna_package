@@ -273,25 +273,31 @@ render_forest <- function(disproportionality_df,
     data = disproportionality_df, aes(
       x = median, xmin = lower, xmax = upper,
       y = factor(get(row), levels = levs_row)
-    ),
-    position = position_dodge(dodge), show.legend = show_legend,
-    alpha = 0.7
+    )
   ) +
     {
       if (nested == FALSE) {
-        geom_linerange(aes(color = color), linewidth = 1)
+        geom_linerange(aes(color = color), linewidth = 1,
+                       position = position_dodge(dodge), show.legend = show_legend,
+                       alpha = 0.7)
       }
     } +
     {
       if (nested == FALSE) {
-        geom_point(aes(color = color, size = ifelse(point_size == 0,log10(D_E),point_size)))
+        geom_point(aes(color = color, size = ifelse(point_size == 0,log10(D_E),point_size)),
+                   position = position_dodge(dodge), show.legend = show_legend,
+                   alpha = 0.7)
       }
     } +
     {
-      if (nested != FALSE) geom_linerange(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8)), position = position_dodge(dodge), linewidth = 1)
+      if (nested != FALSE) geom_linerange(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8)), linewidth = 1,
+                                          position = position_dodge(dodge), show.legend = show_legend,
+                                          alpha = 0.7)
     } +
     {
-      if (nested != FALSE) geom_point(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8), size = ifelse(point_size == 0,log10(D_E),point_size)), position = position_dodge(dodge))
+      if (nested != FALSE) geom_point(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8), size = ifelse(point_size == 0,log10(D_E),point_size)),
+                                      position = position_dodge(dodge), show.legend = show_legend,
+                                      alpha = 0.7)
     } +
     {
       if (!is.na(facet_v)) facet_wrap(factor(get(facet_v)) ~ ., labeller = label_wrap_gen(width = 15), ncol = 4)

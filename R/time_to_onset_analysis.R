@@ -333,25 +333,27 @@ render_tto <- function(df,
     data = df, aes(
       x = median, xmin = lower, xmax = upper,
       y = factor(get(row), levels = levs_row)
-    ),
-    position = position_dodge(dodge), show.legend = show_legend,
-    alpha = 0.7
+    )
   ) +
     {
       if (nested == FALSE) {
-        geom_linerange(aes(col = color), linewidth = 1)
+        geom_linerange(aes(col = color), linewidth = 1,position = position_dodge(dodge), show.legend = show_legend,
+        alpha = 0.7)
       }
     } +
     {
       if (nested == FALSE) {
-        geom_point(aes(col = color))
+        geom_point(aes(col = color),position = position_dodge(dodge), show.legend = show_legend,
+                   alpha = 0.7)
       }
     } +
     {
-      if (nested != FALSE) geom_linerange(aes(color = nested, position = position_dodge(dodge)), linewidth = 1)
+      if (nested != FALSE) geom_linerange(aes(color = nested), linewidth = 1,position = position_dodge(dodge), show.legend = show_legend,
+                                          alpha = 0.7)
     } +
     {
-      if (nested != FALSE) geom_point(aes(color = nested, position = position_dodge(dodge)))
+      if (nested != FALSE) geom_point(aes(color = nested),position = position_dodge(dodge), show.legend = show_legend,
+                                      alpha = 0.7)
     } +
     {
       if (!is.na(facet_v)) facet_wrap(factor(get(facet_v)) ~ ., labeller = label_wrap_gen(width = 15), ncol = 4)

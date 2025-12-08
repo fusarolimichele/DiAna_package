@@ -79,7 +79,8 @@ FAERS_quarter_specifics <- function(quarter = FAERS_version, print = TRUE) {
           "Events are coded according to MedDRA (the international Medical Dictionary for Regulatory Activities terminology developed under the auspices of the International Council for Harmonisation of Technical Requirements for Pharmaceuticals for Human Use (ICH), ",
           "version 28.0)"
         )
-      ) else if (quarter == "25Q2") {
+      )
+      }else if (quarter == "25Q2") {
       c(
         paste0(""),
         paste0(
