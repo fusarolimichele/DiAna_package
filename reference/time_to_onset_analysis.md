@@ -1,0 +1,126 @@
+# Perform time-to-onset analysis for drug-event associations
+
+This function conducts a time-to-onset analysis for associations between
+drugs and events based on user-specified parameters.
+
+## Usage
+
+``` r
+time_to_onset_analysis(
+  drug_selected,
+  reac_selected,
+  temp_drug = Drug,
+  temp_reac = Reac,
+  temp_ther = Ther,
+  meddra_level = "pt",
+  drug_level = "substance",
+  restriction = "none",
+  minimum_cases = 3,
+  max_TTO = 365,
+  test = "AD"
+)
+```
+
+## Arguments
+
+- drug_selected:
+
+  A list of drugs for analysis. Can be a list of lists (to collapse
+  terms together) if drug_level is set to custom.
+
+- reac_selected:
+
+  A list of adverse events for analysis. Can be a list of lists (to
+  collapse terms together) if meddra_level is set to custom.
+
+- temp_drug:
+
+  Data table containing drug data (default is Drug). If set to
+  Drug\[role_cod %in% c("PS","SS")\] allows to investigate only
+  suspects.
+
+- temp_reac:
+
+  Data table containing reaction data (default is Reac).
+
+- temp_ther:
+
+  Data table containing therapy and temporal data (default is Ther).
+
+- meddra_level:
+
+  The desired MedDRA level for analysis (default is "pt"). If set to
+  "custom" allows a list of lists for reac_selected (collapsing multiple
+  terms).
+
+- drug_level:
+
+  The desired drug level for analysis (default is "substance"). If set
+  to "custom" allows a list of lists for reac_selected (collapsing
+  multiple terms).
+
+- restriction:
+
+  Primary IDs to consider for analysis (default is "none", which
+  includes the entire population). If set to
+  Demo\[!RB_duplicates_only_susp\]\$primaryid, for example, allows to
+  exclude duplicates according to one of the deduplication algorithms.
+
+- minimum_cases:
+
+  The minimum number of cases required for the analysis (default is 3).
+
+- max_TTO:
+
+  The maximum time to onset considered in the analysis, in days (default
+  is 365).
+
+- test:
+
+  The two-sample goodness of fit test to apply for TTO analysis. Choices
+  are AD (Anderson-Darling test - default) and KS (Kolmogorov-Smirnov
+  test).
+
+## Value
+
+A data.table containing results of the time-to-onset analysis, including
+drug-event associations, KS test statistics, and p-values.
+
+## References
+
+Van Holle, L., Zeinoun, Z., Bauchau, V. and Verstraeten, T. (2012),
+Using time-to-onset for detecting safety signals in spontaneous reports
+of adverse events following immunization: a proof of concept study.
+Pharmacoepidemiol Drug Saf, 21: 603-610.
+https://doi.org/10.1002/pds.3226
+
+Scholl JHG, van Hunsel FPAM, Hak E, van Puijenbroek EP. Time to onset in
+statistical signal detection revisited: A follow-up study in long-term
+onset adverse drug reactions. Pharmacoepidemiology and Drug Safety.
+2019;28:1283–9.
+
+## See also
+
+[`ks.test`](https://rdrr.io/r/stats/ks.test.html) for information about
+the Kolmogorov-Smirnov test.
+
+## Examples
+
+``` r
+# This is just an example of how to use the function,
+# as sample_Data has only little information about time to onset.
+df <- time_to_onset_analysis(
+  drug_selected = "skin care",
+  reac_selected = list("skin affection" = list(
+    "dry skin",
+    "skin burning sensation",
+    "skin irritation",
+    "erythema",
+    "rash macular",
+    "acne",
+    "skin haemorrhage"
+  )),
+  temp_drug = sample_Drug, temp_reac = sample_Reac,
+  temp_ther = sample_Ther
+)
+```

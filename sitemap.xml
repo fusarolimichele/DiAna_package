@@ -18,6 +18,7 @@
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/disproportionality_analysis.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/disproportionality_comparison.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/disproportionality_trend.html</loc></url>
+<url><loc>https://fusarolimichele.github.io/DiAna_package/reference/extractSMQ.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/format_input_disproportionality.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/get_drugnames.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/hierarchycal_rates.html</loc></url>
@@ -26,9 +27,11 @@
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/import_MedDRA.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/index.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/network_analysis.html</loc></url>
+<url><loc>https://fusarolimichele.github.io/DiAna_package/reference/new_descriptive.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/plot_KS.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/plot_disproportionality_trend.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/render_forest.html</loc></url>
+<url><loc>https://fusarolimichele.github.io/DiAna_package/reference/render_forest_table.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/render_tto.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/reporting_rates.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/retrieve.html</loc></url>
