@@ -35,18 +35,19 @@
 #'   temp_reac = sample_Reac
 #' )
 disproportionality_analysis <- function(
-    drug_selected, reac_selected,
-    temp_drug = Drug, temp_reac = Reac,
-    meddra_level = "pt",
-    drug_level = "substance",
-    restriction = "none",
-    minimum_cases = 3,
-    frequentist_threshold = 1,
-    log2_threshold = 0,
-    multiple_comparison = TRUE,
-    store_pids = FALSE,
-    save_in_excel = FALSE,
-    file_name = "disproportionality_results") {
+  drug_selected, reac_selected,
+  temp_drug = Drug, temp_reac = Reac,
+  meddra_level = "pt",
+  drug_level = "substance",
+  restriction = "none",
+  minimum_cases = 3,
+  frequentist_threshold = 1,
+  log2_threshold = 0,
+  multiple_comparison = TRUE,
+  store_pids = FALSE,
+  save_in_excel = FALSE,
+  file_name = "disproportionality_results"
+) {
   # custom is deprecated
   if (drug_level == "custom" | meddra_level == "custom") {
     warning("the parameter custom is not needed and was deprecated for drug and reac selected to improve the accessibility of the function.")
@@ -239,7 +240,7 @@ render_forest <- function(disproportionality_df,
                           facet_h = NA,
                           legend_position = "right",
                           point_size = 0,
-                          xcoord_lims=NA) {
+                          xcoord_lims = NA) {
   if (length(levs_row) == 1) {
     levs_row <- factor(unique(disproportionality_df[[row]])) %>% droplevels()
   }
@@ -277,47 +278,62 @@ render_forest <- function(disproportionality_df,
   ) +
     {
       if (nested == FALSE) {
-        geom_linerange(aes(color = color), linewidth = 1,
-                       position = position_dodge(dodge), show.legend = show_legend,
-                       alpha = 0.7)
+        geom_linerange(aes(color = color),
+          linewidth = 1,
+          position = position_dodge(dodge), show.legend = show_legend,
+          alpha = 0.7
+        )
       }
     } +
     {
       if (nested == FALSE) {
-        geom_point(aes(color = color, size = ifelse(point_size == 0,log10(D_E),point_size)),
-                   position = position_dodge(dodge), show.legend = show_legend,
-                   alpha = 0.7)
+        geom_point(aes(color = color, size = ifelse(point_size == 0, log10(D_E), point_size)),
+          position = position_dodge(dodge), show.legend = show_legend,
+          alpha = 0.7
+        )
       }
     } +
     {
-      if (nested != FALSE) geom_linerange(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8)), linewidth = 1,
-                                          position = position_dodge(dodge), show.legend = show_legend,
-                                          alpha = 0.7)
+      if (nested != FALSE) {
+        geom_linerange(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8)),
+          linewidth = 1,
+          position = position_dodge(dodge), show.legend = show_legend,
+          alpha = 0.7
+        )
+      }
     } +
     {
-      if (nested != FALSE) geom_point(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8), size = ifelse(point_size == 0,log10(D_E),point_size)),
-                                      position = position_dodge(dodge), show.legend = show_legend,
-                                      alpha = 0.7)
+      if (nested != FALSE) {
+        geom_point(aes(color = nested, alpha = ifelse(lower > threshold, 1, .8), size = ifelse(point_size == 0, log10(D_E), point_size)),
+          position = position_dodge(dodge), show.legend = show_legend,
+          alpha = 0.7
+        )
+      }
     } +
     {
       if (!is.na(facet_v)) facet_wrap(factor(get(facet_v)) ~ ., labeller = label_wrap_gen(width = 15), ncol = 4)
     } +
     {
       if (!is.na(facet_h)) facet_grid(rows = facet_h, labeller = label_wrap_gen(width = 25), scales = "free", space = "free", switch = "y")
-    }  +
+    } +
     geom_vline(aes(xintercept = threshold), linetype = "dashed") +
     xlab(index) +
     ylab("") +
     scale_x_continuous(trans = transformation) +
     theme_bw() +
     scale_alpha_continuous(range = c(0.4, 1), guide = "none") +
-    guides(shape = guide_legend(override.aes = list(size = 5))) + {
-      if (point_size != 0)
-        scale_size(lim=c(0,10),guide = "none")
-    } + {
-      if (point_size == 0)
+    guides(shape = guide_legend(override.aes = list(size = 5))) +
+    {
+      if (point_size != 0) {
+        scale_size(lim = c(0, 10), guide = "none")
+      }
+    } +
+    {
+      if (point_size == 0) {
         scale_size_area(guide = "none")
-    } + {
+      }
+    } +
+    {
       if (nested == FALSE) labs(color = "Signal")
     } +
     {
@@ -336,9 +352,11 @@ render_forest <- function(disproportionality_df,
       legend.title = element_blank(),
       legend.text = element_text(size = text_size_legend),
     ) +
-    guides(shape = guide_legend(override.aes = list(size = 5))) + {
-      if (!is.na(xcoord_lims[[1]]))
-        coord_cartesian(xlim=xcoord_lims)
+    guides(shape = guide_legend(override.aes = list(size = 5))) +
+    {
+      if (!is.na(xcoord_lims[[1]])) {
+        coord_cartesian(xlim = xcoord_lims)
+      }
     }
 }
 
@@ -501,15 +519,16 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' )
 #' @export
 disproportionality_trend <- function(
-    drug_selected, reac_selected,
-    temp_drug = Drug, temp_reac = Reac,
-    temp_demo = Demo, temp_demo_supp = Demo_supp[, .(primaryid, quarter)],
-    meddra_level = "pt",
-    drug_level = "substance",
-    restriction = "none",
-    time_granularity = "year",
-    cumulative = TRUE,
-    min_2004 = TRUE) {
+  drug_selected, reac_selected,
+  temp_drug = Drug, temp_reac = Reac,
+  temp_demo = Demo, temp_demo_supp = Demo_supp[, .(primaryid, quarter)],
+  meddra_level = "pt",
+  drug_level = "substance",
+  restriction = "none",
+  time_granularity = "year",
+  cumulative = TRUE,
+  min_2004 = TRUE
+) {
   if (length(restriction) > 1) {
     temp_drug <- temp_drug[primaryid %in% restriction] %>% droplevels()
     temp_reac <- temp_reac[primaryid %in% restriction] %>% droplevels()
@@ -522,14 +541,18 @@ disproportionality_trend <- function(
       ),
       1, 4
     ))]
-    if (min_2004 == TRUE) {temp_demo <- temp_demo[, `:=`(period, ifelse(period < 2004, 2004, period))]}
+    if (min_2004 == TRUE) {
+      temp_demo <- temp_demo[, `:=`(period, ifelse(period < 2004, 2004, period))]
+    }
   } else if (time_granularity == "quarter") {
     temp_demo <- temp_demo_supp[, period := quarter]
   } else if (time_granularity == "month") {
     temp_demo <- temp_demo[, period := as.numeric(substr(
       ifelse(is.na(init_fda_dt), fda_dt, init_fda_dt), 1, 6
     ))]
-    if (min_2004 == TRUE) {temp_demo <- temp_demo[, `:=`(period, ifelse(period < 200401, 200401, period))]}
+    if (min_2004 == TRUE) {
+      temp_demo <- temp_demo[, `:=`(period, ifelse(period < 200401, 200401, period))]
+    }
   }
   temp_demo <- temp_demo[, .(primaryid, period)][, .(pids = list(primaryid)), by = "period"]
   temp_reac <- temp_reac[, c(meddra_level, "primaryid"), with = FALSE] %>% dplyr::distinct()
@@ -659,7 +682,7 @@ plot_disproportionality_trend <- function(disproportionality_trend_results, metr
       theme(legend.title = element_blank())
   }
   plot <- plot +
-    geom_line(aes(x = period, y = median, color = nested,group=nested),
+    geom_line(aes(x = period, y = median, color = nested, group = nested),
       linetype = "dashed",
       data = disproportionality_trend_results
     ) +
@@ -805,19 +828,21 @@ tailor_disproportionality_threshold <- function(disproportionality_df, minimum_c
 #'
 #' @export
 
-render_forest_table <- function(disproportionality_df){
-  data <- disproportionality_df[,.(Analysis=nested,Observed=D_E,Expected=round(expected),
-                                   `IC (95% CI)`=paste0(
-                                     round(IC_median, 1),
-                                     " (", round(IC_lower,1),
-                                     " ; ", round(IC_upper, 1), ")"
-                                   ),
-                                   mean=IC_median,lower=IC_lower,upper=IC_upper)]
-  data <- rbind(data[Analysis == "Crude"],data[Analysis != "Crude"])
-  line_before_last <- as.character(nrow(data)+2)
+render_forest_table <- function(disproportionality_df) {
+  data <- disproportionality_df[, .(
+    Analysis = nested, Observed = D_E, Expected = round(expected),
+    `IC (95% CI)` = paste0(
+      round(IC_median, 1),
+      " (", round(IC_lower, 1),
+      " ; ", round(IC_upper, 1), ")"
+    ),
+    mean = IC_median, lower = IC_lower, upper = IC_upper
+  )]
+  data <- rbind(data[Analysis == "Crude"], data[Analysis != "Crude"])
+  line_before_last <- as.character(nrow(data) + 2)
 
   # Create color vector based on condition
-  fn_list <- lapply(rbind(data[Analysis=="Crude"],data[Analysis!="Crude"])$lower, function(lwr) {
+  fn_list <- lapply(rbind(data[Analysis == "Crude"], data[Analysis != "Crude"])$lower, function(lwr) {
     if (lwr > 0) {
       # Red circle and red line
       function(..., clr.line, clr.marker) {
@@ -832,26 +857,30 @@ render_forest_table <- function(disproportionality_df){
   })
   x_min <- min(data$lower, na.rm = TRUE)
   x_max <- max(data$upper, na.rm = TRUE)
-  x_ticks <- pretty(c(max(-6,x_min), min(6,x_max)), n = 5)
-  table <- data |> forestplot(labeltext = c(Analysis, Observed, Expected, `IC (95% CI)`),
-                              clip = c(-6, 6),
-                              vertices=TRUE,
-                              boxsize=.1,
-                              xticks=x_ticks,
-                              xlab = "Information Component",
-                              fn.ci_norm = fn_list,
-                              hrzl_lines =
-                                setNames(
-                                  list(gpar(lwd = 2, col = "black")),
-                                  line_before_last
-                                )
-  ) |>
+  x_ticks <- pretty(c(max(-6, x_min), min(6, x_max)), n = 5)
+  table <- data |>
+    forestplot(
+      labeltext = c(Analysis, Observed, Expected, `IC (95% CI)`),
+      clip = c(-6, 6),
+      vertices = TRUE,
+      boxsize = .1,
+      xticks = x_ticks,
+      xlab = "Information Component",
+      fn.ci_norm = fn_list,
+      hrzl_lines =
+        setNames(
+          list(gpar(lwd = 2, col = "black")),
+          line_before_last
+        )
+    ) |>
     fp_set_style(hrz_lines = "#999999") |>
     fp_add_lines(h_2 = gpar(lty = 2)) |>
-    fp_add_header(Analysis = c("Analysis"),
-                  Observed = c("Observed (N)"),
-                  Expected = c("Expected (N)"),
-                  `IC (95% CI)` = c("IC (95% CI)")) |>
+    fp_add_header(
+      Analysis = c("Analysis"),
+      Observed = c("Observed (N)"),
+      Expected = c("Expected (N)"),
+      `IC (95% CI)` = c("IC (95% CI)")
+    ) |>
     fp_set_zebra_style("#F5F9F9")
   return(table)
 }

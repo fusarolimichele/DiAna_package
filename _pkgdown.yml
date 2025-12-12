@@ -39,6 +39,7 @@ reference:
   - import
   - import_ATC
   - import_MedDRA
+  - extractSMQ
 
 - subtitle: "Additional datasets provided for internal use by functions"
   contents:
@@ -65,6 +66,7 @@ reference:
     Functions to perform descriptive analyses.
   contents:
   - descriptive
+  - new_descriptive
   - hierarchycal_rates
   - reporting_rates
   - render_tto
@@ -80,6 +82,7 @@ reference:
   - tailor_disproportionality_threshold
   - plot_disproportionality_trend
   - render_forest
+  - render_forest_table
 
 - title: "Advanced analyses"
   desc: >

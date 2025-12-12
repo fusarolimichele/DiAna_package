@@ -88,9 +88,13 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
       "Class4"
     )) {
       import_ATC()[code == primary_code]
-      temp <- dplyr::distinct(dplyr::distinct(ATC[, c("substance",
-                                                      level), with = FALSE])[temp, on = "substance", allow.cartesian=TRUE][,
-                                                                                                     c("primaryid", level), with = FALSE])
+      temp <- dplyr::distinct(dplyr::distinct(ATC[, c(
+        "substance",
+        level
+      ), with = FALSE])[temp, on = "substance", allow.cartesian = TRUE][,
+        c("primaryid", level),
+        with = FALSE
+      ])
     }
   }
   temp <- dplyr::distinct(temp)[, .N, by = get(level)][order(-N)][

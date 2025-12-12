@@ -5,76 +5,59 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="DiAna">
-<title>Disproportionality_Analysis • DiAna</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<title>Disproportionality Analysis • DiAna</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Disproportionality_Analysis">
-<meta property="og:description" content="DiAna">
-<meta property="og:image" content="https://fusarolimichele.github.io/DiAna_package/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Disproportionality Analysis">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">DiAna</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Get started</h6>
-    <a class="dropdown-item" href="../articles/Start_Subproject.html">Start Subproject</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Disproportionality Analysis</h6>
-    <a class="dropdown-item" href="../articles/Disproportionality_Analysis.html">Disproportionality_Analysis</a>
-    <a class="dropdown-item" href="../articles/Causal_inference.html">Causal inference</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Get started</h6></li>
+    <li><a class="dropdown-item" href="../articles/Start_Subproject.html">Start Subproject</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Disproportionality Analysis</h6></li>
+    <li><a class="dropdown-item" href="../articles/Disproportionality_Analysis.html">Disproportionality Analysis</a></li>
+    <li><a class="dropdown-item" href="../articles/Causal_inference.html">Causal inference</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/fusarolimichele/DiAna_package/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/fusarolimichele/DiAna_package/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -83,7 +66,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Disproportionality_Analysis</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Disproportionality Analysis</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/fusarolimichele/DiAna_package/blob/HEAD/vignettes/articles/Disproportionality_Analysis.Rmd" class="external-link"><code>vignettes/articles/Disproportionality_Analysis.Rmd</code></a></small>
@@ -136,7 +119,7 @@ snippet ‘new_FAERS_project’ to set up a project.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://fusarolimichele.github.io/DiAna_package/">DiAna</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Project_path ---------------------------------------------------------------</span></span>
-<span><span class="va">DiAna_path</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">DiAna_path</span> <span class="op">&lt;-</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">project_name</span> <span class="op">&lt;-</span> <span class="st">"v02_Disproportionality_Analysis"</span></span>
 <span><span class="va">project_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">DiAna_path</span>, <span class="st">"/projects/"</span>, <span class="va">project_name</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">project_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -358,12 +341,12 @@ visualization using render_forest.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>, index <span class="op">=</span> <span class="st">"IC"</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="render_forest-1.png" alt="Fig 1: IC (aripiprazole , ICD)"><div class="figcaption">Fig 1: IC (aripiprazole , ICD)</div>
+<img src="disproportionality_analysis-render_forest1-1.png" alt="Fig 1: IC (aripiprazole , ICD)"><div class="figcaption">Fig 1: IC (aripiprazole , ICD)</div>
 </div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>, index <span class="op">=</span> <span class="st">"ROR"</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="render_forest-2.png" alt="Fig 2: ROR (aripiprazole , ICD)"><div class="figcaption">Fig 2: ROR (aripiprazole , ICD)</div>
+<img src="disproportionality_analysis-render_forest2-1.png" alt="Fig 2: ROR (aripiprazole , ICD)"><div class="figcaption">Fig 2: ROR (aripiprazole , ICD)</div>
 </div>
 <p>In these forest plots we see on the x axis the information component
 (by default) or the ROR if we specify it in the index parameter. The
@@ -471,7 +454,7 @@ impulsivity.</caption>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="render_query-1.png" alt="Fig 3: IC (aripiprazole , ICD_query)"><div class="figcaption">Fig 3: IC (aripiprazole , ICD_query)</div>
+<img src="disproportionality_analysis-render_query-1.png" alt="Fig 3: IC (aripiprazole , ICD_query)"><div class="figcaption">Fig 3: IC (aripiprazole , ICD_query)</div>
 </div>
 <p>You see now that the number of cases has increased from 286 to 701,
 and we still find a SDR.</p>
@@ -553,7 +536,7 @@ function, to make it print each event in a different line</p>
 <span>    <span class="st">"abnormal behaviour"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">reac_selected</span> <span class="op">&lt;-</span> <span class="fu">rlist</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rlist/man/list.append.html" class="external-link">list.append</a></span><span class="op">(</span><span class="va">ICDs</span>, <span class="st">"ICD"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu">purrr</span><span class="fu">::</span><span class="fu">flatten</span><span class="op">(</span><span class="va">ICDs</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">reac_selected</span> <span class="op">&lt;-</span> <span class="fu">rlist</span><span class="fu">::</span><span class="fu">list.append</span><span class="op">(</span><span class="va">ICDs</span>, <span class="st">"ICD"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu">purrr</span><span class="fu">::</span><span class="fu">flatten</span><span class="op">(</span><span class="va">ICDs</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Disproportionality analysis ----------------------------------------------------------</span></span>
 <span><span class="va">disproportionality_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disproportionality_analysis.html">disproportionality_analysis</a></span><span class="op">(</span></span>
@@ -1032,7 +1015,7 @@ give each its drug its facet, as seen in the script.</p>
 <span>    <span class="st">"abnormal behaviour"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">reac_selected</span> <span class="op">&lt;-</span> <span class="fu">rlist</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rlist/man/list.append.html" class="external-link">list.append</a></span><span class="op">(</span><span class="va">ICDs</span>,</span>
+<span><span class="va">reac_selected</span> <span class="op">&lt;-</span> <span class="fu">rlist</span><span class="fu">::</span><span class="fu">list.append</span><span class="op">(</span><span class="va">ICDs</span>,</span>
 <span>  <span class="st">"ICD"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu">purrr</span><span class="fu">::</span><span class="fu">flatten</span><span class="op">(</span><span class="va">ICDs</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="st">"insomnia"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"insomnia"</span><span class="op">)</span>, <span class="co"># positive control</span></span>
 <span>  <span class="st">"headache"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"headache"</span><span class="op">)</span>, <span class="co"># positive control</span></span>
@@ -4384,7 +4367,7 @@ suspected drugs.</caption>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>, row <span class="op">=</span> <span class="st">"event"</span>, facet_v <span class="op">=</span> <span class="st">"substance"</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="only_suspect-1.png" alt="Fig 5: IC (aripiprazole , ICD_query_with_behaviors), and controls, looking only at suspected agents."><div class="figcaption">Fig 5: IC (aripiprazole ,
+<img src="disproportionality_analysis-only_suspect_forest-1.png" alt="Fig 5: IC (aripiprazole , ICD_query_with_behaviors), and controls, looking only at suspected agents."><div class="figcaption">Fig 5: IC (aripiprazole ,
 ICD_query_with_behaviors), and controls, looking only at suspected
 agents.</div>
 </div>
@@ -4407,32 +4390,45 @@ with the other two importing Drug and Reac:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Import data ----------------------------------------------------------------</span></span>
 <span><span class="fu"><a href="../reference/import.html">import</a></span><span class="op">(</span><span class="st">"DEMO"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;           primaryid    sex age_in_days wt_in_kgs occr_country event_dt occp_cod          reporter_country</span></span>
-<span><span class="co">#&gt;               &lt;num&gt; &lt;fctr&gt;       &lt;num&gt;     &lt;num&gt;       &lt;fctr&gt;    &lt;int&gt;   &lt;fctr&gt;                    &lt;fctr&gt;</span></span>
-<span><span class="co">#&gt;        1:  45217461      M        9855        NA         &lt;NA&gt; 19861106       MD  United States of America</span></span>
-<span><span class="co">#&gt;        2:  57910401   &lt;NA&gt;          NA        NA         &lt;NA&gt;       NA     &lt;NA&gt;  United States of America</span></span>
-<span><span class="co">#&gt;        3:  56962401   &lt;NA&gt;          NA        NA         &lt;NA&gt; 19960123     &lt;NA&gt;  United States of America</span></span>
-<span><span class="co">#&gt;        4:  54662121      F       22630        NA         &lt;NA&gt; 19960919       CN South Africa, Republic of</span></span>
-<span><span class="co">#&gt;        5:  31231172      F       21535        68         &lt;NA&gt; 19970927       MD  United States of America</span></span>
-<span><span class="co">#&gt;       ---                                                                                                </span></span>
-<span><span class="co">#&gt; 17598475: 236937711      F        9490        68         &lt;NA&gt; 20240318       CN  United States of America</span></span>
-<span><span class="co">#&gt; 17598476: 236937721      M        6205        NA         &lt;NA&gt; 20240101       CN  United States of America</span></span>
-<span><span class="co">#&gt; 17598477: 236937741      F       13140       134         &lt;NA&gt; 20240322       CN  United States of America</span></span>
-<span><span class="co">#&gt; 17598478: 237079261      F       15695        90         &lt;NA&gt;       NA       CN  United States of America</span></span>
-<span><span class="co">#&gt; 17598479: 237079291      M       22265       108         &lt;NA&gt; 20240228       CN  United States of America</span></span>
-<span><span class="co">#&gt;           rept_cod init_fda_dt   fda_dt premarketing literature RB_duplicates RB_duplicates_only_susp</span></span>
-<span><span class="co">#&gt;             &lt;fctr&gt;       &lt;int&gt;    &lt;int&gt;       &lt;lgcl&gt;     &lt;lgcl&gt;        &lt;lgcl&gt;                  &lt;lgcl&gt;</span></span>
-<span><span class="co">#&gt;        1:      DIR    19861224 19861224        FALSE      FALSE         FALSE                   FALSE</span></span>
-<span><span class="co">#&gt;        2:      DIR    19920917 19920917        FALSE      FALSE         FALSE                   FALSE</span></span>
-<span><span class="co">#&gt;        3:      DIR    19960126 19960126        FALSE      FALSE         FALSE                   FALSE</span></span>
-<span><span class="co">#&gt;        4:      EXP    19961022 19961022        FALSE      FALSE         FALSE                   FALSE</span></span>
-<span><span class="co">#&gt;        5:      EXP    19971203 19971212        FALSE      FALSE         FALSE                   FALSE</span></span>
-<span><span class="co">#&gt;       ---                                                                                            </span></span>
-<span><span class="co">#&gt; 17598475:      DIR    20240331 20240331        FALSE      FALSE         FALSE                   FALSE</span></span>
-<span><span class="co">#&gt; 17598476:      DIR    20240331 20240331        FALSE      FALSE         FALSE                   FALSE</span></span>
-<span><span class="co">#&gt; 17598477:      DIR    20240331 20240331        FALSE      FALSE         FALSE                   FALSE</span></span>
-<span><span class="co">#&gt; 17598478:      DIR    20240331 20240331        FALSE      FALSE         FALSE                   FALSE</span></span>
-<span><span class="co">#&gt; 17598479:      DIR    20240331 20240331        FALSE      FALSE         FALSE                   FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt;           primaryid    sex age_in_days wt_in_kgs occr_country event_dt</span></span>
+<span><span class="co">#&gt;               &lt;num&gt; &lt;fctr&gt;       &lt;num&gt;     &lt;num&gt;       &lt;fctr&gt;    &lt;int&gt;</span></span>
+<span><span class="co">#&gt;        1:  45217461      M        9855        NA         &lt;NA&gt; 19861106</span></span>
+<span><span class="co">#&gt;        2:  57910401   &lt;NA&gt;          NA        NA         &lt;NA&gt;       NA</span></span>
+<span><span class="co">#&gt;        3:  56962401   &lt;NA&gt;          NA        NA         &lt;NA&gt; 19960123</span></span>
+<span><span class="co">#&gt;        4:  54662121      F       22630        NA         &lt;NA&gt; 19960919</span></span>
+<span><span class="co">#&gt;        5:  31231172      F       21535        68         &lt;NA&gt; 19970927</span></span>
+<span><span class="co">#&gt;       ---                                                             </span></span>
+<span><span class="co">#&gt; 17598475: 236937711      F        9490        68         &lt;NA&gt; 20240318</span></span>
+<span><span class="co">#&gt; 17598476: 236937721      M        6205        NA         &lt;NA&gt; 20240101</span></span>
+<span><span class="co">#&gt; 17598477: 236937741      F       13140       134         &lt;NA&gt; 20240322</span></span>
+<span><span class="co">#&gt; 17598478: 237079261      F       15695        90         &lt;NA&gt;       NA</span></span>
+<span><span class="co">#&gt; 17598479: 237079291      M       22265       108         &lt;NA&gt; 20240228</span></span>
+<span><span class="co">#&gt;           occp_cod          reporter_country rept_cod init_fda_dt   fda_dt</span></span>
+<span><span class="co">#&gt;             &lt;fctr&gt;                    &lt;fctr&gt;   &lt;fctr&gt;       &lt;int&gt;    &lt;int&gt;</span></span>
+<span><span class="co">#&gt;        1:       MD  United States of America      DIR    19861224 19861224</span></span>
+<span><span class="co">#&gt;        2:     &lt;NA&gt;  United States of America      DIR    19920917 19920917</span></span>
+<span><span class="co">#&gt;        3:     &lt;NA&gt;  United States of America      DIR    19960126 19960126</span></span>
+<span><span class="co">#&gt;        4:       CN South Africa, Republic of      EXP    19961022 19961022</span></span>
+<span><span class="co">#&gt;        5:       MD  United States of America      EXP    19971203 19971212</span></span>
+<span><span class="co">#&gt;       ---                                                                 </span></span>
+<span><span class="co">#&gt; 17598475:       CN  United States of America      DIR    20240331 20240331</span></span>
+<span><span class="co">#&gt; 17598476:       CN  United States of America      DIR    20240331 20240331</span></span>
+<span><span class="co">#&gt; 17598477:       CN  United States of America      DIR    20240331 20240331</span></span>
+<span><span class="co">#&gt; 17598478:       CN  United States of America      DIR    20240331 20240331</span></span>
+<span><span class="co">#&gt; 17598479:       CN  United States of America      DIR    20240331 20240331</span></span>
+<span><span class="co">#&gt;           premarketing literature RB_duplicates RB_duplicates_only_susp</span></span>
+<span><span class="co">#&gt;                 &lt;lgcl&gt;     &lt;lgcl&gt;        &lt;lgcl&gt;                  &lt;lgcl&gt;</span></span>
+<span><span class="co">#&gt;        1:        FALSE      FALSE         FALSE                   FALSE</span></span>
+<span><span class="co">#&gt;        2:        FALSE      FALSE         FALSE                   FALSE</span></span>
+<span><span class="co">#&gt;        3:        FALSE      FALSE         FALSE                   FALSE</span></span>
+<span><span class="co">#&gt;        4:        FALSE      FALSE         FALSE                   FALSE</span></span>
+<span><span class="co">#&gt;        5:        FALSE      FALSE         FALSE                   FALSE</span></span>
+<span><span class="co">#&gt;       ---                                                              </span></span>
+<span><span class="co">#&gt; 17598475:        FALSE      FALSE         FALSE                   FALSE</span></span>
+<span><span class="co">#&gt; 17598476:        FALSE      FALSE         FALSE                   FALSE</span></span>
+<span><span class="co">#&gt; 17598477:        FALSE      FALSE         FALSE                   FALSE</span></span>
+<span><span class="co">#&gt; 17598478:        FALSE      FALSE         FALSE                   FALSE</span></span>
+<span><span class="co">#&gt; 17598479:        FALSE      FALSE         FALSE                   FALSE</span></span></code></pre></div>
 <p>In the printed dataset we see that the last two columns are
 RB_duplicates and RB_duplicates_only_susp: the first is more
 conservative, considering as duplicates all the reports that have not
@@ -4802,7 +4798,7 @@ deduplication algorithms.</caption>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>, row <span class="op">=</span> <span class="st">"event"</span>, facet_v <span class="op">=</span> <span class="st">"substance"</span>, nested <span class="op">=</span> <span class="st">"nested"</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="deduplication_algorithms-1.png" alt="Fig 6: IC (aripiprazole , ICD_query_with_behaviors), and controls, looking only at suspected agents and deduplicated data."><div class="figcaption">Fig 6: IC (aripiprazole ,
+<img src="disproportionality_analysis-deduplication_forest-1.png" alt="Fig 6: IC (aripiprazole , ICD_query_with_behaviors), and controls, looking only at suspected agents and deduplicated data."><div class="figcaption">Fig 6: IC (aripiprazole ,
 ICD_query_with_behaviors), and controls, looking only at suspected
 agents and deduplicated data.</div>
 </div>
@@ -5383,7 +5379,7 @@ recording bipolar disorder.</caption>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>, row <span class="op">=</span> <span class="st">"event"</span>, facet_v <span class="op">=</span> <span class="st">"substance"</span>, nested <span class="op">=</span> <span class="st">"nested"</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="retrieve_bipolar-1.png" alt="Fig 7: IC (aripiprazole , ICD_query_with_behaviors | bipolar disorder), and controls, looking only at suspected agents."><div class="figcaption">Fig 7: IC (aripiprazole ,
+<img src="disproportionality_analysis-retrieve_bipolar_forest-1.png" alt="Fig 7: IC (aripiprazole , ICD_query_with_behaviors | bipolar disorder), and controls, looking only at suspected agents."><div class="figcaption">Fig 7: IC (aripiprazole ,
 ICD_query_with_behaviors | bipolar disorder), and controls, looking only
 at suspected agents.</div>
 </div>
@@ -5420,19 +5416,32 @@ make your own DiAna-compatible MedDRA.</p>
 <span><span class="co">#&gt; 25410:   surg                surgical and medical procedures</span></span>
 <span><span class="co">#&gt; 25411:   surg                surgical and medical procedures</span></span>
 <span><span class="co">#&gt; 25412:  blood           blood and lymphatic system disorders</span></span>
-<span><span class="co">#&gt;                                                         hlgt                                           hlt</span></span>
-<span><span class="co">#&gt;                                                       &lt;char&gt;                                        &lt;char&gt;</span></span>
-<span><span class="co">#&gt;     1:        metabolic and nutritional disorders congenital            inborn errors of steroid synthesis</span></span>
-<span><span class="co">#&gt;     2:          endocrine investigations (incl sex hormones)                 reproductive hormone analyses</span></span>
-<span><span class="co">#&gt;     3:          endocrine investigations (incl sex hormones)                 reproductive hormone analyses</span></span>
-<span><span class="co">#&gt;     4:          endocrine investigations (incl sex hormones)                 reproductive hormone analyses</span></span>
-<span><span class="co">#&gt;     5:          endocrine investigations (incl sex hormones)                 reproductive hormone analyses</span></span>
-<span><span class="co">#&gt;    ---                                                                                                    </span></span>
-<span><span class="co">#&gt; 25408:     procedural related injuries and complications nec    non-site specific procedural complications</span></span>
-<span><span class="co">#&gt; 25409: pregnancy, labour, delivery and postpartum conditions         normal pregnancy, labour and delivery</span></span>
-<span><span class="co">#&gt; 25410:   obstetric and gynaecological therapeutic procedures                 cervix therapeutic procedures</span></span>
-<span><span class="co">#&gt; 25411:             male genital tract therapeutic procedures male genital tract therapeutic procedures nec</span></span>
-<span><span class="co">#&gt; 25412:                            white blood cell disorders                        eosinophilic disorders</span></span>
+<span><span class="co">#&gt;                                                         hlgt</span></span>
+<span><span class="co">#&gt;                                                       &lt;char&gt;</span></span>
+<span><span class="co">#&gt;     1:        metabolic and nutritional disorders congenital</span></span>
+<span><span class="co">#&gt;     2:          endocrine investigations (incl sex hormones)</span></span>
+<span><span class="co">#&gt;     3:          endocrine investigations (incl sex hormones)</span></span>
+<span><span class="co">#&gt;     4:          endocrine investigations (incl sex hormones)</span></span>
+<span><span class="co">#&gt;     5:          endocrine investigations (incl sex hormones)</span></span>
+<span><span class="co">#&gt;    ---                                                      </span></span>
+<span><span class="co">#&gt; 25408:     procedural related injuries and complications nec</span></span>
+<span><span class="co">#&gt; 25409: pregnancy, labour, delivery and postpartum conditions</span></span>
+<span><span class="co">#&gt; 25410:   obstetric and gynaecological therapeutic procedures</span></span>
+<span><span class="co">#&gt; 25411:             male genital tract therapeutic procedures</span></span>
+<span><span class="co">#&gt; 25412:                            white blood cell disorders</span></span>
+<span><span class="co">#&gt;                                                  hlt</span></span>
+<span><span class="co">#&gt;                                               &lt;char&gt;</span></span>
+<span><span class="co">#&gt;     1:            inborn errors of steroid synthesis</span></span>
+<span><span class="co">#&gt;     2:                 reproductive hormone analyses</span></span>
+<span><span class="co">#&gt;     3:                 reproductive hormone analyses</span></span>
+<span><span class="co">#&gt;     4:                 reproductive hormone analyses</span></span>
+<span><span class="co">#&gt;     5:                 reproductive hormone analyses</span></span>
+<span><span class="co">#&gt;    ---                                              </span></span>
+<span><span class="co">#&gt; 25408:    non-site specific procedural complications</span></span>
+<span><span class="co">#&gt; 25409:         normal pregnancy, labour and delivery</span></span>
+<span><span class="co">#&gt; 25410:                 cervix therapeutic procedures</span></span>
+<span><span class="co">#&gt; 25411: male genital tract therapeutic procedures nec</span></span>
+<span><span class="co">#&gt; 25412:                        eosinophilic disorders</span></span>
 <span><span class="co">#&gt;                                      pt</span></span>
 <span><span class="co">#&gt;                                  &lt;char&gt;</span></span>
 <span><span class="co">#&gt;     1:   11-beta-hydroxylase deficiency</span></span>
@@ -5793,11 +5802,7 @@ disorder using MedDRA.</caption>
 </table>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>, row <span class="op">=</span> <span class="st">"event"</span>, facet_v <span class="op">=</span> <span class="st">"substance"</span>, nested <span class="op">=</span> <span class="st">"nested"</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="retrieve_with_MedDRA-1.png" alt="Fig 8: IC (aripiprazole , ICD_query_with_behaviors | bipolar disorder_HLGT), and controls, looking only at suspected agents."><div class="figcaption">Fig 8: IC (aripiprazole ,
-ICD_query_with_behaviors | bipolar disorder_HLGT), and controls, looking
-only at suspected agents.</div>
-</div>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("disproportionality_analysis-retrieve_with_MedDRA_forest-1.png", : Cannot find the file(s): "disproportionality_analysis-retrieve_with_MedDRA_forest-1.png"</span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="addressing-notoriety-bias">Addressing notoriety bias<a class="anchor" aria-label="anchor" href="#addressing-notoriety-bias"></a>
@@ -5811,7 +5816,7 @@ analysis, the restriction to bipolar disorder, the restriction to
 bipolar disorder pre-warning, and finally this last complete restriction
 with also deduplication. All these analyses are performed considering
 only suspected drugs.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Reference groups ---------------------------------------------------------------------</span></span>
 <span><span class="va">warning_date</span> <span class="op">&lt;-</span> <span class="fl">20160305</span></span>
 <span><span class="va">pre_warning</span> <span class="op">&lt;-</span> <span class="va">Demo</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">init_fda_dt</span><span class="op">)</span>, <span class="va">fda_dt</span> <span class="op">&lt;</span> <span class="va">warning_date</span>, <span class="va">init_fda_dt</span> <span class="op">&lt;</span> <span class="va">warning_date</span><span class="op">)</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span></span>
@@ -5846,7 +5851,7 @@ only suspected drugs.</p>
 <span>  <span class="op">)</span><span class="op">[</span>, <span class="va">nested</span> <span class="op">:=</span> <span class="va">t_name</span><span class="op">]</span></span>
 <span>  <span class="va">disproportionality_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">disproportionality_df</span>, <span class="va">df</span><span class="op">)</span>, fill <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Definitions --------------------------------------------------------------------------</span></span>
 <span><span class="va">disproportionality_df</span></span></code></pre></div>
 <table style="width:100%;" class="table">
@@ -6339,13 +6344,9 @@ bias.</caption>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/render_forest.html">render_forest</a></span><span class="op">(</span><span class="va">disproportionality_df</span>, row <span class="op">=</span> <span class="st">"event"</span>, facet_v <span class="op">=</span> <span class="st">"substance"</span>, nested <span class="op">=</span> <span class="st">"nested"</span><span class="op">)</span></span></code></pre></div>
-<div class="float">
-<img src="notoriety_bias-1.png" alt="Fig 9: IC (aripiprazole , ICD_query_with_behaviors | bipolar disorder_HLGT), and controls, looking only at suspected agents before warning."><div class="figcaption">Fig 9: IC (aripiprazole ,
-ICD_query_with_behaviors | bipolar disorder_HLGT), and controls, looking
-only at suspected agents before warning.</div>
-</div>
+<pre><code><span><span class="co">#&gt; Error in knitr::include_graphics("disproportionality_analysis-notoriety_bias_forest-1.png", : Cannot find the file(s): "disproportionality_analysis-notoriety_bias_forest-1.png"</span></span></code></pre>
 <p>Here you see in green the results of the analysis restricting to the
 pre-warning. You can see that this analysis does not affect bipolar
 disorder nor headache, but it affects all the impulse control disorders
@@ -6364,35 +6365,48 @@ suspected drugs only?</p>
 <p>For this inquiry, DiAna proposes a specific function:
 disproportionality_trend, which allow to adopt a granularity of a month,
 a quarter, or a year.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Import data --------------------------------------------------------------------------</span></span>
 <span><span class="fu"><a href="../reference/import.html">import</a></span><span class="op">(</span><span class="st">"DEMO_SUPP"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;           primaryid rpsr_cod   caseid caseversion i_f_cod auth_num  e_sub lit_ref  rept_dt to_mfr</span></span>
-<span><span class="co">#&gt;               &lt;num&gt;   &lt;fctr&gt;    &lt;int&gt;      &lt;fctr&gt;  &lt;fctr&gt;   &lt;char&gt; &lt;fctr&gt;  &lt;char&gt;    &lt;int&gt; &lt;char&gt;</span></span>
-<span><span class="co">#&gt;        1:  45217461       HP  4521746           1       I     &lt;NA&gt;      N    &lt;NA&gt;       NA   &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;        2:  57910401     &lt;NA&gt;  5791040           1       I     &lt;NA&gt;      N    &lt;NA&gt;       NA   &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;        3:  56962401     &lt;NA&gt;  5696240           1       I     &lt;NA&gt;      N    &lt;NA&gt;       NA   &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;        4:  54662121      FGN  5466212           1       I     &lt;NA&gt;      N    &lt;NA&gt; 19961015   &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;        5:  54662121       HP  5466212           1       I     &lt;NA&gt;      N    &lt;NA&gt; 19961015   &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;       ---                                                                                        </span></span>
-<span><span class="co">#&gt; 18283734: 236937711      CSM 23693771           1       I   697702      N    &lt;NA&gt; 20240331      N</span></span>
-<span><span class="co">#&gt; 18283735: 236937721      CSM 23693772           1       I   697662      N    &lt;NA&gt; 20240331      N</span></span>
-<span><span class="co">#&gt; 18283736: 236937741      CSM 23693774           1       I   697678      N    &lt;NA&gt; 20240331   &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 18283737: 237079261      CSM 23707926           1       I   697660      N    &lt;NA&gt; 20240331      Y</span></span>
-<span><span class="co">#&gt; 18283738: 237079291      CSM 23707929           1       I   697693      N    &lt;NA&gt; 20240331      Y</span></span>
-<span><span class="co">#&gt;                   mfr_sndr     mfr_num   mfr_dt quarter</span></span>
-<span><span class="co">#&gt;                     &lt;char&gt;      &lt;char&gt;    &lt;int&gt;  &lt;fctr&gt;</span></span>
-<span><span class="co">#&gt;        1:             &lt;NA&gt;        &lt;NA&gt;       NA    20Q3</span></span>
-<span><span class="co">#&gt;        2:             &lt;NA&gt;        &lt;NA&gt;       NA    20Q3</span></span>
-<span><span class="co">#&gt;        3:             &lt;NA&gt;        &lt;NA&gt;       NA    20Q3</span></span>
-<span><span class="co">#&gt;        4: ELI LILLY AND CO ZA96101984A 19961010    20Q3</span></span>
-<span><span class="co">#&gt;        5: ELI LILLY AND CO ZA96101984A 19961010    20Q3</span></span>
-<span><span class="co">#&gt;       ---                                              </span></span>
-<span><span class="co">#&gt; 18283734:          FDA-CTU        &lt;NA&gt; 20240331    24Q1</span></span>
-<span><span class="co">#&gt; 18283735:          FDA-CTU        &lt;NA&gt; 20240331    24Q1</span></span>
-<span><span class="co">#&gt; 18283736:          FDA-CTU        &lt;NA&gt; 20240331    24Q1</span></span>
-<span><span class="co">#&gt; 18283737:          FDA-CTU        &lt;NA&gt; 20240331    24Q1</span></span>
-<span><span class="co">#&gt; 18283738:          FDA-CTU        &lt;NA&gt; 20240331    24Q1</span></span>
+<span><span class="co">#&gt;           primaryid rpsr_cod   caseid caseversion i_f_cod auth_num  e_sub</span></span>
+<span><span class="co">#&gt;               &lt;num&gt;   &lt;fctr&gt;    &lt;int&gt;      &lt;fctr&gt;  &lt;fctr&gt;   &lt;char&gt; &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt;        1:  45217461       HP  4521746           1       I     &lt;NA&gt;      N</span></span>
+<span><span class="co">#&gt;        2:  57910401     &lt;NA&gt;  5791040           1       I     &lt;NA&gt;      N</span></span>
+<span><span class="co">#&gt;        3:  56962401     &lt;NA&gt;  5696240           1       I     &lt;NA&gt;      N</span></span>
+<span><span class="co">#&gt;        4:  54662121      FGN  5466212           1       I     &lt;NA&gt;      N</span></span>
+<span><span class="co">#&gt;        5:  54662121       HP  5466212           1       I     &lt;NA&gt;      N</span></span>
+<span><span class="co">#&gt;       ---                                                                </span></span>
+<span><span class="co">#&gt; 18283734: 236937711      CSM 23693771           1       I   697702      N</span></span>
+<span><span class="co">#&gt; 18283735: 236937721      CSM 23693772           1       I   697662      N</span></span>
+<span><span class="co">#&gt; 18283736: 236937741      CSM 23693774           1       I   697678      N</span></span>
+<span><span class="co">#&gt; 18283737: 237079261      CSM 23707926           1       I   697660      N</span></span>
+<span><span class="co">#&gt; 18283738: 237079291      CSM 23707929           1       I   697693      N</span></span>
+<span><span class="co">#&gt;           lit_ref  rept_dt to_mfr         mfr_sndr     mfr_num   mfr_dt</span></span>
+<span><span class="co">#&gt;            &lt;char&gt;    &lt;int&gt; &lt;char&gt;           &lt;char&gt;      &lt;char&gt;    &lt;int&gt;</span></span>
+<span><span class="co">#&gt;        1:    &lt;NA&gt;       NA   &lt;NA&gt;             &lt;NA&gt;        &lt;NA&gt;       NA</span></span>
+<span><span class="co">#&gt;        2:    &lt;NA&gt;       NA   &lt;NA&gt;             &lt;NA&gt;        &lt;NA&gt;       NA</span></span>
+<span><span class="co">#&gt;        3:    &lt;NA&gt;       NA   &lt;NA&gt;             &lt;NA&gt;        &lt;NA&gt;       NA</span></span>
+<span><span class="co">#&gt;        4:    &lt;NA&gt; 19961015   &lt;NA&gt; ELI LILLY AND CO ZA96101984A 19961010</span></span>
+<span><span class="co">#&gt;        5:    &lt;NA&gt; 19961015   &lt;NA&gt; ELI LILLY AND CO ZA96101984A 19961010</span></span>
+<span><span class="co">#&gt;       ---                                                              </span></span>
+<span><span class="co">#&gt; 18283734:    &lt;NA&gt; 20240331      N          FDA-CTU        &lt;NA&gt; 20240331</span></span>
+<span><span class="co">#&gt; 18283735:    &lt;NA&gt; 20240331      N          FDA-CTU        &lt;NA&gt; 20240331</span></span>
+<span><span class="co">#&gt; 18283736:    &lt;NA&gt; 20240331   &lt;NA&gt;          FDA-CTU        &lt;NA&gt; 20240331</span></span>
+<span><span class="co">#&gt; 18283737:    &lt;NA&gt; 20240331      Y          FDA-CTU        &lt;NA&gt; 20240331</span></span>
+<span><span class="co">#&gt; 18283738:    &lt;NA&gt; 20240331      Y          FDA-CTU        &lt;NA&gt; 20240331</span></span>
+<span><span class="co">#&gt;           quarter</span></span>
+<span><span class="co">#&gt;            &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt;        1:    20Q3</span></span>
+<span><span class="co">#&gt;        2:    20Q3</span></span>
+<span><span class="co">#&gt;        3:    20Q3</span></span>
+<span><span class="co">#&gt;        4:    20Q3</span></span>
+<span><span class="co">#&gt;        5:    20Q3</span></span>
+<span><span class="co">#&gt;       ---        </span></span>
+<span><span class="co">#&gt; 18283734:    24Q1</span></span>
+<span><span class="co">#&gt; 18283735:    24Q1</span></span>
+<span><span class="co">#&gt; 18283736:    24Q1</span></span>
+<span><span class="co">#&gt; 18283737:    24Q1</span></span>
+<span><span class="co">#&gt; 18283738:    24Q1</span></span>
 <span><span class="co">## Disproportionality analysis ----------------------------------------------------------</span></span>
 <span><span class="va">disproportionality_trend_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/disproportionality_trend.html">disproportionality_trend</a></span><span class="op">(</span></span>
 <span>  drug_selected <span class="op">=</span> <span class="st">"brexpiprazole"</span>,</span>
@@ -6400,10 +6414,10 @@ a quarter, or a year.</p>
 <span>  temp_drug <span class="op">=</span> <span class="va">Drug</span><span class="op">[</span><span class="va">role_cod</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PS"</span>, <span class="st">"SS"</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>  time_granularity <span class="op">=</span> <span class="st">"year"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_disproportionality_trend.html">plot_disproportionality_trend</a></span><span class="op">(</span>disproportionality_trend_results <span class="op">=</span> <span class="va">disproportionality_trend_df</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
-<img src="disproportionality_trend-1.png" alt="Fig 10: IC trend (aripiprazole , ICD_query_with_behaviors), looking only at suspected agents before warning."><div class="figcaption">Fig 10: IC trend (aripiprazole ,
+<img src="disproportionality_analysis-plot_trend-1.png" alt="Fig 10: IC trend (aripiprazole , ICD_query_with_behaviors), looking only at suspected agents before warning."><div class="figcaption">Fig 10: IC trend (aripiprazole ,
 ICD_query_with_behaviors), looking only at suspected agents before
 warning.</div>
 </div>
@@ -6415,7 +6429,7 @@ warning.</div>
 not the only disproportionality metrics. To compare their results with
 other disproportionality metrics you can use the
 disproportionality_comparison function</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/disproportionality_comparison.html">disproportionality_comparison</a></span><span class="op">(</span></span>
 <span>  drug_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Drug</span><span class="op">[</span><span class="va">substance</span> <span class="op">==</span> <span class="st">"aripiprazole"</span> <span class="op">&amp;</span> <span class="va">role_cod</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PS"</span>, <span class="st">"SS"</span><span class="op">)</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  event_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">Reac</span><span class="op">[</span><span class="va">pt</span> <span class="op">==</span> <span class="st">"impulsive behaviour"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -6434,7 +6448,7 @@ disproportionality_comparison function</p>
 <span><span class="co">#&gt; IC_gamma = 4.48 (4.46-4.75)</span></span></code></pre></div>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -6445,15 +6459,15 @@ disproportionality_comparison function</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>

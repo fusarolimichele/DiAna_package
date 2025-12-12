@@ -245,21 +245,20 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL,
 #' @export
 
 new_descriptive <- function(pids_cases, RG = NULL, drug = NULL,
-                        save_in_excel = TRUE, file_name = "Descriptives.xlsx",
-                        vars = c(
-                          "sex", "Submission", "Reporter",
-                          "age_range", "Outcome", "country",
-                          "continent", "age_in_years",
-                          "wt_in_kgs", "Reactions",
-                          "Indications", "Substances", "num_Substances",
-                          "year", "role_cod", "time_to_onset"
-                        ),
-                        list_pids = list(), method = "independence_test",
-                        database = "sample") {
+                            save_in_excel = TRUE, file_name = "Descriptives.xlsx",
+                            vars = c(
+                              "sex", "Submission", "Reporter",
+                              "age_range", "Outcome", "country",
+                              "continent", "age_in_years",
+                              "wt_in_kgs", "Reactions",
+                              "Indications", "Substances", "num_Substances",
+                              "year", "role_cod", "time_to_onset"
+                            ),
+                            list_pids = list(), method = "independence_test",
+                            database = "sample") {
   # import data
   pids_tot <- base::union(pids_cases, RG)
   if (database == "sample") {
-
     Demo <- DiAna::sample_Demo[primaryid %in% pids_tot]
 
     Drug <- DiAna::sample_Drug[primaryid %in% pids_tot]
@@ -271,83 +270,90 @@ new_descriptive <- function(pids_cases, RG = NULL, drug = NULL,
     Outc <- DiAna::sample_Outc[primaryid %in% pids_tot]
 
     Ther <- DiAna::sample_Ther[primaryid %in% pids_tot]
+  } else {
+    DiAna::import("DEMO", quarter = database, pids = pids_tot)
 
-  }
+    DiAna::import("DRUG", quarter = database, pids = pids_tot)
 
-  else {
+    DiAna::import("REAC", quarter = database, pids = pids_tot)
 
-    DiAna::import("DEMO", quarter = database,pids = pids_tot)
+    DiAna::import("INDI", quarter = database, pids = pids_tot)
 
-    DiAna::import("DRUG", quarter = database,pids = pids_tot)
+    DiAna::import("OUTC", quarter = database, pids = pids_tot)
 
-    DiAna::import("REAC", quarter = database,pids = pids_tot)
-
-    DiAna::import("INDI", quarter = database,pids = pids_tot)
-
-    DiAna::import("OUTC", quarter = database,pids = pids_tot)
-
-    if("time_to_onset" %in% vars) DiAna::import("THER", quarter = database,pids = pids_tot)
-
+    if ("time_to_onset" %in% vars) DiAna::import("THER", quarter = database, pids = pids_tot)
   }
   temp <- Demo
   temp[, sex := ifelse(sex == "F", "Female", ifelse(sex == "M", "Male", NA))]
-  if("Submission" %in% vars) temp[, Submission := ifelse(rept_cod %in% c("30DAY", "5DAY", "EXP"), "Expedited",
-                                                         ifelse(rept_cod == "PER", "Periodic",
-                                                                "Direct"
-                                                         )
-  )]
+  if ("Submission" %in% vars) {
+    temp[, Submission := ifelse(rept_cod %in% c("30DAY", "5DAY", "EXP"), "Expedited",
+      ifelse(rept_cod == "PER", "Periodic",
+        "Direct"
+      )
+    )]
+  }
   temp[, Reporter := ifelse(occp_cod == "CN", "Consumer",
-                            ifelse(occp_cod == "MD", "Physician",
-                                   ifelse(occp_cod == "HP", "Healthcare practitioner",
-                                          ifelse(occp_cod == "PH", "Pharmacist",
-                                                 ifelse(occp_cod == "LW", "Lawyer",
-                                                        ifelse(occp_cod == "OT", "Other",
-                                                               ifelse(occp_cod == "NULL", NA,
-                                                               as.character(occp_cod))))))))]
+    ifelse(occp_cod == "MD", "Physician",
+      ifelse(occp_cod == "HP", "Healthcare practitioner",
+        ifelse(occp_cod == "PH", "Pharmacist",
+          ifelse(occp_cod == "LW", "Lawyer",
+            ifelse(occp_cod == "OT", "Other",
+              ifelse(occp_cod == "NULL", NA,
+                as.character(occp_cod)
+              )
+            )
+          )
+        )
+      )
+    )
+  )]
 
   temp$Reporter <- as.factor(temp$Reporter)
   temp[, age_in_years := age_in_days / 365]
   temp[, age_range := cut(age_in_days, c(0, 28, 730, 4380, 6570, 10950, 18250, 23725, 27375, 31025, 36500, 73000),
-                          include.lowest = TRUE, right = FALSE,
-                          labels = c(
-                            "Neonate (<28d)", "Infant (28d-1y)", "Child (2y-11y)", "Teenager (12y-17y)", "Adult (18y-29y)", "Adult (30y-49y)",
-                            "Adult (50y-64y)", "Elderly (65y-74y)", "Elderly (75y-84y)", "Elderly (85y-99y)", "Elderly (>99y)"
-                          )
+    include.lowest = TRUE, right = FALSE,
+    labels = c(
+      "Neonate (<28d)", "Infant (28d-1y)", "Child (2y-11y)", "Teenager (12y-17y)", "Adult (18y-29y)", "Adult (30y-49y)",
+      "Adult (50y-64y)", "Elderly (65y-74y)", "Elderly (75y-84y)", "Elderly (85y-99y)", "Elderly (>99y)"
+    )
   )]
   temp_outc <- Outc[, `:=`(outc_cod, ifelse(outc_cod == "OT", "Other serious",
+    ifelse(outc_cod == "CA", "Congenital anomaly",
+      ifelse(outc_cod == "HO", "Hospitalization",
+        ifelse(outc_cod == "RI", "Required intervention",
+          ifelse(outc_cod == "DS", "Disability",
+            ifelse(outc_cod == "LT", "Life threatening",
+              ifelse(outc_cod == "DE", "Death", outc_cod)
+            )
+          )
+        )
+      )
+    )
+  ))]
 
-                                            ifelse(outc_cod == "CA", "Congenital anomaly",
+  vars <- union(setdiff(vars, "Outcome"), unique(temp_outc$outc_cod))
 
-                                                   ifelse(outc_cod == "HO", "Hospitalization",
-
-                                                          ifelse(outc_cod == "RI", "Required intervention",
-
-                                                                 ifelse(outc_cod == "DS", "Disability",
-
-                                                                        ifelse(outc_cod == "LT", "Life threatening",
-
-                                                                               ifelse(outc_cod == "DE", "Death",outc_cod))))))))]
-
-  vars <- union(setdiff(vars,"Outcome"),unique(temp_outc$outc_cod))
-
-  temp_outc <- temp_outc[,value:=1] %>% tidyr::pivot_wider(names_from = outc_cod,values_from = value,values_fill = 0)
+  temp_outc <- temp_outc[, value := 1] %>% tidyr::pivot_wider(names_from = outc_cod, values_from = value, values_fill = 0)
 
   temp <- setDT(temp_outc)[temp, on = "primaryid"]
   temp[, country := ifelse(is.na(as.character(occr_country)), as.character(reporter_country), as.character(occr_country))]
-  if(database!="VigiBase"){
+  if (database != "VigiBase") {
     temp <- dplyr::distinct(country_dictionary[, .(country, continent)][!is.na(country)])[temp, on = "country"]
     temp$country <- as.factor(temp$country)
     temp$continent <- factor(temp$continent, levels = c("North America", "Europe", "Asia", "South America", "Oceania", "Africa"), ordered = TRUE)
   }
   temp <- Reac[, .N, by = "primaryid"][, .(primaryid, Reactions = N)][temp, on = "primaryid"]
   temp <- Drug[, .N, by = "primaryid"][, .(primaryid, Substances = N)][temp, on = "primaryid"]
-  if ("num_Substances" %in% vars) {temp[, num_Substances := ifelse(Substances == 1, "1",
-                                                                   ifelse(Substances == 2, "2",
-                                                                          ifelse(Substances>2 & Substances<=5, "3-5", ">5")))]
+  if ("num_Substances" %in% vars) {
+    temp[, num_Substances := ifelse(Substances == 1, "1",
+      ifelse(Substances == 2, "2",
+        ifelse(Substances > 2 & Substances <= 5, "3-5", ">5")
+      )
+    )]
     temp$num_Substances <- factor(temp$num_Substances, levels = c("1", "2", "3-5", ">5"))
   }
   temp <- Indi[, .N, by = "primaryid"][, .(primaryid, Indications = N)][temp, on = "primaryid"]
-  if("time_to_onset" %in% vars) {
+  if ("time_to_onset" %in% vars) {
     temp_tto <- Drug[Ther, on = c("primaryid", "drug_seq")][substance %in% drug]
     suppressWarnings(temp_tto[, role_cod := max(role_cod), by = "primaryid"])
     temp_tto <- temp_tto[!is.na(time_to_onset) & time_to_onset >= 0]
@@ -355,11 +361,12 @@ new_descriptive <- function(pids_cases, RG = NULL, drug = NULL,
     temp <- temp_tto[temp, on = "primaryid"]
     temp$time_to_onset <- as.numeric(temp$time_to_onset)
   }
-  if("year" %in% vars) {temp[, year := as.factor(ifelse(!is.na(event_dt),
-                                                        as.numeric(substr(event_dt, 1, 4)), ifelse(!is.na(init_fda_dt),
-                                                                                                   as.numeric(substr(init_fda_dt, 1, 4)), as.numeric(substr(fda_dt, 1, 4))
-                                                        )
-  ))]
+  if ("year" %in% vars) {
+    temp[, year := as.factor(ifelse(!is.na(event_dt),
+      as.numeric(substr(event_dt, 1, 4)), ifelse(!is.na(init_fda_dt),
+        as.numeric(substr(init_fda_dt, 1, 4)), as.numeric(substr(fda_dt, 1, 4))
+      )
+    ))]
   }
   # add the max role_cod for the drug
   if (!is.null(drug)) {
@@ -388,8 +395,8 @@ new_descriptive <- function(pids_cases, RG = NULL, drug = NULL,
     gt_table <- t %>% tibble::as_tibble()
     tempN_cases <- as.numeric(gsub("\\*\\*", "", gsub(".*N = ", "", colnames(gt_table)[[2]])))
     suppressWarnings(gt_table <- gt_table %>% tidyr::separate(get(colnames(gt_table)[[2]]),
-                                                              sep = ";",
-                                                              into = c("N_cases", "%_cases")
+      sep = ";",
+      into = c("N_cases", "%_cases")
     ))
     gt_table <- rbind(c("N", tempN_cases, ""), gt_table)
     # save it to the excel
@@ -411,35 +418,35 @@ new_descriptive <- function(pids_cases, RG = NULL, drug = NULL,
     temp <- temp[, ..vars]
     # perform the descriptive analysis
     suppressMessages(t <- temp %>%
-                       gtsummary::tbl_summary(
-                         by = Group, statistic = list(
-                           gtsummary::all_continuous() ~ "{median} ({p25}-{p75}) [{min}-{max}] {p_nonmiss}",
-                           gtsummary::all_continuous2() ~ "{median} ({p25}-{p75}) [{min}-{max}] {p_nonmiss}%",
-                           gtsummary::all_categorical() ~ "{n};{p}"
-                         ),
-                         digits = everything() ~ c(0, 2)
-                       ) %>%
-                       gtsummary::add_p(
-                         test = list(gtsummary::all_categorical() ~ "fisher.test"),
-                         test.args = list(
-                           gtsummary::all_categorical() ~ list(simulate.p.value = TRUE),
-                           gtsummary::all_continuous() ~ list(exact = FALSE)
-                         ),
-                         pvalue_fun = function(x) gtsummary::style_pvalue(x, digits = 3)
-                       ) %>%
-                       gtsummary::add_q("holm") %>%
-                       gtsummary::bold_labels())
+      gtsummary::tbl_summary(
+        by = Group, statistic = list(
+          gtsummary::all_continuous() ~ "{median} ({p25}-{p75}) [{min}-{max}] {p_nonmiss}",
+          gtsummary::all_continuous2() ~ "{median} ({p25}-{p75}) [{min}-{max}] {p_nonmiss}%",
+          gtsummary::all_categorical() ~ "{n};{p}"
+        ),
+        digits = everything() ~ c(0, 2)
+      ) %>%
+      gtsummary::add_p(
+        test = list(gtsummary::all_categorical() ~ "fisher.test"),
+        test.args = list(
+          gtsummary::all_categorical() ~ list(simulate.p.value = TRUE),
+          gtsummary::all_continuous() ~ list(exact = FALSE)
+        ),
+        pvalue_fun = function(x) gtsummary::style_pvalue(x, digits = 3)
+      ) %>%
+      gtsummary::add_q("holm") %>%
+      gtsummary::bold_labels())
     # format the table
     gt_table <- t %>% tibble::as_tibble()
     tempN_cases <- as.numeric(gsub(",", "", gsub(".*N = ", "", colnames(gt_table)[[2]])))
     tempN_controls <- as.numeric(gsub(",", "", gsub(".*N = ", "", colnames(gt_table)[[3]])))
     suppressWarnings(gt_table <- gt_table %>% tidyr::separate(get(colnames(gt_table)[[2]]),
-                                                              sep = ";",
-                                                              into = c("N_cases", "%_cases")
+      sep = ";",
+      into = c("N_cases", "%_cases")
     ))
     suppressWarnings(gt_table <- gt_table %>% tidyr::separate(get(colnames(gt_table)[[4]]),
-                                                              sep = ";",
-                                                              into = c("N_controls", "%_controls")
+      sep = ";",
+      into = c("N_controls", "%_controls")
     ))
     gt_table <- rbind(c("N", tempN_cases, "", tempN_controls, "", "", ""), gt_table)
     # save it to the excel
@@ -449,4 +456,3 @@ new_descriptive <- function(pids_cases, RG = NULL, drug = NULL,
   }
   return(gt_table)
 }
-

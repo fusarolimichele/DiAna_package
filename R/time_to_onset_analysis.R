@@ -45,15 +45,16 @@
 #'
 #' @export
 time_to_onset_analysis <- function(
-    drug_selected, reac_selected,
-    temp_drug = Drug, temp_reac = Reac,
-    temp_ther = Ther,
-    meddra_level = "pt",
-    drug_level = "substance",
-    restriction = "none",
-    minimum_cases = 3,
-    max_TTO = 365,
-    test = "AD") {
+  drug_selected, reac_selected,
+  temp_drug = Drug, temp_reac = Reac,
+  temp_ther = Ther,
+  meddra_level = "pt",
+  drug_level = "substance",
+  restriction = "none",
+  minimum_cases = 3,
+  max_TTO = 365,
+  test = "AD"
+) {
   # reformat drug and reac input
   drug_selected <- format_input_disproportionality(drug_selected)
   reac_selected <- format_input_disproportionality(reac_selected)
@@ -337,23 +338,35 @@ render_tto <- function(df,
   ) +
     {
       if (nested == FALSE) {
-        geom_linerange(aes(col = color), linewidth = 1,position = position_dodge(dodge), show.legend = show_legend,
-        alpha = 0.7)
+        geom_linerange(aes(col = color),
+          linewidth = 1, position = position_dodge(dodge), show.legend = show_legend,
+          alpha = 0.7
+        )
       }
     } +
     {
       if (nested == FALSE) {
-        geom_point(aes(col = color),position = position_dodge(dodge), show.legend = show_legend,
-                   alpha = 0.7)
+        geom_point(aes(col = color),
+          position = position_dodge(dodge), show.legend = show_legend,
+          alpha = 0.7
+        )
       }
     } +
     {
-      if (nested != FALSE) geom_linerange(aes(color = nested), linewidth = 1,position = position_dodge(dodge), show.legend = show_legend,
-                                          alpha = 0.7)
+      if (nested != FALSE) {
+        geom_linerange(aes(color = nested),
+          linewidth = 1, position = position_dodge(dodge), show.legend = show_legend,
+          alpha = 0.7
+        )
+      }
     } +
     {
-      if (nested != FALSE) geom_point(aes(color = nested),position = position_dodge(dodge), show.legend = show_legend,
-                                      alpha = 0.7)
+      if (nested != FALSE) {
+        geom_point(aes(color = nested),
+          position = position_dodge(dodge), show.legend = show_legend,
+          alpha = 0.7
+        )
+      }
     } +
     {
       if (!is.na(facet_v)) facet_wrap(factor(get(facet_v)) ~ ., labeller = label_wrap_gen(width = 15), ncol = 4)
