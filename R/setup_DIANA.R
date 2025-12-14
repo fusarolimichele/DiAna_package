@@ -33,6 +33,9 @@
 #'        \itemize{
 #'                \item \emph{25Q2}
 #'                }
+#'        \itemize{
+#'                \item \emph{25Q3}
+#'                }
 #'
 #' @param timeout The amount of time after which R stops a task if it is still unfinished.
 #'                Default 100000It may be necessary to increase it in the case of a slow connection.
@@ -60,7 +63,7 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
     dir.create(paste0(here::here(), "/projects"))
     dir.create(paste0(here::here(), "/external_sources"))
     # URL for the DiAna zip file
-    if (!quarter %in% c("23Q1", "23Q3", "23Q4", "24Q1", "24Q2", "24Q3", "24Q4", "25Q1", "25Q2")) {
+    if (!quarter %in% c("23Q1", "23Q3", "23Q4", "24Q1", "24Q2", "24Q3", "24Q4", "25Q1", "25Q2", "24Q3")) {
       stop("The quarter required is not available on the DiAna OSF")
     } else if (quarter == "23Q1") {
       DiAna_url <- "https://osf.io/download/epkqf/"
@@ -80,6 +83,8 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
       DiAna_url <- "https://osf.io/download/we635/"
     } else if (quarter == "25Q2") {
       DiAna_url <- "https://osf.io/download/f9cra/"
+    } else if (quarter == "25Q3") {
+      DiAna_url <- "https://osf.io/download/g5fkv/"
     }
 
     # Download and extract DiAna data
@@ -96,7 +101,7 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
       destfile = paste0(here::here(), "/external_sources/ATC_DiAna.csv"),
       mode = "wb"
     )
-    utils::download.file("https://osf.io/download/g7sk6/",
+    utils::download.file("https://osf.io/download/c6fg8/",
       destfile = paste0(here::here(), "/external_sources/DiAna_dictionary.csv"),
       mode = "wb"
     )
