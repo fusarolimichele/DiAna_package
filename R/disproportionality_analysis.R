@@ -60,15 +60,78 @@ disproportionality_analysis <- function(
   # print warning if any drug or reaction selected was not found
   if (meddra_level == "pt") {
     if (length(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]]))) > 0) {
-      if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"), default = FALSE)) {
-        stop("Revise the query and run again the command")
+      if(Sys.info()[["sysname"]] == "Windows"){
+        message_pt1 <- "Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n " #135
+        message_pt2 <- paste0(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]])), collapse = "; ")
+        message_pt3 <- ". \n Would you like to revise the query?" #39
+        if(nchar(message_pt2) <= 81){
+          askYesNo(paste0(message_pt1, message_pt2, message_pt3))
+        } else {
+          split_message <- function(message, max_length = 81){
+            parts <- c()
+            while (nchar(message) > max_length) {
+              split_pos <- max(gregexpr(";", substr(message, 1, max_length))[[1]])
+              if (split_pos == -1) split_pos <- max_length
+              parts <- c(parts, substr(message, 1, split_pos))
+              message <- substr(message, split_pos + 1, nchar(message))
+            }
+            parts <- c(parts, message)
+            return(parts)
+          }
+          chunks <- split_message(message = message_pt2)
+        }
+        split_and_ask <- function(part1, part2, part3, max_length = 81) {
+          part2_chunks <- split_message(part2, max_length)
+          for (chunk in part2_chunks) {
+            if(askYesNo(paste0(part1, chunk, part3), default = FALSE)){stop("Revise the query and run again the command")}
+          }
+        }
+        split_and_ask(message_pt1, message_pt2, message_pt3)
+      } else {
+        if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ",
+                            paste0(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]])), collapse = "; "),
+                            ". \n Would you like to revise the query?"), default = FALSE)) {
+          stop("Revise the query and run again the command")
+        }
       }
     }
   }
+
   if (drug_level == "substance") {
     if (length(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]]))) > 0) {
-      if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"), default = FALSE)) {
-        stop("Revise the query and run again the command")
+      if(Sys.info()[["sysname"]] == "Windows"){
+        message_pt1 <- "Not all drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n " #135
+        message_pt2 <- paste0(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]])), collapse = "; ")
+        message_pt3 <- ". \n Would you like to revise the query?" #39
+        if(nchar(message_pt2) <= 81){
+          askYesNo(paste0(message_pt1, message_pt2, message_pt3))
+        } else {
+          split_message <- function(message, max_length = 81){
+            parts <- c()
+            while (nchar(message) > max_length) {
+              split_pos <- max(gregexpr(";", substr(message, 1, max_length))[[1]])
+              if (split_pos == -1) split_pos <- max_length
+              parts <- c(parts, substr(message, 1, split_pos))
+              message <- substr(message, split_pos + 1, nchar(message))
+            }
+            parts <- c(parts, message)
+            return(parts)
+          }
+          chunks <- split_message(message = message_pt2)
+        }
+        split_and_ask <- function(part1, part2, part3, max_length = 81) {
+          part2_chunks <- split_message(part2, max_length)
+          for (chunk in part2_chunks) {
+            if(askYesNo(paste0(part1, chunk, part3), default = FALSE)){stop("Revise the query and run again the command")}
+          }
+        }
+        split_and_ask(message_pt1, message_pt2, message_pt3)
+      } else {
+        if (askYesNo(paste0("Not all drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ",
+                            paste0(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]])), collapse = "; "),
+                            ". \n Would you like to revise the query?"), default = FALSE)) {
+          stop("Revise the query and run again the command")
+        }
       }
     }
   }
@@ -421,6 +484,8 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
     nE = c(drug_count - drug_event_count, tot - event_count - (drug_count - drug_event_count))
   ))
   rownames(tab) <- c("D", "nD")
+  drug_count <- as.numeric(drug_count)
+  event_count <- as.numeric(event_count)
   or <- questionr::odds.ratio(tab)
   ROR_median <- floor(or$OR * 100) / 100
   ROR_lower <- floor(or$`2.5 %` * 100) / 100
@@ -434,7 +499,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
     rate = ((drug_count * event_count) / tot) + 0.5
   ))
   gamma_median <- log2(stats::qgamma(
-    p = .5,
+    p = .05,
     shape = drug_event_count + 0.5,
     rate = ((drug_count * event_count) / tot) + 0.5
   ))
