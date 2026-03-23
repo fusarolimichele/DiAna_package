@@ -88,7 +88,7 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
       DiAna_url <- "https://osf.io/download/f9cra/"
     } else if (quarter == "25Q3") {
       DiAna_url <- "https://osf.io/download/g5fkv/"
-    } else if (quarter == "25Q3") {
+    } else if (quarter == "25Q4") {
       DiAna_url <- "https://osf.io/download/e8vbd/"
     }
 
