@@ -36,6 +36,9 @@
 #'        \itemize{
 #'                \item \emph{25Q3}
 #'                }
+#'        \itemize{
+#'                \item \emph{25Q4}
+#'                }
 #'
 #' @param timeout The amount of time after which R stops a task if it is still unfinished.
 #'                Default 100000It may be necessary to increase it in the case of a slow connection.
@@ -63,7 +66,7 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
     dir.create(paste0(here::here(), "/projects"))
     dir.create(paste0(here::here(), "/external_sources"))
     # URL for the DiAna zip file
-    if (!quarter %in% c("23Q1", "23Q3", "23Q4", "24Q1", "24Q2", "24Q3", "24Q4", "25Q1", "25Q2", "25Q3")) {
+    if (!quarter %in% c("23Q1", "23Q3", "23Q4", "24Q1", "24Q2", "24Q3", "24Q4", "25Q1", "25Q2", "25Q3", "25Q4")) {
       stop("The quarter required is not available on the DiAna OSF")
     } else if (quarter == "23Q1") {
       DiAna_url <- "https://osf.io/download/epkqf/"
@@ -85,6 +88,8 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
       DiAna_url <- "https://osf.io/download/f9cra/"
     } else if (quarter == "25Q3") {
       DiAna_url <- "https://osf.io/download/g5fkv/"
+    } else if (quarter == "25Q3") {
+      DiAna_url <- "https://osf.io/download/e8vbd/"
     }
 
     # Download and extract DiAna data
@@ -97,11 +102,11 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
     if (file.exists(macosx_folder)) {
       unlink(macosx_folder, recursive = TRUE)
     }
-    utils::download.file("https://osf.io/download/9pdmk/",
+    utils::download.file("https://osf.io/download/b2p7k/",
       destfile = paste0(here::here(), "/external_sources/ATC_DiAna.csv"),
       mode = "wb"
     )
-    utils::download.file("https://osf.io/download/c6fg8/",
+    utils::download.file("https://osf.io/download/n2dgz/",
       destfile = paste0(here::here(), "/external_sources/DiAna_dictionary.csv"),
       mode = "wb"
     )
