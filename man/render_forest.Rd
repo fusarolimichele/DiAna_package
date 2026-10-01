@@ -81,7 +81,7 @@ render_forest(disproportionality_df)
 
 }
 \seealso{
-Other visualization functions: 
-\code{\link{plot_disproportionality_trend}()}
+Other visualization functions:
+\code{\link[=plot_disproportionality_trend]{plot_disproportionality_trend()}}
 }
 \concept{visualization functions}

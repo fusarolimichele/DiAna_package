@@ -70,8 +70,8 @@ disproportionality_analysis(
 )
 }
 \seealso{
-Other disproportionality functions: 
-\code{\link{disproportionality_comparison}()},
-\code{\link{disproportionality_trend}()}
+Other disproportionality functions:
+\code{\link[=disproportionality_comparison]{disproportionality_comparison()}},
+\code{\link[=disproportionality_trend]{disproportionality_trend()}}
 }
 \concept{disproportionality functions}

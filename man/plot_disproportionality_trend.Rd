@@ -42,7 +42,7 @@ plot_disproportionality_trend(trend_results, metric = "IC")
 
 }
 \seealso{
-Other visualization functions: 
-\code{\link{render_forest}()}
+Other visualization functions:
+\code{\link[=render_forest]{render_forest()}}
 }
 \concept{visualization functions}

@@ -26,6 +26,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Michele Fusaroli \email{michele.fusaroli@gmail.com} (\href{https://orcid.org/0000-0002-0254-2212}{ORCID}) [copyright holder]
   \item Valentina Giunchi \email{valentina.giunchi2@unibo.it} (\href{https://orcid.org/0000-0001-5841-8520}{ORCID})
 }
 

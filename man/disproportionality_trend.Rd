@@ -82,8 +82,8 @@ result <- disproportionality_trend(drug_selected, reac_selected,
 )
 }
 \seealso{
-Other disproportionality functions: 
-\code{\link{disproportionality_analysis}()},
-\code{\link{disproportionality_comparison}()}
+Other disproportionality functions:
+\code{\link[=disproportionality_analysis]{disproportionality_analysis()}},
+\code{\link[=disproportionality_comparison]{disproportionality_comparison()}}
 }
 \concept{disproportionality functions}
