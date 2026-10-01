@@ -70,6 +70,7 @@ your DiAna project in R Studio:
     lines in the console:
 
 ``` r
+
 install.packages("devtools")
 devtools::install_github("fusarolimichele/DiAna_package")
 ```
@@ -87,6 +88,7 @@ functions)
     \# are comments and not commands):
 
 ``` r
+
 library(DiAna)
 setup_DiAna(quarter = "24Q1")
 # input yes when asked to download the FAERS
