@@ -115,3 +115,4 @@ Hult S, Sartori D, Bergvall T, et al. A feasibility study of drug-drug
 interaction signal detection in regular pharmacovigilance. Drug Saf.
 2020;43:775-85. \doi{10.1007/s40264-020-00939-y}
 }
+\concept{drug-drug interaction functions}

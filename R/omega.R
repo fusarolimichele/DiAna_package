@@ -30,6 +30,7 @@
 #' evidence of a causal interaction. Always inspect `f00`, `f10`, `f01`, `f11`
 #' and `g11` and the case series, alongside Omega, as recommended in the original paper.
 #'
+#' @family drug-drug interaction functions
 #' @param drug1_selected First drug(s). A character vector, or a (named) list
 #'   whose elements are character vectors of terms to collapse into one group.
 #' @param drug2_selected Second drug(s), same format as `drug1_selected`.
