@@ -44,6 +44,7 @@ thus precompiled (note that we are here running the analysis including
 also quarter up to 24Q1, while the preprint was limited to 23Q1).
 
 ``` r
+
 # Information -----------------------------------------------------------------
 ## Project title --------------------------------------------------------------
 ### "Causal inference tools for pharmacovigilance"
@@ -262,6 +263,7 @@ dependence with breast cancer. For this reason we expect to find no
 association (statistical dependence) between the two.
 
 ``` r
+
 ## Tutorial -------------------------------------------------------------------
 disproportionality_df <- disproportionality_analysis(
   drug_selected = "paracetamol",
@@ -272,6 +274,7 @@ paste0("IC = ",disproportionality_df$label_IC)
 ```
 
 ``` r
+
 render_forest(disproportionality_df)
 ```
 
@@ -307,6 +310,7 @@ find a strong association between the reporting of pramipexole and the
 reporting of impulse-control disorders.
 
 ``` r
+
 disproportionality_df <- disproportionality_analysis(
   drug_selected = "pramipexole",
   reac_selected = "impulse-control disorder"
@@ -316,6 +320,7 @@ paste0("IC = ",disproportionality_df$label_IC)
 ```
 
 ``` r
+
 render_forest(disproportionality_df)
 ```
 
@@ -342,6 +347,7 @@ discriminate between direct and reverse causality). In these cases,
 clinical reasoning is crucial to correctly assess the association.
 
 ``` r
+
 disproportionality_df <- disproportionality_analysis(
   drug_selected = "edaravone",
   reac_selected = "amyotrophic lateral sclerosis"
@@ -351,6 +357,7 @@ paste0("IC = ",disproportionality_df$label_IC)
 ```
 
 ``` r
+
 render_forest(disproportionality_df)
 ```
 
@@ -416,6 +423,7 @@ inference informed pharmacovigilance could make better use of negative
 associations is outside the scope of this tutorial.
 
 ``` r
+
 pids_schizophrenia <- unique(Indi[indi_pt%in%MedDRA[hlgt=="schizophrenia and other psychotic disorders"]$pt]$primaryid)
 
 restrictions <- list("main"=list(unique(Demo$primaryid)),"schizophrenia"=list(pids_schizophrenia))#,"not_schizophrenia"=list(setdiff(unique(Demo$primaryid),pids_schizophrenia)))
@@ -441,6 +449,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","goldenrod"))
 ```
 
@@ -490,6 +499,7 @@ would still flow through the reports from alcoholic patients, not
 reporting alcoholism.
 
 ``` r
+
 alcoholism <- c("alcoholism","alcohol problem","alcoholic encephalopathy","alcoholic coma",
                 "alcohol use disorder","alcoholic ketoacidosis","ex-alcohol user",
                 "alcoholic pancreopathy","ex-alcoholic","alcoholic pancreatitis",
@@ -527,6 +537,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","goldenrod"))
 ```
 
@@ -562,6 +573,7 @@ confounder would have led to missing a potential safety signal during
 signal detection.
 
 ``` r
+
 pids_pregnancy_indi <- unique(Indi[indi_pt%in%MedDRA[soc=="pregnancy, puerperium and perinatal conditions"]$pt]$primaryid)
 pids_pregnancy_reac <- unique(Reac[pt%in%MedDRA[soc=="pregnancy, puerperium and perinatal conditions"]$pt]$primaryid)
 pids_pregnancy <- union(pids_pregnancy_indi,pids_pregnancy_reac)
@@ -586,6 +598,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("gray45","goldenrod"))
 ```
 
@@ -620,6 +633,7 @@ recording the value (blue estimate) does not seem to affect the IC
 estimate, likely due to residual unaccounted confounding.
 
 ``` r
+
 pids_valsartan <- unique(Drug[substance=="valsartan"]$primaryid)
 
 restrictions <- list("main"=list(unique(Demo$primaryid)),"valsartan"=list(pids_valsartan))#,
@@ -645,6 +659,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","goldenrod"))
 ```
 
@@ -668,6 +683,7 @@ dependence (grey estimate), although it remains statistically not
 significant when focusing solely on males (gold estimate).
 
 ``` r
+
 pids_male <- Demo[sex=="M"]$primaryid
 
 restrictions <- list("main"=list(unique(Demo$primaryid)),"male"=list(pids_male))
@@ -691,6 +707,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("gray45","goldenrod"))
 ```
 
@@ -717,6 +734,7 @@ restrict to reports not mentioning death, we would produce a noisy
 inference (blue estimate).
 
 ``` r
+
 pids_death <- unique(Outc[outc_cod=="DE"]$primaryid)
 restrictions <- list("main"=list(unique(Demo$primaryid)),"Dead"=list(pids_death))#,"non_Dead"=list(setdiff(unique(Demo$primaryid),pids_death)))
 disproportionality_df <- data.table()
@@ -739,6 +757,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","red"))
 ```
 
@@ -767,6 +786,7 @@ estimate. This is likely because the reporting rate of PPIs when they
 are not the suspected drug is presumed to be very low.
 
 ``` r
+
 pids_PPI <- unique(Drug[substance%in%ATC[Class4=="Proton pump inhibitors"]$substance]$primaryid)
 
 restrictions <- list("main"=list(unique(Demo$primaryid)),"PPI"=list(pids_PPI))#,"non_PPI"=list(setdiff(unique(Demo$primaryid),pids_PPI)))
@@ -790,6 +810,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","red"))
 ```
 
@@ -816,6 +837,7 @@ Once again, restricting to reports that do not mention weight loss does
 not change the outcome (blue estimate).
 
 ``` r
+
 pids_weight <- union(Reac[pt%in%c("weight decreased")]$primaryid,
                      Indi[indi_pt%in%c("weight decreased")]$primaryid)
 restrictions <- list("main"=list(unique(Demo$primaryid)),"weight loss"=list(pids_weight))#
@@ -842,6 +864,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","red"))
 ```
 
@@ -873,6 +896,7 @@ the analysis on the entire population (grey estimate), gives a higher
 recording any investigation (gold estimate).
 
 ``` r
+
 pids_investigations <- Reac[pt%in%MedDRA[soc=="investigations"]$pt]$primaryid
 restrictions <- list("main"=list(unique(Demo$primaryid)),"investigation"=list(pids_investigations))
 disproportionality_df <- data.table()
@@ -894,6 +918,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("gray45","goldenrod"))
 ```
 
@@ -925,6 +950,7 @@ might restrict to reports satisfying any of the two inclusion criteria
 (gold estimate).
 
 ``` r
+
 pids_onco_indi <- Indi[indi_pt%in%MedDRA[soc=="neoplasms benign, malignant and unspecified (incl cysts and polyps)"]$pt]$primaryid
 pids_onco_drug <- Drug[substance%in%c(ATC[Class2=="Antineoplastic"]$substance,
                                       "navitoclax")]$primaryid
@@ -953,6 +979,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","blue","gray45","goldenrod"))
 ```
 
@@ -1047,6 +1074,7 @@ restrict to the cases following the regulatory warning and obtain an
 inflated statistical dependence (blue estimate).
 
 ``` r
+
 pids_warning <- Demo[init_fda_dt<20160503]$primaryid
 restrictions <- list("main"=list(unique(Demo$primaryid)),"pre-warning"=list(pids_warning),
                      "post-warning"=setdiff(Demo$primaryid,pids_warning))
@@ -1070,6 +1098,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","goldenrod"))
 ```
 
@@ -1114,6 +1143,7 @@ result of the sensitivity analysis should be reported and discussed
 together.
 
 ``` r
+
 pids_lawyers <- Demo[occp_cod=="LW"]$primaryid
 restrictions <- list("main"=list(unique(Demo$primaryid)),"lawyers"=list(pids_lawyers),
                      "non-lawyers"=setdiff(Demo$primaryid,pids_lawyers))
@@ -1137,6 +1167,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("blue","gray45","goldenrod"))
 ```
 
@@ -1170,6 +1201,7 @@ more when we remove reports of gambling with the competing dopamine
 agonists (gold estimate).
 
 ``` r
+
 pids_unmasked <- setdiff(Demo$primaryid,Drug[substance%in%ATC[Class4=="Dopamine agonists"]$substance]$primaryid)
 pids_unmasked <- setdiff(Demo$primaryid,intersect(Drug[substance%in%ATC[Class4=="Dopamine agonists"]$substance]$primaryid,Reac[pt=="gambling disorder"]$primaryid))
 restrictions <- list("main"=list(unique(Demo$primaryid)),"unmasked"=list(pids_unmasked))
@@ -1192,6 +1224,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("gray45","goldenrod"))
 ```
 
@@ -1208,6 +1241,7 @@ which even increase when we remove reports of warfarin with the
 competing event bleeding (gold estimate).
 
 ``` r
+
 pids_unmasked <- setdiff(Demo$primaryid,intersect(Reac[pt%in%MedDRA[grepl("bleeding|haemorrhage",pt)]$pt]$primaryid,Drug[substance=="warfarin"]$primaryid))
 restrictions <- list("main"=list(unique(Demo$primaryid)),"unmasked"=list(pids_unmasked))
 disproportionality_df <- data.table()
@@ -1229,6 +1263,7 @@ disproportionality_df[,.(nested,label_IC)]
 ```
 
 ``` r
+
 render_forest(disproportionality_df,nested = "nested",nested_colors=c("gray45","goldenrod"))
 ```
 

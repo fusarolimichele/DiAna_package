@@ -1,11 +1,13 @@
-pandoc: 3.6.3
-pkgdown: 2.2.0
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   articles/Causal_inference: Causal_inference.html
   articles/Disproportionality_Analysis: Disproportionality_Analysis.html
+  articles/Drug-drug-interactions: Drug-drug-interactions.html
+  articles/PVgravID_extension: PVgravID_extension.html
   articles/Start_Subproject: Start_Subproject.html
-last_built: 2025-12-12T10:48Z
+last_built: 2026-10-06T14:53Z
 urls:
   reference: https://fusarolimichele.github.io/DiAna_package/reference
   article: https://fusarolimichele.github.io/DiAna_package/articles

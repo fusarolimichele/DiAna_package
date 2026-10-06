@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="DIsproportionality ANAlysis and Pharmacovigilance in the FAERS">
 <meta name="description" content="Advanced tools for analyzing the FDA Adverse Event Reporting System (FAERS) data, enhancing drug safety research. Provides functions to download cleaned FAERS data and import relational datasets, facilitating case identification and control selection to address confounding in analyses. Provides functions for descriptive and disproportionality analysis, time-to-onset analysis, network analysis, retrieval algorithms, and visualization.">
@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">DiAna</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,10 @@
     <li><h6 class="dropdown-header" data-toc-skip>Disproportionality Analysis</h6></li>
     <li><a class="dropdown-item" href="articles/Disproportionality_Analysis.html">Disproportionality Analysis</a></li>
     <li><a class="dropdown-item" href="articles/Causal_inference.html">Causal inference</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Extensions</h6></li>
+    <li><a class="dropdown-item" href="articles/Drug-drug-interactions.html">Using pvOmega with DiAna</a></li>
+    <li><a class="dropdown-item" href="articles/PVgravID_extension.html">Pregnancy analyses with PVgravID</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
@@ -91,7 +95,7 @@
 </ol>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"fusarolimichele/DiAna_package"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"fusarolimichele/DiAna_package"</span><span class="op">)</span></span></code></pre></div>
 <p>It may be useful to run this command from time to time to download the latest update to the package (e.g., bugs solved, new or improved functions)</p>
 <ol start="4" style="list-style-type: decimal">
 <li>Setup the DiAna project: The first time we use DiAna, we have to set up the folder where the data will be stored together with the results of the analyses. This command will require a good internet connection. The better your internet connection, the faster the download. It usually takes between a few minutes and 20 minutes. On the console, we run the two rows below (note that rows preceded by a # are comments and not commands):</li>
@@ -149,7 +153,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

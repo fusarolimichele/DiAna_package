@@ -111,6 +111,13 @@ Functions to perform disproportionality analyses.
 - [`render_forest_table()`](https://fusarolimichele.github.io/DiAna_package/reference/render_forest_table.md)
   : Render a Forest Plot Table from Disproportionality Data
 
+## Drug-drug interaction analysis
+
+Functions to identify potential drug-drug interactions.
+
+- [`omega_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/omega_analysis.md)
+  : Omega drug-drug interaction analysis on DiAna CDM
+
 ## Advanced analyses
 
 Functions to perform advanced analyses, including time to onset analysis

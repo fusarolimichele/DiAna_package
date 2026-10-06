@@ -1,6 +1,6 @@
 Package: DiAna
 Title: DIsproportionality ANAlysis and Pharmacovigilance in the FAERS
-Version: 2.1.0
+Version: 2.1.1
 Authors@R: c(
     person("Michele", "Fusaroli", , "michele.fusaroli@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-0254-2212")),
@@ -43,6 +43,7 @@ Imports:
     lubridate,
     magrittr,
     purrr,
+    pvOmega,
     questionr,
     readr,
     readxl,
@@ -57,7 +58,11 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
-Config/roxygen2/version: 8.0.0
+Remotes:
+    PVgravID=github::Uppsala-Monitoring-Centre/PVgravID,
+    pvOmega=github::Uppsala-Monitoring-Centre/pvOmega
+Config/Needs/website: rmarkdown
+Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true

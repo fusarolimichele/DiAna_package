@@ -8,3 +8,5 @@ Developer
 .DS_Store
 .Rhistory
 revdep/
+.Rhistory
+vignettes/articles/.gitignore

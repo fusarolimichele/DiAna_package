@@ -154,6 +154,7 @@ reporting_rates(unique(sample_Drug[substance == "paracetamol"]$primaryid),
 #> 66:                colitis ulcerative
 #> 67:             covid-19 immunisation
 #>                                    pt
+#>                                 <ord>
 #>                                          label_pt  N_pt
 #>                                            <char> <int>
 #>  1:                             pain (17.95%) [7]     7
@@ -224,6 +225,7 @@ reporting_rates(unique(sample_Drug[substance == "paracetamol"]$primaryid),
 #> 66:                colitis ulcerative (2.56%) [1]     1
 #> 67:             covid-19 immunisation (2.56%) [1]     1
 #>                                          label_pt  N_pt
+#>                                            <char> <int>
 reporting_rates(unique(sample_Drug[substance == "paracetamol"]$primaryid),
   entity = "substance",
   temp_reac = sample_Reac, temp_drug = sample_Drug,

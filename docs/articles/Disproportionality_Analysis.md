@@ -28,6 +28,7 @@ From the DiAna main project, we open a new R script and run the snippet
 ‘new_FAERS_project’ to set up a project.
 
 ``` r
+
 # Information -----------------------------------------------------------------
 ## Project title --------------------------------------------------------------
 ### v02_Disproportionality analysis
@@ -114,6 +115,7 @@ investigating the possibility of a role of “aripiprazole” in causing
 of our objects of study.
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 drug_selected <- "aripiprazole"
 reac_selected <- "impulse control disorder"
@@ -125,6 +127,7 @@ disproportionality_df, the results of a disproportionality analysis on
 the drug and reaction specified.
 
 ``` r
+
 ## Disproportionality analysis ----------------------------------------------------------
 disproportionality_df <- disproportionality_analysis(
   drug_selected = drug_selected,
@@ -146,6 +149,7 @@ command, that could be run just in the console since we do not need to
 keep it in our script.
 
 ``` r
+
 Reac[, .N, by = "pt"][order(-N)][grepl("impuls", pt)]
 ```
 
@@ -154,7 +158,7 @@ Reac[, .N, by = "pt"][order(-N)][grepl("impuls", pt)]
 | impulsive behaviour      | 3264 |
 | impulse-control disorder | 1733 |
 
-Tab 1: MedDRA Preferred Terms including the substring impuls.
+Tab 1: MedDRA Preferred Terms including the substring impuls. {.table}
 
 The previous command can be read as: “within the database Reac, count
 how many times (.N) each preferred term occurs (by=”pt”). Then order the
@@ -169,6 +173,7 @@ fix it including the dash in the reaction pt as follows and we rerun the
 disproportionality analysis:
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 drug_selected <- "aripiprazole"
 reac_selected <- "impulse-control disorder"
@@ -181,6 +186,7 @@ disproportionality_df <- disproportionality_analysis(
 ```
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 disproportionality_df
 ```
@@ -189,7 +195,8 @@ disproportionality_df
 |:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---|:---|:---|:---|:---|
 | aripiprazole | impulse-control disorder | 286 | 111261 | 111547 | 1447 | 1733 | 17485485 | 31.06 | 27.28 | 35.25 | 4.64 | 4.44 | 4.78 | 31.06 (27.28-35.25) \[286\] | 4.64 (4.44-4.78) \[286\] | TRUE | SDR | SDR |
 
-Tab 2: Disproportionality dataframe structure.
+Tab 2: Disproportionality dataframe structure. {.table
+style="width:100%;"}
 
 This time no error appears, and after few seconds we can see that our
 environment (window pane usually on the upper right) has been populated
@@ -210,6 +217,7 @@ to simplify input to further functions, such as, for example, the
 visualization using render_forest.
 
 ``` r
+
 render_forest(disproportionality_df, index = "IC")
 ```
 
@@ -219,6 +227,7 @@ ICD)](disproportionality_analysis-render_forest1-1.png)
 Fig 1: IC (aripiprazole , ICD)
 
 ``` r
+
 render_forest(disproportionality_df, index = "ROR")
 ```
 
@@ -248,6 +257,7 @@ paragraph and add other interesting terms to the definition of
 impulse-control disorder, using a named list.
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 drug_selected <- "aripiprazole"
 reac_selected <- list("impulse-control disorder" = list(
@@ -263,6 +273,7 @@ disproportionality_df <- disproportionality_analysis(
 ```
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 disproportionality_df
 ```
@@ -272,9 +283,10 @@ disproportionality_df
 | aripiprazole | impulse-control disorder | 701 | 110846 | 111547 | 4258 | 4959 | 17482674 | 25.94 | 23.94 | 28.13 | 4.45 | 4.33 | 4.54 | 25.94 (23.94-28.13) \[701\] | 4.45 (4.33-4.54) \[701\] | TRUE | SDR | SDR |
 
 Tab 3: Disproportionality results when extending the query to
-impulsivity.
+impulsivity. {.table style="width:100%;"}
 
 ``` r
+
 render_forest(disproportionality_df)
 ```
 
@@ -314,6 +326,7 @@ In this case we also add a further parameter to the render_forest
 function, to make it print each event in a different line
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 drug_selected <- "aripiprazole"
 
@@ -375,6 +388,7 @@ disproportionality_df <- disproportionality_analysis(
 ```
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 disproportionality_df
 ```
@@ -399,9 +413,10 @@ disproportionality_df
 | aripiprazole | gaming disorder | 3 | 111544 | 111547 | 6 | 9 | 17486926 | 78.38 | 12.68 | 365.96 | 2.65 | 0.58 | 3.85 | 78.38 (12.68-365.96) \[3\] | 2.65 (0.58-3.85) \[3\] | TRUE | SDR | SDR |
 
 Tab 4: Disproportionality results when considering also specific
-behaviors.
+behaviors. {.table}
 
 ``` r
+
 render_forest(disproportionality_df, row = "event")
 ```
 
@@ -434,6 +449,7 @@ In this case we may want to add to the render forest the option to give
 each its drug its facet, as seen in the script.
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 drug_selected <- list(
   "aripiprazole" = list("aripiprazole"),
@@ -506,6 +522,7 @@ disproportionality_df <- disproportionality_analysis(
 ```
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 disproportionality_df
 ```
@@ -590,9 +607,10 @@ disproportionality_df
 | pramipexole | gaming disorder | 3 | 33559 | 33562 | 6 | 9 | 17564911 | 262.52 | 42.34 | 1215.32 | 2.75 | 0.68 | 3.96 | 262.52 (42.34-1215.32) \[3\] | 2.75 (0.68-3.96) \[3\] | TRUE | SDR | SDR |
 
 Tab 5: Disproportionality results when considering positive and negative
-controls.
+controls. {.table}
 
 ``` r
+
 render_forest(disproportionality_df, row = "event", facet_v = "substance")
 ```
 
@@ -630,6 +648,7 @@ c(“PS”,“SS”)). Remember to respond “no” in the console when the func
 asks you if you want to refine the query.
 
 ``` r
+
 ## Disproportionality analysis ----------------------------------------------------------
 # Suspected drugs
 disproportionality_df <- disproportionality_analysis(
@@ -640,6 +659,7 @@ disproportionality_df <- disproportionality_analysis(
 ```
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 disproportionality_df
 ```
@@ -724,8 +744,10 @@ disproportionality_df
 | pramipexole | gaming disorder | 1 | 11096 | 11097 | 8 | 9 | 17586818 | 197.64 | 4.46 | 1431.76 | 1.56 | -2.22 | 3.25 | 197.64 (4.46-1431.76) \[1\] | 1.56 (-2.22-3.25) \[1\] | FALSE | not enough cases | not enough cases |
 
 Tab 6: Disproportionality results when considering only suspected drugs.
+{.table}
 
 ``` r
+
 render_forest(disproportionality_df, row = "event", facet_v = "substance")
 ```
 
@@ -753,6 +775,7 @@ back into the dedicated section and adding the following row together
 with the other two importing Drug and Reac:
 
 ``` r
+
 ## Import data ----------------------------------------------------------------
 import("DEMO")
 #>           primaryid    sex age_in_days wt_in_kgs occr_country event_dt
@@ -821,6 +844,7 @@ combination, and the background is specified in the “nested” column,
 which we specified as the “nested” parameter of the render_forest.
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 
 # .....all the content before....
@@ -851,6 +875,7 @@ for (n in 1:length(restrictions)) {
 ```
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 disproportionality_df
 ```
@@ -871,9 +896,10 @@ disproportionality_df
 | pramipexole | ICD | 2050 | 7260 | 9310 | 65142 | 67192 | 13905023 | 60.29 | 57.27 | 63.24 | 5.50 | 5.42 | 5.55 | 60.29 (57.27-63.24) \[2050\] | 5.5 (5.42-5.55) \[2050\] | TRUE | weak SDR | SDR | RB2 |
 
 Tab 7: Disproportionality results when considering deduplication
-algorithms.
+algorithms. {.table style="width:100%;"}
 
 ``` r
+
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
@@ -915,6 +941,7 @@ the confounder among the indications, and we therefore have to import
 the Indi database adding it to the import data section.
 
 ``` r
+
 ## Import data ----------------------------------------------------------------
 import("INDI")
 #>           primaryid   drug_seq                                 indi_pt
@@ -941,6 +968,7 @@ have arisen in the compilation), and for lithium (a specific tratment
 for bipolar disorder) among the drugs.
 
 ``` r
+
 ## Reference groups --------------------------------------------------------------------
 bipolar_disorder_indi_pt <- unique(Indi[indi_pt == "bipolar disorder"]$primaryid)
 bipolar_disorder_reac_pt <- unique(Reac[pt == "bipolar disorder"]$primaryid)
@@ -972,6 +1000,7 @@ for (n in 1:length(restrictions)) {
 ```
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 disproportionality_df
 ```
@@ -1000,9 +1029,10 @@ disproportionality_df
 | pramipexole | ICD | 35 | 117 | 152 | 4251 | 4286 | 112958 | 7.94 | 5.27 | 11.70 | 2.55 | 1.98 | 2.95 | 7.94 (5.27-11.7) \[35\] | 2.55 (1.98-2.95) \[35\] | TRUE | weak SDR | SDR | total |
 
 Tab 8: Disproportionality results when considering only reports
-recording bipolar disorder.
+recording bipolar disorder. {.table}
 
 ``` r
+
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
@@ -1034,6 +1064,7 @@ subscription and you have followed
 your own DiAna-compatible MedDRA.
 
 ``` r
+
 ## Reference groups --------------------------------------------------------------------
 # ....
 import_MedDRA()
@@ -1120,6 +1151,7 @@ for (n in 1:length(restrictions)) {
 ```
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 disproportionality_df
 ```
@@ -1140,9 +1172,10 @@ disproportionality_df
 | pramipexole | ICD | 104 | 196 | 300 | 6203 | 6307 | 137504 | 11.76 | 9.16 | 15.01 | 2.93 | 2.61 | 3.17 | 11.76 (9.16-15.01) \[104\] | 2.93 (2.61-3.17) \[104\] | TRUE | weak SDR | SDR | total_hlgt |
 
 Tab 9: Disproportionality results when restricting to bipolar disorder
-using MedDRA.
+using MedDRA. {.table style="width:100%;"}
 
 ``` r
+
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
@@ -1161,6 +1194,7 @@ with also deduplication. All these analyses are performed considering
 only suspected drugs.
 
 ``` r
+
 ## Reference groups ---------------------------------------------------------------------
 warning_date <- 20160305
 pre_warning <- Demo[ifelse(is.na(init_fda_dt), fda_dt < warning_date, init_fda_dt < warning_date)]$primaryid
@@ -1198,6 +1232,7 @@ for (n in 1:length(restrictions)) {
 ```
 
 ``` r
+
 ## Definitions --------------------------------------------------------------------------
 disproportionality_df
 ```
@@ -1226,8 +1261,10 @@ disproportionality_df
 | pramipexole | ICD | 25 | 63 | 88 | 1881 | 1906 | 57784 | 12.19 | 7.32 | 19.69 | 2.94 | 2.27 | 3.41 | 12.19 (7.32-19.69) \[25\] | 2.94 (2.27-3.41) \[25\] | TRUE | weak SDR | SDR | both_biases_dedup |
 
 Tab 10: Disproportionality results when addressing notoriety bias.
+{.table style="width:100%;"}
 
 ``` r
+
 render_forest(disproportionality_df, row = "event", facet_v = "substance", nested = "nested")
 ```
 
@@ -1254,6 +1291,7 @@ disproportionality_trend, which allow to adopt a granularity of a month,
 a quarter, or a year.
 
 ``` r
+
 ## Import data --------------------------------------------------------------------------
 import("DEMO_SUPP")
 #>           primaryid rpsr_cod   caseid caseversion i_f_cod auth_num  e_sub
@@ -1305,6 +1343,7 @@ disproportionality_trend_df <- disproportionality_trend(
 ```
 
 ``` r
+
 plot_disproportionality_trend(disproportionality_trend_results = disproportionality_trend_df)
 ```
 
@@ -1323,6 +1362,7 @@ disproportionality metrics you can use the disproportionality_comparison
 function
 
 ``` r
+
 disproportionality_comparison(
   drug_count = length(unique(Drug[substance == "aripiprazole" & role_cod %in% c("PS", "SS")]$primaryid)),
   event_count = length(unique(Reac[pt == "impulsive behaviour"]$primaryid)),

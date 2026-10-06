@@ -1,5 +1,13 @@
 # Changelog
 
+## DiAna 2.1.1
+
+- Now interoperable with the PVomega package for identifying potential
+  drug-drug interactions (including a function applying it to the DiAna
+  data model)
+- Now interoperable with the PVgravID package for identifying pregnancy
+  reports
+
 ## DiAna 2.1.0
 
 ### Breaking changes
