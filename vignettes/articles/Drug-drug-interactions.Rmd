@@ -1,127 +1,216 @@
 ---
-title: "Drug-drug interaction screening with Omega"
+title: "Using pvOmega with DiAna"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Drug-drug interaction screening with Omega}
+  %\VignetteIndexEntry{Using pvOmega with DiAna}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
 ```
 
-```{r setup}
+## Introduction
+
+Omega is a measure of disproportionality designed to identify potential drug-drug interactions in collections of individual case safety reports.
+It compares the observed reporting of an event for a pair of drugs with the reporting expected under an additive model.
+
+The `omega_analysis()` function provides an interface for performing an Omega analysis directly from drug and reaction data. This vignette
+illustrates the use of the functions coming from `pvOmega` with the sample data distributed with `DiAna` and
+with locally stored FAERS data.
+
+## Example using DiAna sample data
+
+The sample datasets included with `DiAna` can be used to explore
+`omega_analysis()` without importing an external pharmacovigilance
+database.
+
+```{r sample-data}
+library(DiAna)
 library(pvOmega)
-```
 
-## What Omega measures
-
-Omega ([Noren et al. 2008](#noren-et-al-2008)) is a disproportionality measure for
-drug-drug-event combination. It compares the observed number of reports
-listing two drugs and an adverse event with the number expected if the two
-drugs did not interact.
-
-"No interaction" is defined by an **additive** model: the reporting rate of the
-event under both drugs is the background reporting rate plus the contribution attributable to each drug. This is the key difference from logistic regression, whose interaction term assumes multiplicative effects of separate drugs and misses well-established interactions such as cerivastatin with gemfibrozil.
-
-The steps are:
-
-1. Count the reports in each of the four exposure strata: neither drug, D1
-   only, D2 only, both drugs.
-2. Compute the relative reporting rate of the event in each stratum:
-   `f00`, `f10`, `f01`, `f11`.
-3. Estimate the expected rate under both drugs, `g11`, from `f00`, `f10` and
-   `f01` only (eq. 16 of the paper).
-4. Compute the expected count `E111 = g11 * n11.`.
-5. Compute the shrunk ratio `omega = log2((n111 + 0.5) / (E111 + 0.5))` and
-   its Gamma credibility interval.
-
-A potential interaction is highlighted when `omega_lower` is above 0.
-
-## Starting from counts
-
-`omega_from_counts()` works with any data source. The example below is the
-first case study of the paper: delayed bleeding with itraconazole and oral
-contraceptives.
-
-```{r}
-res <- omega_from_counts(
-  n111 = 10, n11. = 23, n1.1 = 10, n.11 = 19,
-  n1.. = 39, n.1. = 1489, n..1 = 39, n... = 5503
-)
-res[, .(f00, f10, f01, f11, g11, E111, omega, omega_lower, omega_upper)]
-```
-
-
-## Starting from a table of counts
-
-`omega_from_table()` takes a data frame with one row per drug1-drug2-event
-combination and one column per count (`n111`, `n11.`, `n1.1`, `n.11`, `n1..`,
-`n.1.`, `n..1`, `n...`). Other columns, such as labels, are kept in the
-output.
-
-```{r}
-counts <- data.frame(
-  drug1 = c("itraconazole", "drug A"),
-  drug2 = c("oral contraceptives", "drug B"),
-  event = c("delayed bleeding", "event X"),
-  n111 = c(10, 45), `n11.` = c(23, 250), `n1.1` = c(10, 120),
-  `n.11` = c(19, 85), `n1..` = c(39, 580), `n.1.` = c(1489, 420),
-  `n..1` = c(39, 340), `n...` = c(5503, 50000),
-  check.names = FALSE
+omega_analysis(
+  drug1_selected = "paracetamol",
+  drug2_selected = "ibuprofen",
+  reac_selected = "overdose",
+  temp_drug = DiAna::sample_Drug,
+  temp_reac = DiAna::sample_Reac
 )
 ```
 
-Groups of terms can be collapsed with lists, as in DiAna:
+Here, paracetamol and ibuprofen define the drug pair and overdose is the event of interest. The `temp_drug` and `temp_reac` arguments specify the drug and reaction tables used to construct the counts required for the Omega calculation.
 
-```{r}
-res <- omega_from_table(counts)
-res[, .(drug1, drug2, event, f11, g11, omega, omega_lower, omega_upper)]
+## Using FAERS data
+
+The following examples demonstrate how the same analysis can be performed using locally prepared FAERS data.
+
+We import the data as usual, once the setup_DiAna function has been used to download them locally.
+
+```{r import-faers, eval=FALSE}
+library(data.table)
+
+import("DRUG")
+import("REAC")
 ```
 
-## Methodological choices to report
+The examples below are not evaluated when the vignette is built because the FAERS data are not distributed with the package.
 
-The counts come from your own data, and three choices made when building
-them change the results. State them in any publication:
+## Gemfibrozil, cerivastatin, and rhabdomyolysis
 
-* **Drug roles**. Which reported drugs count as exposure. At Uppsala
-  Monitoring Centre only primary suspect, secondary suspect and interacting
-  drugs count (Hult et al. 2020); reports where a drug is only concomitant
-  then fall into the background stratum.
-* **Deduplication**. Spontaneous reporting databases such as FAERS contain
-  duplicate reports, which should be removed before counting.
-* **Report universe**. The total `n...` defines the population of reports.
-  Every other count must refer to this same set of reports.
+A classic drug-drug-event combination can be investigated by selecting gemfibrozil and cerivastatin as the drug pair and rhabdomyolysis as the event:
 
-## Interpreting results
+```{r gemfibrozil-cerivastatin, eval=FALSE}
+omega_analysis(
+  drug1_selected = "gemfibrozil",
+  drug2_selected = "cerivastatin",
+  reac_selected = "rhabdomyolysis"
+)
+```
 
-As recommended in the original paper, do not read Omega in isolation. The
-columns `f00`, `f10`, `f01` and `f11` show why a combination was
-highlighted. For example, a large `f10` means D1 alone already explains much
-of the reporting.
+### Identifying reports containing the triplet
 
+The reports contributing to a particular drug-drug-event combination can also be identified directly from the underlying tables.
 
-Omega cannot be estimated when one of the four D1/D2 strata is empty (for
-example, one drug is never reported without the other), or when every report
-in the D1-only, D2-only or neither-drug stratum lists the event (`f10`, `f01`
-or `f00` equal to 1). Such rows return `NA` for `g11`, `E111` and the Omega
-columns, with a warning that names the affected rows and the reason.
+For example, restricting drug exposure to primary suspect (`PS`),
+secondary suspect (`SS`), and interacting (`I`) drug roles:
 
 
-## References
+```{r explicit-drug-data, eval=FALSE}
+omega_analysis(
+  drug1_selected = "gemfibrozil",
+  drug2_selected = "cerivastatin",
+  reac_selected = "rhabdomyolysis",
+  temp_drug = Drug[role_cod %in% c("PS", "SS", "I")]
+)
+```
 
-### Noren et al. 2007
-Noren GN, Sundberg R, Bate A, Edwards IR.
-[A statistical methodology for drug-drug interaction surveillance](https://www2.math.su.se/matstat/reports/seriea/2007/rep6/report.pdf).
-*Research Report*. 2007;2007:6. Mathematical Statistics, Stockholm University.
+## Other drug-drug-event combinations
 
-### Noren et al. 2008
-Noren GN, Sundberg R, Bate A, Edwards IR.
-[A statistical methodology for drug-drug interaction surveillance](https://doi.org/10.1002/sim.3247).
-*Stat Med*. 2008;27(16):3057-70.
+The same approach can be applied to other combinations. For example,
+digoxin, clarithromycin, and increased drug level:
 
-### Hult et al. 2020
-Hult S, Sartori D, Bergvall T, et al. [A feasibility study of drug-drug
-interaction signal detection in regular pharmacovigilance](https://doi.org/10.1007/s40264-020-00939-y). *Drug Saf*.
-2020;43:775-85.
+```{r digoxin-clarithromycin, eval=FALSE}
+omega_analysis(
+  drug1_selected = "digoxin",
+  drug2_selected = "clarithromycin",
+  reac_selected = "drug level increased"
+)
+```
+
+or ipilimumab, nivolumab, and hepatitis:
+
+```{r ipilimumab-nivolumab, eval=FALSE}
+omega_analysis(
+  drug1_selected = "ipilimumab",
+  drug2_selected = "nivolumab",
+  reac_selected = "hepatitis"
+)
+```
+
+## Selecting multiple drugs
+
+More than one drug can be included in a selection by supplying a character
+vector.
+
+For example:
+
+```{r multiple-drugs, eval=FALSE}
+omega_analysis(
+  drug1_selected = c(
+    "ipilimumab",
+    "paracetamol"
+  ),
+  drug2_selected = "nivolumab",
+  reac_selected = "hepatitis"
+)
+```
+
+This allows an analysis to be run separately on multiple substances rather than a single drug name.
+
+## Defining a drug group
+
+Related substances can also be combined into a named group by supplying a named list.
+
+For example, several PD-1/PD-L1 inhibitors can be grouped as `PD1PDL1` and considered as a single substance:
+
+```{r grouped-drugs, eval=FALSE}
+omega_analysis(
+  drug1_selected = c(
+    "ipilimumab",
+    "paracetamol"
+  ),
+  drug2_selected = list(
+    "PD1PDL1" = c(
+      "nivolumab",
+      "pembrolizumab",
+      "atezolizumab",
+      "avelumab",
+      "durvalumab",
+      "cemiplimab",
+      "tislelizumab",
+      "dostarlimab",
+      "retifanlimab",
+      "toripalimab",
+      "cosibelimab"
+    )
+  ),
+  reac_selected = "hepatitis"
+)
+```
+
+Using a named group can be useful when the scientific question concerns a drug class or another predefined collection of substances rather than an individual product.
+
+The substances included in a group should be selected on the basis of the analysis question rather than the observed Omega results.
+
+## Defining an event group
+
+The same principle can be applied to reactions. A named list can be used to combine related reaction terms into a single event definition.
+
+For example:
+
+```{r grouped-reactions, eval=FALSE}
+omega_analysis(
+  drug1_selected = c(
+    "ipilimumab",
+    "paracetamol"
+  ),
+  drug2_selected = list(
+    "PD1PDL1" = c(
+      "nivolumab",
+      "pembrolizumab",
+      "atezolizumab",
+      "avelumab",
+      "durvalumab",
+      "cemiplimab",
+      "tislelizumab",
+      "dostarlimab",
+      "retifanlimab",
+      "toripalimab",
+      "cosibelimab"
+    )
+  ),
+  reac_selected = list(
+    "hepatitis" = c(
+      "hepatitis",
+      "liver injury"
+    )
+  )
+)
+```
+
+This defines the event of interest using both `hepatitis` and `liver injury`, while retaining `hepatitis` as the label for the grouped event.
+
+## Interpretation
+
+Omega is intended as a tool for signal detection and hypothesis generation.
+An elevated Omega value should not, by itself, be interpreted as evidence of a causal or clinically relevant drug-drug interaction.
+
+Results depend on the underlying reporting data and on analytical choices such as the definition of drug exposure, drug roles, event terms, report population, and grouping of drugs or reactions.
+
+In particular, grouping multiple drugs or reaction terms changes the
+question being addressed by the analysis. Such groupings should therefore be defined on clinical, pharmacological, or other substantive grounds before interpreting the resulting Omega estimates.
