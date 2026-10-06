@@ -1,0 +1,127 @@
+---
+title: "Drug-drug interaction screening with Omega"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Drug-drug interaction screening with Omega}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup}
+library(pvOmega)
+```
+
+## What Omega measures
+
+Omega ([Noren et al. 2008](#noren-et-al-2008)) is a disproportionality measure for
+drug-drug-event combination. It compares the observed number of reports
+listing two drugs and an adverse event with the number expected if the two
+drugs did not interact.
+
+"No interaction" is defined by an **additive** model: the reporting rate of the
+event under both drugs is the background reporting rate plus the contribution attributable to each drug. This is the key difference from logistic regression, whose interaction term assumes multiplicative effects of separate drugs and misses well-established interactions such as cerivastatin with gemfibrozil.
+
+The steps are:
+
+1. Count the reports in each of the four exposure strata: neither drug, D1
+   only, D2 only, both drugs.
+2. Compute the relative reporting rate of the event in each stratum:
+   `f00`, `f10`, `f01`, `f11`.
+3. Estimate the expected rate under both drugs, `g11`, from `f00`, `f10` and
+   `f01` only (eq. 16 of the paper).
+4. Compute the expected count `E111 = g11 * n11.`.
+5. Compute the shrunk ratio `omega = log2((n111 + 0.5) / (E111 + 0.5))` and
+   its Gamma credibility interval.
+
+A potential interaction is highlighted when `omega_lower` is above 0.
+
+## Starting from counts
+
+`omega_from_counts()` works with any data source. The example below is the
+first case study of the paper: delayed bleeding with itraconazole and oral
+contraceptives.
+
+```{r}
+res <- omega_from_counts(
+  n111 = 10, n11. = 23, n1.1 = 10, n.11 = 19,
+  n1.. = 39, n.1. = 1489, n..1 = 39, n... = 5503
+)
+res[, .(f00, f10, f01, f11, g11, E111, omega, omega_lower, omega_upper)]
+```
+
+
+## Starting from a table of counts
+
+`omega_from_table()` takes a data frame with one row per drug1-drug2-event
+combination and one column per count (`n111`, `n11.`, `n1.1`, `n.11`, `n1..`,
+`n.1.`, `n..1`, `n...`). Other columns, such as labels, are kept in the
+output.
+
+```{r}
+counts <- data.frame(
+  drug1 = c("itraconazole", "drug A"),
+  drug2 = c("oral contraceptives", "drug B"),
+  event = c("delayed bleeding", "event X"),
+  n111 = c(10, 45), `n11.` = c(23, 250), `n1.1` = c(10, 120),
+  `n.11` = c(19, 85), `n1..` = c(39, 580), `n.1.` = c(1489, 420),
+  `n..1` = c(39, 340), `n...` = c(5503, 50000),
+  check.names = FALSE
+)
+```
+
+Groups of terms can be collapsed with lists, as in DiAna:
+
+```{r}
+res <- omega_from_table(counts)
+res[, .(drug1, drug2, event, f11, g11, omega, omega_lower, omega_upper)]
+```
+
+## Methodological choices to report
+
+The counts come from your own data, and three choices made when building
+them change the results. State them in any publication:
+
+* **Drug roles**. Which reported drugs count as exposure. At Uppsala
+  Monitoring Centre only primary suspect, secondary suspect and interacting
+  drugs count (Hult et al. 2020); reports where a drug is only concomitant
+  then fall into the background stratum.
+* **Deduplication**. Spontaneous reporting databases such as FAERS contain
+  duplicate reports, which should be removed before counting.
+* **Report universe**. The total `n...` defines the population of reports.
+  Every other count must refer to this same set of reports.
+
+## Interpreting results
+
+As recommended in the original paper, do not read Omega in isolation. The
+columns `f00`, `f10`, `f01` and `f11` show why a combination was
+highlighted. For example, a large `f10` means D1 alone already explains much
+of the reporting.
+
+
+Omega cannot be estimated when one of the four D1/D2 strata is empty (for
+example, one drug is never reported without the other), or when every report
+in the D1-only, D2-only or neither-drug stratum lists the event (`f10`, `f01`
+or `f00` equal to 1). Such rows return `NA` for `g11`, `E111` and the Omega
+columns, with a warning that names the affected rows and the reason.
+
+
+## References
+
+### Noren et al. 2007
+Noren GN, Sundberg R, Bate A, Edwards IR.
+[A statistical methodology for drug-drug interaction surveillance](https://www2.math.su.se/matstat/reports/seriea/2007/rep6/report.pdf).
+*Research Report*. 2007;2007:6. Mathematical Statistics, Stockholm University.
+
+### Noren et al. 2008
+Noren GN, Sundberg R, Bate A, Edwards IR.
+[A statistical methodology for drug-drug interaction surveillance](https://doi.org/10.1002/sim.3247).
+*Stat Med*. 2008;27(16):3057-70.
+
+### Hult et al. 2020
+Hult S, Sartori D, Bergvall T, et al. [A feasibility study of drug-drug
+interaction signal detection in regular pharmacovigilance](https://doi.org/10.1007/s40264-020-00939-y). *Drug Saf*.
+2020;43:775-85.
