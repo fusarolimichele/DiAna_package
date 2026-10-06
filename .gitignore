@@ -9,3 +9,4 @@ Developer
 .Rhistory
 revdep/
 .Rhistory
+vignettes/articles/.gitignore
