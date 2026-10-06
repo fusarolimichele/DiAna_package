@@ -4,6 +4,8 @@
 <url><loc>https://fusarolimichele.github.io/DiAna_package/LICENSE.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/articles/Causal_inference.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/articles/Disproportionality_Analysis.html</loc></url>
+<url><loc>https://fusarolimichele.github.io/DiAna_package/articles/Drug-drug-interactions.html</loc></url>
+<url><loc>https://fusarolimichele.github.io/DiAna_package/articles/PVgravID_extension.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/articles/Start_Subproject.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/articles/index.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/authors.html</loc></url>
@@ -28,6 +30,7 @@
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/index.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/network_analysis.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/new_descriptive.html</loc></url>
+<url><loc>https://fusarolimichele.github.io/DiAna_package/reference/omega_analysis.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/plot_KS.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/plot_disproportionality_trend.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/render_forest.html</loc></url>

@@ -1,0 +1,238 @@
+# Using pvOmega with DiAna
+
+## Introduction
+
+Omega is a measure of disproportionality designed to identify potential
+drug-drug interactions in collections of individual case safety reports.
+It compares the observed reporting of an event for a pair of drugs with
+the reporting expected under an additive model.
+
+The
+[`omega_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/omega_analysis.md)
+function provides an interface for performing an Omega analysis directly
+from drug and reaction data. This vignette illustrates the use of the
+functions coming from `pvOmega` with the sample data distributed with
+`DiAna` and with locally stored FAERS data.
+
+## Example using DiAna sample data
+
+The sample datasets included with `DiAna` can be used to explore
+[`omega_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/omega_analysis.md)
+without importing an external pharmacovigilance database.
+
+``` r
+
+library(DiAna)
+library(pvOmega)
+
+omega_analysis(
+  drug1_selected = "paracetamol",
+  drug2_selected = "ibuprofen",
+  reac_selected = "overdose",
+  temp_drug = DiAna::sample_Drug,
+  temp_reac = DiAna::sample_Reac
+)
+```
+
+Here, paracetamol and ibuprofen define the drug pair and overdose is the
+event of interest. The `temp_drug` and `temp_reac` arguments specify the
+drug and reaction tables used to construct the counts required for the
+Omega calculation.
+
+## Using FAERS data
+
+The following examples demonstrate how the same analysis can be
+performed using locally prepared FAERS data.
+
+We import the data as usual, once the setup_DiAna function has been used
+to download them locally.
+
+``` r
+
+library(data.table)
+
+import("DRUG")
+import("REAC")
+```
+
+The examples below are not evaluated when the vignette is built because
+the FAERS data are not distributed with the package.
+
+## Gemfibrozil, cerivastatin, and rhabdomyolysis
+
+A classic drug-drug-event combination can be investigated by selecting
+gemfibrozil and cerivastatin as the drug pair and rhabdomyolysis as the
+event:
+
+``` r
+
+omega_analysis(
+  drug1_selected = "gemfibrozil",
+  drug2_selected = "cerivastatin",
+  reac_selected = "rhabdomyolysis"
+)
+```
+
+### Identifying reports containing the triplet
+
+The reports contributing to a particular drug-drug-event combination can
+also be identified directly from the underlying tables.
+
+For example, restricting drug exposure to primary suspect (`PS`),
+secondary suspect (`SS`), and interacting (`I`) drug roles:
+
+``` r
+
+omega_analysis(
+  drug1_selected = "gemfibrozil",
+  drug2_selected = "cerivastatin",
+  reac_selected = "rhabdomyolysis",
+  temp_drug = Drug[role_cod %in% c("PS", "SS", "I")]
+)
+```
+
+## Other drug-drug-event combinations
+
+The same approach can be applied to other combinations. For example,
+digoxin, clarithromycin, and increased drug level:
+
+``` r
+
+omega_analysis(
+  drug1_selected = "digoxin",
+  drug2_selected = "clarithromycin",
+  reac_selected = "drug level increased"
+)
+```
+
+or ipilimumab, nivolumab, and hepatitis:
+
+``` r
+
+omega_analysis(
+  drug1_selected = "ipilimumab",
+  drug2_selected = "nivolumab",
+  reac_selected = "hepatitis"
+)
+```
+
+## Selecting multiple drugs
+
+More than one drug can be included in a selection by supplying a
+character vector.
+
+For example:
+
+``` r
+
+omega_analysis(
+  drug1_selected = c(
+    "ipilimumab",
+    "paracetamol"
+  ),
+  drug2_selected = "nivolumab",
+  reac_selected = "hepatitis"
+)
+```
+
+This allows an analysis to be run separately on multiple substances
+rather than a single drug name.
+
+## Defining a drug group
+
+Related substances can also be combined into a named group by supplying
+a named list.
+
+For example, several PD-1/PD-L1 inhibitors can be grouped as `PD1PDL1`
+and considered as a single substance:
+
+``` r
+
+omega_analysis(
+  drug1_selected = c(
+    "ipilimumab",
+    "paracetamol"
+  ),
+  drug2_selected = list(
+    "PD1PDL1" = c(
+      "nivolumab",
+      "pembrolizumab",
+      "atezolizumab",
+      "avelumab",
+      "durvalumab",
+      "cemiplimab",
+      "tislelizumab",
+      "dostarlimab",
+      "retifanlimab",
+      "toripalimab",
+      "cosibelimab"
+    )
+  ),
+  reac_selected = "hepatitis"
+)
+```
+
+Using a named group can be useful when the scientific question concerns
+a drug class or another predefined collection of substances rather than
+an individual product.
+
+The substances included in a group should be selected on the basis of
+the analysis question rather than the observed Omega results.
+
+## Defining an event group
+
+The same principle can be applied to reactions. A named list can be used
+to combine related reaction terms into a single event definition.
+
+For example:
+
+``` r
+
+omega_analysis(
+  drug1_selected = c(
+    "ipilimumab",
+    "paracetamol"
+  ),
+  drug2_selected = list(
+    "PD1PDL1" = c(
+      "nivolumab",
+      "pembrolizumab",
+      "atezolizumab",
+      "avelumab",
+      "durvalumab",
+      "cemiplimab",
+      "tislelizumab",
+      "dostarlimab",
+      "retifanlimab",
+      "toripalimab",
+      "cosibelimab"
+    )
+  ),
+  reac_selected = list(
+    "hepatitis" = c(
+      "hepatitis",
+      "liver injury"
+    )
+  )
+)
+```
+
+This defines the event of interest using both `hepatitis` and
+`liver injury`, while retaining `hepatitis` as the label for the grouped
+event.
+
+## Interpretation
+
+Omega is intended as a tool for signal detection and hypothesis
+generation. An elevated Omega value should not, by itself, be
+interpreted as evidence of a causal or clinically relevant drug-drug
+interaction.
+
+Results depend on the underlying reporting data and on analytical
+choices such as the definition of drug exposure, drug roles, event
+terms, report population, and grouping of drugs or reactions.
+
+In particular, grouping multiple drugs or reaction terms changes the
+question being addressed by the analysis. Such groupings should
+therefore be defined on clinical, pharmacological, or other substantive
+grounds before interpreting the resulting Omega estimates.
