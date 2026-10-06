@@ -27,6 +27,7 @@ extremely useful to document and explain our project, but are not run
 and do not affect the results.
 
 ``` r
+
 # Information -----------------------------------------------------------------
 ## Project title --------------------------------------------------------------
 ### Setting up a DiAna subproject
@@ -63,6 +64,7 @@ After we have included the information we deem necessary to document our
 script, we upload the DiAna package.
 
 ``` r
+
 # Set up ----------------------------------------------------------------------
 ## upload DiAna ---------------------------------------------------------------
 library(DiAna)
@@ -92,6 +94,7 @@ storing the output. If you want to give a better name to the project
 just change the string assinged to the variable project_name.
 
 ``` r
+
 ## Project_path ---------------------------------------------------------------
 DiAna_path <- here::here()
 project_name <- "tutorial"
@@ -118,6 +121,7 @@ empowering pharmacovigilance analyses. We first set the FAERS version,
 that is the last quarter we want to be included in the analysis.
 
 ``` r
+
 ## FAERS_version --------------------------------------------------------------
 FAERS_version <- "24Q1"
 ```
@@ -134,6 +138,7 @@ the FAERS_version we provided, and if you did not set it, you will see
 an error remembering you to set the FAERS_version.
 
 ``` r
+
 ## Import data ----------------------------------------------------------------
 import("DRUG")
 import("REAC")
@@ -152,6 +157,7 @@ reports is available with the package and can be accessed calling
 this, but you may not include it in your script):
 
 ``` r
+
 sample_Demo
 #>       primaryid    sex age_in_days wt_in_kgs             occr_country event_dt
 #>           <num> <fctr>       <num>     <num>                   <fctr>    <int>
@@ -201,6 +207,7 @@ include it in your script). The help window of R studio, usually on the
 lower right corner, will include the documentation.
 
 ``` r
+
 ?sample_Demo
 ```
 
@@ -218,6 +225,7 @@ on the DiAna GitHub repository to create the MedDRA file for the
 import_MedDRA function.
 
 ``` r
+
 import_ATC()
 ```
 
@@ -243,6 +251,7 @@ will autocompile the script with something similar to the following
 chunk. Then we just need to include the details of our specific study.
 
 ``` r
+
 # Information -----------------------------------------------------------------
 ## Project title --------------------------------------------------------------
 ### TITLE

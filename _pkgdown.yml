@@ -84,6 +84,12 @@ reference:
   - render_forest
   - render_forest_table
 
+- title: "Drug-drug interaction analysis"
+  desc: >
+    Functions to identify potential drug-drug interactions.
+  contents:
+  - omega_analysis
+
 - title: "Advanced analyses"
   desc: >
     Functions to perform advanced analyses, including time to onset analysis and network analysis.
@@ -116,5 +122,11 @@ articles:
   contents:
   - articles/Disproportionality_Analysis
   - articles/Causal_inference
+
+- title: Extensions
+  navbar: Extensions
+  contents:
+  - articles/Drug-drug-interactions
+  - articles/PVgravID_extension
 
 

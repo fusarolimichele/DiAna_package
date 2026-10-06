@@ -30,6 +30,9 @@ Useful links:
 
 Authors:
 
+- Michele Fusaroli <michele.fusaroli@gmail.com>
+  ([ORCID](https://orcid.org/0000-0002-0254-2212)) \[copyright holder\]
+
 - Valentina Giunchi <valentina.giunchi2@unibo.it>
   ([ORCID](https://orcid.org/0000-0001-5841-8520))
 
