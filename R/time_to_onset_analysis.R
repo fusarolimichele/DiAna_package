@@ -60,16 +60,8 @@ time_to_onset_analysis <- function(
   reac_selected <- format_input_disproportionality(reac_selected)
 
   # print warning if any drug or reaction selected was not found
-  if (length(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]]))) > 0) {
-    if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
-      stop("Revise the query and run again the command")
-    }
-  }
-  if (length(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]]))) > 0) {
-    if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
-      stop("Revise the query and run again the command")
-    }
-  }
+  check_terms_found(drug_selected, unique(temp_drug[[drug_level]]), "drugs")
+  check_terms_found(reac_selected, unique(temp_reac[[meddra_level]]), "events")
   if (length(restriction) > 1) {
     temp_drug <- temp_drug[primaryid %in% restriction] %>% droplevels()
     temp_reac <- temp_reac[primaryid %in% restriction] %>% droplevels()

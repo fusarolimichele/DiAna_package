@@ -53,6 +53,43 @@ pids_by_group <- function(ids, terms, groups) {
 #' @noRd
 fast_intersect <- function(a, b) a[a %in% b]
 
+#' Wrappers around interactive() and askYesNo(), so tests can mock them
+#' @noRd
+is_interactive <- function() interactive()
+
+#' @noRd
+ask_yes_no <- function(msg) utils::askYesNo(msg, default = FALSE)
+
+#' Check that the selected terms exist in the database
+#'
+#' Lists the terms that were not found. In an interactive session it then asks
+#' whether to stop and revise the query; otherwise it warns and continues.
+#' @param selected Character vector or (nested) list of selected terms.
+#' @param available Terms present in the database.
+#' @param what Plural noun used in the message, e.g. "drugs" or "events".
+#' @return Invisibly, the terms that were not found.
+#' @noRd
+check_terms_found <- function(selected, available, what) {
+  not_found <- setdiff(as.character(unlist(selected)), as.character(available))
+  if (length(not_found) == 0L) {
+    return(invisible(character(0)))
+  }
+  msg <- paste0(
+    "Not all the ", what, " selected were found in the database. ",
+    "Check these terms for misspellings or alternative nomenclature: ",
+    paste(not_found, collapse = "; "), "."
+  )
+  if (!is_interactive()) {
+    warning(msg, call. = FALSE)
+    return(invisible(not_found))
+  }
+  message(msg)
+  if (isTRUE(ask_yes_no("Would you like to revise the query?"))) {
+    stop("Revise the query and run the command again.", call. = FALSE)
+  }
+  invisible(not_found)
+}
+
 #' Warn about groups that match no report
 #' @noRd
 warn_empty <- function(pids, arg) {
