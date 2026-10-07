@@ -9,42 +9,11 @@ setup_DiAna(quarter = "23Q1", timeout = 1e+05)
 \arguments{
 \item{quarter}{The quarter for which to set up the DiAna environment
 (default is "23Q1"). The ones available:
-\itemize{
-\item \emph{23Q1}
-}
-\itemize{
-\item \emph{23Q3}
-}
-\itemize{
-\item \emph{23Q4}
-}
-\itemize{
-\item \emph{24Q1}
-}
-\itemize{
-\item \emph{24Q2}
-}
-\itemize{
-\item \emph{24Q3}
-}
-\itemize{
-\item \emph{24Q4}
-}
-\itemize{
-\item \emph{25Q1}
-}
-\itemize{
-\item \emph{25Q2}
-}
-\itemize{
-\item \emph{25Q3}
-}
-\itemize{
-\item \emph{25Q4}
-}}
+23Q1, 23Q3, 23Q4, 24Q1, 24Q2, 24Q3, 24Q4, 25Q1, 25Q2, 25Q3, 25Q4.}
 
-\item{timeout}{The amount of time after which R stops a task if it is still unfinished.
-Default 100000It may be necessary to increase it in the case of a slow connection.}
+\item{timeout}{The amount of time, in seconds, after which R stops a download if it is still unfinished.
+Default 100000. It may be necessary to increase it in the case of a slow connection.
+The previous value of the \code{timeout} option is restored when the function ends.}
 }
 \value{
 None. The function sets up the environment and downloads data.
