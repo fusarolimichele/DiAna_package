@@ -1,12 +1,14 @@
 .Rproj.user
+.Rhistory
+.DS_Store
+Rplots.pdf
 inst/doc
-data/24Q1
+revdep/
+# FAERS data downloaded by setup_DiAna() into data/<quarter>/ (e.g. data/25Q4)
+data/[0-9][0-9]Q[0-9]/
+data/*.zip
 external_sources
 projects
 Developer_script.R
 Developer
-.DS_Store
-.Rhistory
-revdep/
-.Rhistory
 vignettes/articles/.gitignore
