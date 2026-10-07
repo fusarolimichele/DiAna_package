@@ -22,7 +22,8 @@ Description: Advanced tools for analyzing the FDA Adverse Event Reporting
 License: MIT + file LICENSE
 URL: https://fusarolimichele.github.io/DiAna_package/,
     https://github.com/fusarolimichele/DiAna_package,
-    https://github.com/fusarolimichele/DiAna, https://osf.io/zqu89/
+    https://github.com/fusarolimichele/DiAna_cleaning,
+    https://osf.io/zqu89/
 BugReports: https://github.com/fusarolimichele/DiAna_package/issues
 Depends: 
     data.table,
