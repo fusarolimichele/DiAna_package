@@ -43,7 +43,6 @@ Imports:
     lubridate,
     magrittr,
     purrr,
-    pvOmega,
     questionr,
     readr,
     readxl,
@@ -56,12 +55,12 @@ Imports:
     writexl
 Suggests: 
     knitr,
+    pvOmega,
     rmarkdown,
     testthat (>= 3.0.0)
-Remotes:
-    PVgravID=github::Uppsala-Monitoring-Centre/PVgravID,
-    pvOmega=github::Uppsala-Monitoring-Centre/pvOmega
-Config/Needs/website: rmarkdown
+Config/Needs/check: Uppsala-Monitoring-Centre/pvOmega
+Config/Needs/website: rmarkdown, Uppsala-Monitoring-Centre/pvOmega,
+    Uppsala-Monitoring-Centre/PVgravID
 Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3
 Encoding: UTF-8
