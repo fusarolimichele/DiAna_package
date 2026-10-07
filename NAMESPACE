@@ -126,12 +126,7 @@ importFrom(stats,
   qgamma,
   qnorm
 )
-importFrom(stringr,
-  str_detect,
-  str_match,
-  str_split,
-  str_to_title
-)
+importFrom(stringr,str_to_title)
 importFrom(tibble,
   as_tibble,
   tibble

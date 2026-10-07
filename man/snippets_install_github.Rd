@@ -10,10 +10,12 @@ snippets_install_github(repo = "fusarolimichele/DiAna_snippets")
 \item{repo}{Character. The GitHub repository containing the snippets. Default is "fusarolimichele/DiAna_snippets".}
 }
 \value{
-None. This function is called for its side effects, which include installing RStudio snippets.
+Invisibly, the path of the updated snippets file. This function is called for its side effects, which include installing RStudio snippets.
 }
 \description{
 This function installs RStudio code snippets from a specified GitHub repository.
+The downloaded snippets are merged into the user's existing R snippets file:
+snippets with the same name are replaced, all the others are kept.
 }
 \examples{
 \dontrun{
