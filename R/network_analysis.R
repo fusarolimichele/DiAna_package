@@ -61,7 +61,7 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   }
   df <- dplyr::distinct(df)
   df_N <- df[, .N, by = entity_var]
-  df <- df[!get(entity_var) %in% df_N[N <= length(unique(df$primaryid)) * min_frequency_term | N >= length(unique(df$primaryid)) - 1][[entity]]]
+  df <- df[!get(entity_var) %in% df_N[N <= length(unique(df$primaryid)) * min_frequency_term | N >= length(unique(df$primaryid)) - 1][[entity_var]]]
   df <- df[!is.na(get(entity_var))]
   binary_data <- df
   binary_data$value <- 1
@@ -88,7 +88,7 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
     as.matrix()
   rownames(binary_data) <- row_names
   binary_data[is.na(binary_data[, ])] <- 0
-  suppressWarnings(g1 <- IsingFit::IsingFit(binary_data))
+  suppressWarnings(g1 <- IsingFit::IsingFit(binary_data, plot = FALSE, progressbar = FALSE))
   G_igraph <- igraph::graph_from_adjacency_matrix(g1$weiadj, mode = "undirected", weighted = TRUE)
   if (remove_singlet) {
     G_igraph <- igraph::delete_vertices(igraph::simplify(G_igraph), igraph::degree(G_igraph) == 0)
@@ -114,7 +114,7 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
 
   # labs1 <- df[, .N, by = "pt"][order(-N)][, .(s = pt, s2 = N)]
   labs <- data.table(s = V(G_igraph)$name)
-  labs <- dplyr::left_join(labs, labs1)
+  labs <- dplyr::left_join(labs, labs1, by = "s")
   labs[is.na(s2)]$s2 <- 0
   G_igraph <- igraph::set_vertex_attr(G_igraph, "size", value = log(labs$s2))
   G_igraph <- igraph::set_vertex_attr(G_igraph, "label", value = labs$s)
