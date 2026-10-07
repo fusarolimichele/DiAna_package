@@ -47,9 +47,9 @@ retrieve(
 
 \item{temp_drug_name}{the Drug_name databases. Can be set to sample_Drug_Name for testing}
 
-\item{temp_meddra}{the MedDRA dictionary, if available. Defaults to NA for subscription requirement.}
+\item{temp_meddra}{the MedDRA dictionary (a data.table with columns soc, hlgt and pt), if available. Defaults to NA because MedDRA requires a subscription.}
 
-\item{temp_atc}{the ATC classification, if available. Defaults to NA for testing.}
+\item{temp_atc}{the ATC classification, as returned by import_ATC(), if available. Defaults to NA. Only the primary ATC code of each substance is used.}
 
 \item{save_in_excel}{Whether to save the outcome in an excel. Defaults to TRUE}
 }

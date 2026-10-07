@@ -7,8 +7,8 @@
 #' @inheritParams descriptive
 #' @param pids Primaryids of interest.
 #' @param file_name The name of the output xlsx file (default is "individual cases").
-#' @param temp_meddra the MedDRA dictionary, if available. Defaults to NA for subscription requirement.
-#' @param temp_atc the ATC classification, if available. Defaults to NA for testing.
+#' @param temp_meddra the MedDRA dictionary (a data.table with columns soc, hlgt and pt), if available. Defaults to NA because MedDRA requires a subscription.
+#' @param temp_atc the ATC classification, as returned by import_ATC(), if available. Defaults to NA. Only the primary ATC code of each substance is used.
 #' @param temp_demo_supp the Demo_supp databases. Can be set to sample_Demo_Supp for testing
 #' @param temp_doses the Doses databases. Can be set to sample_Doses for testing
 #' @param temp_drug_supp the Drug_supp databases. Can be set to sample_Drug_Supp for testing
@@ -39,7 +39,7 @@ retrieve <- function(pids, file_name = "individual_cases",
 
   ## Reactions
   temp_reac <- temp_reac[primaryid %in% pids]
-  if (!is.na(temp_meddra)) {
+  if (is.data.frame(temp_meddra)) {
     temp_reac <- temp_meddra[temp_reac, on = "pt"][order(soc)]
     temp_reac <- temp_reac[, .(
       pt = paste0(" (", paste0(pt, collapse = "; "), ")"),
@@ -69,8 +69,8 @@ retrieve <- function(pids, file_name = "individual_cases",
   ]
   ## Drug
   temp_drug <- temp_drug[primaryid %in% pids]
-  if (!is.na(temp_atc)) {
-    temp_atc[code == primary_code]
+  if (is.data.frame(temp_atc)) {
+    temp_atc <- temp_atc[code == primary_code]
     temp_drug <- temp_atc[temp_drug, on = "substance"][order(-substance)][order(-Class1)]
     t_drug1 <- temp_drug[, .(substance = paste0("(", paste0(unique(substance),
       collapse = "; "
