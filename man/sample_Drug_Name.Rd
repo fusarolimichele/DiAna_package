@@ -16,7 +16,7 @@ A data.table with 5 variables:
 }
 }
 \source{
-https://github.com/fusarolimichele/DiAna
+https://github.com/fusarolimichele/DiAna_cleaning
 }
 \usage{
 sample_Drug_Name

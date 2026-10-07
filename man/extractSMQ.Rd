@@ -23,7 +23,7 @@ The function reads the SMQ dictionary from an external CSV file located at:
 \code{external_sources/smq_dictionary.csv}.
 Since MedDRA subscription is required, the user must obtain the SMQ dictionary separately.
 Instructions for setting up the required files are provided in the DiAna GitHub repository:
-\url{https://github.com/fusarolimichele/DiAna}.
+\url{https://github.com/fusarolimichele/DiAna_cleaning}.
 
 The function processes five hierarchical levels (\code{SMQ_1} to \code{SMQ_5}) and assigns Preferred Terms (PTs)
 accordingly, filtering by "Narrow" scope if requested.

@@ -28,7 +28,7 @@
 #' providing a glimpse into the structure of the database and allowing tests and documentation.
 #' @docType data
 #' @keywords datasets
-#' @source https://github.com/fusarolimichele/DiAna
+#' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Demo"
 
 #' Sample dataset containing events (suspected adverse drug reactions) and related information.
@@ -49,7 +49,7 @@
 #' providing a glimpse into the structure of the database and allowing tests and documentation.
 #' @docType data
 #' @keywords datasets
-#' @source https://github.com/fusarolimichele/DiAna
+#' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Reac"
 
 #' Sample dataset containing indications for using reported drugs.
@@ -71,7 +71,7 @@
 #' indications observed in adverse drug reaction reports. Each report can record multiple drugs
 #' and therefore multiple indications.
 #' @keywords datasets
-#' @source https://github.com/fusarolimichele/DiAna
+#' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Indi"
 
 #' Sample Data on Individual Outcomes
@@ -90,7 +90,7 @@
 #' This dataset provides information on outcomes associated with reported adverse drug reactions,
 #' specifying the severity or nature of each event observed for individuals.
 #' @keywords datasets
-#' @source https://github.com/fusarolimichele/DiAna
+#' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Outc"
 
 #' Sample Data on Therapy Details
@@ -114,7 +114,7 @@
 #' This subset dataset provides detailed information on therapeutic interventions,
 #' It facilitates analysis of therapy durations, and onset times.
 #' @keywords datasets
-#' @source https://github.com/fusarolimichele/DiAna
+#' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Ther"
 
 #' Sample Data on Drug Doses
@@ -141,7 +141,7 @@
 #' and frequency of administration, facilitating analysis related to dosing patterns.
 #' As it can be observed in the sample, most of the dataset is NA (info not available).
 #' @keywords datasets
-#' @source https://github.com/fusarolimichele/DiAna
+#' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Doses"
 
 #' Sample Data on Drug Administration
@@ -162,7 +162,7 @@
 #' This subset of Drug provides detailed information on drugs administered to individuals,
 #' specifying their suspected roles in the context of adverse drug reactions.
 #' @keywords datasets
-#' @source https://github.com/fusarolimichele/DiAna
+#' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Drug"
 
 #' Sample Data on Drug Names before standardization
@@ -184,7 +184,7 @@
 #' @details
 #' This subset of Drug_Name provides detailed information on drug names and associated attributes.
 #' @keywords datasets
-#' @source https://github.com/fusarolimichele/DiAna
+#' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Drug_Name"
 
 #' Sample Supplementary Demographic Data
@@ -216,7 +216,7 @@
 #' including details related to reporting and manufacturer information.
 #' It is useful for understanding additional context around adverse drug reaction reports.
 #' @keywords datasets
-#' @source https://github.com/fusarolimichele/DiAna
+#' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Demo_Supp"
 
 #' Sample Supplementary Drug Information
@@ -242,7 +242,7 @@
 #' including details such as administration routes, dose forms, and dechallenge/rechallenge flags.
 #' It complements adverse drug reaction data by providing additional context on drug usage.
 #' @keywords datasets
-#' @source https://github.com/fusarolimichele/DiAna
+#' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Drug_Supp"
 
 #' Country Dictionary Dataset

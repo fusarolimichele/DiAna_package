@@ -28,5 +28,5 @@ if (file.exists("external_source/meddra_primary.csv")) {
 
 }
 \seealso{
-You can find more information and instructions for obtaining MedDRA data at https://github.com/fusarolimichele/DiAna.
+You can find more information and instructions for obtaining MedDRA data at https://github.com/fusarolimichele/DiAna_cleaning.
 }

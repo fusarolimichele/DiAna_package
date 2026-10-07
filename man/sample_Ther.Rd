@@ -17,7 +17,7 @@ A data.table with 7 variables:
 }
 }
 \source{
-https://github.com/fusarolimichele/DiAna
+https://github.com/fusarolimichele/DiAna_cleaning
 }
 \usage{
 sample_Ther

@@ -24,7 +24,7 @@ A data.table with 10 variables:
 }
 }
 \source{
-https://github.com/fusarolimichele/DiAna
+https://github.com/fusarolimichele/DiAna_cleaning
 }
 \usage{
 sample_Demo_Supp
