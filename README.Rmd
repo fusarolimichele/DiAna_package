@@ -94,7 +94,7 @@ project: it will create a folder to store cleaned FAERS data, that will
 be downloaded from an OSF repository (in particular we are downloading
 the entire FAERS database, including all the quarters up to the 24Q1).
 The entire cleaning process is made transparent on the github
-(<https://github.com/fusarolimichele/DiAna>). It will also create a
+(<https://github.com/fusarolimichele/DiAna_cleaning>). It will also create a
 folder for external sources and a folder to store projects. In the
 external sources, it will also download the DiAna dictionary used to
 translate free text drug names into active ingredients, a linkage to the

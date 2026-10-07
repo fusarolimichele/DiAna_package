@@ -69,7 +69,7 @@ import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environm
 #' If the file exists, it will load the data, select specific columns (def, soc, hlgt, hlt, pt), remove duplicates, and store it in the global environment as "MedDRA".
 #'
 #' @seealso
-#' You can find more information and instructions for obtaining MedDRA data at https://github.com/fusarolimichele/DiAna.
+#' You can find more information and instructions for obtaining MedDRA data at https://github.com/fusarolimichele/DiAna_cleaning.
 #'
 #' @examples
 #' # This example requires a specific file that can only be available with a MeDRA subscription.
@@ -83,7 +83,7 @@ import_MedDRA <- function(env = .GlobalEnv) {
   path <- paste0(here::here(), "/external_sources/meddra_primary.csv")
   if (!file.exists(path)) {
     stop("The MedDRA is not available with DiAna since the subscription must be done with MEDDRA MSSO.
-         Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna
+         Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna_cleaning
          to make it ready for download.")
   } else {
     suppressMessages(MedDRA <- setDT(
@@ -150,7 +150,7 @@ import_ATC <- function(primary = T, env = .GlobalEnv) {
 #' `external_sources/smq_dictionary.csv`.
 #' Since MedDRA subscription is required, the user must obtain the SMQ dictionary separately.
 #' Instructions for setting up the required files are provided in the DiAna GitHub repository:
-#' <https://github.com/fusarolimichele/DiAna>.
+#' <https://github.com/fusarolimichele/DiAna_cleaning>.
 #'
 #' The function processes five hierarchical levels (`SMQ_1` to `SMQ_5`) and assigns Preferred Terms (PTs)
 #' accordingly, filtering by "Narrow" scope if requested.
@@ -167,7 +167,7 @@ import_ATC <- function(primary = T, env = .GlobalEnv) {
 extractSMQ <- function(Narrow = TRUE) {
   path <- paste0(here::here(), "/external_sources/smq_dictionary.csv")
   if (!file.exists(path)) {
-    stop("The SMQ_dictionary is not available with DiAna since the subscription must be done with MEDDRA MSSO.\n         Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna\n         to make it ready for download.")
+    stop("The SMQ_dictionary is not available with DiAna since the subscription must be done with MEDDRA MSSO.\n         Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna_cleaning\n         to make it ready for download.")
   }
   smq_dictionary <- setDT(readr::read_delim(path,
     delim = ";", escape_double = FALSE, trim_ws = TRUE
