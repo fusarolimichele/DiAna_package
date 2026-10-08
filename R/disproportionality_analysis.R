@@ -23,6 +23,22 @@
 #' @param file_name Name of the Excel file, used if `save_in_excel = TRUE`.
 #' @return A data.table containing disproportionality analysis results.
 #'
+#' @section Reporting odds ratio (ROR):
+#' DiAna's ROR is the conditional maximum-likelihood estimate of the odds
+#' ratio from Fisher's exact test ([stats::fisher.test()]), with its exact 95%
+#' confidence interval; the p-value used for the Bonferroni correction comes
+#' from the same test. Estimates and limits are rounded down to two decimals.
+#'
+#' This is not the classic ROR, `(a * d) / (b * c)`, with Woolf's
+#' log-normal confidence interval, used by many studies and tools. The point
+#' estimates are nearly identical, but with few cases the exact interval is
+#' wider, and the two can disagree on whether the lower limit exceeds 1. For
+#' example, with 1 case, 10 other reports of the event, 50 other reports of
+#' the drug and 5,000 other reports, the exact interval is 0.23-72.63 and
+#' Woolf's is 1.26-79.60. Results can therefore differ from tools using
+#' Woolf's ROR, mostly below about 5 cases; `minimum_cases` (default 3)
+#' already excludes the sparsest combinations from signal detection.
+#'
 #' @importFrom dplyr distinct rename
 #' @importFrom purrr map map2
 #'
@@ -351,12 +367,13 @@ render_forest <- function(disproportionality_df,
 #' @details
 #' The function constructs a contingency table for the drug-event combination and computes the following metrics:
 #' \describe{
-#'   \item{\code{ROR}}{Reporting Odds Ratio: Based on odds ratio}
+#'   \item{\code{ROR}}{Reporting Odds Ratio: Fisher's conditional maximum-likelihood odds ratio with its exact confidence interval (see the section below).}
 #'   \item{\code{PRR}}{Proportional Reporting Ratio: The expected probability of the event is calculated on the population not having the drug of interest.}
 #'   \item{\code{RRR}}{Relative Reporting Ratio: The expected probability of the event is calculated on the entire population.}
 #'   \item{\code{IC}}{Information Component: A measure based on Bayesian confidence propagation neural network models. It is the log2 of the shrinked RRR.}
 #'   \item{\code{IC_gamma}}{Gamma distribution-based Information Component: An alternative IC calculation using the gamma distribution. It is more appropriate for small databases}
 #' }
+#' @inheritSection disproportionality_analysis Reporting odds ratio (ROR)
 #' @importFrom stats qgamma qnorm
 #' @export
 #' @examples
@@ -473,6 +490,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' @details
 #' The function processes the provided data to calculate the reporting odds ratio (ROR) and the information component (IC) for the specified drug-event combination over time.
 #'
+#' @inheritSection disproportionality_analysis Reporting odds ratio (ROR)
 #' @examples
 #' drug_selected <- "paracetamol"
 #' reac_selected <- "overdose"

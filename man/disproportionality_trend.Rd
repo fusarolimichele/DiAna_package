@@ -73,6 +73,24 @@ Its results can be visualized using \code{plot_disproportionality_trend()}.
 \details{
 The function processes the provided data to calculate the reporting odds ratio (ROR) and the information component (IC) for the specified drug-event combination over time.
 }
+\section{Reporting odds ratio (ROR)}{
+
+DiAna's ROR is the conditional maximum-likelihood estimate of the odds
+ratio from Fisher's exact test (\code{\link[stats:fisher.test]{stats::fisher.test()}}), with its exact 95\%
+confidence interval; the p-value used for the Bonferroni correction comes
+from the same test. Estimates and limits are rounded down to two decimals.
+
+This is not the classic ROR, \code{(a * d) / (b * c)}, with Woolf's
+log-normal confidence interval, used by many studies and tools. The point
+estimates are nearly identical, but with few cases the exact interval is
+wider, and the two can disagree on whether the lower limit exceeds 1. For
+example, with 1 case, 10 other reports of the event, 50 other reports of
+the drug and 5,000 other reports, the exact interval is 0.23-72.63 and
+Woolf's is 1.26-79.60. Results can therefore differ from tools using
+Woolf's ROR, mostly below about 5 cases; \code{minimum_cases} (default 3)
+already excludes the sparsest combinations from signal detection.
+}
+
 \examples{
 drug_selected <- "paracetamol"
 reac_selected <- "overdose"
