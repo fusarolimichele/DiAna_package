@@ -313,7 +313,7 @@ render_tto <- function(df,
   if (nested != FALSE) {
     df$nested <- df[[nested]]
     colors <- nested_colors
-    if (is.na(colors)) {
+    if (all(is.na(colors))) {
       colors <- c(
         "goldenrod", "steelblue", "salmon2",
         "green4", "brown", "violet", "blue4"
@@ -371,8 +371,13 @@ render_tto <- function(df,
     xlab("TTO (days)") +
     ylab("") +
     scale_x_continuous(trans = transformation) +
-    scale_color_manual(values = c(red = "red", orange = "orange", gray = "gray")) +
+    # nested plots are coloured by group, with a legend to tell the groups apart;
+    # otherwise by the significance of the tests (red, orange, gray)
+    scale_color_manual(values = if (nested != FALSE) colors else c(red = "red", orange = "orange", gray = "gray")) +
     theme_bw() +
     scale_size_area(guide = "none") +
-    guides(shape = guide_legend(override.aes = list(size = 5)), col = "none")
+    guides(
+      shape = guide_legend(override.aes = list(size = 5)),
+      col = if (nested != FALSE && show_legend) "legend" else "none"
+    )
 }

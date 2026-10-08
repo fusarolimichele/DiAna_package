@@ -303,7 +303,7 @@ render_forest <- function(disproportionality_df,
     guides(shape = guide_legend(override.aes = list(size = 5))) +
     {
       if (point_size != 0) {
-        scale_size(lim = c(0, 10), guide = "none")
+        ggplot2::scale_size(limits = c(0, 10), guide = "none")
       }
     } +
     {
@@ -333,7 +333,7 @@ render_forest <- function(disproportionality_df,
     guides(shape = guide_legend(override.aes = list(size = 5))) +
     {
       if (!is.na(xcoord_lims[[1]])) {
-        coord_cartesian(xlim = xcoord_lims)
+        ggplot2::coord_cartesian(xlim = xcoord_lims)
       }
     }
 }
@@ -825,7 +825,7 @@ render_forest_table <- function(disproportionality_df) {
       xlab = "Information Component",
       fn.ci_norm = fn_list,
       hrzl_lines =
-        setNames(
+        stats::setNames(
           list(gpar(lwd = 2, col = "black")),
           line_before_last
         )

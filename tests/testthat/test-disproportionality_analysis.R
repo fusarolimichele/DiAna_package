@@ -285,3 +285,35 @@ test_that("ROR and IC helpers match the scalar formulas", {
   ic <- ic_bcpnn(D_E = 5, D = 50, E = 15, TOT = 1000)
   expect_equal(ic$IC_median, floor(log2(5.5 / (50 * 15 / 1000 + .5)) * 100) / 100)
 })
+
+test_that("render_forest_table() draws the forest table", {
+  df <- data.table::data.table(
+    nested = c("Crude", "Adjusted"), D_E = c(10, 8), expected = c(5.5, 6.2),
+    IC_median = c(1.2, 0.8), IC_lower = c(0.5, -0.2), IC_upper = c(1.9, 1.3)
+  )
+  pdf(NULL)
+  on.exit(dev.off(), add = TRUE)
+  expect_s3_class(render_forest_table(df), "gforge_forestplot")
+})
+
+test_that("render_forest() options build without errors", {
+  pdf(NULL)
+  on.exit(dev.off(), add = TRUE)
+  res <- disproportionality_analysis(c("paracetamol", "ibuprofen"), c("overdose", "nausea"),
+    temp_drug = sample_Drug, temp_reac = sample_Reac
+  )
+  males <- disproportionality_analysis(c("paracetamol", "ibuprofen"), c("overdose", "nausea"),
+    temp_drug = sample_Drug, temp_reac = sample_Reac, restriction = sample_Demo[sex == "M"]$primaryid
+  )
+  both <- rbind(res[, analysis := "all"], males[, analysis := "males"])
+  plots <- list(
+    render_forest(res, index = "ROR"),
+    render_forest(res, custom_threshold = 0.5, point_size = 3, xcoord_lims = c(-2, 5), legend_position = "bottom"),
+    render_forest(both, nested = "analysis", facet_v = "event"),
+    render_forest(both, nested = "analysis", nested_colors = c("black", "red"), facet_h = "event")
+  )
+  for (p in plots) {
+    expect_s3_class(p, "ggplot")
+    expect_no_error(ggplot2::ggplot_build(p))
+  }
+})

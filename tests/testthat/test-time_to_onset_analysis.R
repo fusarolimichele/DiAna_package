@@ -63,3 +63,22 @@ test_that("Render TTO works", {
     restriction = sample_Demo[sex == "F"]$primaryid
   )))
 })
+
+test_that("render_tto() nested and faceted plots build without errors", {
+  pdf(NULL)
+  on.exit(dev.off(), add = TRUE)
+  tto <- time_to_onset_analysis(list("skin care", "adapalene"),
+    list("erythema", "dry skin", "skin irritation"),
+    temp_drug = sample_Drug, temp_reac = sample_Reac, temp_ther = sample_Ther
+  )
+  tto2 <- rbind(data.table::copy(tto)[, analysis := "a"], data.table::copy(tto)[, analysis := "b"])
+  plots <- list(
+    render_tto(tto2, nested = "analysis"),
+    render_tto(tto2, nested = "analysis", nested_colors = c("black", "red"), facet_h = "event"),
+    render_tto(tto, facet_v = "event")
+  )
+  for (p in plots) {
+    expect_s3_class(p, "ggplot")
+    expect_no_error(ggplot2::ggplot_build(p))
+  }
+})
