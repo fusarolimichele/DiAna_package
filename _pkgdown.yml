@@ -119,6 +119,7 @@ articles:
   navbar: Get started
   contents:
   - articles/Start_Subproject
+  - articles/DiAna_data
 
 - title: Disproportionality Analysis
   navbar: Disproportionality Analysis
