@@ -17,6 +17,12 @@
 #' @param drug_role is only used for substances. By default both suspect and concomitant drugs are included.
 #'
 #' @param drug_indi is only used for indications. By default the indications of all the drugs of the selected primaryids are considered, but you can specify a vector of drugs.
+#' @param temp_meddra MedDRA dictionary, used for the levels "hlt", "hlgt" and "soc".
+#'   By default, `MedDRA` from your workspace if it is loaded, otherwise it is
+#'   read with [import_MedDRA()].
+#' @param temp_atc ATC classification, used for the levels "Class1" to "Class4".
+#'   By default, `ATC` from your workspace if it is loaded, otherwise it is
+#'   read with [import_ATC()]. Only primary ATC codes are used.
 #'
 #' @return A data.table containing counts and percentages of the investigated entity
 #'         at the specified level and in descending order.
@@ -50,7 +56,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
                               "PS",
                               "SS", "I", "C"
                             ), drug_indi = NA, temp_reac = Reac, temp_drug = Drug,
-                            temp_indi = Indi) {
+                            temp_indi = Indi, temp_meddra = NULL, temp_atc = NULL) {
   if (entity == "reaction") {
     check_workspace_defaults("temp_reac")
     temp <- temp_reac[primaryid %in% pids_cases]
@@ -75,8 +81,8 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
     ]
   }
   if (level %in% c("hlt", "hlgt", "soc")) {
-    import_MedDRA()
-    temp <- dplyr::distinct(dplyr::distinct(MedDRA[, c(
+    temp_meddra <- get_dictionary(temp_meddra, "MedDRA")
+    temp <- dplyr::distinct(dplyr::distinct(temp_meddra[, c(
       "pt",
       level
     ), with = FALSE])[temp, on = "pt"][, c(
@@ -91,8 +97,8 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
       "Class1", "Class2", "Class3",
       "Class4"
     )) {
-      import_ATC()[code == primary_code]
-      temp <- dplyr::distinct(dplyr::distinct(ATC[, c(
+      temp_atc <- get_dictionary(temp_atc, "ATC")[code == primary_code]
+      temp <- dplyr::distinct(dplyr::distinct(temp_atc[, c(
         "substance",
         level
       ), with = FALSE])[temp, on = "substance", allow.cartesian = TRUE][,
@@ -135,6 +141,10 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
 #' @param file_name Path of the XLSX file to save the hierarchy in, if `save_in_excel = TRUE`. Default "reporting_rates.xlsx" in `project_path`.
 #' @param save_in_excel Whether to also save the hierarchy in an Excel file, `file_name`. Defaults to `TRUE` only if `file_name` is supplied.
 #' @param drug_role If entity is substance, it is possible to specify the drug roles that should be considered
+#' @inheritParams reporting_rates
+#' @param ... Case tables passed on to [reporting_rates()]: `temp_reac`,
+#'   `temp_indi` and `temp_drug`. By default, `Reac`, `Indi` and `Drug` from
+#'   your workspace.
 #'
 #' @return A data.table with the hierarchy of interest.
 #'         For indications and reactions, SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
@@ -144,39 +154,39 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
 #'
 #' @examples
 #' # The following examples require the MedDRA and the ATC to be available
-#' Reac <- sample_Reac
-#' Indi <- sample_Indi
-#' Drug <- sample_Drug
 #' pids <- sample_Demo$primaryid
 #' if (file.exists(file.path(here::here(), "external_sources", "meddra_primary.csv"))) {
-#'   import_MedDRA()
-#'   hierarchycal_rates(pids, "reaction")
-#'   hierarchycal_rates(pids, "indication")
+#'   MedDRA <- import_MedDRA()
+#'   hierarchical_rates(pids, "reaction", temp_meddra = MedDRA, temp_reac = sample_Reac)
+#'   hierarchical_rates(pids, "indication", temp_meddra = MedDRA, temp_indi = sample_Indi)
 #' }
 #' if (file.exists(file.path(here::here(), "external_sources", "ATC_DiAna.csv"))) {
-#'   import_ATC()
-#'   hierarchycal_rates(pids, "substance")
+#'   ATC <- import_ATC()
+#'   hierarchical_rates(pids, "substance", temp_atc = ATC, temp_drug = sample_Drug)
 #' }
-hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx"), drug_role = c("PS", "SS", "I", "C"), save_in_excel = !missing(file_name)) {
+hierarchical_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx"), drug_role = c("PS", "SS", "I", "C"), save_in_excel = !missing(file_name),
+                               temp_meddra = NULL, temp_atc = NULL, ...) {
   if (entity %in% c("reaction", "indication")) {
-    pts <- reporting_rates(pids_cases, entity = entity, "pt")
-    hlts <- reporting_rates(pids_cases, entity = entity, "hlt")
-    hlgts <- reporting_rates(pids_cases, entity = entity, "hlgt")
-    socs <- reporting_rates(pids_cases, entity = entity, "soc")
-    check_workspace_object("MedDRA")
-    temp <- MedDRA[socs, on = "soc"][hlgts, on = "hlgt"][hlts, on = "hlt"][pts, on = "pt"]
+    # get MedDRA once and pass it on, so the file is read at most once
+    temp_meddra <- get_dictionary(temp_meddra, "MedDRA")
+    pts <- reporting_rates(pids_cases, entity = entity, "pt", ...)
+    hlts <- reporting_rates(pids_cases, entity = entity, "hlt", temp_meddra = temp_meddra, ...)
+    hlgts <- reporting_rates(pids_cases, entity = entity, "hlgt", temp_meddra = temp_meddra, ...)
+    socs <- reporting_rates(pids_cases, entity = entity, "soc", temp_meddra = temp_meddra, ...)
+    temp <- temp_meddra[socs, on = "soc"][hlgts, on = "hlgt"][hlts, on = "hlt"][pts, on = "pt"]
     temp <- temp[order(-N_soc, -label_soc, -N_hlgt, -label_hlgt, -N_hlt, -label_hlt, -N_pt)][
       , .(label_soc, label_hlgt, label_hlt, label_pt)
     ]
   }
   if (entity == "substance") {
-    substances <- reporting_rates(pids_cases, entity = entity, "substance", drug_role = drug_role)
-    Class4s <- reporting_rates(pids_cases, entity = entity, "Class4", drug_role = drug_role)
-    Class3s <- reporting_rates(pids_cases, entity = entity, "Class3", drug_role = drug_role)
-    Class2s <- reporting_rates(pids_cases, entity = entity, "Class2", drug_role = drug_role)
-    Class1s <- reporting_rates(pids_cases, entity = entity, "Class1", drug_role = drug_role)
-    check_workspace_object("ATC")
-    temp <- ATC[Class1s, on = "Class1"][Class2s, on = "Class2"][Class3s, on = "Class3"][Class4s, on = "Class4"][substances, on = "substance"]
+    # get the ATC once and pass it on, so the file is read at most once
+    temp_atc <- get_dictionary(temp_atc, "ATC")[code == primary_code]
+    substances <- reporting_rates(pids_cases, entity = entity, "substance", drug_role = drug_role, ...)
+    Class4s <- reporting_rates(pids_cases, entity = entity, "Class4", drug_role = drug_role, temp_atc = temp_atc, ...)
+    Class3s <- reporting_rates(pids_cases, entity = entity, "Class3", drug_role = drug_role, temp_atc = temp_atc, ...)
+    Class2s <- reporting_rates(pids_cases, entity = entity, "Class2", drug_role = drug_role, temp_atc = temp_atc, ...)
+    Class1s <- reporting_rates(pids_cases, entity = entity, "Class1", drug_role = drug_role, temp_atc = temp_atc, ...)
+    temp <- temp_atc[Class1s, on = "Class1"][Class2s, on = "Class2"][Class3s, on = "Class3"][Class4s, on = "Class4"][substances, on = "substance"]
     temp <- temp[order(-N_Class1, -label_Class1, -N_Class2, -label_Class2, -N_Class3, -label_Class3, -N_Class4, -label_Class4, -N_substance)][
       , .(label_Class1, label_Class2, label_Class3, label_Class4, label_substance)
     ]

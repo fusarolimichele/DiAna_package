@@ -10,6 +10,7 @@ export(disproportionality_trend)
 export(extractSMQ)
 export(format_input_disproportionality)
 export(get_drugnames)
+export(hierarchical_rates)
 export(hierarchycal_rates)
 export(import)
 export(import_ATC)
@@ -92,11 +93,6 @@ importFrom(gtsummary,
   tbl_summary
 )
 importFrom(here,here)
-importFrom(httr,
-  GET,
-  content,
-  status_code
-)
 importFrom(igraph,
   E,
   V,
@@ -111,13 +107,11 @@ importFrom(igraph,
   simplify
 )
 importFrom(jsonlite,fromJSON)
-importFrom(lubridate,ym)
 importFrom(magrittr,"%>%")
 importFrom(purrr,
   map,
   map2
 )
-importFrom(questionr,odds.ratio)
 importFrom(readr,read_delim)
 importFrom(readxl,read_xlsx)
 importFrom(stats,
@@ -126,7 +120,6 @@ importFrom(stats,
   qgamma,
   qnorm
 )
-importFrom(stringr,str_to_title)
 importFrom(tibble,
   as_tibble,
   tibble
