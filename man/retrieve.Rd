@@ -31,7 +31,7 @@ retrieve(
 
 \item{temp_drug}{Drug dataset. Can be set to sample_Drug for testing}
 
-\item{temp_demo}{Demo dataset. Defaults to Demo. Can be se to sample_Demo for testing}
+\item{temp_demo}{Demo dataset. Defaults to Demo. Can be set to sample_Demo for testing}
 
 \item{temp_demo_supp}{the Demo_supp databases. Can be set to sample_Demo_Supp for testing}
 

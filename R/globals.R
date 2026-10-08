@@ -38,5 +38,5 @@ utils::globalVariables(c(
   "Doses", "IC_signal", "ROR_signal", "nested",
   "scale_size", "coord_cartesian", "NB", "SMQ_1", "SMQ_2", "SMQ_3", "SMQ_4", "SMQ_5",
   "num_Substances", "Analysis", "Expected", "IC (95% CI)", "Observed", "Substances",
-  "expected", "setNames"
+  "expected", "setNames", "Seriousness_recorded"
 ))

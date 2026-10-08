@@ -28,7 +28,7 @@ disproportionality_trend(
 
 \item{temp_reac}{Reac dataset. Can be set to sample_Reac for testing}
 
-\item{temp_demo}{Demo dataset. Defaults to Demo. Can be se to sample_Demo for testing}
+\item{temp_demo}{Demo dataset. Defaults to Demo. Can be set to sample_Demo for testing}
 
 \item{temp_demo_supp}{Data frame containing supplementary demographic data, and in particular the quarter. Defaults to \verb{Demo_supp\[, .(primaryid, quarter)\]}.}
 

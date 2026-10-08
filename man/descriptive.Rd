@@ -12,9 +12,10 @@ descriptive(
   file_name = "Descriptives.xlsx",
   vars = c("sex", "Submission", "Reporter", "age_range", "Outcome", "country",
     "continent", "age_in_years", "wt_in_kgs", "Reactions", "Indications", "Substances",
-    "year", "role_cod", "time_to_onset"),
+    "num_Substances", "year", "role_cod", "time_to_onset"),
   list_pids = list(),
   method = "independence_test",
+  outcome = c("each", "most_severe"),
   temp_demo = Demo,
   temp_drug = Drug,
   temp_reac = Reac,
@@ -40,7 +41,19 @@ descriptive(
 
 \item{method}{The method for Chi-square test analysis, either "independence_test" or "goodness_of_fit". Default is "independence_test". It applies only for comparisons between cases and non-cases.}
 
-\item{temp_demo}{Demo dataset. Defaults to Demo. Can be se to sample_Demo for testing}
+\item{outcome}{How to describe the seriousness outcomes, when \code{"Outcome"}
+is in \code{vars}:
+\itemize{
+\item \code{"each"} (default): one row per outcome (Death, Life threatening,
+Disability, Required intervention, Hospitalization, Congenital
+anomaly, Other serious). A report with several outcomes counts in
+each of them, so the percentages do not add up to 100\%.
+\item \code{"most_severe"}: one row per report, with its most severe
+outcome, in the order listed above.
+}
+See the section "Outcomes" for the denominator.}
+
+\item{temp_demo}{Demo dataset. Defaults to Demo. Can be set to sample_Demo for testing}
 
 \item{temp_drug}{Drug dataset. Can be set to sample_Drug for testing}
 
@@ -53,26 +66,47 @@ descriptive(
 \item{temp_ther}{Ther dataset. Can be set to sample_Ther for testing}
 }
 \value{
-The function generates descriptive statistics as a gt_table and potentially saves them to an Excel file.
+The descriptive statistics as a table (a tibble), with counts and
+percentages for cases and, if \code{RG} is given, for non-cases with p-values.
+If \code{save_in_excel = TRUE}, the table is also saved to \code{file_name}.
 }
 \description{
-This function generates descriptive statistics for a sample of data, including cases and non-cases, and saves the results to an Excel file.
+This function generates descriptive statistics for a sample of reports
+(cases), optionally compared with a reference group (non-cases), and can
+save the results to an Excel file.
 }
+\section{Outcomes}{
+
+A FAERS report records seriousness outcomes only when the reporter
+provides them. A report without any recorded outcome is \strong{not} known to be
+non-serious: the information is simply missing, and nothing can be said
+about the seriousness of that report. For this reason:
+\itemize{
+\item the row "Seriousness recorded" gives the number and percentage of
+reports, among all reports, that record at least one outcome;
+\item the percentages of the outcome rows use as denominator only the
+reports with at least one recorded outcome. Reports without any
+recorded outcome are excluded from that denominator, not counted as
+non-serious.
+}
+}
+
 \examples{
 pids_cases <- unique(sample_Demo[sex == "M"]$primaryid)
-RG <- unique(sample_Demo[sex == "M"]$primaryid)
+RG <- unique(sample_Demo[sex == "F"]$primaryid)
 
 # Generate descriptive statistics for cases
 descriptive(
-  pids_cases = pids_cases, save_in_excel = FALSE,
+  pids_cases = pids_cases,
   temp_demo = sample_Demo, temp_drug = sample_Drug,
   temp_reac = sample_Reac, temp_indi = sample_Indi,
   temp_outc = sample_Outc, temp_ther = sample_Ther
 )
 
-# Generate descriptive statistics for cases and non-cases
+# Generate descriptive statistics for cases and non-cases,
+# describing only the most severe outcome of each report
 descriptive(
-  pids_cases = pids_cases, RG = RG, save_in_excel = FALSE,
+  pids_cases = pids_cases, RG = RG, outcome = "most_severe",
   temp_demo = sample_Demo, temp_drug = sample_Drug,
   temp_reac = sample_Reac, temp_indi = sample_Indi,
   temp_outc = sample_Outc, temp_ther = sample_Ther
