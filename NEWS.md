@@ -13,6 +13,7 @@
 * DiAna now requires R 4.1.0 or later (it already used the `\(x)` syntax).
 
 ## Bug fixes
+* `extractSMQ()` no longer returns an empty element named `NA` for the unused levels of the SMQ hierarchy. When the dictionary is missing it says which file and columns it expects, instead of pointing to instructions that did not exist, and it checks the columns of the file.
 * `hierarchical_rates()` (formerly `hierarchycal_rates()`) works again without first running `import_MedDRA()` or `import_ATC()`, and reads each dictionary at most once. It also accepts `temp_meddra`, `temp_atc`, and the case tables `temp_reac`, `temp_indi` and `temp_drug`.
 * `reporting_rates()` reuses the MedDRA and ATC already loaded in your workspace instead of reading the files on every call, and gains `temp_meddra` and `temp_atc` arguments.
 * `disproportionality_analysis()` accepts factors as `drug_selected` and `reac_selected` (e.g. a column of `Drug`), instead of failing with a join error.
@@ -28,6 +29,9 @@
 * `disproportionality_analysis()` and `time_to_onset_analysis()`: the check for misspelled drugs and events no longer crashes on Windows. In non-interactive sessions (scripts, R Markdown, batch jobs) it now gives a warning instead of a prompt; previously `time_to_onset_analysis()` stopped in that case.
 * `snippets_install_github()` now keeps the user's existing RStudio snippets, replacing only those with the same name, and finds the snippets folder on Windows.
 * `setup_DiAna()` checks the quarter before creating any folder, restores the `timeout` option when it ends, and handles a cancelled dialog.
+
+## Documentation
+* The help pages of `disproportionality_analysis()`, `disproportionality_trend()` and `disproportionality_comparison()` explain that DiAna's ROR is Fisher's conditional maximum-likelihood odds ratio with an exact confidence interval, and how it differs from the classic ROR with Woolf's interval when there are few cases.
 
 ## Dependencies
 * DiAna no longer depends on questionr, lubridate, httr and stringr, which reduces the packages installed with it from 158 to 130 (questionr alone brought in 22, including shiny). Results are unchanged: the reporting odds ratio is computed with `stats::fisher.test()`, which questionr was calling.
