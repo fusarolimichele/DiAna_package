@@ -75,7 +75,6 @@ library(DiAna)
 #> The following object is masked from 'package:base':
 #> 
 #>     %notin%
-#> Loading required package: ggplot2
 ```
 
 ### **Setting Up Your DiAna Subproject**

@@ -1,5 +1,149 @@
 # Changelog
 
+## DiAna (development version)
+
+### Deprecated
+
+- [`retrieve_pregnancy_pids()`](https://fusarolimichele.github.io/DiAna_package/reference/retrieve_pregnancy_pids.md)
+  is deprecated and will be removed in the next release: use the
+  PVgravID package
+  (`remotes::install_github("Uppsala-Monitoring-Centre/PVgravID")`), as
+  shown in the article “Pregnancy analyses with PVgravID”.
+- [`hierarchycal_rates()`](https://fusarolimichele.github.io/DiAna_package/reference/DiAna-deprecated.md)
+  is renamed
+  [`hierarchical_rates()`](https://fusarolimichele.github.io/DiAna_package/reference/hierarchical_rates.md);
+  the old name still works, with a warning.
+- [`new_descriptive()`](https://fusarolimichele.github.io/DiAna_package/reference/DiAna-deprecated.md)
+  is merged into
+  [`descriptive()`](https://fusarolimichele.github.io/DiAna_package/reference/descriptive.md);
+  the old name still works, with a warning. Pass the tables with the
+  `temp_*` arguments instead of `database`.
+
+### Changes that may affect your scripts
+
+- [`descriptive()`](https://fusarolimichele.github.io/DiAna_package/reference/descriptive.md)
+  describes seriousness outcomes differently. A report without any
+  recorded outcome is not known to be non-serious, so it is no longer
+  counted as “Non Serious”. A new row, “Seriousness recorded”, gives the
+  reports that record at least one outcome, and the outcome percentages
+  use only those reports as denominator. By default (`outcome = "each"`)
+  there is one row per outcome type, and a report with several outcomes
+  counts in each; `outcome = "most_severe"` gives one row per report
+  with its most severe outcome. Reporter codes outside the standard list
+  now appear as their own category instead of Unknown, and
+  `num_Substances` (1, 2, 3-5, \>5 substances) is included by default.
+- Functions no longer write files unless asked:
+  [`descriptive()`](https://fusarolimichele.github.io/DiAna_package/reference/descriptive.md),
+  [`new_descriptive()`](https://fusarolimichele.github.io/DiAna_package/reference/DiAna-deprecated.md),
+  [`retrieve()`](https://fusarolimichele.github.io/DiAna_package/reference/retrieve.md),
+  [`hierarchycal_rates()`](https://fusarolimichele.github.io/DiAna_package/reference/DiAna-deprecated.md)
+  (`save_in_excel`) and
+  [`network_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/network_analysis.md)
+  (`save_plot`) save only when you pass a `file_name` or set the
+  argument to `TRUE`. Calls that relied on the default file name now
+  only return the results.
+  [`hierarchycal_rates()`](https://fusarolimichele.github.io/DiAna_package/reference/DiAna-deprecated.md)
+  now also returns the hierarchy as a data.table.
+- [`import()`](https://fusarolimichele.github.io/DiAna_package/reference/import.md),
+  [`import_MedDRA()`](https://fusarolimichele.github.io/DiAna_package/reference/import_MedDRA.md)
+  and
+  [`import_ATC()`](https://fusarolimichele.github.io/DiAna_package/reference/import_ATC.md)
+  assign the table in the environment they are called from
+  (`env = parent.frame()`), instead of always in the global environment.
+  From the console or a script nothing changes. Inside your own
+  functions, the table is now created in the function: pass it on
+  explicitly (e.g. `temp_drug = Drug`).
+- ggplot2 is no longer attached by
+  [`library(DiAna)`](https://fusarolimichele.github.io/DiAna_package/).
+  Call [`library(ggplot2)`](https://ggplot2.tidyverse.org) to customise
+  plots, e.g. `render_forest(...) + theme(...)`. data.table is still
+  attached.
+- DiAna now requires R 4.1.0 or later (it already used the `\(x)`
+  syntax).
+
+### Bug fixes
+
+- [`hierarchical_rates()`](https://fusarolimichele.github.io/DiAna_package/reference/hierarchical_rates.md)
+  (formerly
+  [`hierarchycal_rates()`](https://fusarolimichele.github.io/DiAna_package/reference/DiAna-deprecated.md))
+  works again without first running
+  [`import_MedDRA()`](https://fusarolimichele.github.io/DiAna_package/reference/import_MedDRA.md)
+  or
+  [`import_ATC()`](https://fusarolimichele.github.io/DiAna_package/reference/import_ATC.md),
+  and reads each dictionary at most once. It also accepts `temp_meddra`,
+  `temp_atc`, and the case tables `temp_reac`, `temp_indi` and
+  `temp_drug`.
+- [`reporting_rates()`](https://fusarolimichele.github.io/DiAna_package/reference/reporting_rates.md)
+  reuses the MedDRA and ATC already loaded in your workspace instead of
+  reading the files on every call, and gains `temp_meddra` and
+  `temp_atc` arguments.
+- [`disproportionality_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/disproportionality_analysis.md)
+  accepts factors as `drug_selected` and `reac_selected` (e.g. a column
+  of `Drug`), instead of failing with a join error.
+- [`snippets_install_github()`](https://fusarolimichele.github.io/DiAna_package/reference/snippets_install_github.md)
+  reports the reason when a download fails (e.g. “HTTP status was ‘404
+  Not Found’”).
+- `new_descriptive(database = <quarter>)` no longer replaces `Demo`,
+  `Drug`, `Reac`, `Indi`, `Outc` and `Ther` in your workspace with the
+  subset of analysed cases.
+- [`retrieve_pregnancy_pids()`](https://fusarolimichele.github.io/DiAna_package/reference/retrieve_pregnancy_pids.md)
+  now uses its `quarter` argument (it always imported the quarter in
+  `FAERS_version`), and no longer overwrites seven tables in your
+  workspace.
+- [`disproportionality_trend()`](https://fusarolimichele.github.io/DiAna_package/reference/disproportionality_trend.md)
+  no longer adds a `period` column to your `Demo` table.
+- [`Fix_DiAna_dictionary_locally()`](https://fusarolimichele.github.io/DiAna_package/reference/Fix_DiAna_dictionary_locally.md)
+  now works: it no longer needs an undocumented `path` variable, and it
+  replaces the records of the corrected drugs instead of adding the
+  corrected records next to the old ones. It gains `temp_drug` and
+  `temp_drug_name` arguments.
+- When an argument defaults to a table that is not in your workspace
+  (e.g. `temp_drug = Drug` without `Drug`), the error now says which
+  table is missing and how to import it, instead of “object ‘Drug’ not
+  found”.
+- [`network_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/network_analysis.md)
+  now applies `min_frequency_term` for `entity = "reaction"` and
+  `entity = "indication"`. Previously the filter was silently skipped,
+  so every term entered the network: **results of earlier reaction and
+  indication networks may differ**. Analyses are also much faster (the
+  example went from about 140 s to 2 s).
+- [`network_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/network_analysis.md)
+  no longer draws an extra IsingFit plot or prints a progress bar.
+- [`retrieve()`](https://fusarolimichele.github.io/DiAna_package/reference/retrieve.md)
+  no longer fails when a MedDRA table is passed as `temp_meddra`, and
+  uses only the primary ATC code when `temp_atc` is given.
+- [`disproportionality_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/disproportionality_analysis.md)
+  and
+  [`time_to_onset_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/time_to_onset_analysis.md):
+  the check for misspelled drugs and events no longer crashes on
+  Windows. In non-interactive sessions (scripts, R Markdown, batch jobs)
+  it now gives a warning instead of a prompt; previously
+  [`time_to_onset_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/time_to_onset_analysis.md)
+  stopped in that case.
+- [`snippets_install_github()`](https://fusarolimichele.github.io/DiAna_package/reference/snippets_install_github.md)
+  now keeps the user’s existing RStudio snippets, replacing only those
+  with the same name, and finds the snippets folder on Windows.
+- [`setup_DiAna()`](https://fusarolimichele.github.io/DiAna_package/reference/setup_DiAna.md)
+  checks the quarter before creating any folder, restores the `timeout`
+  option when it ends, and handles a cancelled dialog.
+
+### Dependencies
+
+- DiAna no longer depends on questionr, lubridate, httr and stringr,
+  which reduces the packages installed with it from 158 to 130
+  (questionr alone brought in 22, including shiny). Results are
+  unchanged: the reporting odds ratio is computed with
+  [`stats::fisher.test()`](https://rdrr.io/r/stats/fisher.test.html),
+  which questionr was calling.
+- [`disproportionality_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/disproportionality_analysis.md)
+  and
+  [`disproportionality_trend()`](https://fusarolimichele.github.io/DiAna_package/reference/disproportionality_trend.md)
+  compute the IC for all combinations at once, and are about a third
+  faster on many combinations.
+- ‘pvOmega’ moved from Imports to Suggests: it is needed only by
+  [`omega_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/omega_analysis.md),
+  which explains how to install it when it is missing.
+
 ## DiAna 2.1.1
 
 - Now interoperable with the PVomega package for identifying potential

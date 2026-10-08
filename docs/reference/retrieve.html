@@ -73,7 +73,7 @@ If MedDRA is available PTs are clustered by HLGT.</p>
 <span>  temp_drug_name <span class="op">=</span> <span class="va">Drug_name</span>,</span>
 <span>  temp_meddra <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  temp_atc <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  save_in_excel <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  save_in_excel <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/missing.html" class="external-link">missing</a></span><span class="op">(</span><span class="va">file_name</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -98,7 +98,7 @@ If MedDRA is available PTs are clustered by HLGT.</p>
 
 
 <dt id="arg-temp-demo">temp_demo<a class="anchor" aria-label="anchor" href="#arg-temp-demo"></a></dt>
-<dd><p>Demo dataset. Defaults to Demo. Can be se to sample_Demo for testing</p></dd>
+<dd><p>Demo dataset. Defaults to Demo. Can be set to sample_Demo for testing</p></dd>
 
 
 <dt id="arg-temp-demo-supp">temp_demo_supp<a class="anchor" aria-label="anchor" href="#arg-temp-demo-supp"></a></dt>
@@ -130,31 +130,85 @@ If MedDRA is available PTs are clustered by HLGT.</p>
 
 
 <dt id="arg-temp-meddra">temp_meddra<a class="anchor" aria-label="anchor" href="#arg-temp-meddra"></a></dt>
-<dd><p>the MedDRA dictionary, if available. Defaults to NA for subscription requirement.</p></dd>
+<dd><p>the MedDRA dictionary (a data.table with columns soc, hlgt and pt), if available. Defaults to NA because MedDRA requires a subscription.</p></dd>
 
 
 <dt id="arg-temp-atc">temp_atc<a class="anchor" aria-label="anchor" href="#arg-temp-atc"></a></dt>
-<dd><p>the ATC classification, if available. Defaults to NA for testing.</p></dd>
+<dd><p>the ATC classification, as returned by import_ATC(), if available. Defaults to NA. Only the primary ATC code of each substance is used.</p></dd>
 
 
 <dt id="arg-save-in-excel">save_in_excel<a class="anchor" aria-label="anchor" href="#arg-save-in-excel"></a></dt>
-<dd><p>Whether to save the outcome in an excel. Defaults to TRUE</p></dd>
+<dd><p>Whether to also save the results in an Excel file, <code>file_name</code>. Defaults to <code>TRUE</code> only if <code>file_name</code> is supplied.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Two xlsx files with individual cases information:
-one general with a row per ICSR,
-and one with drug information and multiple rows per ICSR.</p>
+    <p>A list of two data.tables with individual cases information:
+<code>general_info</code>, with a row per ICSR,
+and <code>drug_info</code>, with drug information and multiple rows per ICSR.
+If <code>save_in_excel = TRUE</code>, they are also saved as <code>file_name.xlsx</code>
+and <code>file_name_drug.xlsx</code>.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">FAERS_version</span> <span class="op">&lt;-</span> <span class="st">"24Q1"</span></span></span>
-<span class="r-in"><span><span class="va">pids</span> <span class="op">&lt;-</span> <span class="va">sample_Demo</span><span class="op">[</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"data/24Q1.csv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu">retrieve</span><span class="op">(</span><span class="va">pids</span>, save_in_excel <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">sample_Demo</span><span class="op">[</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"M"</span><span class="op">]</span><span class="op">$</span><span class="va">primaryid</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cases</span> <span class="op">&lt;-</span> <span class="fu">retrieve</span><span class="op">(</span><span class="va">pids</span>,</span></span>
+<span class="r-in"><span>  temp_reac <span class="op">=</span> <span class="va">sample_Reac</span>, temp_drug <span class="op">=</span> <span class="va">sample_Drug</span>, temp_demo <span class="op">=</span> <span class="va">sample_Demo</span>,</span></span>
+<span class="r-in"><span>  temp_demo_supp <span class="op">=</span> <span class="va">sample_Demo_Supp</span>, temp_outc <span class="op">=</span> <span class="va">sample_Outc</span>,</span></span>
+<span class="r-in"><span>  temp_ther <span class="op">=</span> <span class="va">sample_Ther</span>, temp_doses <span class="op">=</span> <span class="va">sample_Doses</span>,</span></span>
+<span class="r-in"><span>  temp_drug_supp <span class="op">=</span> <span class="va">sample_Drug_Supp</span>, temp_indi <span class="op">=</span> <span class="va">sample_Indi</span>,</span></span>
+<span class="r-in"><span>  temp_drug_name <span class="op">=</span> <span class="va">sample_Drug_Name</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">cases</span><span class="op">$</span><span class="va">general_info</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    primaryid outc_cod rpsr_cod    sex age_in_days wt_in_kgs occr_country</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;num&gt;   &lt;char&gt;   &lt;char&gt; &lt;fctr&gt;       &lt;num&gt;     &lt;num&gt;       &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:   4315260       OT  HP; FGN      M          NA        NA         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   4450462       HO       HP      M       21900        NA         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:   4633603   RI; HO       NA      M       19710        88         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:   4649430   HO; OT      CSM      M          NA        NA         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:   4745980       HO       NA      M       27010        NA         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:   4756942   HO; OT       NA      M       13870       107         &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    event_dt occp_cod         reporter_country rept_cod init_fda_dt   fda_dt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       &lt;int&gt;   &lt;fctr&gt;                   &lt;fctr&gt;   &lt;fctr&gt;       &lt;int&gt;    &lt;int&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:       NA       OT                     &lt;NA&gt;      EXP          NA 20040309</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: 20031203     &lt;NA&gt;                     &lt;NA&gt;      EXP          NA 20040914</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: 20041123       OT                     &lt;NA&gt;      DIR          NA 20050412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:       NA     &lt;NA&gt;                     &lt;NA&gt;      EXP          NA 20050427</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5: 20050413       CN United States of America      EXP          NA 20050816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: 20000101       MD United States of America      EXP          NA 20050830</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    premarketing literature RB_duplicates RB_duplicates_only_susp age_in_years</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;lgcl&gt;     &lt;lgcl&gt;        &lt;lgcl&gt;                  &lt;lgcl&gt;        &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:        FALSE      FALSE         FALSE                    TRUE           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:        FALSE      FALSE         FALSE                   FALSE           60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:        FALSE      FALSE         FALSE                   FALSE           54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:        FALSE      FALSE         FALSE                   FALSE           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:        FALSE      FALSE         FALSE                   FALSE           74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:        FALSE      FALSE         FALSE                   FALSE           38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                         substance</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                            &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:                                                                           infliximab; azathioprine; budesonide</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: vitamin b3; vitamin e; mexiletine; senna spp; vitamin b12; organ lysate; trazodone; alprazolam; NA; famotidine</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:                                                                                                        insulin</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:                                                               cetirizine; fluticasone; montelukast; salbutamol</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:                                                          rofecoxib; celecoxib; celecoxib; acetylsalicylic acid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:                                                      rofecoxib; rofecoxib; vitamins, unspecified; valaciclovir</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                                                                                                 pt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                                                                                             &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:                                                                                                                                                                                                                                                                                                                                                    systemic lupus erythematosus</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:                                                                                                                                                                                                                                                                                                           hepatic function abnormal; lymphocyte stimulation test positive; rash</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:                                                                                                                                                                                                                                                                                                                                                                   hypoglycaemia</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:                                                                                                                                                                                                                                                                                                                           cardiac murmur; respiratory syncytial virus infection</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:                                                                                                                                                                                                                                                                                                                                                           myocardial infarction</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: arteriovenous malformation; arthralgia; arteriosclerosis; atrioventricular block; back injury; blood creatinine increased; musculoskeletal chest pain; arteriosclerosis coronary artery; dizziness; iliotibial band syndrome; joint effusion; joint injury; labile hypertension; meniscus injury; muscle mass; myocardial infarction; panic attack; tendonitis; viral infection</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                               pt_rechallenged</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                        &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:                                                                         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:                                                                 NA; NA; NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:                                                                         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:                                                                     NA; NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:                                                                         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: NA; NA; NA; NA; NA; NA; NA; NA; NA; NA; NA; NA; NA; NA; NA; NA; NA; NA; NA</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

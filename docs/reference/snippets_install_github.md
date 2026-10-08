@@ -1,7 +1,9 @@
 # Install RStudio Snippets from GitHub Repository
 
 This function installs RStudio code snippets from a specified GitHub
-repository.
+repository. The downloaded snippets are merged into the user's existing
+R snippets file: snippets with the same name are replaced, all the
+others are kept.
 
 ## Usage
 
@@ -18,8 +20,8 @@ snippets_install_github(repo = "fusarolimichele/DiAna_snippets")
 
 ## Value
 
-None. This function is called for its side effects, which include
-installing RStudio snippets.
+Invisibly, the path of the updated snippets file. This function is
+called for its side effects, which include installing RStudio snippets.
 
 ## Examples
 

@@ -15,7 +15,9 @@ reporting_rates(
   drug_indi = NA,
   temp_reac = Reac,
   temp_drug = Drug,
-  temp_indi = Indi
+  temp_indi = Indi,
+  temp_meddra = NULL,
+  temp_atc = NULL
 )
 ```
 
@@ -61,6 +63,21 @@ reporting_rates(
 - temp_indi:
 
   Indi dataset. Can be set to sample_Indi for testing
+
+- temp_meddra:
+
+  MedDRA dictionary, used for the levels "hlt", "hlgt" and "soc". By
+  default, `MedDRA` from your workspace if it is loaded, otherwise it is
+  read with
+  [`import_MedDRA()`](https://fusarolimichele.github.io/DiAna_package/reference/import_MedDRA.md).
+
+- temp_atc:
+
+  ATC classification, used for the levels "Class1" to "Class4". By
+  default, `ATC` from your workspace if it is loaded, otherwise it is
+  read with
+  [`import_ATC()`](https://fusarolimichele.github.io/DiAna_package/reference/import_ATC.md).
+  Only primary ATC codes are used.
 
 ## Value
 

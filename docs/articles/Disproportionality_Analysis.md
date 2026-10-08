@@ -1059,8 +1059,8 @@ disorders and disturbances” to make even bigger the reference group,
 still addressing the bias?
 
 Note that this chunk of script works only if you have a MedDRA
-subscription and you have followed
-[https://github.com/fusarolimichele/DiAna](#id_0) instructions to make
+subscription and you have followed the
+<https://github.com/fusarolimichele/DiAna_cleaning> instructions to make
 your own DiAna-compatible MedDRA.
 
 ``` r

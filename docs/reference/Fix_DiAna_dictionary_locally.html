@@ -52,7 +52,11 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Fix_DiAna_dictionary_locally</span><span class="op">(</span><span class="va">changes_xlsx_name</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">Fix_DiAna_dictionary_locally</span><span class="op">(</span></span>
+<span>  <span class="va">changes_xlsx_name</span>,</span>
+<span>  temp_drug <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  temp_drug_name <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -60,7 +64,19 @@
 
 
 <dl><dt id="arg-changes-xlsx-name">changes_xlsx_name<a class="anchor" aria-label="anchor" href="#arg-changes-xlsx-name"></a></dt>
-<dd><p>A string specifying the name of the Excel file containing the changes.</p></dd>
+<dd><p>Path of the Excel file containing the changes, with
+the columns <code>drugname</code> (raw drug name) and <code>substance</code> (the active
+ingredient it should be translated to).</p></dd>
+
+
+<dt id="arg-temp-drug">temp_drug<a class="anchor" aria-label="anchor" href="#arg-temp-drug"></a></dt>
+<dd><p>Drug dataset. Defaults to <code>Drug</code> if it is in your
+workspace; otherwise it is imported for the quarter in <code>FAERS_version</code>.</p></dd>
+
+
+<dt id="arg-temp-drug-name">temp_drug_name<a class="anchor" aria-label="anchor" href="#arg-temp-drug-name"></a></dt>
+<dd><p>Drug_name dataset. Defaults to <code>Drug_name</code> if it is in
+your workspace; otherwise it is imported for the quarter in <code>FAERS_version</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -70,19 +86,19 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The function performs the following steps:</p><ul><li><p>Reads the changes from the specified Excel file.</p></li>
-<li><p>Imports the necessary data tables (<code>DRUG_NAME</code> and <code>DRUG</code>) if they do not already exist.</p></li>
+<li><p>Uses the <code>Drug</code> and <code>Drug_name</code> tables, importing them if they are not available.</p></li>
 <li><p>Identifies the records in <code>Drug_name</code> that need to be fixed based on the changes.</p></li>
-<li><p>Joins the changes with the identified records and updates the <code>Drug</code> table.</p></li>
-<li><p>Removes the old records and adds the updated records to the <code>Drug</code> table.</p></li>
+<li><p>Replaces the substance of those records in the <code>Drug</code> table.</p></li>
 </ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># This example needs that DiAna dictionary is downloaded (using setup_DiAna),</span></span></span>
-<span class="r-in"><span><span class="co"># and that an excel file with intended changes is available</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"changes.xlsx"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"external_source/DiAna_dictionary.csv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">Drug</span> <span class="op">&lt;-</span> <span class="fu">Fix_DiAna_dictionary_locally</span><span class="op">(</span><span class="st">"changes.xlsx"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">changes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".xlsx"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">writexl</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/writexl//reference/write_xlsx.html" class="external-link">write_xlsx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>drugname <span class="op">=</span> <span class="st">"humira"</span>, substance <span class="op">=</span> <span class="st">"adalimumab"</span><span class="op">)</span>, <span class="va">changes</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Drug</span> <span class="op">&lt;-</span> <span class="fu">Fix_DiAna_dictionary_locally</span><span class="op">(</span><span class="va">changes</span>,</span></span>
+<span class="r-in"><span>  temp_drug <span class="op">=</span> <span class="va">sample_Drug</span>, temp_drug_name <span class="op">=</span> <span class="va">sample_Drug_Name</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="va">changes</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

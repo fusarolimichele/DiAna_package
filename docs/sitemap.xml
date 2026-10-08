@@ -15,6 +15,7 @@
 <url><loc>https://fusarolimichele.github.io/DiAna_package/authors.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/index.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/news/index.html</loc></url>
+<url><loc>https://fusarolimichele.github.io/DiAna_package/reference/DiAna-deprecated.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/DiAna-package.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/DiAna_reference.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/FAERS_quarter_specifics.html</loc></url>
@@ -28,13 +29,12 @@
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/fisher.test.simulate.p.values.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/format_input_disproportionality.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/get_drugnames.html</loc></url>
-<url><loc>https://fusarolimichele.github.io/DiAna_package/reference/hierarchycal_rates.html</loc></url>
+<url><loc>https://fusarolimichele.github.io/DiAna_package/reference/hierarchical_rates.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/import.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/import_ATC.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/import_MedDRA.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/index.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/network_analysis.html</loc></url>
-<url><loc>https://fusarolimichele.github.io/DiAna_package/reference/new_descriptive.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/omega_analysis.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/plot_KS.html</loc></url>
 <url><loc>https://fusarolimichele.github.io/DiAna_package/reference/plot_disproportionality_trend.html</loc></url>

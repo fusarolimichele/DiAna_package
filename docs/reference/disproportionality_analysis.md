@@ -100,12 +100,12 @@ disproportionality_analysis(
 
 - save_in_excel:
 
-  Whether to save the outcome in an excel. Defaults to TRUE
+  Whether to also save the results in an Excel file, `file_name`.
+  Default `FALSE`.
 
 - file_name:
 
-  The name of the Excel file to save the results. Default is
-  "Descriptives.xlsx". It only works if save_in_excel is TRUE.
+  Name of the Excel file, used if `save_in_excel = TRUE`.
 
 ## Value
 

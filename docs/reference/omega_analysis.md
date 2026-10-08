@@ -89,11 +89,15 @@ omega_analysis(
 
 A `data.table` with one row per drug1-drug2-event combination: the
 labels `drug1`, `drug2`, `event`, all columns returned by
-[`omega_from_counts()`](https://rdrr.io/pkg/pvOmega/man/omega_from_counts.html),
+[`pvOmega::omega_from_counts()`](https://rdrr.io/pkg/pvOmega/man/omega_from_counts.html),
 `label_omega` and `omega_signal` (an ordered factor:
 `"not enough cases"`, `"no SDR"`, `"SDR"`).
 
 ## Details
+
+The 'pvOmega' package is not on CRAN and is needed only by this
+function. Install it with
+`remotes::install_github("Uppsala-Monitoring-Centre/pvOmega")`.
 
 ### Report universe
 
@@ -138,13 +142,15 @@ interaction signal detection in regular pharmacovigilance. Drug Saf.
 ## Examples
 
 ``` r
-omega_analysis(
-  drug1_selected = "paracetamol",
-  drug2_selected = "ibuprofen",
-  reac_selected = "overdose",
-  temp_drug = sample_Drug,
-  temp_reac = sample_Reac
-)
+if (requireNamespace("pvOmega", quietly = TRUE)) {
+  omega_analysis(
+    drug1_selected = "paracetamol",
+    drug2_selected = "ibuprofen",
+    reac_selected = "overdose",
+    temp_drug = sample_Drug,
+    temp_reac = sample_Reac
+  )
+}
 #>          drug1     drug2    event  n1.1  n.11  n1..  n.1.  n..1  n...  n111
 #>         <char>    <char>   <char> <num> <num> <num> <num> <num> <num> <num>
 #> 1: paracetamol ibuprofen overdose     5     0    51    15    15  1000     0

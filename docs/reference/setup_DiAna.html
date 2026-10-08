@@ -67,23 +67,14 @@ and DiAna dictionary together with the csv to link drugs with the ATC.</p>
 
 <dl><dt id="arg-quarter">quarter<a class="anchor" aria-label="anchor" href="#arg-quarter"></a></dt>
 <dd><p>The quarter for which to set up the DiAna environment
-(default is "23Q1"). The ones available:</p><ul><li><p><em>23Q1</em></p></li>
-</ul><ul><li><p><em>23Q3</em></p></li>
-</ul><ul><li><p><em>23Q4</em></p></li>
-</ul><ul><li><p><em>24Q1</em></p></li>
-</ul><ul><li><p><em>24Q2</em></p></li>
-</ul><ul><li><p><em>24Q3</em></p></li>
-</ul><ul><li><p><em>24Q4</em></p></li>
-</ul><ul><li><p><em>25Q1</em></p></li>
-</ul><ul><li><p><em>25Q2</em></p></li>
-</ul><ul><li><p><em>25Q3</em></p></li>
-</ul><ul><li><p><em>25Q4</em></p></li>
-</ul></dd>
+(default is "23Q1"). The ones available:
+23Q1, 23Q3, 23Q4, 24Q1, 24Q2, 24Q3, 24Q4, 25Q1, 25Q2, 25Q3, 25Q4.</p></dd>
 
 
 <dt id="arg-timeout">timeout<a class="anchor" aria-label="anchor" href="#arg-timeout"></a></dt>
-<dd><p>The amount of time after which R stops a task if it is still unfinished.
-Default 100000It may be necessary to increase it in the case of a slow connection.</p></dd>
+<dd><p>The amount of time, in seconds, after which R stops a download if it is still unfinished.
+Default 100000. It may be necessary to increase it in the case of a slow connection.
+The previous value of the <code>timeout</code> option is restored when the function ends.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -45,12 +45,5 @@ includes drug names and their occurrence percentages.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-# This example needs that setup_DiAna has been run before, to download DiAna dictionary
-if (file.exists("external_source/DiAna_dictionary.csv")) {
-  FAERS_version <- "24Q1"
-  result <- get_drugnames("aripiprazole")
-  print(result)
-}
-} # }
+get_drugnames("adalimumab", temp_d = sample_Drug, temp_d_name = sample_Drug_Name)
 ```

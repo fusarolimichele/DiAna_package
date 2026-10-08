@@ -66,7 +66,9 @@ Calculates % as the proportion of individuals recording the event.</p>
 <span>  drug_indi <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  temp_reac <span class="op">=</span> <span class="va">Reac</span>,</span>
 <span>  temp_drug <span class="op">=</span> <span class="va">Drug</span>,</span>
-<span>  temp_indi <span class="op">=</span> <span class="va">Indi</span></span>
+<span>  temp_indi <span class="op">=</span> <span class="va">Indi</span>,</span>
+<span>  temp_meddra <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  temp_atc <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -107,6 +109,18 @@ Calculates % as the proportion of individuals recording the event.</p>
 
 <dt id="arg-temp-indi">temp_indi<a class="anchor" aria-label="anchor" href="#arg-temp-indi"></a></dt>
 <dd><p>Indi dataset. Can be set to sample_Indi for testing</p></dd>
+
+
+<dt id="arg-temp-meddra">temp_meddra<a class="anchor" aria-label="anchor" href="#arg-temp-meddra"></a></dt>
+<dd><p>MedDRA dictionary, used for the levels "hlt", "hlgt" and "soc".
+By default, <code>MedDRA</code> from your workspace if it is loaded, otherwise it is
+read with <code><a href="import_MedDRA.html">import_MedDRA()</a></code>.</p></dd>
+
+
+<dt id="arg-temp-atc">temp_atc<a class="anchor" aria-label="anchor" href="#arg-temp-atc"></a></dt>
+<dd><p>ATC classification, used for the levels "Class1" to "Class4".
+By default, <code>ATC</code> from your workspace if it is loaded, otherwise it is
+read with <code><a href="import_ATC.html">import_ATC()</a></code>. Only primary ATC codes are used.</p></dd>
 
 </dl></div>
     <div class="section level2">

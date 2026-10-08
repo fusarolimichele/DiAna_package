@@ -7,14 +7,30 @@ fixed, and updates the dictionary accordingly.
 ## Usage
 
 ``` r
-Fix_DiAna_dictionary_locally(changes_xlsx_name)
+Fix_DiAna_dictionary_locally(
+  changes_xlsx_name,
+  temp_drug = NULL,
+  temp_drug_name = NULL
+)
 ```
 
 ## Arguments
 
 - changes_xlsx_name:
 
-  A string specifying the name of the Excel file containing the changes.
+  Path of the Excel file containing the changes, with the columns
+  `drugname` (raw drug name) and `substance` (the active ingredient it
+  should be translated to).
+
+- temp_drug:
+
+  Drug dataset. Defaults to `Drug` if it is in your workspace; otherwise
+  it is imported for the quarter in `FAERS_version`.
+
+- temp_drug_name:
+
+  Drug_name dataset. Defaults to `Drug_name` if it is in your workspace;
+  otherwise it is imported for the quarter in `FAERS_version`.
 
 ## Value
 
@@ -26,24 +42,21 @@ The function performs the following steps:
 
 - Reads the changes from the specified Excel file.
 
-- Imports the necessary data tables (`DRUG_NAME` and `DRUG`) if they do
-  not already exist.
+- Uses the `Drug` and `Drug_name` tables, importing them if they are not
+  available.
 
 - Identifies the records in `Drug_name` that need to be fixed based on
   the changes.
 
-- Joins the changes with the identified records and updates the `Drug`
-  table.
-
-- Removes the old records and adds the updated records to the `Drug`
-  table.
+- Replaces the substance of those records in the `Drug` table.
 
 ## Examples
 
 ``` r
-# This example needs that DiAna dictionary is downloaded (using setup_DiAna),
-# and that an excel file with intended changes is available
-if (file.exists("changes.xlsx") & file.exists("external_source/DiAna_dictionary.csv")) {
-  Drug <- Fix_DiAna_dictionary_locally("changes.xlsx")
-}
+changes <- tempfile(fileext = ".xlsx")
+writexl::write_xlsx(data.frame(drugname = "humira", substance = "adalimumab"), changes)
+Drug <- Fix_DiAna_dictionary_locally(changes,
+  temp_drug = sample_Drug, temp_drug_name = sample_Drug_Name
+)
+unlink(changes)
 ```

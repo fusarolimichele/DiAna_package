@@ -45,7 +45,7 @@ disproportionality_trend(
 
 - temp_demo:
 
-  Demo dataset. Defaults to Demo. Can be se to sample_Demo for testing
+  Demo dataset. Defaults to Demo. Can be set to sample_Demo for testing
 
 - temp_demo_supp:
 

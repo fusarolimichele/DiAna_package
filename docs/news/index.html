@@ -46,6 +46,67 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="diana-development-version">DiAna (development version)<a class="anchor" aria-label="anchor" href="#diana-development-version"></a></h2>
+<div class="section level3">
+<h3 id="deprecated-development-version">Deprecated<a class="anchor" aria-label="anchor" href="#deprecated-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/retrieve_pregnancy_pids.html">retrieve_pregnancy_pids()</a></code> is deprecated and will be removed in the next release: use the PVgravID package (<code>remotes::install_github("Uppsala-Monitoring-Centre/PVgravID")</code>), as shown in the article “Pregnancy analyses with PVgravID”.</li>
+<li>
+<code><a href="../reference/DiAna-deprecated.html">hierarchycal_rates()</a></code> is renamed <code><a href="../reference/hierarchical_rates.html">hierarchical_rates()</a></code>; the old name still works, with a warning.</li>
+<li>
+<code><a href="../reference/DiAna-deprecated.html">new_descriptive()</a></code> is merged into <code><a href="../reference/descriptive.html">descriptive()</a></code>; the old name still works, with a warning. Pass the tables with the <code>temp_*</code> arguments instead of <code>database</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-that-may-affect-your-scripts-development-version">Changes that may affect your scripts<a class="anchor" aria-label="anchor" href="#changes-that-may-affect-your-scripts-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/descriptive.html">descriptive()</a></code> describes seriousness outcomes differently. A report without any recorded outcome is not known to be non-serious, so it is no longer counted as “Non Serious”. A new row, “Seriousness recorded”, gives the reports that record at least one outcome, and the outcome percentages use only those reports as denominator. By default (<code>outcome = "each"</code>) there is one row per outcome type, and a report with several outcomes counts in each; <code>outcome = "most_severe"</code> gives one row per report with its most severe outcome. Reporter codes outside the standard list now appear as their own category instead of Unknown, and <code>num_Substances</code> (1, 2, 3-5, &gt;5 substances) is included by default.</li>
+<li>Functions no longer write files unless asked: <code><a href="../reference/descriptive.html">descriptive()</a></code>, <code><a href="../reference/DiAna-deprecated.html">new_descriptive()</a></code>, <code><a href="../reference/retrieve.html">retrieve()</a></code>, <code><a href="../reference/DiAna-deprecated.html">hierarchycal_rates()</a></code> (<code>save_in_excel</code>) and <code><a href="../reference/network_analysis.html">network_analysis()</a></code> (<code>save_plot</code>) save only when you pass a <code>file_name</code> or set the argument to <code>TRUE</code>. Calls that relied on the default file name now only return the results. <code><a href="../reference/DiAna-deprecated.html">hierarchycal_rates()</a></code> now also returns the hierarchy as a data.table.</li>
+<li>
+<code><a href="../reference/import.html">import()</a></code>, <code><a href="../reference/import_MedDRA.html">import_MedDRA()</a></code> and <code><a href="../reference/import_ATC.html">import_ATC()</a></code> assign the table in the environment they are called from (<code>env = parent.frame()</code>), instead of always in the global environment. From the console or a script nothing changes. Inside your own functions, the table is now created in the function: pass it on explicitly (e.g. <code>temp_drug = Drug</code>).</li>
+<li>ggplot2 is no longer attached by <code><a href="https://fusarolimichele.github.io/DiAna_package/">library(DiAna)</a></code>. Call <code><a href="https://ggplot2.tidyverse.org" class="external-link">library(ggplot2)</a></code> to customise plots, e.g. <code>render_forest(...) + theme(...)</code>. data.table is still attached.</li>
+<li>DiAna now requires R 4.1.0 or later (it already used the <code>\(x)</code> syntax).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/hierarchical_rates.html">hierarchical_rates()</a></code> (formerly <code><a href="../reference/DiAna-deprecated.html">hierarchycal_rates()</a></code>) works again without first running <code><a href="../reference/import_MedDRA.html">import_MedDRA()</a></code> or <code><a href="../reference/import_ATC.html">import_ATC()</a></code>, and reads each dictionary at most once. It also accepts <code>temp_meddra</code>, <code>temp_atc</code>, and the case tables <code>temp_reac</code>, <code>temp_indi</code> and <code>temp_drug</code>.</li>
+<li>
+<code><a href="../reference/reporting_rates.html">reporting_rates()</a></code> reuses the MedDRA and ATC already loaded in your workspace instead of reading the files on every call, and gains <code>temp_meddra</code> and <code>temp_atc</code> arguments.</li>
+<li>
+<code><a href="../reference/disproportionality_analysis.html">disproportionality_analysis()</a></code> accepts factors as <code>drug_selected</code> and <code>reac_selected</code> (e.g. a column of <code>Drug</code>), instead of failing with a join error.</li>
+<li>
+<code><a href="../reference/snippets_install_github.html">snippets_install_github()</a></code> reports the reason when a download fails (e.g. “HTTP status was ‘404 Not Found’”).</li>
+<li>
+<code>new_descriptive(database = &lt;quarter&gt;)</code> no longer replaces <code>Demo</code>, <code>Drug</code>, <code>Reac</code>, <code>Indi</code>, <code>Outc</code> and <code>Ther</code> in your workspace with the subset of analysed cases.</li>
+<li>
+<code><a href="../reference/retrieve_pregnancy_pids.html">retrieve_pregnancy_pids()</a></code> now uses its <code>quarter</code> argument (it always imported the quarter in <code>FAERS_version</code>), and no longer overwrites seven tables in your workspace.</li>
+<li>
+<code><a href="../reference/disproportionality_trend.html">disproportionality_trend()</a></code> no longer adds a <code>period</code> column to your <code>Demo</code> table.</li>
+<li>
+<code><a href="../reference/Fix_DiAna_dictionary_locally.html">Fix_DiAna_dictionary_locally()</a></code> now works: it no longer needs an undocumented <code>path</code> variable, and it replaces the records of the corrected drugs instead of adding the corrected records next to the old ones. It gains <code>temp_drug</code> and <code>temp_drug_name</code> arguments.</li>
+<li>When an argument defaults to a table that is not in your workspace (e.g. <code>temp_drug = Drug</code> without <code>Drug</code>), the error now says which table is missing and how to import it, instead of “object ‘Drug’ not found”.</li>
+<li>
+<code><a href="../reference/network_analysis.html">network_analysis()</a></code> now applies <code>min_frequency_term</code> for <code>entity = "reaction"</code> and <code>entity = "indication"</code>. Previously the filter was silently skipped, so every term entered the network: <strong>results of earlier reaction and indication networks may differ</strong>. Analyses are also much faster (the example went from about 140 s to 2 s).</li>
+<li>
+<code><a href="../reference/network_analysis.html">network_analysis()</a></code> no longer draws an extra IsingFit plot or prints a progress bar.</li>
+<li>
+<code><a href="../reference/retrieve.html">retrieve()</a></code> no longer fails when a MedDRA table is passed as <code>temp_meddra</code>, and uses only the primary ATC code when <code>temp_atc</code> is given.</li>
+<li>
+<code><a href="../reference/disproportionality_analysis.html">disproportionality_analysis()</a></code> and <code><a href="../reference/time_to_onset_analysis.html">time_to_onset_analysis()</a></code>: the check for misspelled drugs and events no longer crashes on Windows. In non-interactive sessions (scripts, R Markdown, batch jobs) it now gives a warning instead of a prompt; previously <code><a href="../reference/time_to_onset_analysis.html">time_to_onset_analysis()</a></code> stopped in that case.</li>
+<li>
+<code><a href="../reference/snippets_install_github.html">snippets_install_github()</a></code> now keeps the user’s existing RStudio snippets, replacing only those with the same name, and finds the snippets folder on Windows.</li>
+<li>
+<code><a href="../reference/setup_DiAna.html">setup_DiAna()</a></code> checks the quarter before creating any folder, restores the <code>timeout</code> option when it ends, and handles a cancelled dialog.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="dependencies-development-version">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies-development-version"></a></h3>
+<ul><li>DiAna no longer depends on questionr, lubridate, httr and stringr, which reduces the packages installed with it from 158 to 130 (questionr alone brought in 22, including shiny). Results are unchanged: the reporting odds ratio is computed with <code><a href="https://rdrr.io/r/stats/fisher.test.html" class="external-link">stats::fisher.test()</a></code>, which questionr was calling.</li>
+<li>
+<code><a href="../reference/disproportionality_analysis.html">disproportionality_analysis()</a></code> and <code><a href="../reference/disproportionality_trend.html">disproportionality_trend()</a></code> compute the IC for all combinations at once, and are about a third faster on many combinations.</li>
+<li>‘pvOmega’ moved from Imports to Suggests: it is needed only by <code><a href="../reference/omega_analysis.html">omega_analysis()</a></code>, which explains how to install it when it is missing.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.1" id="diana-211">DiAna 2.1.1<a class="anchor" aria-label="anchor" href="#diana-211"></a></h2>
 <ul><li>Now interoperable with the PVomega package for identifying potential drug-drug interactions (including a function applying it to the DiAna data model)</li>
 <li>Now interoperable with the PVgravID package for identifying pregnancy reports</li>

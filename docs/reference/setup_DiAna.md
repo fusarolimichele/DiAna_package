@@ -15,55 +15,15 @@ setup_DiAna(quarter = "23Q1", timeout = 1e+05)
 - quarter:
 
   The quarter for which to set up the DiAna environment (default is
-  "23Q1"). The ones available:
-
-  - *23Q1*
-
-  &nbsp;
-
-  - *23Q3*
-
-  &nbsp;
-
-  - *23Q4*
-
-  &nbsp;
-
-  - *24Q1*
-
-  &nbsp;
-
-  - *24Q2*
-
-  &nbsp;
-
-  - *24Q3*
-
-  &nbsp;
-
-  - *24Q4*
-
-  &nbsp;
-
-  - *25Q1*
-
-  &nbsp;
-
-  - *25Q2*
-
-  &nbsp;
-
-  - *25Q3*
-
-  &nbsp;
-
-  - *25Q4*
+  "23Q1"). The ones available: 23Q1, 23Q3, 23Q4, 24Q1, 24Q2, 24Q3, 24Q4,
+  25Q1, 25Q2, 25Q3, 25Q4.
 
 - timeout:
 
-  The amount of time after which R stops a task if it is still
-  unfinished. Default 100000It may be necessary to increase it in the
-  case of a slow connection.
+  The amount of time, in seconds, after which R stops a download if it
+  is still unfinished. Default 100000. It may be necessary to increase
+  it in the case of a slow connection. The previous value of the
+  `timeout` option is restored when the function ends.
 
 ## Value
 

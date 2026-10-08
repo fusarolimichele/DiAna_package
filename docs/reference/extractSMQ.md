@@ -29,7 +29,7 @@ The function reads the SMQ dictionary from an external CSV file located
 at: `external_sources/smq_dictionary.csv`. Since MedDRA subscription is
 required, the user must obtain the SMQ dictionary separately.
 Instructions for setting up the required files are provided in the DiAna
-GitHub repository: <https://github.com/fusarolimichele/DiAna>.
+GitHub repository: <https://github.com/fusarolimichele/DiAna_cleaning>.
 
 The function processes five hierarchical levels (`SMQ_1` to `SMQ_5`) and
 assigns Preferred Terms (PTs) accordingly, filtering by "Narrow" scope
@@ -43,8 +43,9 @@ execution and returns an error message.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-smq_list <- extractSMQ(Narrow = TRUE)
-smq_list <- extractSMQ(Narrow = FALSE)
-} # }
+# Requires an SMQ dictionary prepared from a MedDRA subscription
+if (file.exists(file.path(here::here(), "external_sources", "smq_dictionary.csv"))) {
+  smq_list <- extractSMQ(Narrow = TRUE)
+  smq_list <- extractSMQ(Narrow = FALSE)
+}
 ```

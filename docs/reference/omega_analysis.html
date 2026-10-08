@@ -140,13 +140,13 @@ file (requires the 'writexl' package). Default <code>FALSE</code>.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A <code>data.table</code> with one row per drug1-drug2-event combination:
 the labels <code>drug1</code>, <code>drug2</code>, <code>event</code>, all columns returned by
-<code><a href="https://rdrr.io/pkg/pvOmega/man/omega_from_counts.html" class="external-link">omega_from_counts()</a></code>, <code>label_omega</code> and <code>omega_signal</code> (an ordered
+<code><a href="https://rdrr.io/pkg/pvOmega/man/omega_from_counts.html" class="external-link">pvOmega::omega_from_counts()</a></code>, <code>label_omega</code> and <code>omega_signal</code> (an ordered
 factor: <code>"not enough cases"</code>, <code>"no SDR"</code>, <code>"SDR"</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-
-<div class="section">
+    <p>The 'pvOmega' package is not on CRAN and is needed only by this function.
+Install it with <code>remotes::install_github("Uppsala-Monitoring-Centre/pvOmega")</code>.</p><div class="section">
 <h3 id="report-universe">Report universe<a class="anchor" aria-label="anchor" href="#report-universe"></a></h3>
 
 
@@ -196,13 +196,15 @@ interaction signal detection in regular pharmacovigilance. Drug Saf.
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">omega_analysis</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  drug1_selected <span class="op">=</span> <span class="st">"paracetamol"</span>,</span></span>
-<span class="r-in"><span>  drug2_selected <span class="op">=</span> <span class="st">"ibuprofen"</span>,</span></span>
-<span class="r-in"><span>  reac_selected <span class="op">=</span> <span class="st">"overdose"</span>,</span></span>
-<span class="r-in"><span>  temp_drug <span class="op">=</span> <span class="va">sample_Drug</span>,</span></span>
-<span class="r-in"><span>  temp_reac <span class="op">=</span> <span class="va">sample_Reac</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"pvOmega"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">omega_analysis</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    drug1_selected <span class="op">=</span> <span class="st">"paracetamol"</span>,</span></span>
+<span class="r-in"><span>    drug2_selected <span class="op">=</span> <span class="st">"ibuprofen"</span>,</span></span>
+<span class="r-in"><span>    reac_selected <span class="op">=</span> <span class="st">"overdose"</span>,</span></span>
+<span class="r-in"><span>    temp_drug <span class="op">=</span> <span class="va">sample_Drug</span>,</span></span>
+<span class="r-in"><span>    temp_reac <span class="op">=</span> <span class="va">sample_Reac</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          drug1     drug2    event  n1.1  n.11  n1..  n.1.  n..1  n...  n111</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;char&gt;    &lt;char&gt;   &lt;char&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1: paracetamol ibuprofen overdose     5     0    51    15    15  1000     0</span>

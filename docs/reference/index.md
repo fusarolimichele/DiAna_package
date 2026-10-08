@@ -70,20 +70,13 @@ Functions to retrieve cases or specific subpopulations.
 - [`Fix_DiAna_dictionary_locally()`](https://fusarolimichele.github.io/DiAna_package/reference/Fix_DiAna_dictionary_locally.md)
   : Fix DiAna Dictionary Locally
 
-### Identify specific subpopulations
-
-- [`retrieve_pregnancy_pids()`](https://fusarolimichele.github.io/DiAna_package/reference/retrieve_pregnancy_pids.md)
-  : Retrieve Pregnancy-Related Report Identifiers from FAERS
-
 ## Descriptive functions
 
 Functions to perform descriptive analyses.
 
 - [`descriptive()`](https://fusarolimichele.github.io/DiAna_package/reference/descriptive.md)
   : Generate Descriptive Statistics for a Sample
-- [`new_descriptive()`](https://fusarolimichele.github.io/DiAna_package/reference/new_descriptive.md)
-  : Generate Descriptive Statistics for a Sample
-- [`hierarchycal_rates()`](https://fusarolimichele.github.io/DiAna_package/reference/hierarchycal_rates.md)
+- [`hierarchical_rates()`](https://fusarolimichele.github.io/DiAna_package/reference/hierarchical_rates.md)
   : Generate Hierarchy of events or substances
 - [`reporting_rates()`](https://fusarolimichele.github.io/DiAna_package/reference/reporting_rates.md)
   : Reporting rates of events or substances
@@ -134,6 +127,18 @@ and network analysis.
 
 - [`network_analysis()`](https://fusarolimichele.github.io/DiAna_package/reference/network_analysis.md)
   : Perform Network Analysis and Visualization
+
+## Deprecated
+
+Functions that still work but will be removed in a future release.
+retrieve_pregnancy_pids() is replaced by the PVgravID package.
+
+- [`retrieve_pregnancy_pids()`](https://fusarolimichele.github.io/DiAna_package/reference/retrieve_pregnancy_pids.md)
+  : Retrieve Pregnancy-Related Report Identifiers from FAERS
+  (deprecated)
+- [`hierarchycal_rates()`](https://fusarolimichele.github.io/DiAna_package/reference/DiAna-deprecated.md)
+  [`new_descriptive()`](https://fusarolimichele.github.io/DiAna_package/reference/DiAna-deprecated.md)
+  : Deprecated functions in DiAna
 
 ## DiAna specifics
 

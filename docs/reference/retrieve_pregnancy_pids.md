@@ -1,4 +1,13 @@
-# Retrieve Pregnancy-Related Report Identifiers from FAERS
+# Retrieve Pregnancy-Related Report Identifiers from FAERS (deprecated)
+
+**Deprecated.** It will be removed in the next release of DiAna. Use the
+PVgravID package instead, which implements the pregnancy-identification
+algorithms and is maintained by the Uppsala Monitoring Centre. PVgravID
+is not on CRAN; install it with
+`remotes::install_github("Uppsala-Monitoring-Centre/PVgravID")`. The
+article "Pregnancy analyses with PVgravID"
+(<https://fusarolimichele.github.io/DiAna_package/articles/PVgravID_extension.html>)
+shows how to use it with DiAna data.
 
 This function retrieves the identifiers of pregnancy-related reports
 from the FDA Adverse Event Reporting System (FAERS) for a specified
@@ -54,21 +63,33 @@ drug routes. The results are filtered to exclude reports unlikely to be
 related to pregnancy (e.g., reports involving males, children, or older
 adults). The algorithm is an implementation and evolution of the
 original pregnancy algorithm by Sakai,ref. 10.3389/fphar.2022.1063625
-\#' @references Sakai T, Mori C, Ohtsu F. Potential safety signal of
-pregnancy loss with vascular endothelial growth factor inhibitor
-intraocular injection: A disproportionality analysis using the Food and
-Drug Administration Adverse Event Reporting System. Front Pharmacol.
-2022 Nov 10;13:1063625. doi: 10.3389/fphar.2022.1063625. PMID: 36438807;
-PMCID: PMC9684212.
+
+## References
+
+Sakai T, Mori C, Ohtsu F. Potential safety signal of pregnancy loss with
+vascular endothelial growth factor inhibitor intraocular injection: A
+disproportionality analysis using the Food and Drug Administration
+Adverse Event Reporting System. Front Pharmacol. 2022 Nov 10;13:1063625.
+doi: 10.3389/fphar.2022.1063625. PMID: 36438807; PMCID: PMC9684212.
+
+## See also
+
+The PVgravID package:
+<https://uppsala-monitoring-centre.github.io/PVgravID/>
 
 ## Examples
 
 ``` r
-# This function retrieves the pregnancy FAERS from the entire database.
-# therefore it requires the data to have been downloaded.
-FAERS_version <- "24Q1"
-if (file.exists("data/24Q1/DEMO.rds")) {
-  pids_pregnancy <- retrieve_pregnancy_pids()
-  pids_pregnancy$medium_specificity
+# Deprecated: use the PVgravID package instead.
+# On the sample data shipped with DiAna
+pids_pregnancy <- retrieve_pregnancy_pids(quarter = "sample")
+#> Warning: retrieve_pregnancy_pids() is deprecated and will be removed in the next release of DiAna. Use the PVgravID package instead: remotes::install_github("Uppsala-Monitoring-Centre/PVgravID"). See https://fusarolimichele.github.io/DiAna_package/articles/PVgravID_extension.html
+pids_pregnancy$medium_specificity
+#> [1] 209984413  90142505 122688521 141551261 172405551 186233281 196446181
+#> [8] 214536961 164548722
+
+# On the entire database, which requires the data downloaded with setup_DiAna()
+if (file.exists(file.path(here::here(), "data", "24Q1", "DEMO.rds"))) {
+  pids_pregnancy <- retrieve_pregnancy_pids(quarter = "24Q1")
 }
 ```
