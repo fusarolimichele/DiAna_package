@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Advanced tools for analyzing the FDA Adverse Event Reporting System (FAERS) data, enhancing drug safety research. Provides functions to download cleaned FAERS data and import relational datasets, facilitating case identification and control selection to address confounding in analyses. Provides functions for descriptive and disproportionality analysis, time-to-onset analysis, network analysis, retrieval algorithms, and visualization.
+Advanced tools for analyzing the FDA Adverse Event Reporting System (FAERS) data, enhancing drug safety research. Provides functions to download cleaned FAERS data and import relational datasets, facilitating case identification and control selection to address confounding in analyses. Provides functions for descriptive and disproportionality analysis, time-to-onset analysis, network analysis, retrieval algorithms, and visualization. The drug name standardization is described in Fusaroli et al. (2024) \doi{10.1007/s40264-023-01391-4}, the network analysis in Fusaroli et al. (2021) \doi{10.3389/fphar.2021.740707}, the Omega interaction measure in Noren et al. (2008) \doi{10.1002/sim.3247}, and the pregnancy algorithm extends Sakai et al. (2022) \doi{10.3389/fphar.2022.1063625}.
 }
 \seealso{
 Useful links:

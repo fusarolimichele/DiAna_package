@@ -18,7 +18,13 @@ Description: Advanced tools for analyzing the FDA Adverse Event Reporting
     datasets, facilitating case identification and control selection to
     address confounding in analyses. Provides functions for descriptive
     and disproportionality analysis, time-to-onset analysis, network
-    analysis, retrieval algorithms, and visualization.
+    analysis, retrieval algorithms, and visualization. The drug name
+    standardization is described in Fusaroli et al. (2024)
+    <doi:10.1007/s40264-023-01391-4>, the network analysis in Fusaroli et
+    al. (2021) <doi:10.3389/fphar.2021.740707>, the Omega interaction
+    measure in Noren et al. (2008) <doi:10.1002/sim.3247>, and the
+    pregnancy algorithm extends Sakai et al. (2022)
+    <doi:10.3389/fphar.2022.1063625>.
 License: MIT + file LICENSE
 URL: https://fusarolimichele.github.io/DiAna_package/,
     https://github.com/fusarolimichele/DiAna_package,
@@ -27,12 +33,12 @@ URL: https://fusarolimichele.github.io/DiAna_package/,
 BugReports: https://github.com/fusarolimichele/DiAna_package/issues
 Depends: 
     data.table,
-    ggplot2,
-    R (>= 2.10)
+    R (>= 4.1.0)
 Imports: 
     dplyr,
     forestplot,
     ggflowchart,
+    ggplot2,
     grDevices,
     gridExtra,
     gtsummary,
