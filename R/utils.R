@@ -119,6 +119,79 @@ check_workspace_object <- function(name) {
 #' @noRd
 diana_root <- function() here::here()
 
+#' Get the MedDRA or ATC dictionary, reading the file only when needed
+#'
+#' Uses, in order: the table passed by the user; the table already in the
+#' caller's workspace (e.g. `MedDRA` loaded with import_MedDRA()); the file in
+#' external_sources/. This avoids re-reading the file on every call.
+#' @param table The table passed by the user, or NULL.
+#' @param name "MedDRA" or "ATC".
+#' @noRd
+get_dictionary <- function(table, name = c("MedDRA", "ATC")) {
+  name <- match.arg(name)
+  if (!is.null(table)) {
+    return(table)
+  }
+  env <- parent.frame()
+  if (exists(name, envir = env)) {
+    return(get(name, envir = env))
+  }
+  if (name == "MedDRA") {
+    import_MedDRA(env = environment())
+  } else {
+    import_ATC(env = environment())
+  }
+}
+
+#' Reporting odds ratio from a 2x2 table, with Fisher's exact test
+#'
+#' The conditional maximum likelihood estimate of the odds ratio, its 95%
+#' confidence interval and the p-value of Fisher's exact test.
+#' @param tab A 2x2 matrix.
+#' @noRd
+fisher_or <- function(tab) {
+  ft <- stats::fisher.test(tab)
+  list(OR = unname(ft$estimate), lower = ft$conf.int[1], upper = ft$conf.int[2], p = ft$p.value)
+}
+
+#' Reporting odds ratio for many drug-event combinations
+#'
+#' Fisher's exact test on the 2x2 table of each combination. The estimates are
+#' rounded down to two decimals, as reported by DiAna.
+#' @param D_E,D_nE,nD_E,nD_nE Vectors of counts: reports with drug and event,
+#'   drug without event, event without drug, neither.
+#' @return A list of four vectors: ROR_median, ROR_lower, ROR_upper, p_value_fisher.
+#' @noRd
+ror_fisher <- function(D_E, D_nE, nD_E, nD_nE) {
+  res <- vapply(seq_along(D_E), function(i) {
+    or <- fisher_or(matrix(c(D_E[i], nD_E[i], D_nE[i], nD_nE[i]), nrow = 2))
+    c(or$OR, or$lower, or$upper, or$p)
+  }, numeric(4))
+  list(
+    ROR_median = floor(res[1, ] * 100) / 100,
+    ROR_lower = floor(res[2, ] * 100) / 100,
+    ROR_upper = floor(res[3, ] * 100) / 100,
+    p_value_fisher = res[4, ]
+  )
+}
+
+#' Information component (BCPNN) for many drug-event combinations
+#'
+#' The IC with its approximate 95% credibility interval (Noren et al.), with
+#' the shrinkage of 0.5, rounded down to two decimals. Vectorised over the
+#' combinations.
+#' @param D_E Reports with drug and event; D reports with drug; E reports
+#'   with event; TOT all reports.
+#' @return A list of three vectors: IC_median, IC_lower, IC_upper.
+#' @noRd
+ic_bcpnn <- function(D_E, D, E, TOT) {
+  IC_median <- log2((D_E + .5) / (((D * E) / TOT) + .5))
+  IC_lower <- floor((IC_median - 3.3 * (D_E + .5)^(-1 / 2) - 2 * (D_E + .5)^(-3 / 2)) * 100) / 100
+  IC_upper <- floor((IC_median + 2.4 * (D_E + .5)^(-1 / 2) - 0.5 * (D_E + .5)^(-3 / 2)) * 100) / 100
+  IC_median <- floor(IC_median * 100) / 100
+  list(IC_median = IC_median, IC_lower = IC_lower, IC_upper = IC_upper)
+}
+
 #' Wrappers around interactive() and askYesNo(), so tests can mock them
 #' @noRd
 is_interactive <- function() interactive()
