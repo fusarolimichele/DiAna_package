@@ -12,3 +12,5 @@ projects
 Developer_script.R
 Developer
 vignettes/articles/.gitignore
+# website: built and deployed to gh-pages by .github/workflows/pkgdown.yaml
+docs/
