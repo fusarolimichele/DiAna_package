@@ -35,6 +35,7 @@ DiAna_reference <- function(print = TRUE) {
 #' @examples
 #' FAERS_quarter_specifics("24Q1")
 FAERS_quarter_specifics <- function(quarter = FAERS_version, print = TRUE) {
+  check_workspace_defaults("quarter")
   base::union(
     c(
       paste0("The DiAna dictionary used to convert drugnames to substances is ", quarter),

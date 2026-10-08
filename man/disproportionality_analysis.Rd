@@ -46,9 +46,9 @@ disproportionality_analysis(
 
 \item{store_pids}{Logical specifying whether to store primaryids recording the drug and primaryids recording the event as lists. Default to FALSE.}
 
-\item{save_in_excel}{Whether to save the outcome in an excel. Defaults to TRUE}
+\item{save_in_excel}{Whether to also save the results in an Excel file, \code{file_name}. Default \code{FALSE}.}
 
-\item{file_name}{The name of the Excel file to save the results. Default is "Descriptives.xlsx". It only works if save_in_excel is TRUE.}
+\item{file_name}{Name of the Excel file, used if \code{save_in_excel = TRUE}.}
 }
 \value{
 A data.table containing disproportionality analysis results.

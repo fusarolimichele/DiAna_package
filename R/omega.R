@@ -101,6 +101,7 @@ omega_analysis <- function(drug1_selected,
       call. = FALSE
     )
   }
+  check_workspace_defaults(c("temp_drug", "temp_reac"))
   check_columns(temp_drug, c("primaryid", "substance"), "temp_drug")
   check_columns(temp_reac, c("primaryid", "pt"), "temp_reac")
 

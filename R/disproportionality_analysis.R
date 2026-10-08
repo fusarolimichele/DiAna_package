@@ -19,6 +19,8 @@
 #' @param multiple_comparison Logical specifying whether to perform Bonferroni correction for multiple testing on the ROR. Default to TRUE. Particularly important when running the disproportionality on many combinations.
 #' @param frequentist_threshold Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).
 #' @param store_pids Logical specifying whether to store primaryids recording the drug and primaryids recording the event as lists. Default to FALSE.
+#' @param save_in_excel Whether to also save the results in an Excel file, `file_name`. Default `FALSE`.
+#' @param file_name Name of the Excel file, used if `save_in_excel = TRUE`.
 #' @return A data.table containing disproportionality analysis results.
 #'
 #' @importFrom questionr odds.ratio
@@ -53,6 +55,8 @@ disproportionality_analysis <- function(
     warning("the parameter custom is not needed and was deprecated for drug and reac selected to improve the accessibility of the function.")
   }
 
+  check_workspace_defaults(c("temp_drug", "temp_reac"))
+
   # reformat drug and reac input
   drug_selected <- format_input_disproportionality(drug_selected)
   reac_selected <- format_input_disproportionality(reac_selected)
@@ -73,10 +77,7 @@ disproportionality_analysis <- function(
 
   # change MedDRA level if requested and possible
   if (meddra_level != "pt") {
-    if (!exists("MedDRA")) {
-      stop("The MedDRA dictionary is not uploaded.
-                                Without it, only analyses at the PT level are possible")
-    }
+    check_workspace_object("MedDRA")
     temp_reac <- MedDRA[, c(meddra_level, "pt"), with = FALSE][temp_reac, on = "pt"]
   }
 
@@ -399,6 +400,7 @@ render_forest <- function(disproportionality_df,
 #'
 disproportionality_comparison <- function(drug_count = length(pids_drug), event_count = length(pids_event),
                                           drug_event_count = length(intersect(pids_drug, pids_event)), tot = nrow(Demo), print_results = TRUE) {
+  check_workspace_defaults(c("drug_count", "event_count", "drug_event_count", "tot"))
   if (drug_count < drug_event_count) {
     stop("The count of reports recording a drug cannot be lower than the count of reports recording the drug and the event. Please check the provided counts.")
   }
@@ -523,6 +525,10 @@ disproportionality_trend <- function(
   cumulative = TRUE,
   min_2004 = TRUE
 ) {
+  check_workspace_defaults(c("temp_drug", "temp_reac", "temp_demo"))
+  # keep only the needed columns: this also makes a copy, so adding `period`
+  # below does not modify the caller's Demo by reference
+  temp_demo <- temp_demo[, .(primaryid, init_fda_dt, fda_dt)]
   if (length(restriction) > 1) {
     temp_drug <- temp_drug[primaryid %in% restriction] %>% droplevels()
     temp_reac <- temp_reac[primaryid %in% restriction] %>% droplevels()
@@ -539,6 +545,7 @@ disproportionality_trend <- function(
       temp_demo <- temp_demo[, `:=`(period, ifelse(period < 2004, 2004, period))]
     }
   } else if (time_granularity == "quarter") {
+    check_workspace_defaults("temp_demo_supp")
     temp_demo <- temp_demo_supp[, period := quarter]
   } else if (time_granularity == "month") {
     temp_demo <- temp_demo[, period := as.numeric(substr(
@@ -807,8 +814,6 @@ tailor_disproportionality_threshold <- function(disproportionality_df, minimum_c
 #' @importFrom grid gpar
 #'
 #' @examples
-#' \dontrun{
-#' library(data.table)
 #' df <- data.table(
 #'   nested = c("Crude", "Adjusted"),
 #'   D_E = c(10, 8),
@@ -818,7 +823,6 @@ tailor_disproportionality_threshold <- function(disproportionality_df, minimum_c
 #'   IC_upper = c(1.9, 1.3)
 #' )
 #' render_forest_table(df)
-#' }
 #'
 #' @export
 

@@ -55,6 +55,8 @@ time_to_onset_analysis <- function(
   max_TTO = 365,
   test = "AD"
 ) {
+  check_workspace_defaults(c("temp_drug", "temp_reac", "temp_ther"))
+
   # reformat drug and reac input
   drug_selected <- format_input_disproportionality(drug_selected)
   reac_selected <- format_input_disproportionality(reac_selected)
@@ -72,10 +74,7 @@ time_to_onset_analysis <- function(
   ]
 
   if (meddra_level != "pt") {
-    if (!exists("MedDRA")) {
-      stop("The MedDRA dictionary is not uploaded.
-                                Without it, only analyses at the PT level are possible")
-    }
+    check_workspace_object("MedDRA")
     temp_reac <- MedDRA[, c(meddra_level, "pt"), with = FALSE][temp_reac, on = "pt"]
   }
 
