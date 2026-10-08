@@ -1,4 +1,13 @@
-#' Retrieve Pregnancy-Related Report Identifiers from FAERS
+#' Retrieve Pregnancy-Related Report Identifiers from FAERS (deprecated)
+#'
+#' @description
+#' **Deprecated.** It will be removed in the next release of DiAna. Use the PVgravID package instead, which implements the
+#' pregnancy-identification algorithms and is maintained by the Uppsala
+#' Monitoring Centre. PVgravID is not on CRAN; install it with
+#' `remotes::install_github("Uppsala-Monitoring-Centre/PVgravID")`. The
+#' article "Pregnancy analyses with PVgravID"
+#' (<https://fusarolimichele.github.io/DiAna_package/articles/PVgravID_extension.html>)
+#' shows how to use it with DiAna data.
 #'
 #' This function retrieves the identifiers of pregnancy-related reports from the FDA Adverse Event Reporting System (FAERS) for a specified quarter.
 #'
@@ -15,10 +24,12 @@
 #' @importFrom ggflowchart ggflowchart
 #' @details
 #' The function processes data from multiple FAERS tables (\code{DEMO}, \code{DRUG}, \code{REAC}, \code{INDI}, \code{OUTC}, \code{THER}, and \code{DRUG_SUPP}) to identify pregnancy-related reports based on specific indications, reactions, and drug routes. The results are filtered to exclude reports unlikely to be related to pregnancy (e.g., reports involving males, children, or older adults). The algorithm is an implementation and evolution of the original pregnancy algorithm by Sakai,ref. 10.3389/fphar.2022.1063625
-#' #' @references
+#' @references
 #' Sakai T, Mori C, Ohtsu F. Potential safety signal of pregnancy loss with vascular endothelial growth factor inhibitor intraocular injection: A disproportionality analysis using the Food and Drug Administration Adverse Event Reporting System. Front Pharmacol. 2022 Nov 10;13:1063625. doi: 10.3389/fphar.2022.1063625. PMID: 36438807; PMCID: PMC9684212.
+#' @seealso The PVgravID package: <https://uppsala-monitoring-centre.github.io/PVgravID/>
 #' @export
 #' @examples
+#' # Deprecated: use the PVgravID package instead.
 #' # On the sample data shipped with DiAna
 #' pids_pregnancy <- retrieve_pregnancy_pids(quarter = "sample")
 #' pids_pregnancy$medium_specificity
@@ -28,6 +39,12 @@
 #'   pids_pregnancy <- retrieve_pregnancy_pids(quarter = "24Q1")
 #' }
 retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
+  .Deprecated(msg = paste0(
+    "retrieve_pregnancy_pids() is deprecated and will be removed in the next release of DiAna. ",
+    "Use the PVgravID package instead: ",
+    "remotes::install_github(\"Uppsala-Monitoring-Centre/PVgravID\"). ",
+    "See https://fusarolimichele.github.io/DiAna_package/articles/PVgravID_extension.html"
+  ))
   ## pregnancy indication--------------
   pregnancy_indication <- c(
     "abnormal cord insertion", "abnormal labour", "abnormal labour affecting foetus",

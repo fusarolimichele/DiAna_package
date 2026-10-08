@@ -51,8 +51,8 @@ test_that("retrieve_pregnancy_pids() uses its quarter argument and leaves the wo
   local_mocked_bindings(diana_root = function() fake_root)
   before <- ls(globalenv())
   expect_equal(
-    retrieve_pregnancy_pids(quarter = "99Q1")[1:4],
-    retrieve_pregnancy_pids(quarter = "sample")[1:4]
+    suppressWarnings(retrieve_pregnancy_pids(quarter = "99Q1"), classes = "deprecatedWarning")[1:4],
+    suppressWarnings(retrieve_pregnancy_pids(quarter = "sample"), classes = "deprecatedWarning")[1:4]
   )
   expect_equal(ls(globalenv()), before)
 })
