@@ -14,19 +14,25 @@
 #' @param temp_drug_supp the Drug_supp databases. Can be set to sample_Drug_Supp for testing
 #' @param temp_drug_name the Drug_name databases. Can be set to sample_Drug_Name for testing
 #'
-#' @return Two xlsx files with individual cases information:
-#'         one general with a row per ICSR,
-#'         and one with drug information and multiple rows per ICSR.
+#' @return A list of two data.tables with individual cases information:
+#'         `general_info`, with a row per ICSR,
+#'         and `drug_info`, with drug information and multiple rows per ICSR.
+#'         If `save_in_excel = TRUE`, they are also saved as `file_name.xlsx`
+#'         and `file_name_drug.xlsx`.
 #' @importFrom dplyr select
 #' @importFrom writexl write_xlsx
 #' @importFrom here here
 #'
 #' @examples
-#' FAERS_version <- "24Q1"
-#' pids <- sample_Demo[sex == "M"]$primaryid
-#' if (file.exists("data/24Q1.csv")) {
-#'   retrieve(pids, save_in_excel = FALSE)
-#' }
+#' pids <- unique(sample_Demo[sex == "M"]$primaryid)
+#' cases <- retrieve(pids,
+#'   temp_reac = sample_Reac, temp_drug = sample_Drug, temp_demo = sample_Demo,
+#'   temp_demo_supp = sample_Demo_Supp, temp_outc = sample_Outc,
+#'   temp_ther = sample_Ther, temp_doses = sample_Doses,
+#'   temp_drug_supp = sample_Drug_Supp, temp_indi = sample_Indi,
+#'   temp_drug_name = sample_Drug_Name
+#' )
+#' head(cases$general_info)
 #'
 #' @export
 retrieve <- function(pids, file_name = "individual_cases",
@@ -34,8 +40,11 @@ retrieve <- function(pids, file_name = "individual_cases",
                      temp_demo_supp = Demo_supp, temp_outc = Outc, temp_ther = Ther,
                      temp_doses = Doses, temp_drug_supp = Drug_supp, temp_indi = Indi,
                      temp_drug_name = Drug_name, temp_meddra = NA, temp_atc = NA,
-                     save_in_excel = TRUE) {
-  path_MedDRA <- paste0(here::here(), "/external_sources/meddra_primary.csv")
+                     save_in_excel = !missing(file_name)) {
+  check_workspace_defaults(c(
+    "temp_reac", "temp_drug", "temp_demo", "temp_demo_supp", "temp_outc",
+    "temp_ther", "temp_doses", "temp_drug_supp", "temp_indi", "temp_drug_name"
+  ))
 
   ## Reactions
   temp_reac <- temp_reac[primaryid %in% pids]

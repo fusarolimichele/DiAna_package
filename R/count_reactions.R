@@ -52,10 +52,13 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
                             ), drug_indi = NA, temp_reac = Reac, temp_drug = Drug,
                             temp_indi = Indi) {
   if (entity == "reaction") {
+    check_workspace_defaults("temp_reac")
     temp <- temp_reac[primaryid %in% pids_cases]
   } else if (entity == "indication") {
+    check_workspace_defaults("temp_indi")
     temp <- temp_indi[primaryid %in% pids_cases]
     if (sum(!is.na(drug_indi)) > 0) {
+      check_workspace_defaults("temp_drug")
       temp <- temp_drug[temp, on = c("primaryid", "drug_seq")][substance %in%
         drug_indi]
     }
@@ -65,6 +68,7 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
         "therapeutic procedures and supportive care nec"
       )]
   } else if (entity == "substance") {
+    check_workspace_defaults("temp_drug")
     temp <- dplyr::distinct(temp_drug[primaryid %in% pids_cases])[role_cod %in% drug_role][
       ,
       .(primaryid, substance)
@@ -128,32 +132,38 @@ reporting_rates <- function(pids_cases, entity = "reaction", level = "pt", drug_
 #'                \item \emph{indication};
 #'                \item \emph{substance}.
 #'                }
-#' @param file_name Path to save the XLSX file containing the hierarchy.
+#' @param file_name Path of the XLSX file to save the hierarchy in, if `save_in_excel = TRUE`. Default "reporting_rates.xlsx" in `project_path`.
+#' @param save_in_excel Whether to also save the hierarchy in an Excel file, `file_name`. Defaults to `TRUE` only if `file_name` is supplied.
 #' @param drug_role If entity is substance, it is possible to specify the drug roles that should be considered
 #'
-#' @return An excel file with the hierarchy of interest.
+#' @return A data.table with the hierarchy of interest.
 #'         For indications and reactions, SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
 #'         For substances, the ATC hierarchy is followed.
 #' @importFrom writexl write_xlsx
 #' @export
 #'
 #' @examples
-#' # The following examples require the MedDRA and the ATC to be imported
-#' if (file.exists("external_sources/meddra_primary")) {
-#'   hierarchycal_rates(pids, "reaction", "reactions_rates.xlsx")
+#' # The following examples require the MedDRA and the ATC to be available
+#' Reac <- sample_Reac
+#' Indi <- sample_Indi
+#' Drug <- sample_Drug
+#' pids <- sample_Demo$primaryid
+#' if (file.exists(file.path(here::here(), "external_sources", "meddra_primary.csv"))) {
+#'   import_MedDRA()
+#'   hierarchycal_rates(pids, "reaction")
+#'   hierarchycal_rates(pids, "indication")
 #' }
-#' if (file.exists("external_sources/meddra_primary")) {
-#'   hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
+#' if (file.exists(file.path(here::here(), "external_sources", "ATC_DiAna.csv"))) {
+#'   import_ATC()
+#'   hierarchycal_rates(pids, "substance")
 #' }
-#' if (file.exists("external_sources/ATC_DiAna")) {
-#'   hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
-#' }
-hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx"), drug_role = c("PS", "SS", "I", "C")) {
+hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = paste0(project_path, "reporting_rates.xlsx"), drug_role = c("PS", "SS", "I", "C"), save_in_excel = !missing(file_name)) {
   if (entity %in% c("reaction", "indication")) {
     pts <- reporting_rates(pids_cases, entity = entity, "pt")
     hlts <- reporting_rates(pids_cases, entity = entity, "hlt")
     hlgts <- reporting_rates(pids_cases, entity = entity, "hlgt")
     socs <- reporting_rates(pids_cases, entity = entity, "soc")
+    check_workspace_object("MedDRA")
     temp <- MedDRA[socs, on = "soc"][hlgts, on = "hlgt"][hlts, on = "hlt"][pts, on = "pt"]
     temp <- temp[order(-N_soc, -label_soc, -N_hlgt, -label_hlgt, -N_hlt, -label_hlt, -N_pt)][
       , .(label_soc, label_hlgt, label_hlt, label_pt)
@@ -165,10 +175,14 @@ hierarchycal_rates <- function(pids_cases, entity = "reaction", file_name = past
     Class3s <- reporting_rates(pids_cases, entity = entity, "Class3", drug_role = drug_role)
     Class2s <- reporting_rates(pids_cases, entity = entity, "Class2", drug_role = drug_role)
     Class1s <- reporting_rates(pids_cases, entity = entity, "Class1", drug_role = drug_role)
+    check_workspace_object("ATC")
     temp <- ATC[Class1s, on = "Class1"][Class2s, on = "Class2"][Class3s, on = "Class3"][Class4s, on = "Class4"][substances, on = "substance"]
     temp <- temp[order(-N_Class1, -label_Class1, -N_Class2, -label_Class2, -N_Class3, -label_Class3, -N_Class4, -label_Class4, -N_substance)][
       , .(label_Class1, label_Class2, label_Class3, label_Class4, label_substance)
     ]
   }
-  writexl::write_xlsx(temp, file_name)
+  if (save_in_excel) {
+    writexl::write_xlsx(temp, file_name)
+  }
+  temp
 }

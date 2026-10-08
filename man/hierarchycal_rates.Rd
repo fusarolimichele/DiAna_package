@@ -8,7 +8,8 @@ hierarchycal_rates(
   pids_cases,
   entity = "reaction",
   file_name = paste0(project_path, "reporting_rates.xlsx"),
-  drug_role = c("PS", "SS", "I", "C")
+  drug_role = c("PS", "SS", "I", "C"),
+  save_in_excel = !missing(file_name)
 )
 }
 \arguments{
@@ -21,12 +22,14 @@ hierarchycal_rates(
 \item \emph{substance}.
 }}
 
-\item{file_name}{Path to save the XLSX file containing the hierarchy.}
+\item{file_name}{Path of the XLSX file to save the hierarchy in, if \code{save_in_excel = TRUE}. Default "reporting_rates.xlsx" in \code{project_path}.}
 
 \item{drug_role}{If entity is substance, it is possible to specify the drug roles that should be considered}
+
+\item{save_in_excel}{Whether to also save the hierarchy in an Excel file, \code{file_name}. Defaults to \code{TRUE} only if \code{file_name} is supplied.}
 }
 \value{
-An excel file with the hierarchy of interest.
+A data.table with the hierarchy of interest.
 For indications and reactions, SOCs are ordered by occurrences and, within, HLGTs, HLTs, PTs.
 For substances, the ATC hierarchy is followed.
 }
@@ -36,14 +39,18 @@ for a specified entity and based on different MedDRA or ATC levels
 and writes the result to a xlsx file.
 }
 \examples{
-# The following examples require the MedDRA and the ATC to be imported
-if (file.exists("external_sources/meddra_primary")) {
-  hierarchycal_rates(pids, "reaction", "reactions_rates.xlsx")
+# The following examples require the MedDRA and the ATC to be available
+Reac <- sample_Reac
+Indi <- sample_Indi
+Drug <- sample_Drug
+pids <- sample_Demo$primaryid
+if (file.exists(file.path(here::here(), "external_sources", "meddra_primary.csv"))) {
+  import_MedDRA()
+  hierarchycal_rates(pids, "reaction")
+  hierarchycal_rates(pids, "indication")
 }
-if (file.exists("external_sources/meddra_primary")) {
-  hierarchycal_rates(pids, "indication", "indications_rates.xlsx")
-}
-if (file.exists("external_sources/ATC_DiAna")) {
-  hierarchycal_rates(pids, "substance", "substances_rates.xlsx")
+if (file.exists(file.path(here::here(), "external_sources", "ATC_DiAna.csv"))) {
+  import_ATC()
+  hierarchycal_rates(pids, "substance")
 }
 }

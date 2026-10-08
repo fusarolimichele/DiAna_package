@@ -19,7 +19,7 @@ retrieve(
   temp_drug_name = Drug_name,
   temp_meddra = NA,
   temp_atc = NA,
-  save_in_excel = TRUE
+  save_in_excel = !missing(file_name)
 )
 }
 \arguments{
@@ -51,12 +51,14 @@ retrieve(
 
 \item{temp_atc}{the ATC classification, as returned by import_ATC(), if available. Defaults to NA. Only the primary ATC code of each substance is used.}
 
-\item{save_in_excel}{Whether to save the outcome in an excel. Defaults to TRUE}
+\item{save_in_excel}{Whether to also save the results in an Excel file, \code{file_name}. Defaults to \code{TRUE} only if \code{file_name} is supplied.}
 }
 \value{
-Two xlsx files with individual cases information:
-one general with a row per ICSR,
-and one with drug information and multiple rows per ICSR.
+A list of two data.tables with individual cases information:
+\code{general_info}, with a row per ICSR,
+and \code{drug_info}, with drug information and multiple rows per ICSR.
+If \code{save_in_excel = TRUE}, they are also saved as \code{file_name.xlsx}
+and \code{file_name_drug.xlsx}.
 }
 \description{
 This function retrieves data for a specific group of primaryids,
@@ -64,10 +66,14 @@ allowing for in-depth case-by-case evaluation and clinical reasoning.
 If MedDRA is available PTs are clustered by HLGT.
 }
 \examples{
-FAERS_version <- "24Q1"
-pids <- sample_Demo[sex == "M"]$primaryid
-if (file.exists("data/24Q1.csv")) {
-  retrieve(pids, save_in_excel = FALSE)
-}
+pids <- unique(sample_Demo[sex == "M"]$primaryid)
+cases <- retrieve(pids,
+  temp_reac = sample_Reac, temp_drug = sample_Drug, temp_demo = sample_Demo,
+  temp_demo_supp = sample_Demo_Supp, temp_outc = sample_Outc,
+  temp_ther = sample_Ther, temp_doses = sample_Doses,
+  temp_drug_supp = sample_Drug_Supp, temp_indi = sample_Indi,
+  temp_drug_name = sample_Drug_Name
+)
+head(cases$general_info)
 
 }

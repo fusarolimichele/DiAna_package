@@ -18,7 +18,7 @@ network_analysis(
   temp_reac = Reac,
   temp_indi = Indi,
   temp_drug = Drug,
-  save_plot = TRUE
+  save_plot = !missing(file_name)
 )
 }
 \arguments{
@@ -30,7 +30,7 @@ network_analysis(
 
 \item{remove_negative_edges}{Logical indicating whether to remove edges with negative weights. Default is TRUE.}
 
-\item{file_name}{Character string specifying the file name (including path) to save the network visualization. Default is "network.tiff".}
+\item{file_name}{Character string specifying the file name (including path) to save the network visualization, if \code{save_plot = TRUE}. Default is "network.tiff" in \code{project_path}.}
 
 \item{width}{Numeric specifying the width of the saved image in pixels. Default is 1500.}
 
@@ -48,10 +48,10 @@ network_analysis(
 
 \item{temp_drug}{Drug dataset. Can be set to sample_Drug for testing}
 
-\item{save_plot}{Whether the plot should be saved as a tiff. Defaults to true}
+\item{save_plot}{Whether the plot should also be saved as a TIFF file, \code{file_name}. Defaults to \code{TRUE} only if \code{file_name} is supplied.}
 }
 \value{
-NULL (invisibly). Saves a network visualization as a TIFF file.
+The network, as an igraph object, which can be drawn with \code{plot()}. If \code{save_plot = TRUE}, the visualization is also saved as a TIFF file.
 }
 \description{
 This function performs network analysis on the provided data and generates a visualization of the network. It uses IsingFit to model the network structure, clusters nodes using Louvain method, and visualizes the resulting network graph.

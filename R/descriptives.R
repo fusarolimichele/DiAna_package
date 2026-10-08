@@ -9,7 +9,7 @@
 #' @param vars A character vector of variable names to include in the analysis.
 #' @param list_pids A list of vectors with primary IDs for custom groups whose distribution should be described. Default is an empty list.
 #' @param method The method for Chi-square test analysis, either "independence_test" or "goodness_of_fit". Default is "independence_test". It applies only for comparisons between cases and non-cases.
-#' @param save_in_excel Whether to save the outcome in an excel. Defaults to TRUE
+#' @param save_in_excel Whether to also save the results in an Excel file, `file_name`. Defaults to `TRUE` only if `file_name` is supplied.
 #' @param temp_demo Demo dataset. Defaults to Demo. Can be se to sample_Demo for testing
 #' @param temp_drug Drug dataset. Can be set to sample_Drug for testing
 #' @param temp_reac Reac dataset. Can be set to sample_Reac for testing
@@ -48,7 +48,7 @@
 #' @export
 
 descriptive <- function(pids_cases, RG = NULL, drug = NULL,
-                        save_in_excel = TRUE, file_name = "Descriptives.xlsx",
+                        save_in_excel = !missing(file_name), file_name = "Descriptives.xlsx",
                         vars = c(
                           "sex", "Submission", "Reporter",
                           "age_range", "Outcome", "country",
@@ -60,6 +60,7 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL,
                         temp_demo = Demo, temp_drug = Drug, temp_reac = Reac,
                         temp_indi = Indi, temp_outc = Outc, temp_ther = Ther) {
   # import data
+  check_workspace_defaults(c("temp_demo", "temp_drug", "temp_reac", "temp_indi", "temp_outc", "temp_ther"))
   pids_tot <- base::union(pids_cases, RG)
   temp_demo <- temp_demo[primaryid %in% pids_tot]
   temp_outc <- temp_outc[primaryid %in% pids_tot]
@@ -218,7 +219,7 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL,
 #' @param vars A character vector of variable names to include in the analysis.
 #' @param list_pids A list of vectors with primary IDs for custom groups whose distribution should be described. Default is an empty list.
 #' @param method The method for Chi-square test analysis, either "independence_test" or "goodness_of_fit". Default is "independence_test". It applies only for comparisons between cases and non-cases.
-#' @param save_in_excel Whether to save the outcome in an excel. Defaults to TRUE
+#' @param save_in_excel Whether to also save the results in an Excel file, `file_name`. Defaults to `TRUE` only if `file_name` is supplied.
 #' @param database Database on which to run the analysis. By default "sample".
 #'
 #' @return The function generates descriptive statistics as a gt_table and potentially saves them to an Excel file.
@@ -245,7 +246,7 @@ descriptive <- function(pids_cases, RG = NULL, drug = NULL,
 #' @export
 
 new_descriptive <- function(pids_cases, RG = NULL, drug = NULL,
-                            save_in_excel = TRUE, file_name = "Descriptives.xlsx",
+                            save_in_excel = !missing(file_name), file_name = "Descriptives.xlsx",
                             vars = c(
                               "sex", "Submission", "Reporter",
                               "age_range", "Outcome", "country",
@@ -271,17 +272,17 @@ new_descriptive <- function(pids_cases, RG = NULL, drug = NULL,
 
     Ther <- DiAna::sample_Ther[primaryid %in% pids_tot]
   } else {
-    DiAna::import("DEMO", quarter = database, pids = pids_tot)
+    Demo <- import("DEMO", quarter = database, pids = pids_tot, save_in_environment = FALSE)
 
-    DiAna::import("DRUG", quarter = database, pids = pids_tot)
+    Drug <- import("DRUG", quarter = database, pids = pids_tot, save_in_environment = FALSE)
 
-    DiAna::import("REAC", quarter = database, pids = pids_tot)
+    Reac <- import("REAC", quarter = database, pids = pids_tot, save_in_environment = FALSE)
 
-    DiAna::import("INDI", quarter = database, pids = pids_tot)
+    Indi <- import("INDI", quarter = database, pids = pids_tot, save_in_environment = FALSE)
 
-    DiAna::import("OUTC", quarter = database, pids = pids_tot)
+    Outc <- import("OUTC", quarter = database, pids = pids_tot, save_in_environment = FALSE)
 
-    if ("time_to_onset" %in% vars) DiAna::import("THER", quarter = database, pids = pids_tot)
+    if ("time_to_onset" %in% vars) Ther <- import("THER", quarter = database, pids = pids_tot, save_in_environment = FALSE)
   }
   temp <- Demo
   temp[, sex := ifelse(sex == "F", "Female", ifelse(sex == "M", "Male", NA))]

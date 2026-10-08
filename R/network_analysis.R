@@ -7,15 +7,15 @@
 #' @param entity Character specifying the type of entity to analyze ("reaction", "indication", or "substance").
 #' @param remove_singlet Logical indicating whether to remove singleton nodes (nodes with no edges). Default is TRUE.
 #' @param remove_negative_edges Logical indicating whether to remove edges with negative weights. Default is TRUE.
-#' @param file_name Character string specifying the file name (including path) to save the network visualization. Default is "network.tiff".
+#' @param file_name Character string specifying the file name (including path) to save the network visualization, if `save_plot = TRUE`. Default is "network.tiff" in `project_path`.
 #' @param width Numeric specifying the width of the saved image in pixels. Default is 1500.
 #' @param height Numeric specifying the height of the saved image in pixels. Default is 1500.
 #' @param labs_size Size of labels in network visualization. Default is 1. It can be changed if visualization is not good.
 #' @param min_frequency_term Frequency threshold for a term in the dataset to be included in the analysis. Default to 0.01
 #' @param restriction Restriction performed in the analysis. Default is none. It could be set to 'suspects' if entity is 'substance' to restrict the analysis to primary and secondary suspects
-#' @param save_plot Whether the plot should be saved as a tiff. Defaults to true
+#' @param save_plot Whether the plot should also be saved as a TIFF file, `file_name`. Defaults to `TRUE` only if `file_name` is supplied.
 
-#' @return NULL (invisibly). Saves a network visualization as a TIFF file.
+#' @return The network, as an igraph object, which can be drawn with `plot()`. If `save_plot = TRUE`, the visualization is also saved as a TIFF file.
 #'
 #' @importFrom dplyr distinct left_join select
 #' @importFrom igraph cluster_louvain graph_from_adjacency_matrix delete.vertices delete.edges degree layout_nicely set_vertex_attr simplify membership V E
@@ -44,14 +44,17 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
                              remove_negative_edges = TRUE,
                              file_name = paste0(project_path, "network.tiff"), width = 1500, height = 1500,
                              labs_size = 1, min_frequency_term = 0.01, restriction = "none", temp_reac = Reac, temp_indi = Indi, temp_drug = Drug,
-                             save_plot = TRUE) {
+                             save_plot = !missing(file_name)) {
   if (entity == "reaction") {
+    check_workspace_defaults("temp_reac")
     entity_var <- "pt"
     df <- temp_reac[, .(primaryid, pt)][primaryid %in% pids]
   } else if (entity == "indication") {
+    check_workspace_defaults("temp_indi")
     entity_var <- "indi_pt"
     df <- temp_indi[, .(primaryid, indi_pt)][primaryid %in% pids]
   } else if (entity == "substance") {
+    check_workspace_defaults("temp_drug")
     entity_var <- "substance"
     df <- temp_drug[primaryid %in% pids]
     if (restriction == "suspects") {

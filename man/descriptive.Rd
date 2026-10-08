@@ -8,7 +8,7 @@ descriptive(
   pids_cases,
   RG = NULL,
   drug = NULL,
-  save_in_excel = TRUE,
+  save_in_excel = !missing(file_name),
   file_name = "Descriptives.xlsx",
   vars = c("sex", "Submission", "Reporter", "age_range", "Outcome", "country",
     "continent", "age_in_years", "wt_in_kgs", "Reactions", "Indications", "Substances",
@@ -30,7 +30,7 @@ descriptive(
 
 \item{drug}{A vector of drug names. Default is NULL.}
 
-\item{save_in_excel}{Whether to save the outcome in an excel. Defaults to TRUE}
+\item{save_in_excel}{Whether to also save the results in an Excel file, \code{file_name}. Defaults to \code{TRUE} only if \code{file_name} is supplied.}
 
 \item{file_name}{The name of the Excel file to save the results. Default is "Descriptives.xlsx". It only works if save_in_excel is TRUE.}
 
