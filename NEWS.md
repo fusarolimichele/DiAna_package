@@ -1,6 +1,17 @@
 # DiAna (development version)
 
+## Changes that may affect your scripts
+* Functions no longer write files unless asked: `descriptive()`, `new_descriptive()`, `retrieve()`, `hierarchycal_rates()` (`save_in_excel`) and `network_analysis()` (`save_plot`) save only when you pass a `file_name` or set the argument to `TRUE`. Calls that relied on the default file name now only return the results. `hierarchycal_rates()` now also returns the hierarchy as a data.table.
+* `import()`, `import_MedDRA()` and `import_ATC()` assign the table in the environment they are called from (`env = parent.frame()`), instead of always in the global environment. From the console or a script nothing changes. Inside your own functions, the table is now created in the function: pass it on explicitly (e.g. `temp_drug = Drug`).
+* ggplot2 is no longer attached by `library(DiAna)`. Call `library(ggplot2)` to customise plots, e.g. `render_forest(...) + theme(...)`. data.table is still attached.
+* DiAna now requires R 4.1.0 or later (it already used the `\(x)` syntax).
+
 ## Bug fixes
+* `new_descriptive(database = <quarter>)` no longer replaces `Demo`, `Drug`, `Reac`, `Indi`, `Outc` and `Ther` in your workspace with the subset of analysed cases.
+* `retrieve_pregnancy_pids()` now uses its `quarter` argument (it always imported the quarter in `FAERS_version`), and no longer overwrites seven tables in your workspace.
+* `disproportionality_trend()` no longer adds a `period` column to your `Demo` table.
+* `Fix_DiAna_dictionary_locally()` now works: it no longer needs an undocumented `path` variable, and it replaces the records of the corrected drugs instead of adding the corrected records next to the old ones. It gains `temp_drug` and `temp_drug_name` arguments.
+* When an argument defaults to a table that is not in your workspace (e.g. `temp_drug = Drug` without `Drug`), the error now says which table is missing and how to import it, instead of "object 'Drug' not found".
 * `network_analysis()` now applies `min_frequency_term` for `entity = "reaction"` and `entity = "indication"`. Previously the filter was silently skipped, so every term entered the network: **results of earlier reaction and indication networks may differ**. Analyses are also much faster (the example went from about 140 s to 2 s).
 * `network_analysis()` no longer draws an extra IsingFit plot or prints a progress bar.
 * `retrieve()` no longer fails when a MedDRA table is passed as `temp_meddra`, and uses only the primary ATC code when `temp_atc` is given.
