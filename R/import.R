@@ -31,7 +31,6 @@
 #'   console or a script, or the calling function's own environment when
 #'   called inside a function.
 #' @return The imported data.table (invisibly when it is also assigned).
-#' @importFrom stringr str_to_title
 #' @importFrom here here
 #' @examples
 #' # This example requires that setup_DiAna has been run to download data
@@ -56,7 +55,8 @@ import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environm
     t <- t[primaryid %in% pids]
   }
   if (save_in_environment) {
-    assign(stringr::str_to_title(df_name), t, envir = env)
+    # e.g. "DRUG_NAME" is assigned as Drug_name
+    assign(paste0(substr(df_name, 1, 1), tolower(substring(df_name, 2))), t, envir = env)
     return(invisible(t))
   }
   t

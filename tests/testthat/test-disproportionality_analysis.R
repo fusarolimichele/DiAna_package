@@ -266,3 +266,22 @@ test_that("Plot disproportionality trend works as usual", {
     time_granularity = "month"
   ), metric = "ROR", time_granularity = "month"))
 })
+
+test_that("disproportionality_analysis() accepts factors, e.g. a column of Drug", {
+  drugs <- factor(c("paracetamol", "ibuprofen"))
+  expect_equal(
+    disproportionality_analysis(drugs, "overdose", temp_drug = sample_Drug, temp_reac = sample_Reac),
+    disproportionality_analysis(c("paracetamol", "ibuprofen"), "overdose", temp_drug = sample_Drug, temp_reac = sample_Reac)
+  )
+})
+
+test_that("ROR and IC helpers match the scalar formulas", {
+  tab <- matrix(c(5, 10, 45, 940), nrow = 2)
+  ft <- stats::fisher.test(tab)
+  ror <- ror_fisher(D_E = 5, D_nE = 45, nD_E = 10, nD_nE = 940)
+  expect_equal(ror$ROR_median, floor(unname(ft$estimate) * 100) / 100)
+  expect_equal(ror$ROR_lower, floor(ft$conf.int[1] * 100) / 100)
+  expect_equal(ror$p_value_fisher, ft$p.value)
+  ic <- ic_bcpnn(D_E = 5, D = 50, E = 15, TOT = 1000)
+  expect_equal(ic$IC_median, floor(log2(5.5 / (50 * 15 / 1000 + .5)) * 100) / 100)
+})

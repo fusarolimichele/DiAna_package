@@ -23,7 +23,6 @@
 #' @param file_name Name of the Excel file, used if `save_in_excel = TRUE`.
 #' @return A data.table containing disproportionality analysis results.
 #'
-#' @importFrom questionr odds.ratio
 #' @importFrom dplyr distinct rename
 #' @importFrom purrr map map2
 #'
@@ -127,38 +126,8 @@ disproportionality_analysis <- function(
   results <- results[, nD_E := as.numeric(purrr::map2(primaryid_event, primaryid_substance, \(x, y)length(setdiff(x, y))))]
   results <- results[, E := D_E + nD_E]
   results <- results[, nD_nE := TOT - (D_E + D_nE + nD_E)]
-  ROR <- lapply(seq(1:nrow(results)), function(x) {
-    tab <- as.matrix(data.table(
-      E = c(results$D_E[[x]], results$nD_E[[x]]),
-      nE = c(results$D_nE[[x]], results$nD_nE[[x]])
-    ))
-    or <- questionr::odds.ratio(tab)
-    ROR_median <- floor(or$OR * 100) / 100
-    ROR_lower <- floor(or$`2.5 %` * 100) / 100
-    ROR_upper <- floor(or$`97.5 %` * 100) / 100
-    p_value_fisher <- or$p
-    return(list(ROR_median, ROR_lower, ROR_upper, p_value_fisher))
-  })
-  results <- results[, ROR_median := as.numeric(purrr::map(ROR, \(x) x[[1]]))][
-    , ROR_lower := as.numeric(purrr::map(ROR, \(x) x[[2]]))
-  ][
-    , ROR_upper := as.numeric(purrr::map(ROR, \(x) x[[3]]))
-  ][
-    , p_value_fisher := as.numeric(purrr::map(ROR, \(x) x[[4]]))
-  ]
-  IC <- lapply(seq(1:nrow(results)), function(x) {
-    IC_median <- log2((results$D_E[[x]] + .5) / (((results$D[[x]] * results$E[[x]]) / TOT) + .5))
-    IC_lower <- floor((IC_median - 3.3 * (results$D_E[[x]] + .5)^(-1 / 2) - 2 * (results$D_E[[x]] + .5)^(-3 / 2)) * 100) / 100
-    IC_upper <- floor((IC_median + 2.4 * (results$D_E[[x]] + .5)^(-1 / 2) - 0.5 * (results$D_E[[x]] + .5)^(-3 / 2)) * 100) / 100
-    IC_median <- floor(IC_median * 100) / 100
-    return(list(IC_median, IC_lower, IC_upper))
-  })
-
-  results <- results[, IC_median := as.numeric(purrr::map(IC, \(x) x[[1]]))][
-    , IC_lower := as.numeric(purrr::map(IC, \(x) x[[2]]))
-  ][
-    , IC_upper := as.numeric(purrr::map(IC, \(x) x[[3]]))
-  ]
+  results <- results[, c("ROR_median", "ROR_lower", "ROR_upper", "p_value_fisher") := ror_fisher(D_E, D_nE, nD_E, nD_nE)]
+  results <- results[, c("IC_median", "IC_lower", "IC_upper") := ic_bcpnn(D_E, D, E, TOT)]
   results <- results[, label_ROR := paste0(ROR_median, " (", ROR_lower, "-", ROR_upper, ") [", D_E, "]")]
   results <- results[, label_IC := paste0(IC_median, " (", IC_lower, "-", IC_upper, ") [", D_E, "]")]
   # correct for multiple comparisons
@@ -388,7 +357,6 @@ render_forest <- function(disproportionality_df,
 #'   \item{\code{IC}}{Information Component: A measure based on Bayesian confidence propagation neural network models. It is the log2 of the shrinked RRR.}
 #'   \item{\code{IC_gamma}}{Gamma distribution-based Information Component: An alternative IC calculation using the gamma distribution. It is more appropriate for small databases}
 #' }
-#' @importFrom questionr odds.ratio
 #' @importFrom stats qgamma qnorm
 #' @export
 #' @examples
@@ -417,10 +385,10 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
   rownames(tab) <- c("D", "nD")
   drug_count <- as.numeric(drug_count)
   event_count <- as.numeric(event_count)
-  or <- questionr::odds.ratio(tab)
+  or <- fisher_or(tab)
   ROR_median <- floor(or$OR * 100) / 100
-  ROR_lower <- floor(or$`2.5 %` * 100) / 100
-  ROR_upper <- floor(or$`97.5 %` * 100) / 100
+  ROR_lower <- floor(or$lower * 100) / 100
+  ROR_upper <- floor(or$upper * 100) / 100
   IC_median <- log2((drug_event_count + .5) / (((drug_count * event_count) / tot) + .5))
   IC_lower <- floor((IC_median - 3.3 * (drug_event_count + .5)^(-1 / 2) - 2 * (drug_event_count + .5)^(-3 / 2)) * 100) / 100
   IC_upper <- floor((IC_median + 2.4 * (drug_event_count + .5)^(-1 / 2) - 0.5 * (drug_event_count + .5)^(-3 / 2)) * 100) / 100
@@ -502,7 +470,6 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #'
 #' @importFrom dplyr distinct
 #' @importFrom purrr map map2
-#' @importFrom questionr odds.ratio
 #' @details
 #' The function processes the provided data to calculate the reporting odds ratio (ROR) and the information component (IC) for the specified drug-event combination over time.
 #'
@@ -581,39 +548,9 @@ disproportionality_trend <- function(
     results <- results[, cum_TOT := Reduce(function(x, y) sum(x[[1]], y), TOT, accumulate = TRUE)]
     results <- results[, .(period, TOT = cum_TOT, D_E = cum_D_E, D_nE = cum_D_nE, D = cum_D, nD_E = cum_nD_E, E = cum_E, nD_nE = cum_nD_nE)]
   }
-  ROR <- lapply(seq(1:nrow(results)), function(x) {
-    tab <- as.matrix(data.table(
-      E = c(results$D_E[[x]], results$nD_E[[x]]),
-      nE = c(results$D_nE[[x]], results$nD_nE[[x]])
-    ))
-    or <- questionr::odds.ratio(tab)
-    ROR_median <- floor(or$OR * 100) / 100
-    ROR_lower <- floor(or$`2.5 %` * 100) / 100
-    ROR_upper <- floor(or$`97.5 %` * 100) / 100
-    p_value_fisher <- or$p
-    return(list(ROR_median, ROR_lower, ROR_upper, p_value_fisher))
-  })
-  results <- results[, ROR_median := as.numeric(purrr::map(ROR, \(x) x[[1]]))][
-    , ROR_lower := as.numeric(purrr::map(ROR, \(x) x[[2]]))
-  ][
-    , ROR_upper := as.numeric(purrr::map(ROR, \(x) x[[3]]))
-  ][
-    , p_value_fisher := as.numeric(purrr::map(ROR, \(x) x[[4]]))
-  ]
+  results <- results[, c("ROR_median", "ROR_lower", "ROR_upper", "p_value_fisher") := ror_fisher(D_E, D_nE, nD_E, nD_nE)]
   results <- results[, Bonferroni := results$p_value_fisher * sum(results$D_E >= 3)]
-  IC <- lapply(seq(1:nrow(results)), function(x) {
-    IC_median <- log2((results$D_E[[x]] + .5) / (((results$D[[x]] * results$E[[x]]) / results$TOT[[x]]) + .5))
-    IC_lower <- floor((IC_median - 3.3 * (results$D_E[[x]] + .5)^(-1 / 2) - 2 * (results$D_E[[x]] + .5)^(-3 / 2)) * 100) / 100
-    IC_upper <- floor((IC_median + 2.4 * (results$D_E[[x]] + .5)^(-1 / 2) - 0.5 * (results$D_E[[x]] + .5)^(-3 / 2)) * 100) / 100
-    IC_median <- floor(IC_median * 100) / 100
-    return(list(IC_median, IC_lower, IC_upper))
-  })
-
-  results <- results[, IC_median := as.numeric(purrr::map(IC, \(x) x[[1]]))][
-    , IC_lower := as.numeric(purrr::map(IC, \(x) x[[2]]))
-  ][
-    , IC_upper := as.numeric(purrr::map(IC, \(x) x[[3]]))
-  ]
+  results <- results[, c("IC_median", "IC_lower", "IC_upper") := ic_bcpnn(D_E, D, E, TOT)]
   results <- results[, label_ROR := paste0(ROR_median, " (", ROR_lower, "-", ROR_upper, ") [", D_E, "]")]
   results <- results[, label_IC := paste0(IC_median, " (", IC_lower, "-", IC_upper, ") [", D_E, "]")]
   return(results)
@@ -630,7 +567,6 @@ disproportionality_trend <- function(
 #' @param time_granularity Character string specifying the time frame. It is recommeded to use the same specified in the 'disproportionality_trend' function. Default is "year". Alternatives are "quarter" and "month".
 #'
 #' @return A ggplot object representing the disproportionality trend plot for the specified metric.
-#' @importFrom lubridate ym
 #' @details
 #' The function creates a plot to visualize the disproportionality trend of a drug-event combination over time. Depending on the selected metric, it plots either the information component (IC) or the reporting odds ratio (ROR) with corresponding confidence intervals.
 #'
@@ -650,7 +586,8 @@ disproportionality_trend <- function(
 #' @export
 plot_disproportionality_trend <- function(disproportionality_trend_results, metric = "IC", time_granularity = "year") {
   if (time_granularity == "month") {
-    disproportionality_trend_results$period <- lubridate::ym(disproportionality_trend_results$period)
+    # period is year and month as yyyymm, e.g. 200401
+    disproportionality_trend_results$period <- as.Date(paste0(disproportionality_trend_results$period, "01"), format = "%Y%m%d")
   }
   if (is.null(disproportionality_trend_results$nested)) {
     disproportionality_trend_results$nested <- "default"
@@ -709,6 +646,10 @@ plot_disproportionality_trend <- function(disproportionality_trend_results, metr
 #'
 format_input_disproportionality <- function(input) {
   t <- input
+  # factors (e.g. a column of Drug or Reac) would be matched by their integer codes
+  if (is.factor(t)) {
+    t <- as.character(t)
+  }
   if (!is.list(t)) {
     t <- as.list(t)
   }

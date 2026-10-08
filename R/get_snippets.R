@@ -7,7 +7,6 @@
 #' @param repo Character. The GitHub repository containing the snippets. Default is "fusarolimichele/DiAna_snippets".
 #' @return Invisibly, the path of the updated snippets file. This function is called for its side effects, which include installing RStudio snippets.
 #' @importFrom jsonlite fromJSON
-#' @importFrom httr content GET status_code
 #' @importFrom utils modifyList
 #' @examples
 #' \dontrun{
@@ -38,14 +37,9 @@ snippets_install_github <- function(repo = "fusarolimichele/DiAna_snippets") {
     stop("The snippets were not downloaded.", call. = FALSE)
   }
 
-  # retrieve files
-  req <- httr::GET("https://api.github.com/", path = file.path("repos", repo, "contents"))
-  parsed <- jsonlite::fromJSON(httr::content(req, as = "text", encoding = "UTF-8"), simplifyVector = FALSE)
-  if (httr::status_code(req) >= 400) {
-    stop("Request failed (", httr::status_code(req), ")\n", parsed$message,
-      call. = FALSE
-    )
-  }
+  # retrieve the list of files in the repository
+  listing <- read_url(paste0("https://api.github.com/repos/", repo, "/contents"))
+  parsed <- jsonlite::fromJSON(listing, simplifyVector = FALSE)
 
   snippets <- parse_snippets(readLines(path, warn = FALSE))
   n_downloaded <- 0L
@@ -53,17 +47,36 @@ snippets_install_github <- function(repo = "fusarolimichele/DiAna_snippets") {
     if (f$type != "file" || !grepl("\\.snippets$", f$name)) {
       next
     }
-    req <- httr::GET(f$download_url)
-    if (httr::status_code(req) >= 400) {
-      stop("Download of ", f$name, " failed (", httr::status_code(req), ").", call. = FALSE)
-    }
-    downloaded <- parse_snippets(strsplit(httr::content(req, as = "text", encoding = "UTF-8"), "\r?\n")[[1]])
+    downloaded <- parse_snippets(strsplit(read_url(f$download_url), "\r?\n")[[1]])
     snippets <- utils::modifyList(snippets, downloaded)
     n_downloaded <- n_downloaded + length(downloaded)
   }
   writeLines(format_snippets(snippets), path)
   message(n_downloaded, " snippets installed in ", path, ".")
   invisible(path)
+}
+
+#' Read a web page as a single string, with a clear error if it fails
+#' @noRd
+read_url <- function(address) {
+  con <- url(address, encoding = "UTF-8")
+  on.exit(close(con), add = TRUE)
+  # a failed download gives a warning with the HTTP status, then an error:
+  # keep the warning, which is the informative part, for the error message
+  status <- NULL
+  lines <- tryCatch(
+    withCallingHandlers(readLines(con, warn = FALSE), warning = function(w) {
+      status <<- conditionMessage(w)
+      invokeRestart("muffleWarning")
+    }),
+    error = function(e) {
+      stop("Could not download ", address, " (", if (is.null(status)) conditionMessage(e) else status,
+        "). Check your internet connection and the repository name.",
+        call. = FALSE
+      )
+    }
+  )
+  paste(lines, collapse = "\n")
 }
 
 #' Location of the user's RStudio R snippets file
