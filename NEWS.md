@@ -1,12 +1,22 @@
 # DiAna (development version)
 
+## Deprecated
+* `retrieve_pregnancy_pids()` is deprecated and will be removed in the next release: use the PVgravID package (`remotes::install_github("Uppsala-Monitoring-Centre/PVgravID")`), as shown in the article "Pregnancy analyses with PVgravID".
+* `hierarchycal_rates()` is renamed `hierarchical_rates()`; the old name still works, with a warning.
+* `new_descriptive()` is merged into `descriptive()`; the old name still works, with a warning. Pass the tables with the `temp_*` arguments instead of `database`.
+
 ## Changes that may affect your scripts
+* `descriptive()` describes seriousness outcomes differently. A report without any recorded outcome is not known to be non-serious, so it is no longer counted as "Non Serious". A new row, "Seriousness recorded", gives the reports that record at least one outcome, and the outcome percentages use only those reports as denominator. By default (`outcome = "each"`) there is one row per outcome type, and a report with several outcomes counts in each; `outcome = "most_severe"` gives one row per report with its most severe outcome. Reporter codes outside the standard list now appear as their own category instead of Unknown, and `num_Substances` (1, 2, 3-5, >5 substances) is included by default.
 * Functions no longer write files unless asked: `descriptive()`, `new_descriptive()`, `retrieve()`, `hierarchycal_rates()` (`save_in_excel`) and `network_analysis()` (`save_plot`) save only when you pass a `file_name` or set the argument to `TRUE`. Calls that relied on the default file name now only return the results. `hierarchycal_rates()` now also returns the hierarchy as a data.table.
 * `import()`, `import_MedDRA()` and `import_ATC()` assign the table in the environment they are called from (`env = parent.frame()`), instead of always in the global environment. From the console or a script nothing changes. Inside your own functions, the table is now created in the function: pass it on explicitly (e.g. `temp_drug = Drug`).
 * ggplot2 is no longer attached by `library(DiAna)`. Call `library(ggplot2)` to customise plots, e.g. `render_forest(...) + theme(...)`. data.table is still attached.
 * DiAna now requires R 4.1.0 or later (it already used the `\(x)` syntax).
 
 ## Bug fixes
+* `hierarchical_rates()` (formerly `hierarchycal_rates()`) works again without first running `import_MedDRA()` or `import_ATC()`, and reads each dictionary at most once. It also accepts `temp_meddra`, `temp_atc`, and the case tables `temp_reac`, `temp_indi` and `temp_drug`.
+* `reporting_rates()` reuses the MedDRA and ATC already loaded in your workspace instead of reading the files on every call, and gains `temp_meddra` and `temp_atc` arguments.
+* `disproportionality_analysis()` accepts factors as `drug_selected` and `reac_selected` (e.g. a column of `Drug`), instead of failing with a join error.
+* `snippets_install_github()` reports the reason when a download fails (e.g. "HTTP status was '404 Not Found'").
 * `new_descriptive(database = <quarter>)` no longer replaces `Demo`, `Drug`, `Reac`, `Indi`, `Outc` and `Ther` in your workspace with the subset of analysed cases.
 * `retrieve_pregnancy_pids()` now uses its `quarter` argument (it always imported the quarter in `FAERS_version`), and no longer overwrites seven tables in your workspace.
 * `disproportionality_trend()` no longer adds a `period` column to your `Demo` table.
@@ -20,6 +30,8 @@
 * `setup_DiAna()` checks the quarter before creating any folder, restores the `timeout` option when it ends, and handles a cancelled dialog.
 
 ## Dependencies
+* DiAna no longer depends on questionr, lubridate, httr and stringr, which reduces the packages installed with it from 158 to 130 (questionr alone brought in 22, including shiny). Results are unchanged: the reporting odds ratio is computed with `stats::fisher.test()`, which questionr was calling.
+* `disproportionality_analysis()` and `disproportionality_trend()` compute the IC for all combinations at once, and are about a third faster on many combinations.
 * 'pvOmega' moved from Imports to Suggests: it is needed only by `omega_analysis()`, which explains how to install it when it is missing.
 
 # DiAna 2.1.1
