@@ -59,7 +59,7 @@ setup_DiAna <- function(quarter = "23Q1", timeout = 100000) {
   old_options <- options(timeout = max(timeout, getOption("timeout")))
   on.exit(options(old_options), add = TRUE)
 
-  root <- here::here()
+  root <- diana_root()
   for (folder in c("data", "projects", "external_sources")) {
     dir.create(file.path(root, folder), showWarnings = FALSE)
   }

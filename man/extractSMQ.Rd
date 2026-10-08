@@ -32,9 +32,10 @@ accordingly, filtering by "Narrow" scope if requested.
 If the required SMQ dictionary file is missing, the function stops execution and returns an error message.
 }
 \examples{
-\dontrun{
-smq_list <- extractSMQ(Narrow = TRUE)
-smq_list <- extractSMQ(Narrow = FALSE)
+# Requires an SMQ dictionary prepared from a MedDRA subscription
+if (file.exists(file.path(here::here(), "external_sources", "smq_dictionary.csv"))) {
+  smq_list <- extractSMQ(Narrow = TRUE)
+  smq_list <- extractSMQ(Narrow = FALSE)
 }
 
 }

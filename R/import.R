@@ -23,40 +23,48 @@
 #'                in the format \emph{23Q1}. Defaults to the value assigned to FAERS_version.
 #' @param pids Optional vector of primary IDs to subset the imported data.
 #'             Defaults to the entire population.
-#' @param save_in_environment is a parameter automatically used within functions to avoid that the imported databases are overscribed.
-#' @param env The environment where the data will be assigned. Default to .GlobalEnv
-#' @return A data.table containing the imported data.
+#' @param save_in_environment Whether to also assign the table, named in title case
+#'   (e.g. `Drug` for `"DRUG"`), in `env`. Default `TRUE`. Use `FALSE` to only
+#'   return it, e.g. `my_drug <- import("DRUG", save_in_environment = FALSE)`.
+#' @param env The environment where the table is assigned. Defaults to the
+#'   environment `import()` is called from: your workspace when called from the
+#'   console or a script, or the calling function's own environment when
+#'   called inside a function.
+#' @return The imported data.table (invisibly when it is also assigned).
 #' @importFrom stringr str_to_title
 #' @importFrom here here
 #' @examples
 #' # This example requires that setup_DiAna has been run to download data
-#' FAERS_version <- "24Q1"
-#' if (file.exists("data/24Q1/DRUG.rds")) {
-#'   import("DRUG")
+#' if (file.exists(file.path(here::here(), "data", "24Q1", "DRUG.rds"))) {
+#'   import("DRUG", quarter = "24Q1")
 #' }
 #'
 #' @export
 #'
 
-import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environment = TRUE, env = .GlobalEnv) {
-  path <- paste0(here::here(), "/data/", quarter, "/", df_name, ".rds")
+import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environment = TRUE, env = parent.frame()) {
+  check_workspace_defaults("quarter")
+  path <- file.path(diana_root(), "data", quarter, paste0(df_name, ".rds"))
   if (!file.exists(path)) {
-    stop("The dataset specified does not exist")
-  } else {
-    t <- setDT(readRDS(path))
-    if (sum(!is.na(pids)) > 0) {
-      t <- t[primaryid %in% pids]
-    }
-    if (save_in_environment) {
-      assign(stringr::str_to_title(df_name), t, envir = env)
-    }
+    stop("The dataset ", path, " does not exist. Check `df_name` and `quarter`, ",
+      "and download the data with setup_DiAna(\"", quarter, "\") if needed.",
+      call. = FALSE
+    )
+  }
+  t <- setDT(readRDS(path))
+  if (sum(!is.na(pids)) > 0) {
+    t <- t[primaryid %in% pids]
+  }
+  if (save_in_environment) {
+    assign(stringr::str_to_title(df_name), t, envir = env)
+    return(invisible(t))
   }
   t
 }
 
 #' Import MedDRA Data
 #'
-#' This function imports MedDRA (Medical Dictionary for Regulatory Activities) data from a CSV file and stores it in the global environment.
+#' This function imports MedDRA (Medical Dictionary for Regulatory Activities) data from a CSV file and assigns it as `MedDRA` in `env`.
 #'
 #' @inheritParams import
 #' @return A data table containing MedDRA data.
@@ -66,21 +74,21 @@ import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environm
 #' @details
 #' This function reads MedDRA data from a CSV file located at the path specified by `here()/external_sources/meddra_primary.csv`.
 #' If the file does not exist, it will stop execution and provide instructions on how to obtain MedDRA data.
-#' If the file exists, it will load the data, select specific columns (def, soc, hlgt, hlt, pt), remove duplicates, and store it in the global environment as "MedDRA".
+#' If the file exists, it will load the data, select specific columns (def, soc, hlgt, hlt, pt), remove duplicates, and assign it as `MedDRA` in `env` (by default, the environment it is called from).
 #'
 #' @seealso
 #' You can find more information and instructions for obtaining MedDRA data at https://github.com/fusarolimichele/DiAna_cleaning.
 #'
 #' @examples
 #' # This example requires a specific file that can only be available with a MeDRA subscription.
-#' if (file.exists("external_source/meddra_primary.csv")) {
+#' if (file.exists(file.path(here::here(), "external_sources", "meddra_primary.csv"))) {
 #'   import_MedDRA()
 #' }
 #'
 #' @export
 
-import_MedDRA <- function(env = .GlobalEnv) {
-  path <- paste0(here::here(), "/external_sources/meddra_primary.csv")
+import_MedDRA <- function(env = parent.frame()) {
+  path <- file.path(diana_root(), "external_sources", "meddra_primary.csv")
   if (!file.exists(path)) {
     stop("The MedDRA is not available with DiAna since the subscription must be done with MEDDRA MSSO.
          Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna_cleaning
@@ -94,13 +102,14 @@ import_MedDRA <- function(env = .GlobalEnv) {
     )[, .(def, soc, hlgt, hlt, pt)] %>% dplyr::distinct())
     assign("MedDRA", MedDRA, envir = env)
   }
-  MedDRA
+  invisible(MedDRA)
 }
 
 #' Import ATC classification
 #'
 #' This function reads the ATC (Anatomical Therapeutic Chemical) classification
-#' from an external source and assigns it to a global environment variable.
+#' from an external source and assigns it as `ATC` in `env` (by default, the
+#' environment it is called from).
 #' @param primary Whether only the primary ATC should be retrieved.
 #' @inheritParams import
 #' @return A data frame containing the dataset for ATC linkage.
@@ -109,12 +118,12 @@ import_MedDRA <- function(env = .GlobalEnv) {
 #' @importFrom readr read_delim
 #'
 #' @examples
-#' if (file.exists("external_source/ATC_DiAna.csv")) {
+#' if (file.exists(file.path(here::here(), "external_sources", "ATC_DiAna.csv"))) {
 #'   import_ATC()
 #' }
 #' @export
-import_ATC <- function(primary = T, env = .GlobalEnv) {
-  path <- paste0(here::here(), "/external_sources/ATC_DiAna.csv")
+import_ATC <- function(primary = TRUE, env = parent.frame()) {
+  path <- file.path(diana_root(), "external_sources", "ATC_DiAna.csv")
   if (!file.exists(path)) {
     stop("The ATC cannot be found in external sources. It should have been downloaded with setup_diana. Please investigate the problem.")
   } else {
@@ -126,11 +135,11 @@ import_ATC <- function(primary = T, env = .GlobalEnv) {
       substance = Substance, code, primary_code, Lvl4, Class4, Lvl3, Class3,
       Lvl2, Class2, Lvl1, Class1
     )] %>% dplyr::distinct())
-    if (primary == T) {
+    if (isTRUE(primary)) {
       ATC <- ATC[code == primary_code]
     }
     assign("ATC", ATC, envir = env)
-    ATC
+    invisible(ATC)
   }
 }
 
@@ -158,14 +167,15 @@ import_ATC <- function(primary = T, env = .GlobalEnv) {
 #' @note If the required SMQ dictionary file is missing, the function stops execution and returns an error message.
 #'
 #' @examples
-#' \dontrun{
-#' smq_list <- extractSMQ(Narrow = TRUE)
-#' smq_list <- extractSMQ(Narrow = FALSE)
+#' # Requires an SMQ dictionary prepared from a MedDRA subscription
+#' if (file.exists(file.path(here::here(), "external_sources", "smq_dictionary.csv"))) {
+#'   smq_list <- extractSMQ(Narrow = TRUE)
+#'   smq_list <- extractSMQ(Narrow = FALSE)
 #' }
 #'
 #' @export
 extractSMQ <- function(Narrow = TRUE) {
-  path <- paste0(here::here(), "/external_sources/smq_dictionary.csv")
+  path <- file.path(diana_root(), "external_sources", "smq_dictionary.csv")
   if (!file.exists(path)) {
     stop("The SMQ_dictionary is not available with DiAna since the subscription must be done with MEDDRA MSSO.\n         Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna_cleaning\n         to make it ready for download.")
   }

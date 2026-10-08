@@ -28,11 +28,12 @@ The function processes data from multiple FAERS tables (\code{DEMO}, \code{DRUG}
 Sakai T, Mori C, Ohtsu F. Potential safety signal of pregnancy loss with vascular endothelial growth factor inhibitor intraocular injection: A disproportionality analysis using the Food and Drug Administration Adverse Event Reporting System. Front Pharmacol. 2022 Nov 10;13:1063625. doi: 10.3389/fphar.2022.1063625. PMID: 36438807; PMCID: PMC9684212.
 }
 \examples{
-# This function retrieves the pregnancy FAERS from the entire database.
-# therefore it requires the data to have been downloaded.
-FAERS_version <- "24Q1"
-if (file.exists("data/24Q1/DEMO.rds")) {
-  pids_pregnancy <- retrieve_pregnancy_pids()
-  pids_pregnancy$medium_specificity
+# On the sample data shipped with DiAna
+pids_pregnancy <- retrieve_pregnancy_pids(quarter = "sample")
+pids_pregnancy$medium_specificity
+
+# On the entire database, which requires the data downloaded with setup_DiAna()
+if (file.exists(file.path(here::here(), "data", "24Q1", "DEMO.rds"))) {
+  pids_pregnancy <- retrieve_pregnancy_pids(quarter = "24Q1")
 }
 }

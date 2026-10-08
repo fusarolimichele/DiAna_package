@@ -19,12 +19,13 @@
 #' Sakai T, Mori C, Ohtsu F. Potential safety signal of pregnancy loss with vascular endothelial growth factor inhibitor intraocular injection: A disproportionality analysis using the Food and Drug Administration Adverse Event Reporting System. Front Pharmacol. 2022 Nov 10;13:1063625. doi: 10.3389/fphar.2022.1063625. PMID: 36438807; PMCID: PMC9684212.
 #' @export
 #' @examples
-#' # This function retrieves the pregnancy FAERS from the entire database.
-#' # therefore it requires the data to have been downloaded.
-#' FAERS_version <- "24Q1"
-#' if (file.exists("data/24Q1/DEMO.rds")) {
-#'   pids_pregnancy <- retrieve_pregnancy_pids()
-#'   pids_pregnancy$medium_specificity
+#' # On the sample data shipped with DiAna
+#' pids_pregnancy <- retrieve_pregnancy_pids(quarter = "sample")
+#' pids_pregnancy$medium_specificity
+#'
+#' # On the entire database, which requires the data downloaded with setup_DiAna()
+#' if (file.exists(file.path(here::here(), "data", "24Q1", "DEMO.rds"))) {
+#'   pids_pregnancy <- retrieve_pregnancy_pids(quarter = "24Q1")
 #' }
 retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
   ## pregnancy indication--------------
@@ -988,13 +989,14 @@ retrieve_pregnancy_pids <- function(quarter = FAERS_version) {
     Ther <- sample_Ther
     Drug_supp <- sample_Drug_Supp
   } else {
-    import("DEMO")
-    import("DRUG")
-    import("REAC")
-    import("INDI")
-    import("OUTC")
-    import("THER")
-    import("DRUG_SUPP")
+    check_workspace_defaults("quarter")
+    Demo <- import("DEMO", quarter = quarter, save_in_environment = FALSE)
+    Drug <- import("DRUG", quarter = quarter, save_in_environment = FALSE)
+    Reac <- import("REAC", quarter = quarter, save_in_environment = FALSE)
+    Indi <- import("INDI", quarter = quarter, save_in_environment = FALSE)
+    Outc <- import("OUTC", quarter = quarter, save_in_environment = FALSE)
+    Ther <- import("THER", quarter = quarter, save_in_environment = FALSE)
+    Drug_supp <- import("DRUG_SUPP", quarter = quarter, save_in_environment = FALSE)
   }
   # Step 1 - Pregnancy reports---------------------------------
   indi_preg <- unique(Indi[indi_pt %in% pregnancy_indication]$primaryid)
