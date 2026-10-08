@@ -53,6 +53,72 @@ pids_by_group <- function(ids, terms, groups) {
 #' @noRd
 fast_intersect <- function(a, b) a[a %in% b]
 
+#' Workspace objects that DiAna functions use as defaults, and how to create them
+#' @noRd
+workspace_objects <- c(
+  Drug = 'import("DRUG")', Reac = 'import("REAC")', Demo = 'import("DEMO")',
+  Demo_supp = 'import("DEMO_SUPP")', Indi = 'import("INDI")', Outc = 'import("OUTC")',
+  Ther = 'import("THER")', Doses = 'import("DOSES")', Drug_supp = 'import("DRUG_SUPP")',
+  Drug_name = 'import("DRUG_NAME")', MedDRA = "import_MedDRA()", ATC = "import_ATC()",
+  FAERS_version = 'FAERS_version <- "25Q4"',
+  pids_drug = NA, pids_event = NA
+)
+
+#' Stop with a clear message when a workspace object is missing
+#' @param name Name of the missing object, e.g. "Drug".
+#' @param arg Argument whose default needs the object, if any.
+#' @noRd
+stop_missing_object <- function(name, arg = NULL) {
+  how <- workspace_objects[name]
+  fix <- if (is.na(how)) "" else paste0("Run `", how, "` first")
+  if (!is.null(arg)) {
+    fix <- paste0(fix, if (nzchar(fix)) ", or " else "", "pass `", arg, "` explicitly")
+    datasets <- ls(getNamespaceInfo(asNamespace("DiAna"), "lazydata"))
+    sample_name <- datasets[tolower(datasets) == tolower(paste0("sample_", name))]
+    if (length(sample_name) == 1L) {
+      fix <- paste0(fix, " (e.g. `", arg, " = ", sample_name, "`)")
+    }
+    msg <- paste0("`", arg, "` was not supplied, and its default needs `", name, "`, which was not found in your workspace.")
+  } else {
+    msg <- paste0("`", name, "` was not found in your workspace.")
+  }
+  stop(msg, " ", fix, ".", call. = FALSE)
+}
+
+#' Check that the defaults of unsupplied arguments can be found
+#'
+#' Several DiAna functions default to tables in the user's workspace
+#' (e.g. `temp_drug = Drug`). For each argument in `args` that the caller did
+#' not supply, this checks that the DiAna objects its default refers to exist,
+#' without evaluating the default. Call it where the argument is first used.
+#' @param args Names of the arguments to check.
+#' @noRd
+check_workspace_defaults <- function(args) {
+  env <- parent.frame()
+  defaults <- formals(sys.function(sys.parent()))
+  for (arg in args) {
+    if (!eval(call("missing", as.name(arg)), env)) next
+    needed <- intersect(all.vars(defaults[[arg]]), names(workspace_objects))
+    for (name in needed) {
+      if (!exists(name, envir = env)) stop_missing_object(name, arg)
+    }
+  }
+  invisible(TRUE)
+}
+
+#' Check that an object used directly by a function exists in the workspace
+#' @noRd
+check_workspace_object <- function(name) {
+  if (!exists(name, envir = parent.frame())) stop_missing_object(name)
+  invisible(TRUE)
+}
+
+#' Root folder of the DiAna project, where data/ and external_sources/ live
+#'
+#' A wrapper around here::here(), so tests can point it to a temporary folder.
+#' @noRd
+diana_root <- function() here::here()
+
 #' Wrappers around interactive() and askYesNo(), so tests can mock them
 #' @noRd
 is_interactive <- function() interactive()
