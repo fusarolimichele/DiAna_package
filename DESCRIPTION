@@ -62,6 +62,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 Config/Needs/check: Uppsala-Monitoring-Centre/pvOmega
+Config/Needs/coverage: Uppsala-Monitoring-Centre/pvOmega
 Config/Needs/website: rmarkdown, Uppsala-Monitoring-Centre/pvOmega,
     Uppsala-Monitoring-Centre/PVgravID
 Config/roxygen2/version: 8.1.0
