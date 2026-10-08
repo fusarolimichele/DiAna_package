@@ -13,6 +13,9 @@
 * DiAna now requires R 4.1.0 or later (it already used the `\(x)` syntax).
 
 ## Bug fixes
+* `render_forest()` with `point_size` or `xcoord_lims` failed with "could not find function" since ggplot2 is no longer attached by `library(DiAna)`; it now calls these ggplot2 functions explicitly.
+* `render_tto()` with `nested` drew every group in the same grey and failed when `nested_colors` was given; groups now get their colours and a legend.
+* `DiAna_reference()` and `FAERS_quarter_specifics()` now honour `print`: by default they print the text and return it invisibly; `print = FALSE` only returns it.
 * `extractSMQ()` no longer returns an empty element named `NA` for the unused levels of the SMQ hierarchy. When the dictionary is missing it says which file and columns it expects, instead of pointing to instructions that did not exist, and it checks the columns of the file.
 * `hierarchical_rates()` (formerly `hierarchycal_rates()`) works again without first running `import_MedDRA()` or `import_ATC()`, and reads each dictionary at most once. It also accepts `temp_meddra`, `temp_atc`, and the case tables `temp_reac`, `temp_indi` and `temp_drug`.
 * `reporting_rates()` reuses the MedDRA and ATC already loaded in your workspace instead of reading the files on every call, and gains `temp_meddra` and `temp_atc` arguments.
