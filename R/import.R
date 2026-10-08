@@ -155,11 +155,16 @@ import_ATC <- function(primary = TRUE, env = parent.frame()) {
 #' and the values are character vectors of Preferred Terms (PTs) associated with that SMQ.
 #'
 #' @details
-#' The function reads the SMQ dictionary from an external CSV file located at:
-#' `external_sources/smq_dictionary.csv`.
-#' Since MedDRA subscription is required, the user must obtain the SMQ dictionary separately.
-#' Instructions for setting up the required files are provided in the DiAna GitHub repository:
-#' <https://github.com/fusarolimichele/DiAna_cleaning>.
+#' The function reads the SMQ dictionary from `external_sources/smq_dictionary.csv`.
+#' SMQs are part of MedDRA, which requires a subscription from MedDRA MSSO,
+#' so DiAna cannot distribute this file. Prepare it from your MedDRA release
+#' as a semicolon-separated file with the columns:
+#' \itemize{
+#'   \item `SMQ_1` to `SMQ_5`: the SMQ the term belongs to, at each level of
+#'     the SMQ hierarchy (level 1 being the broadest);
+#'   \item `pt`: the Preferred Term, in lowercase as in DiAna's `Reac`;
+#'   \item `NB`: the scope of the term in the SMQ, `"Narrow"` or `"Broad"`.
+#' }
 #'
 #' The function processes five hierarchical levels (`SMQ_1` to `SMQ_5`) and assigns Preferred Terms (PTs)
 #' accordingly, filtering by "Narrow" scope if requested.
@@ -177,71 +182,31 @@ import_ATC <- function(primary = TRUE, env = parent.frame()) {
 extractSMQ <- function(Narrow = TRUE) {
   path <- file.path(diana_root(), "external_sources", "smq_dictionary.csv")
   if (!file.exists(path)) {
-    stop("The SMQ_dictionary is not available with DiAna since the subscription must be done with MEDDRA MSSO.\n         Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna_cleaning\n         to make it ready for download.")
+    stop("The SMQ dictionary was not found at ", path, ". ",
+      "DiAna cannot distribute it, because SMQs are part of MedDRA, which requires a subscription. ",
+      "Prepare it from your MedDRA release as a semicolon-separated file with the columns ",
+      "SMQ_1 to SMQ_5, pt and NB (\"Narrow\" or \"Broad\"): see ?extractSMQ.",
+      call. = FALSE
+    )
   }
   smq_dictionary <- setDT(readr::read_delim(path,
-    delim = ";", escape_double = FALSE, trim_ws = TRUE
+    delim = ";", escape_double = FALSE, trim_ws = TRUE, show_col_types = FALSE
   ))
-  smq_list <- c()
-  for (n in unique(smq_dictionary$SMQ_1)) {
-    ifelse(Narrow,
-      {
-        sublist <- list(smq_dictionary[SMQ_1 == n][NB == "Narrow"]$pt)
-      },
-      {
-        sublist <- list(smq_dictionary[SMQ_1 == n]$pt)
-      }
-    )
-    names(sublist) <- n
-    smq_list <- c(smq_list, sublist)
-  }
-  for (n in setdiff(unique(smq_dictionary$SMQ_2), unique(smq_dictionary$SMQ_1))) {
-    ifelse(Narrow,
-      {
-        sublist <- list(smq_dictionary[SMQ_2 == n][NB == "Narrow"]$pt)
-      },
-      {
-        sublist <- list(smq_dictionary[SMQ_2 == n]$pt)
-      }
-    )
-    names(sublist) <- n
-    smq_list <- c(smq_list, sublist)
-  }
-  for (n in setdiff(unique(smq_dictionary$SMQ_3), unique(smq_dictionary$SMQ_2))) {
-    ifelse(Narrow,
-      {
-        sublist <- list(smq_dictionary[SMQ_3 == n][NB == "Narrow"]$pt)
-      },
-      {
-        sublist <- list(smq_dictionary[SMQ_3 == n]$pt)
-      }
-    )
-    names(sublist) <- n
-    smq_list <- c(smq_list, sublist)
-  }
-  for (n in setdiff(unique(smq_dictionary$SMQ_4), unique(smq_dictionary$SMQ_3))) {
-    ifelse(Narrow,
-      {
-        sublist <- list(smq_dictionary[SMQ_4 == n][NB == "Narrow"]$pt)
-      },
-      {
-        sublist <- list(smq_dictionary[SMQ_4 == n]$pt)
-      }
-    )
-    names(sublist) <- n
-    smq_list <- c(smq_list, sublist)
-  }
-  for (n in setdiff(unique(smq_dictionary$SMQ_5), unique(smq_dictionary$SMQ_4))) {
-    ifelse(Narrow,
-      {
-        sublist <- list(smq_dictionary[SMQ_5 == n][NB == "Narrow"]$pt)
-      },
-      {
-        sublist <- list(smq_dictionary[SMQ_5 == n]$pt)
-      }
-    )
-    names(sublist) <- n
-    smq_list <- c(smq_list, sublist)
+  check_columns(smq_dictionary, c(paste0("SMQ_", 1:5), "pt", "NB"), "smq_dictionary.csv")
+  # SMQs are listed from the whole dictionary; with Narrow = TRUE only their
+  # narrow-scope terms are kept (an SMQ with only broad terms is then empty)
+  terms <- if (Narrow) smq_dictionary[NB == "Narrow"] else smq_dictionary
+  # one element per SMQ, at every level of the hierarchy; an SMQ that also
+  # appears at the level above is listed only once. Empty levels (NA) are
+  # not SMQs and are skipped.
+  smq_list <- list()
+  previous <- character(0)
+  for (level in paste0("SMQ_", 1:5)) {
+    smqs <- unique(smq_dictionary[[level]])
+    for (n in setdiff(smqs[!is.na(smqs)], previous)) {
+      smq_list[[n]] <- terms[terms[[level]] %in% n]$pt
+    }
+    previous <- smqs
   }
   return(smq_list)
 }
