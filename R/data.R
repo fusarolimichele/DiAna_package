@@ -28,6 +28,12 @@
 #' providing a glimpse into the structure of the database and allowing tests and documentation.
 #' @docType data
 #' @keywords datasets
+#' @section Sampling:
+#' The sample datasets contain all the records of 1,000 reports (`primaryid`)
+#' drawn at random from `Demo` in the DiAna data of quarter 23Q1, kept in
+#' every table. They show the structure of the data and are used in examples
+#' and tests; they are not representative of FAERS for analysis. See
+#' `data-raw/sample_data.R` in the package repository.
 #' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Demo"
 
@@ -49,6 +55,12 @@
 #' providing a glimpse into the structure of the database and allowing tests and documentation.
 #' @docType data
 #' @keywords datasets
+#' @section Sampling:
+#' The sample datasets contain all the records of 1,000 reports (`primaryid`)
+#' drawn at random from `Demo` in the DiAna data of quarter 23Q1, kept in
+#' every table. They show the structure of the data and are used in examples
+#' and tests; they are not representative of FAERS for analysis. See
+#' `data-raw/sample_data.R` in the package repository.
 #' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Reac"
 
@@ -71,6 +83,12 @@
 #' indications observed in adverse drug reaction reports. Each report can record multiple drugs
 #' and therefore multiple indications.
 #' @keywords datasets
+#' @section Sampling:
+#' The sample datasets contain all the records of 1,000 reports (`primaryid`)
+#' drawn at random from `Demo` in the DiAna data of quarter 23Q1, kept in
+#' every table. They show the structure of the data and are used in examples
+#' and tests; they are not representative of FAERS for analysis. See
+#' `data-raw/sample_data.R` in the package repository.
 #' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Indi"
 
@@ -90,6 +108,12 @@
 #' This dataset provides information on outcomes associated with reported adverse drug reactions,
 #' specifying the severity or nature of each event observed for individuals.
 #' @keywords datasets
+#' @section Sampling:
+#' The sample datasets contain all the records of 1,000 reports (`primaryid`)
+#' drawn at random from `Demo` in the DiAna data of quarter 23Q1, kept in
+#' every table. They show the structure of the data and are used in examples
+#' and tests; they are not representative of FAERS for analysis. See
+#' `data-raw/sample_data.R` in the package repository.
 #' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Outc"
 
@@ -114,6 +138,12 @@
 #' This subset dataset provides detailed information on therapeutic interventions,
 #' It facilitates analysis of therapy durations, and onset times.
 #' @keywords datasets
+#' @section Sampling:
+#' The sample datasets contain all the records of 1,000 reports (`primaryid`)
+#' drawn at random from `Demo` in the DiAna data of quarter 23Q1, kept in
+#' every table. They show the structure of the data and are used in examples
+#' and tests; they are not representative of FAERS for analysis. See
+#' `data-raw/sample_data.R` in the package repository.
 #' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Ther"
 
@@ -141,6 +171,12 @@
 #' and frequency of administration, facilitating analysis related to dosing patterns.
 #' As it can be observed in the sample, most of the dataset is NA (info not available).
 #' @keywords datasets
+#' @section Sampling:
+#' The sample datasets contain all the records of 1,000 reports (`primaryid`)
+#' drawn at random from `Demo` in the DiAna data of quarter 23Q1, kept in
+#' every table. They show the structure of the data and are used in examples
+#' and tests; they are not representative of FAERS for analysis. See
+#' `data-raw/sample_data.R` in the package repository.
 #' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Doses"
 
@@ -162,6 +198,12 @@
 #' This subset of Drug provides detailed information on drugs administered to individuals,
 #' specifying their suspected roles in the context of adverse drug reactions.
 #' @keywords datasets
+#' @section Sampling:
+#' The sample datasets contain all the records of 1,000 reports (`primaryid`)
+#' drawn at random from `Demo` in the DiAna data of quarter 23Q1, kept in
+#' every table. They show the structure of the data and are used in examples
+#' and tests; they are not representative of FAERS for analysis. See
+#' `data-raw/sample_data.R` in the package repository.
 #' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Drug"
 
@@ -184,6 +226,12 @@
 #' @details
 #' This subset of Drug_Name provides detailed information on drug names and associated attributes.
 #' @keywords datasets
+#' @section Sampling:
+#' The sample datasets contain all the records of 1,000 reports (`primaryid`)
+#' drawn at random from `Demo` in the DiAna data of quarter 23Q1, kept in
+#' every table. They show the structure of the data and are used in examples
+#' and tests; they are not representative of FAERS for analysis. See
+#' `data-raw/sample_data.R` in the package repository.
 #' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Drug_Name"
 
@@ -216,6 +264,12 @@
 #' including details related to reporting and manufacturer information.
 #' It is useful for understanding additional context around adverse drug reaction reports.
 #' @keywords datasets
+#' @section Sampling:
+#' The sample datasets contain all the records of 1,000 reports (`primaryid`)
+#' drawn at random from `Demo` in the DiAna data of quarter 23Q1, kept in
+#' every table. They show the structure of the data and are used in examples
+#' and tests; they are not representative of FAERS for analysis. See
+#' `data-raw/sample_data.R` in the package repository.
 #' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Demo_Supp"
 
@@ -242,6 +296,12 @@
 #' including details such as administration routes, dose forms, and dechallenge/rechallenge flags.
 #' It complements adverse drug reaction data by providing additional context on drug usage.
 #' @keywords datasets
+#' @section Sampling:
+#' The sample datasets contain all the records of 1,000 reports (`primaryid`)
+#' drawn at random from `Demo` in the DiAna data of quarter 23Q1, kept in
+#' every table. They show the structure of the data and are used in examples
+#' and tests; they are not representative of FAERS for analysis. See
+#' `data-raw/sample_data.R` in the package repository.
 #' @source https://github.com/fusarolimichele/DiAna_cleaning
 "sample_Drug_Supp"
 

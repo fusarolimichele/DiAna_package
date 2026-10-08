@@ -32,4 +32,13 @@ This dataset provides supplementary information on drugs administered,
 including details such as administration routes, dose forms, and dechallenge/rechallenge flags.
 It complements adverse drug reaction data by providing additional context on drug usage.
 }
+\section{Sampling}{
+
+The sample datasets contain all the records of 1,000 reports (\code{primaryid})
+drawn at random from \code{Demo} in the DiAna data of quarter 23Q1, kept in
+every table. They show the structure of the data and are used in examples
+and tests; they are not representative of FAERS for analysis. See
+\code{data-raw/sample_data.R} in the package repository.
+}
+
 \keyword{datasets}
