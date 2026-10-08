@@ -56,3 +56,61 @@ test_that("retrieve_pregnancy_pids() uses its quarter argument and leaves the wo
   )
   expect_equal(ls(globalenv()), before)
 })
+
+# dictionaries in the fake project
+dir.create(file.path(fake_root, "external_sources"), showWarnings = FALSE)
+fake_meddra_file <- data.frame(
+  def = 1, soc = "soc a", hlgt = "hlgt a", hlt = c("hlt a", "hlt a", "hlt b"),
+  pt = c("nausea", "nausea", "vomiting")
+)
+write.table(fake_meddra_file, file.path(fake_root, "external_sources", "meddra_primary.csv"), sep = ";", row.names = FALSE)
+fake_atc_file <- data.frame(
+  Substance = c("paracetamol", "paracetamol"), code = c("N02BE01", "X"), primary_code = "N02BE01",
+  Lvl4 = "N02BE", Class4 = "anilides", Lvl3 = "N02B", Class3 = "other analgesics",
+  Lvl2 = "N02", Class2 = "analgesics", Lvl1 = "N", Class1 = "nervous system"
+)
+write.table(fake_atc_file, file.path(fake_root, "external_sources", "ATC_DiAna.csv"), sep = ";", row.names = FALSE)
+
+test_that("import_MedDRA() reads the dictionary, removes duplicates and assigns it where called", {
+  local_mocked_bindings(diana_root = function() fake_root)
+  res <- import_MedDRA()
+  expect_named(res, c("def", "soc", "hlgt", "hlt", "pt"))
+  expect_equal(nrow(res), 2)
+  expect_true(exists("MedDRA", inherits = FALSE))
+})
+
+test_that("import_ATC() keeps only primary codes unless asked otherwise", {
+  local_mocked_bindings(diana_root = function() fake_root)
+  expect_equal(nrow(import_ATC()), 1)
+  expect_true(exists("ATC", inherits = FALSE))
+  expect_equal(nrow(import_ATC(primary = FALSE, env = environment())), 2)
+  expect_named(import_ATC(), c("substance", "code", "primary_code", "Lvl4", "Class4", "Lvl3", "Class3", "Lvl2", "Class2", "Lvl1", "Class1"))
+})
+
+test_that("import_MedDRA() and import_ATC() explain a missing file", {
+  empty_root <- tempfile("diana_")
+  dir.create(empty_root)
+  local_mocked_bindings(diana_root = function() empty_root)
+  expect_error(import_MedDRA(), "MedDRA is not available")
+  expect_error(import_ATC(), "ATC cannot be found")
+})
+
+test_that("new_descriptive() imports the tables of a quarter", {
+  local_mocked_bindings(diana_root = function() fake_root)
+  pids <- unique(sample_Drug[substance == "adalimumab"]$primaryid)
+  from_quarter <- suppressWarnings(new_descriptive(pids, drug = "adalimumab", database = "99Q1"))
+  from_sample <- suppressWarnings(new_descriptive(pids, drug = "adalimumab", database = "sample"))
+  expect_equal(from_quarter, from_sample)
+})
+
+test_that("new_descriptive(database = 'VigiBase') leaves out continents", {
+  vigibase_root <- tempfile("diana_")
+  dir.create(file.path(vigibase_root, "data"), recursive = TRUE)
+  file.copy(file.path(fake_root, "data", "99Q1"), file.path(vigibase_root, "data"), recursive = TRUE)
+  file.rename(file.path(vigibase_root, "data", "99Q1"), file.path(vigibase_root, "data", "VigiBase"))
+  local_mocked_bindings(diana_root = function() vigibase_root)
+  pids <- unique(sample_Drug[substance == "adalimumab"]$primaryid)
+  res <- suppressWarnings(new_descriptive(pids, database = "VigiBase"))
+  expect_false("__continent__" %in% res[[1]] || "continent" %in% res[[1]])
+  expect_true(any(res[[1]] %in% c("country", "__country__")))
+})

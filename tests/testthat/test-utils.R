@@ -45,3 +45,17 @@ test_that("disproportionality_analysis warns about terms not in the database", {
     "paracetamoll"
   )
 })
+
+test_that("as_term_groups() accepts vectors, unnamed and named lists", {
+  expect_equal(as_term_groups(c("a", "b", "a"), "x"), list(a = "a", b = "b"))
+  expect_equal(as_term_groups(list(c("a", "b"), "c"), "x"), list(a = c("a", "b"), c = "c"))
+  expect_equal(as_term_groups(list(grp = list("a", "b")), "x"), list(grp = c("a", "b")))
+  expect_error(as_term_groups(character(0), "drug1_selected"), "`drug1_selected` must contain at least one term")
+  expect_error(as_term_groups(list(g = character(0)), "x"), "contains empty groups")
+  expect_error(as_term_groups(list(g = "a", g = "b"), "x"), "duplicated group names")
+})
+
+test_that("warn_empty() names the groups without reports", {
+  expect_warning(warn_empty(list(a = 1:2, b = integer(0)), "drug1_selected"), "drug1_selected` for: b")
+  expect_silent(warn_empty(list(a = 1:2), "drug1_selected"))
+})

@@ -30,3 +30,14 @@ test_that("Network analysis drops rare and near-universal terms (min_frequency_t
   expect_setequal(V(g)$name, kept_terms)
   expect_lt(length(V(g)), nrow(counts))
 })
+
+test_that("Network analysis works on suspected substances and saves the plot when asked", {
+  file <- tempfile(fileext = ".tiff")
+  g <- network_analysis(
+    pids = sample_Demo$primaryid, entity = "substance", restriction = "suspects",
+    temp_drug = sample_Drug, file_name = file
+  )
+  expect_s3_class(g, "igraph")
+  expect_true(file.exists(file))
+  expect_gt(file.size(file), 0)
+})

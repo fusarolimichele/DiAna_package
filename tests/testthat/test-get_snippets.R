@@ -27,3 +27,49 @@ test_that("Snippets are not installed in a non-interactive session", {
   local_mocked_bindings(is_interactive = function() FALSE)
   expect_error(snippets_install_github(), "interactively")
 })
+
+test_that("snippets_install_github() merges the downloaded snippets into the user's file", {
+  path <- tempfile(fileext = ".snippets")
+  writeLines(c("snippet lib", "\tlibrary(x)", "snippet mine", "\tmy_code()"), path)
+  listing <- '[{"type": "file", "name": "r.snippets", "download_url": "https://example.org/r.snippets"},
+               {"type": "file", "name": "LICENSE", "download_url": "https://example.org/LICENSE"},
+               {"type": "dir", "name": "old", "download_url": null}]'
+  local_mocked_bindings(
+    is_interactive = function() TRUE,
+    ask_yes_no = function(msg) TRUE,
+    snippets_path = function() path,
+    read_url = function(address) {
+      if (grepl("api.github.com", address)) {
+        listing
+      } else {
+        "snippet lib\n\tlibrary(DiAna)\nsnippet diana\n\tsetup_DiAna()"
+      }
+    }
+  )
+  expect_message(snippets_install_github(), "2 snippets installed")
+  merged <- parse_snippets(readLines(path))
+  expect_named(merged, c("lib", "mine", "diana"))
+  expect_equal(merged$lib, "\tlibrary(DiAna)")
+  expect_equal(merged$mine, "\tmy_code()")
+})
+
+test_that("snippets_install_github() changes nothing if the user declines or has no snippets file", {
+  path <- tempfile(fileext = ".snippets")
+  writeLines(c("snippet mine", "\tmy_code()"), path)
+  local_mocked_bindings(
+    is_interactive = function() TRUE,
+    ask_yes_no = function(msg) FALSE,
+    snippets_path = function() path,
+    read_url = function(address) stop("should not download")
+  )
+  expect_error(snippets_install_github(), "not downloaded")
+  expect_equal(readLines(path), c("snippet mine", "\tmy_code()"))
+
+  local_mocked_bindings(snippets_path = function() tempfile())
+  expect_error(snippets_install_github(), "Edit Code Snippets")
+})
+
+test_that("snippets_path() points to the RStudio snippets folder", {
+  expect_match(snippets_path(), "r\\.snippets$")
+  expect_match(snippets_path(), "snippets", fixed = TRUE)
+})
