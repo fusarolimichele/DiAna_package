@@ -15,11 +15,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-DiAna does not analyse the raw FDA Adverse Event Reporting System (FAERS)
+DiAna does not analyze the raw FDA Adverse Event Reporting System (FAERS)
 files. It works on a cleaned version of FAERS that is rebuilt at every
 quarterly update and shared on the Open Science Framework (OSF), where
-`setup_DiAna()` downloads it from. This article summarises how that data is
-built and what to keep in mind when analysing it.
+`setup_DiAna()` downloads it from. This article summarizes how that data is
+built and what to keep in mind when analyzing it.
 
 The full description of the cleaning, with the code of every step, is in the
 [DiAna documentation](https://github.com/fusarolimichele/DiAna_cleaning/blob/main/DiAna_Documentation.pdf)
@@ -30,7 +30,7 @@ Repository for FAERS cleaning and analysis. 2023.
 
 ## The cleaning in brief
 
-Raw FAERS cannot be analysed as it is: it is split into separate files for
+Raw FAERS cannot be analyzed as it is: it is split into separate files for
 every quarter since 2004, its format changed over time, many fields are free
 text, and the same case can appear several times. The DiAna cleaning turns it
 into a single, consistent database:
@@ -87,10 +87,10 @@ The cleaning runs in this order:
    converted to R's `.rds` format. Known formatting errors are corrected
    (for example missing line breaks in three DRUG files of 2011).
 2. **Merging the quarters.** For each table, all LAERS and FAERS quarters are
-   merged into one. Variable names are standardised, columns never filled
+   merged into one. Variable names are standardized, columns never filled
    (mostly for privacy) are removed, duplicated columns are combined, empty
    strings become missing values, and each report records its quarter.
-3. **Standardisation** of the fields that FAERS does not code consistently:
+3. **Standardization** of the fields that FAERS does not code consistently:
    - **Events and indications** (`pt`, `indi_pt`, `drug_rec_act`): terms
      that are not current MedDRA Preferred Terms (older MedDRA versions, Low
      Level Terms, misspellings) are translated where possible.
@@ -110,7 +110,7 @@ The cleaning runs in this order:
      they are rather than completed, to avoid inventing precision.
    - **Therapy**: durations are converted to days, and missing start or end
      dates are imputed from the duration where possible. Route, dose form,
-     dose frequency, dechallenge and rechallenge are standardised.
+     dose frequency, dechallenge and rechallenge are standardized.
 4. **Time to onset** is computed for each drug as the days from its start
    date to the event date (day 1 being the first day of therapy).
 5. **Removing reports:**
@@ -148,7 +148,7 @@ DiAna, such as `sample_Demo`, have the same structure):
 | `OUTC` | report and outcome | seriousness outcome |
 | `THER` | report and drug | start and end dates, duration, time to onset |
 
-## What to keep in mind when analysing
+## What to keep in mind when analyzing
 
 - **Missing is not negative.** A report without a recorded outcome is not
   known to be non-serious; a missing sex or age is unknown. This is why
@@ -178,7 +178,7 @@ DiAna, such as `sample_Demo`, have the same structure):
 The events and indications are coded with MedDRA Preferred Terms, but the
 MedDRA hierarchy (HLT, HLGT, SOC) cannot be distributed with DiAna: it
 requires a subscription, free for academics, from
-[MedDRA](https://www.meddra.org/). To analyse at levels above the PT:
+[MedDRA](https://www.meddra.org/). To analyze at levels above the PT:
 
 1. Download the English MedDRA release and unzip it with the password from
    the MedDRA self-service application.

@@ -36,7 +36,7 @@ disproportionality_analysis(
 
 \item{restriction}{Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo[!RB_duplicates_only_susp]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.}
 
-\item{minimum_cases}{Threshold of minimum cases for calculating identifyin a signal (default is 3).}
+\item{minimum_cases}{Threshold of minimum cases for identifying a signal (default is 3).}
 
 \item{frequentist_threshold}{Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).}
 

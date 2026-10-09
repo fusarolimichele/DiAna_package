@@ -49,7 +49,7 @@ The function constructs a contingency table for the drug-event combination and c
 \item{\code{ROR}}{Reporting Odds Ratio: Fisher's conditional maximum-likelihood odds ratio with its exact confidence interval (see the section below).}
 \item{\code{PRR}}{Proportional Reporting Ratio: The expected probability of the event is calculated on the population not having the drug of interest.}
 \item{\code{RRR}}{Relative Reporting Ratio: The expected probability of the event is calculated on the entire population.}
-\item{\code{IC}}{Information Component: A measure based on Bayesian confidence propagation neural network models. It is the log2 of the shrinked RRR.}
+\item{\code{IC}}{Information Component: A measure based on Bayesian confidence propagation neural network models. It is the log2 of the shrunk RRR.}
 \item{\code{IC_gamma}}{Gamma distribution-based Information Component: An alternative IC calculation using the gamma distribution. It is more appropriate for small databases}
 }
 }

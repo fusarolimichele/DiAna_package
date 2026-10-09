@@ -287,7 +287,7 @@
 #'     \item{route}{Route of drug administration (\code{factor}).}
 #'     \item{dose_form}{Form of the drug dose (\code{factor}).}
 #'     \item{dechal}{Dechallenged flag indicating if dechallenge verified: the event abated at the discontinuation of the drug (\code{factor}).}
-#'     \item{rechal}{Rechallenged flag indicating if rechallenge verified: the event reappeared after readminstering the drug (\code{factor}).}
+#'     \item{rechal}{Rechallenged flag indicating if rechallenge verified: the event reappeared after readministering the drug (\code{factor}).}
 #'     \item{lot_num}{Lot number of the drug (\code{character}).}
 #'     \item{exp_dt}{Expiration date of the drug (\code{numeric}).}
 #'   }

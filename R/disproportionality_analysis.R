@@ -14,7 +14,7 @@
 #' @param meddra_level The desired MedDRA level for analysis (default is "pt").
 #' @param drug_level The desired drug level for analysis (default is "substance"). If set to "custom" allows a list of lists for reac_selected (collapsing multiple terms).
 #' @param restriction Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo\[!RB_duplicates_only_susp\]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.
-#' @param minimum_cases Threshold of minimum cases for calculating identifyin a signal (default is 3).
+#' @param minimum_cases Threshold of minimum cases for identifying a signal (default is 3).
 #' @param log2_threshold Threshold for defining the significance of the lower limit of the Information Component (default is 0).
 #' @param multiple_comparison Logical specifying whether to perform Bonferroni correction for multiple testing on the ROR. Default to TRUE. Particularly important when running the disproportionality on many combinations.
 #' @param frequentist_threshold Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).
@@ -370,7 +370,7 @@ render_forest <- function(disproportionality_df,
 #'   \item{\code{ROR}}{Reporting Odds Ratio: Fisher's conditional maximum-likelihood odds ratio with its exact confidence interval (see the section below).}
 #'   \item{\code{PRR}}{Proportional Reporting Ratio: The expected probability of the event is calculated on the population not having the drug of interest.}
 #'   \item{\code{RRR}}{Relative Reporting Ratio: The expected probability of the event is calculated on the entire population.}
-#'   \item{\code{IC}}{Information Component: A measure based on Bayesian confidence propagation neural network models. It is the log2 of the shrinked RRR.}
+#'   \item{\code{IC}}{Information Component: A measure based on Bayesian confidence propagation neural network models. It is the log2 of the shrunk RRR.}
 #'   \item{\code{IC_gamma}}{Gamma distribution-based Information Component: An alternative IC calculation using the gamma distribution. It is more appropriate for small databases}
 #' }
 #' @inheritSection disproportionality_analysis Reporting odds ratio (ROR)
@@ -466,7 +466,7 @@ disproportionality_comparison <- function(drug_count = length(pids_drug), event_
 #' @param min_2004 Logical indicating whether to start the analysis only from 2004, year of the FDA AERS first implementation. Defaults to `TRUE`.
 #'
 #' @return A data frame containing the disproportionality results over time, including:
-#' \item{period}{Time period. Deafult is 'year'. Other values are 'quarter' and 'month'. When using 'quarter' Demo_supp is required}
+#' \item{period}{Time period. Default is 'year'. Other values are 'quarter' and 'month'. When using 'quarter' Demo_supp is required}
 #' \item{TOT}{Total number of reports}
 #' \item{D_E}{Number of reports with both drug and event}
 #' \item{D_nE}{Number of reports with the drug but not the event}
@@ -582,7 +582,7 @@ disproportionality_trend <- function(
 #' @family visualization functions
 #' @param disproportionality_trend_results Data frame containing the results from the `disproportionality_trend` function.
 #' @param metric Character string specifying the metric to plot. Options are "IC" (information component) or "ROR" (reporting odds ratio). Defaults to "IC".
-#' @param time_granularity Character string specifying the time frame. It is recommeded to use the same specified in the 'disproportionality_trend' function. Default is "year". Alternatives are "quarter" and "month".
+#' @param time_granularity Character string specifying the time frame. It is recommended to use the same specified in the 'disproportionality_trend' function. Default is "year". Alternatives are "quarter" and "month".
 #'
 #' @return A ggplot object representing the disproportionality trend plot for the specified metric.
 #' @details

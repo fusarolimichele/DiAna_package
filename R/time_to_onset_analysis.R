@@ -259,7 +259,7 @@ plot_KS <- function(results_tto_analysis, RG = "drug") {
 #' @param df Data.table containing the data for rendering the forest plot.
 #' @param row Variable for the rows of the forest plot (default is "substance").
 #' @param levs_row Levels for the rows of the forest plot.
-#' @param facet_v Variable for vertical facetting (default is "NA", it could be setted to e.g., "event").
+#' @param facet_v Variable for vertical facetting (default is "NA", it could be set to e.g., "event").
 #' @param facet_h Variable for horizontal facetting (default is NA).
 #' @param nested Variable indicating if nested plotting is required (default is FALSE). If nested plotting is required the name of the variable should replace FALSE.
 #' @param text_size_legend Size of text in the legend (default is 15).

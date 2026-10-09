@@ -3,8 +3,8 @@
 
 # DiAna
 
-The goal of DiAna is to enchance the transparency,
-flexibility,replicability, and tool exchange capabilities within the
+The goal of DiAna is to enhance the transparency,
+flexibility, replicability, and tool exchange capabilities within the
 domain of pharmacovigilance studies. This specialized R package has been
 meticulously crafted to facilitate the intricate process of
 disproportionality analysis on the FDA Adverse Event Reporting System
@@ -45,7 +45,7 @@ these simple steps:
 2.  Installing R Studio R Studio is an integrated development
     environment (IDE) for R that makes your R programming easier and
     more efficient. Once R is installed, go to the R Studio website
-    (<https://posit.co/download/rstudio-desktop/>) and download the free
+    (<https://posit.co/downloads>) and download the free
     version of R Studio Desktop. Install R Studio by following the
     installation instructions for your operating system.
 
@@ -97,7 +97,7 @@ setup_DiAna(quarter = "24Q1")
 
 With library DiAna we have imported the DiAna package (i.e., the toolbox
 with all the functions that we will use in our analyses). With
-setup_DiAna(quarter=“24Q1”) we are automaticatilly setting up the
+setup_DiAna(quarter=“24Q1”) we are automatically setting up the
 project: it will create a folder to store cleaned FAERS data, that will
 be downloaded from an OSF repository (in particular we are downloading
 the entire FAERS database, including all the quarters up to the 24Q1).
