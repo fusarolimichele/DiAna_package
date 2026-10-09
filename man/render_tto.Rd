@@ -37,7 +37,7 @@ render_tto(
 
 \item{nested_colors}{Vector of colors for plot elements.}
 
-\item{facet_v}{Variable for vertical facetting (default is "NA", it could be setted to e.g., "event").}
+\item{facet_v}{Variable for vertical facetting (default is "NA", it could be set to e.g., "event").}
 
 \item{facet_h}{Variable for horizontal facetting (default is NA).}
 }

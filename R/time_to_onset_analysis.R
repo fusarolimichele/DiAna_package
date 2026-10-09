@@ -55,21 +55,15 @@ time_to_onset_analysis <- function(
   max_TTO = 365,
   test = "AD"
 ) {
+  check_workspace_defaults(c("temp_drug", "temp_reac", "temp_ther"))
+
   # reformat drug and reac input
   drug_selected <- format_input_disproportionality(drug_selected)
   reac_selected <- format_input_disproportionality(reac_selected)
 
   # print warning if any drug or reaction selected was not found
-  if (length(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]]))) > 0) {
-    if (askYesNo(paste0("Not all the drugs selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(drug_selected), unique(temp_drug[[drug_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
-      stop("Revise the query and run again the command")
-    }
-  }
-  if (length(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]]))) > 0) {
-    if (askYesNo(paste0("Not all the events selected were found in the database, \n check the following terms for any misspelling or alternative nomenclature: \n ", paste0(setdiff(purrr::flatten(reac_selected), unique(temp_reac[[meddra_level]])), collapse = "; "), ". \n Would you like to revise the query?"))) {
-      stop("Revise the query and run again the command")
-    }
-  }
+  check_terms_found(drug_selected, unique(temp_drug[[drug_level]]), "drugs")
+  check_terms_found(reac_selected, unique(temp_reac[[meddra_level]]), "events")
   if (length(restriction) > 1) {
     temp_drug <- temp_drug[primaryid %in% restriction] %>% droplevels()
     temp_reac <- temp_reac[primaryid %in% restriction] %>% droplevels()
@@ -80,10 +74,7 @@ time_to_onset_analysis <- function(
   ]
 
   if (meddra_level != "pt") {
-    if (!exists("MedDRA")) {
-      stop("The MedDRA dictionary is not uploaded.
-                                Without it, only analyses at the PT level are possible")
-    }
+    check_workspace_object("MedDRA")
     temp_reac <- MedDRA[, c(meddra_level, "pt"), with = FALSE][temp_reac, on = "pt"]
   }
 
@@ -268,7 +259,7 @@ plot_KS <- function(results_tto_analysis, RG = "drug") {
 #' @param df Data.table containing the data for rendering the forest plot.
 #' @param row Variable for the rows of the forest plot (default is "substance").
 #' @param levs_row Levels for the rows of the forest plot.
-#' @param facet_v Variable for vertical facetting (default is "NA", it could be setted to e.g., "event").
+#' @param facet_v Variable for vertical facetting (default is "NA", it could be set to e.g., "event").
 #' @param facet_h Variable for horizontal facetting (default is NA).
 #' @param nested Variable indicating if nested plotting is required (default is FALSE). If nested plotting is required the name of the variable should replace FALSE.
 #' @param text_size_legend Size of text in the legend (default is 15).
@@ -322,7 +313,7 @@ render_tto <- function(df,
   if (nested != FALSE) {
     df$nested <- df[[nested]]
     colors <- nested_colors
-    if (is.na(colors)) {
+    if (all(is.na(colors))) {
       colors <- c(
         "goldenrod", "steelblue", "salmon2",
         "green4", "brown", "violet", "blue4"
@@ -380,8 +371,13 @@ render_tto <- function(df,
     xlab("TTO (days)") +
     ylab("") +
     scale_x_continuous(trans = transformation) +
-    scale_color_manual(values = c(red = "red", orange = "orange", gray = "gray")) +
+    # nested plots are coloured by group, with a legend to tell the groups apart;
+    # otherwise by the significance of the tests (red, orange, gray)
+    scale_color_manual(values = if (nested != FALSE) colors else c(red = "red", orange = "orange", gray = "gray")) +
     theme_bw() +
     scale_size_area(guide = "none") +
-    guides(shape = guide_legend(override.aes = list(size = 5)), col = "none")
+    guides(
+      shape = guide_legend(override.aes = list(size = 5)),
+      col = if (nested != FALSE && show_legend) "legend" else "none"
+    )
 }

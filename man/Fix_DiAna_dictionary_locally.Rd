@@ -4,10 +4,22 @@
 \alias{Fix_DiAna_dictionary_locally}
 \title{Fix DiAna Dictionary Locally}
 \usage{
-Fix_DiAna_dictionary_locally(changes_xlsx_name)
+Fix_DiAna_dictionary_locally(
+  changes_xlsx_name,
+  temp_drug = NULL,
+  temp_drug_name = NULL
+)
 }
 \arguments{
-\item{changes_xlsx_name}{A string specifying the name of the Excel file containing the changes.}
+\item{changes_xlsx_name}{Path of the Excel file containing the changes, with
+the columns \code{drugname} (raw drug name) and \code{substance} (the active
+ingredient it should be translated to).}
+
+\item{temp_drug}{Drug dataset. Defaults to \code{Drug} if it is in your
+workspace; otherwise it is imported for the quarter in \code{FAERS_version}.}
+
+\item{temp_drug_name}{Drug_name dataset. Defaults to \code{Drug_name} if it is in
+your workspace; otherwise it is imported for the quarter in \code{FAERS_version}.}
 }
 \value{
 A data.table with the updated Drug information.
@@ -19,16 +31,16 @@ This function updates the DiAna dictionary based on changes specified in an Exce
 The function performs the following steps:
 \itemize{
 \item Reads the changes from the specified Excel file.
-\item Imports the necessary data tables (\code{DRUG_NAME} and \code{DRUG}) if they do not already exist.
+\item Uses the \code{Drug} and \code{Drug_name} tables, importing them if they are not available.
 \item Identifies the records in \code{Drug_name} that need to be fixed based on the changes.
-\item Joins the changes with the identified records and updates the \code{Drug} table.
-\item Removes the old records and adds the updated records to the \code{Drug} table.
+\item Replaces the substance of those records in the \code{Drug} table.
 }
 }
 \examples{
-# This example needs that DiAna dictionary is downloaded (using setup_DiAna),
-# and that an excel file with intended changes is available
-if (file.exists("changes.xlsx") & file.exists("external_source/DiAna_dictionary.csv")) {
-  Drug <- Fix_DiAna_dictionary_locally("changes.xlsx")
-}
+changes <- tempfile(fileext = ".xlsx")
+writexl::write_xlsx(data.frame(drugname = "humira", substance = "adalimumab"), changes)
+Drug <- Fix_DiAna_dictionary_locally(changes,
+  temp_drug = sample_Drug, temp_drug_name = sample_Drug_Name
+)
+unlink(changes)
 }

@@ -57,17 +57,12 @@ reference:
   - get_drugnames
   - Fix_DiAna_dictionary_locally
 
-- subtitle: "Identify specific subpopulations"
-  contents:
-  - retrieve_pregnancy_pids
-
 - title: "Descriptive functions"
   desc: >
     Functions to perform descriptive analyses.
   contents:
   - descriptive
-  - new_descriptive
-  - hierarchycal_rates
+  - hierarchical_rates
   - reporting_rates
   - render_tto
 
@@ -103,6 +98,14 @@ reference:
   - network_analysis
 
 
+- title: "Deprecated"
+  desc: >
+    Functions that still work but will be removed in a future release.
+    retrieve_pregnancy_pids() is replaced by the PVgravID package.
+  contents:
+  - retrieve_pregnancy_pids
+  - DiAna-deprecated
+
 - title: "DiAna specifics"
   desc: >
     Functions to retrieve DiAna reference and information about the used quarter.
@@ -116,6 +119,7 @@ articles:
   navbar: Get started
   contents:
   - articles/Start_Subproject
+  - articles/DiAna_data
 
 - title: Disproportionality Analysis
   navbar: Disproportionality Analysis

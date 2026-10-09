@@ -93,7 +93,7 @@ new directory named "tutorial" within the "projects" folder of your
 DiAna folder. The **`here::here()`** function helps locate the current
 DiAna package directory, and the project_path variable is defined to
 point to the "tutorial" folder for storing the output. If you want to
-give a better name to the project just change the string assinged to the
+give a better name to the project just change the string assigned to the
 variable project_name.
 
 ```{r setup_subproject, eval=FALSE}

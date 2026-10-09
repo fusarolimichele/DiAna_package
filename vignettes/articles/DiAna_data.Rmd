@@ -1,0 +1,199 @@
+---
+title: "Where the DiAna data comes from"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Where the DiAna data comes from}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+DiAna does not analyze the raw FDA Adverse Event Reporting System (FAERS)
+files. It works on a cleaned version of FAERS that is rebuilt at every
+quarterly update and shared on the Open Science Framework (OSF), where
+`setup_DiAna()` downloads it from. This article summarizes how that data is
+built and what to keep in mind when analyzing it.
+
+The full description of the cleaning, with the code of every step, is in the
+[DiAna documentation](https://github.com/fusarolimichele/DiAna_cleaning/blob/main/DiAna_Documentation.pdf)
+of the [DiAna_cleaning](https://github.com/fusarolimichele/DiAna_cleaning)
+repository. To cite the cleaned data: Fusaroli M, Giunchi V. DiAna:
+Repository for FAERS cleaning and analysis. 2023.
+[doi:10.17605/OSF.IO/ZQU89](https://doi.org/10.17605/OSF.IO/ZQU89).
+
+## The cleaning in brief
+
+Raw FAERS cannot be analyzed as it is: it is split into separate files for
+every quarter since 2004, its format changed over time, many fields are free
+text, and the same case can appear several times. The DiAna cleaning turns it
+into a single, consistent database:
+
+- **One database for all quarters.** All quarters since 2004, from both the
+  legacy system (LAERS) and the current one (FAERS), are merged into one set
+  of tables with the same variable names and coding throughout.
+- **Standard terms.** Drug names are translated into active ingredients,
+  events and indications into current MedDRA Preferred Terms, and countries,
+  routes, dose forms and other free-text fields into standard values.
+- **Comparable measures.** Ages are in days, weights in kilograms and
+  durations in days; implausible values are set to missing rather than kept.
+- **Dates kept as recorded.** Invalid dates are removed and incomplete ones are not
+  completed, and the time to onset is computed for each drug.
+- **One report per case.** Nullified reports, older versions of the same case
+  and duplicated identifiers are removed, as are reports without any drug or
+  any event.
+- **Flags for selection.** Probable duplicates, premarketing (clinical trial)
+  reports and literature reports are kept but flagged, so each study can
+  decide whether to exclude them.
+- **Ready-to-use tables.** The result is split into the tables listed below,
+  which `import()` loads for each quarter.
+
+The rest of this article describes these steps in more detail.
+
+## The source: FAERS quarterly data
+
+The FDA publishes FAERS as
+[quarterly data extracts](https://fis.fda.gov/extensions/FPD-QDE-FAERS/FPD-QDE-FAERS.html).
+DiAna uses the ASCII files, in which fields are separated by `$`. A few
+things about these files shape everything that follows:
+
+- **Quarters refer to when the FDA received a report**, not to when the
+  event happened. The first quarter is January-March 2004, but reports can
+  describe events that occurred earlier.
+- **Each quarter is split into seven files**: DEMO (demographic and
+  administrative information), DRUG (medicinal products), REAC (adverse
+  events), OUTC (outcomes), RPSR (report sources), THER (therapy dates) and
+  INDI (indications). From 19Q1 a DELETED file lists reports to be removed.
+- **The system changed in 2012.** Until 12Q2 the data come from the Legacy
+  AERS (LAERS), based on individual safety reports; from 12Q3 from FAERS,
+  based on cases with numbered versions. Variable names and coding differ
+  between the two, and also between FAERS quarters.
+- **`primaryid` identifies one version of a case** (`caseid`). It links the
+  tables: DEMO has one row per `primaryid`; DRUG, REAC, OUTC and RPSR can
+  have several. THER and INDI link to DRUG through `primaryid` and
+  `drug_seq`.
+
+## How the data is cleaned
+
+The cleaning runs in this order:
+
+1. **Download and storage.** All quarterly ASCII files are downloaded and
+   converted to R's `.rds` format. Known formatting errors are corrected
+   (for example missing line breaks in three DRUG files of 2011).
+2. **Merging the quarters.** For each table, all LAERS and FAERS quarters are
+   merged into one. Variable names are standardized, columns never filled
+   (mostly for privacy) are removed, duplicated columns are combined, empty
+   strings become missing values, and each report records its quarter.
+3. **Standardization** of the fields that FAERS does not code consistently:
+   - **Events and indications** (`pt`, `indi_pt`, `drug_rec_act`): terms
+     that are not current MedDRA Preferred Terms (older MedDRA versions, Low
+     Level Terms, misspellings) are translated where possible.
+   - **Drugs**: free-text drug names (brand names, active ingredients,
+     abbreviations, misspellings) are translated into active ingredients
+     with the
+     [DiAna dictionary](https://doi.org/10.1007/s40264-023-01391-4).
+     Products with several ingredients become one row per ingredient.
+   - **Sex**: only `F` and `M` are kept; other values become missing.
+   - **Age and weight**: converted to days and kilograms. Implausible values
+     (over 122 years, over 635 kg) become missing. Age groups are recomputed
+     from the age.
+   - **Country**: country codes are translated into country names.
+   - **Reporter occupation**: only the standard codes are kept.
+   - **Dates**: dates before 1985 or after the end of the quarter become
+     missing. Incomplete dates (year only, or year and month) are kept as
+     they are rather than completed, to avoid inventing precision.
+   - **Therapy**: durations are converted to days, and missing start or end
+     dates are imputed from the duration where possible. Route, dose form,
+     dose frequency, dechallenge and rechallenge are standardized.
+4. **Time to onset** is computed for each drug as the days from its start
+   date to the event date (day 1 being the first day of therapy).
+5. **Removing reports:**
+   - nullified reports listed in the DELETED files;
+   - duplicated `primaryid`, keeping the most recent quarter;
+   - earlier versions of the same case, keeping the most recent;
+   - duplicated manufacturer report numbers, keeping the most recent;
+   - reports without any drug or any event.
+6. **Flagging reports**, which are kept but marked:
+   - `premarketing`: reports from clinical trials, identified from the drug
+     names (e.g. pre-registration codes, placebo);
+   - `literature`: reports from the scientific literature;
+   - `RB_duplicates` and `RB_duplicates_only_susp`: probable duplicates found
+     by a rule-based algorithm (identical event date, sex, reporter country,
+     age, weight, events and drugs; the second considers only suspected
+     drugs). In each group of duplicates, the most recent report is not
+     flagged.
+7. **Splitting into the DiAna tables** listed below.
+
+## The tables you work with
+
+`import()` loads these tables for a quarter (the sample datasets shipped with
+DiAna, such as `sample_Demo`, have the same structure):
+
+| Table | One row per | Contents |
+|---|---|---|
+| `DEMO` | report | sex, age, weight, countries, dates, reporter, flags |
+| `DEMO_SUPP` | report | case identifiers, version, manufacturer, quarter, report source |
+| `DRUG` | report and drug | active ingredient (`substance`) and role (`role_cod`: PS, SS, I, C) |
+| `DRUG_NAME` | report and drug | the drug name as reported |
+| `DRUG_SUPP` | report and drug | route, dose form, dechallenge, rechallenge, lot |
+| `DOSES` | report and drug | dose, unit, frequency, cumulative dose |
+| `REAC` | report and event | event (MedDRA PT) and rechallenged event |
+| `INDI` | report, drug and indication | indication (MedDRA PT) |
+| `OUTC` | report and outcome | seriousness outcome |
+| `THER` | report and drug | start and end dates, duration, time to onset |
+
+## What to keep in mind when analyzing
+
+- **Missing is not negative.** A report without a recorded outcome is not
+  known to be non-serious; a missing sex or age is unknown. This is why
+  `descriptive()` computes outcome percentages only among reports that
+  record an outcome.
+- **Duplicates are flagged, not removed.** To exclude probable duplicates,
+  restrict the analysis, for example
+  `restriction = Demo[RB_duplicates == FALSE]$primaryid` in
+  `disproportionality_analysis()`.
+- **Premarketing and literature reports are kept.** Exclude them with the
+  `premarketing` and `literature` flags if your study requires it.
+- **Not every drug name is translated.** Untranslated names still count in
+  the total number of reports. Check how your drug of interest is reported
+  with `get_drugnames()`, and correct the translation locally with
+  `Fix_DiAna_dictionary_locally()` if needed.
+- **Dates before 2013 are less reliable.** Until 2012, incomplete dates were
+  completed automatically when stored, which affects time trends and time to
+  onset. Null or negative times to onset are set to missing when the event
+  occurred before 2013; later ones are kept, and you may want a sensitivity
+  analysis excluding drugs with a null or negative time to onset.
+- **Each quarter is a new release.** Analyses are reproducible only on the
+  same quarter: record it (`FAERS_version`) and report it with
+  `FAERS_quarter_specifics()`.
+
+## MedDRA
+
+The events and indications are coded with MedDRA Preferred Terms, but the
+MedDRA hierarchy (HLT, HLGT, SOC) cannot be distributed with DiAna: it
+requires a subscription, free for academics, from
+[MedDRA](https://www.meddra.org/). To analyze at levels above the PT:
+
+1. Download the English MedDRA release and unzip it with the password from
+   the MedDRA self-service application.
+2. Build `meddra_primary.csv`: one row per PT with its primary SOC, and the
+   columns `def`, `soc`, `hlgt`, `hlt` and `pt`, in lowercase and separated
+   by `;`. The code is in the section "Standardization > MedDRA" of the
+   [DiAna documentation](https://github.com/fusarolimichele/DiAna_cleaning/blob/main/DiAna_Documentation.pdf).
+3. Save it in the `external_sources` folder of your DiAna project, and load
+   it with `import_MedDRA()`.
+
+```{r meddra}
+MedDRA <- import_MedDRA()
+disproportionality_analysis(
+  drug_selected = "paracetamol",
+  reac_selected = "hepatobiliary disorders",
+  meddra_level = "soc"
+)
+```

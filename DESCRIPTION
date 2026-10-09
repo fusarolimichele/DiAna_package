@@ -1,6 +1,6 @@
 Package: DiAna
 Title: DIsproportionality ANAlysis and Pharmacovigilance in the FAERS
-Version: 2.1.1
+Version: 2.2.0
 Authors@R: c(
     person("Michele", "Fusaroli", , "michele.fusaroli@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-0254-2212")),
@@ -18,37 +18,39 @@ Description: Advanced tools for analyzing the FDA Adverse Event Reporting
     datasets, facilitating case identification and control selection to
     address confounding in analyses. Provides functions for descriptive
     and disproportionality analysis, time-to-onset analysis, network
-    analysis, retrieval algorithms, and visualization.
+    analysis, retrieval algorithms, and visualization. The drug name
+    standardization is described in Fusaroli et al. (2024)
+    <doi:10.1007/s40264-023-01391-4>, the network analysis in Fusaroli et
+    al. (2021) <doi:10.3389/fphar.2021.740707>, the Omega interaction
+    measure in Noren et al. (2008) <doi:10.1002/sim.3247>, and the
+    pregnancy algorithm extends Sakai et al. (2022)
+    <doi:10.3389/fphar.2022.1063625>.
 License: MIT + file LICENSE
 URL: https://fusarolimichele.github.io/DiAna_package/,
     https://github.com/fusarolimichele/DiAna_package,
-    https://github.com/fusarolimichele/DiAna, https://osf.io/zqu89/
+    https://github.com/fusarolimichele/DiAna_cleaning,
+    https://osf.io/zqu89/
 BugReports: https://github.com/fusarolimichele/DiAna_package/issues
 Depends: 
     data.table,
-    ggplot2,
-    R (>= 2.10)
+    R (>= 4.1.0)
 Imports: 
     dplyr,
     forestplot,
     ggflowchart,
+    ggplot2,
     grDevices,
     gridExtra,
     gtsummary,
     here,
-    httr,
     igraph,
     IsingFit,
     jsonlite,
-    lubridate,
     magrittr,
     purrr,
-    pvOmega,
-    questionr,
     readr,
     readxl,
     stats,
-    stringr,
     tibble,
     tidyr,
     twosamples,
@@ -56,14 +58,16 @@ Imports:
     writexl
 Suggests: 
     knitr,
+    pvOmega,
     rmarkdown,
     testthat (>= 3.0.0)
-Remotes:
-    PVgravID=github::Uppsala-Monitoring-Centre/PVgravID,
-    pvOmega=github::Uppsala-Monitoring-Centre/pvOmega
-Config/Needs/website: rmarkdown
+Config/Needs/check: Uppsala-Monitoring-Centre/pvOmega
+Config/Needs/coverage: Uppsala-Monitoring-Centre/pvOmega
+Config/Needs/website: rmarkdown, Uppsala-Monitoring-Centre/pvOmega,
+    Uppsala-Monitoring-Centre/PVgravID
 Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3
 Encoding: UTF-8
+Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)

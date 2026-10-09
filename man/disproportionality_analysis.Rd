@@ -36,7 +36,7 @@ disproportionality_analysis(
 
 \item{restriction}{Primary IDs to consider for analysis (default is "none", which includes the entire population). If set to Demo[!RB_duplicates_only_susp]$primaryid, for example, allows to exclude duplicates according to one of the deduplication algorithms.}
 
-\item{minimum_cases}{Threshold of minimum cases for calculating identifyin a signal (default is 3).}
+\item{minimum_cases}{Threshold of minimum cases for identifying a signal (default is 3).}
 
 \item{frequentist_threshold}{Threshold for defining the significance of the lower limit of the Reporting Odds Ratio (default is 1).}
 
@@ -46,9 +46,9 @@ disproportionality_analysis(
 
 \item{store_pids}{Logical specifying whether to store primaryids recording the drug and primaryids recording the event as lists. Default to FALSE.}
 
-\item{save_in_excel}{Whether to save the outcome in an excel. Defaults to TRUE}
+\item{save_in_excel}{Whether to also save the results in an Excel file, \code{file_name}. Default \code{FALSE}.}
 
-\item{file_name}{The name of the Excel file to save the results. Default is "Descriptives.xlsx". It only works if save_in_excel is TRUE.}
+\item{file_name}{Name of the Excel file, used if \code{save_in_excel = TRUE}.}
 }
 \value{
 A data.table containing disproportionality analysis results.
@@ -61,6 +61,24 @@ Contrary to \code{disproportionality_comparison()}, it calculates the associatio
 and not based on number of reports.
 See \code{disproportionality_trend()} for investigating how disproportionality changed through time.
 }
+\section{Reporting odds ratio (ROR)}{
+
+DiAna's ROR is the conditional maximum-likelihood estimate of the odds
+ratio from Fisher's exact test (\code{\link[stats:fisher.test]{stats::fisher.test()}}), with its exact 95\%
+confidence interval; the p-value used for the Bonferroni correction comes
+from the same test. Estimates and limits are rounded down to two decimals.
+
+This is not the classic ROR, \code{(a * d) / (b * c)}, with Woolf's
+log-normal confidence interval, used by many studies and tools. The point
+estimates are nearly identical, but with few cases the exact interval is
+wider, and the two can disagree on whether the lower limit exceeds 1. For
+example, with 1 case, 10 other reports of the event, 50 other reports of
+the drug and 5,000 other reports, the exact interval is 0.23-72.63 and
+Woolf's is 1.26-79.60. Results can therefore differ from tools using
+Woolf's ROR, mostly below about 5 cases; \code{minimum_cases} (default 3)
+already excludes the sparsest combinations from signal detection.
+}
+
 \examples{
 disproportionality_analysis(
   drug_selected = "paracetamol",
