@@ -1,4 +1,6 @@
-# DiAna (development version)
+# DiAna 2.2.0
+
+First release on CRAN.
 
 ## Deprecated
 * `retrieve_pregnancy_pids()` is deprecated and will be removed in the next release: use the PVgravID package (`remotes::install_github("Uppsala-Monitoring-Centre/PVgravID")`), as shown in the article "Pregnancy analyses with PVgravID".
