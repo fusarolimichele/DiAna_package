@@ -5,6 +5,9 @@
 #' from the `Drug` and `Reac` tables of the DiAna CDM. The
 #' interface mirrors [DiAna::disproportionality_analysis()] and calls the pvOmega package for the calculation.
 #'
+#' The 'pvOmega' package is not on CRAN and is needed only by this function.
+#' Install it with `remotes::install_github("Uppsala-Monitoring-Centre/pvOmega")`.
+#'
 #' ## Report universe
 #' The total number of reports (`n...`) is the number of distinct
 #' `primaryid` in `temp_reac`, intersected with `restriction` when supplied.
@@ -57,7 +60,7 @@
 #'
 #' @return A `data.table` with one row per drug1-drug2-event combination:
 #'   the labels `drug1`, `drug2`, `event`, all columns returned by
-#'   [omega_from_counts()], `label_omega` and `omega_signal` (an ordered
+#'   `pvOmega::omega_from_counts()`, `label_omega` and `omega_signal` (an ordered
 #'   factor: `"not enough cases"`, `"no SDR"`, `"SDR"`).
 #'
 #' @references
@@ -70,13 +73,15 @@
 #' 2020;43:775-85. \doi{10.1007/s40264-020-00939-y}
 #'
 #' @examples
-#' omega_analysis(
-#'   drug1_selected = "paracetamol",
-#'   drug2_selected = "ibuprofen",
-#'   reac_selected = "overdose",
-#'   temp_drug = sample_Drug,
-#'   temp_reac = sample_Reac
-#' )
+#' if (requireNamespace("pvOmega", quietly = TRUE)) {
+#'   omega_analysis(
+#'     drug1_selected = "paracetamol",
+#'     drug2_selected = "ibuprofen",
+#'     reac_selected = "overdose",
+#'     temp_drug = sample_Drug,
+#'     temp_reac = sample_Reac
+#'   )
+#' }
 #' @export
 omega_analysis <- function(drug1_selected,
                            drug2_selected,
@@ -90,6 +95,13 @@ omega_analysis <- function(drug1_selected,
                            save_in_excel = FALSE,
                            file_name = "omega_results") {
   # ---- checks ----------------------------------------------------------------
+  if (!requireNamespace("pvOmega", quietly = TRUE)) {
+    stop("omega_analysis() requires the 'pvOmega' package. Install it with ",
+      "remotes::install_github(\"Uppsala-Monitoring-Centre/pvOmega\").",
+      call. = FALSE
+    )
+  }
+  check_workspace_defaults(c("temp_drug", "temp_reac"))
   check_columns(temp_drug, c("primaryid", "substance"), "temp_drug")
   check_columns(temp_reac, c("primaryid", "pt"), "temp_reac")
 

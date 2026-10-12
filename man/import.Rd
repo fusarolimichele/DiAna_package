@@ -9,7 +9,7 @@ import(
   quarter = FAERS_version,
   pids = NA,
   save_in_environment = TRUE,
-  env = .GlobalEnv
+  env = parent.frame()
 )
 }
 \arguments{
@@ -35,21 +35,25 @@ in the format \emph{23Q1}. Defaults to the value assigned to FAERS_version.}
 \item{pids}{Optional vector of primary IDs to subset the imported data.
 Defaults to the entire population.}
 
-\item{save_in_environment}{is a parameter automatically used within functions to avoid that the imported databases are overscribed.}
+\item{save_in_environment}{Whether to also assign the table, named in title case
+(e.g. \code{Drug} for \code{"DRUG"}), in \code{env}. Default \code{TRUE}. Use \code{FALSE} to only
+return it, e.g. \code{my_drug <- import("DRUG", save_in_environment = FALSE)}.}
 
-\item{env}{The environment where the data will be assigned. Default to .GlobalEnv}
+\item{env}{The environment where the table is assigned. Defaults to the
+environment \code{import()} is called from: your workspace when called from the
+console or a script, or the calling function's own environment when
+called inside a function.}
 }
 \value{
-A data.table containing the imported data.
+The imported data.table (invisibly when it is also assigned).
 }
 \description{
 Imports the specified FAERS relational database.
 }
 \examples{
 # This example requires that setup_DiAna has been run to download data
-FAERS_version <- "24Q1"
-if (file.exists("data/24Q1/DRUG.rds")) {
-  import("DRUG")
+if (file.exists(file.path(here::here(), "data", "24Q1", "DRUG.rds"))) {
+  import("DRUG", quarter = "24Q1")
 }
 
 }

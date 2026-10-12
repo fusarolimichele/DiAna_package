@@ -14,16 +14,10 @@
 #' @seealso \code{\link{import}}
 #'
 #' @examples
-#' \dontrun{
-#' # This example needs that setup_DiAna has been run before, to download DiAna dictionary
-#' if (file.exists("external_source/DiAna_dictionary.csv")) {
-#'   FAERS_version <- "24Q1"
-#'   result <- get_drugnames("aripiprazole")
-#'   print(result)
-#' }
-#' }
+#' get_drugnames("adalimumab", temp_d = sample_Drug, temp_d_name = sample_Drug_Name)
 #' @export
 get_drugnames <- function(drug, temp_d = Drug, temp_d_name = Drug_name) {
+  check_workspace_defaults(c("temp_d", "temp_d_name"))
   t <- temp_d[substance == drug]
   t <- temp_d_name[t, on = c("primaryid", "drug_seq")]
   t <- t[, .N, by = "drugname"][order(-N)][, perc := N / sum(N)]
@@ -33,36 +27,55 @@ get_drugnames <- function(drug, temp_d = Drug, temp_d_name = Drug_name) {
 #'
 #' This function updates the DiAna dictionary based on changes specified in an Excel file. It imports necessary data, identifies records to be fixed, and updates the dictionary accordingly.
 #'
-#' @param changes_xlsx_name A string specifying the name of the Excel file containing the changes.
+#' @param changes_xlsx_name Path of the Excel file containing the changes, with
+#'   the columns `drugname` (raw drug name) and `substance` (the active
+#'   ingredient it should be translated to).
+#' @param temp_drug Drug dataset. Defaults to `Drug` if it is in your
+#'   workspace; otherwise it is imported for the quarter in `FAERS_version`.
+#' @param temp_drug_name Drug_name dataset. Defaults to `Drug_name` if it is in
+#'   your workspace; otherwise it is imported for the quarter in `FAERS_version`.
 #' @return A data.table with the updated Drug information.
 #' @details
 #' The function performs the following steps:
 #' \itemize{
 #'   \item Reads the changes from the specified Excel file.
-#'   \item Imports the necessary data tables (`DRUG_NAME` and `DRUG`) if they do not already exist.
+#'   \item Uses the `Drug` and `Drug_name` tables, importing them if they are not available.
 #'   \item Identifies the records in `Drug_name` that need to be fixed based on the changes.
-#'   \item Joins the changes with the identified records and updates the `Drug` table.
-#'   \item Removes the old records and adds the updated records to the `Drug` table.
+#'   \item Replaces the substance of those records in the `Drug` table.
 #' }
 #' @importFrom readxl read_xlsx
 #' @importFrom dplyr distinct
 #' @examples
-#' # This example needs that DiAna dictionary is downloaded (using setup_DiAna),
-#' # and that an excel file with intended changes is available
-#' if (file.exists("changes.xlsx") & file.exists("external_source/DiAna_dictionary.csv")) {
-#'   Drug <- Fix_DiAna_dictionary_locally("changes.xlsx")
-#' }
+#' changes <- tempfile(fileext = ".xlsx")
+#' writexl::write_xlsx(data.frame(drugname = "humira", substance = "adalimumab"), changes)
+#' Drug <- Fix_DiAna_dictionary_locally(changes,
+#'   temp_drug = sample_Drug, temp_drug_name = sample_Drug_Name
+#' )
+#' unlink(changes)
 #' @export
-Fix_DiAna_dictionary_locally <- function(changes_xlsx_name) {
-  changes <- setDT(readxl::read_xlsx(paste0(path, changes_xlsx_name)))
-  if (!exists("Drug_name")) import("DRUG_NAME", quarter = FAERS_version)
-  if (!exists("Drug")) import("DRUG", quarter = FAERS_version)
-  tobefixed <- Drug_name[drugname %in% changes$drugname]
+Fix_DiAna_dictionary_locally <- function(changes_xlsx_name,
+                                         temp_drug = NULL,
+                                         temp_drug_name = NULL) {
+  changes <- setDT(readxl::read_xlsx(changes_xlsx_name))
+  check_columns(changes, c("drugname", "substance"), "changes_xlsx_name")
+  if (is.null(temp_drug_name)) {
+    temp_drug_name <- if (exists("Drug_name")) get("Drug_name") else import_from_FAERS_version("DRUG_NAME")
+  }
+  if (is.null(temp_drug)) {
+    temp_drug <- if (exists("Drug")) get("Drug") else import_from_FAERS_version("DRUG")
+  }
+  tobefixed <- temp_drug_name[drugname %in% changes$drugname]
   tobefixed <- changes[tobefixed, on = "drugname"]
-  tobefixed <- dplyr::distinct(Drug[, .(primaryid, drug_seq, role_cod)])[tobefixed, on = c("primaryid", "drug_seq")]
+  tobefixed <- dplyr::distinct(temp_drug[, .(primaryid, drug_seq, role_cod)])[tobefixed, on = c("primaryid", "drug_seq")]
   tobefixed <- tobefixed[, .(primaryid, drug_seq, substance, role_cod)]
-  toberemoved <- Drug[tobefixed[, .(primaryid, drug_seq)], on = c("primaryid", "drug_seq")]
-  Drug <- setdiff(Drug, toberemoved)
-  Drug <- rbindlist(list(Drug, tobefixed))
-  return(Drug)
+  # drop the old records of the fixed drugs (anti-join), then add the corrected ones
+  kept <- temp_drug[!tobefixed, on = c("primaryid", "drug_seq")]
+  rbindlist(list(kept, tobefixed), use.names = TRUE, fill = TRUE)
+}
+
+#' Import a table for the quarter in FAERS_version, without assigning it
+#' @noRd
+import_from_FAERS_version <- function(df_name) {
+  check_workspace_object("FAERS_version")
+  import(df_name, quarter = get("FAERS_version"), save_in_environment = FALSE)
 }

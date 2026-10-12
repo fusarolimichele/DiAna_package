@@ -9,7 +9,7 @@ FAERS_quarter_specifics(quarter = FAERS_version, print = TRUE)
 \arguments{
 \item{quarter}{The quarter for which specifics are needed. Default to FAERS_version.}
 
-\item{print}{Logical, should the output be printed? Default to TRUE.}
+\item{print}{Logical: print the text? Default \code{TRUE}. The text is also returned, invisibly when printed.}
 }
 \value{
 Specifics

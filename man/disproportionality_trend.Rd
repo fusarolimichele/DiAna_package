@@ -28,7 +28,7 @@ disproportionality_trend(
 
 \item{temp_reac}{Reac dataset. Can be set to sample_Reac for testing}
 
-\item{temp_demo}{Demo dataset. Defaults to Demo. Can be se to sample_Demo for testing}
+\item{temp_demo}{Demo dataset. Defaults to Demo. Can be set to sample_Demo for testing}
 
 \item{temp_demo_supp}{Data frame containing supplementary demographic data, and in particular the quarter. Defaults to \verb{Demo_supp\[, .(primaryid, quarter)\]}.}
 
@@ -46,7 +46,7 @@ disproportionality_trend(
 }
 \value{
 A data frame containing the disproportionality results over time, including:
-\item{period}{Time period. Deafult is 'year'. Other values are 'quarter' and 'month'. When using 'quarter' Demo_supp is required}
+\item{period}{Time period. Default is 'year'. Other values are 'quarter' and 'month'. When using 'quarter' Demo_supp is required}
 \item{TOT}{Total number of reports}
 \item{D_E}{Number of reports with both drug and event}
 \item{D_nE}{Number of reports with the drug but not the event}
@@ -73,6 +73,24 @@ Its results can be visualized using \code{plot_disproportionality_trend()}.
 \details{
 The function processes the provided data to calculate the reporting odds ratio (ROR) and the information component (IC) for the specified drug-event combination over time.
 }
+\section{Reporting odds ratio (ROR)}{
+
+DiAna's ROR is the conditional maximum-likelihood estimate of the odds
+ratio from Fisher's exact test (\code{\link[stats:fisher.test]{stats::fisher.test()}}), with its exact 95\%
+confidence interval; the p-value used for the Bonferroni correction comes
+from the same test. Estimates and limits are rounded down to two decimals.
+
+This is not the classic ROR, \code{(a * d) / (b * c)}, with Woolf's
+log-normal confidence interval, used by many studies and tools. The point
+estimates are nearly identical, but with few cases the exact interval is
+wider, and the two can disagree on whether the lower limit exceeds 1. For
+example, with 1 case, 10 other reports of the event, 50 other reports of
+the drug and 5,000 other reports, the exact interval is 0.23-72.63 and
+Woolf's is 1.26-79.60. Results can therefore differ from tools using
+Woolf's ROR, mostly below about 5 cases; \code{minimum_cases} (default 3)
+already excludes the sparsest combinations from signal detection.
+}
+
 \examples{
 drug_selected <- "paracetamol"
 reac_selected <- "overdose"

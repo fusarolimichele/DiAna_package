@@ -15,7 +15,7 @@ plot_disproportionality_trend(
 
 \item{metric}{Character string specifying the metric to plot. Options are "IC" (information component) or "ROR" (reporting odds ratio). Defaults to "IC".}
 
-\item{time_granularity}{Character string specifying the time frame. It is recommeded to use the same specified in the 'disproportionality_trend' function. Default is "year". Alternatives are "quarter" and "month".}
+\item{time_granularity}{Character string specifying the time frame. It is recommended to use the same specified in the 'disproportionality_trend' function. Default is "year". Alternatives are "quarter" and "month".}
 }
 \value{
 A ggplot object representing the disproportionality trend plot for the specified metric.

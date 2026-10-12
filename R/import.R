@@ -23,40 +23,48 @@
 #'                in the format \emph{23Q1}. Defaults to the value assigned to FAERS_version.
 #' @param pids Optional vector of primary IDs to subset the imported data.
 #'             Defaults to the entire population.
-#' @param save_in_environment is a parameter automatically used within functions to avoid that the imported databases are overscribed.
-#' @param env The environment where the data will be assigned. Default to .GlobalEnv
-#' @return A data.table containing the imported data.
-#' @importFrom stringr str_to_title
+#' @param save_in_environment Whether to also assign the table, named in title case
+#'   (e.g. `Drug` for `"DRUG"`), in `env`. Default `TRUE`. Use `FALSE` to only
+#'   return it, e.g. `my_drug <- import("DRUG", save_in_environment = FALSE)`.
+#' @param env The environment where the table is assigned. Defaults to the
+#'   environment `import()` is called from: your workspace when called from the
+#'   console or a script, or the calling function's own environment when
+#'   called inside a function.
+#' @return The imported data.table (invisibly when it is also assigned).
 #' @importFrom here here
 #' @examples
 #' # This example requires that setup_DiAna has been run to download data
-#' FAERS_version <- "24Q1"
-#' if (file.exists("data/24Q1/DRUG.rds")) {
-#'   import("DRUG")
+#' if (file.exists(file.path(here::here(), "data", "24Q1", "DRUG.rds"))) {
+#'   import("DRUG", quarter = "24Q1")
 #' }
 #'
 #' @export
 #'
 
-import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environment = TRUE, env = .GlobalEnv) {
-  path <- paste0(here::here(), "/data/", quarter, "/", df_name, ".rds")
+import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environment = TRUE, env = parent.frame()) {
+  check_workspace_defaults("quarter")
+  path <- file.path(diana_root(), "data", quarter, paste0(df_name, ".rds"))
   if (!file.exists(path)) {
-    stop("The dataset specified does not exist")
-  } else {
-    t <- setDT(readRDS(path))
-    if (sum(!is.na(pids)) > 0) {
-      t <- t[primaryid %in% pids]
-    }
-    if (save_in_environment) {
-      assign(stringr::str_to_title(df_name), t, envir = env)
-    }
+    stop("The dataset ", path, " does not exist. Check `df_name` and `quarter`, ",
+      "and download the data with setup_DiAna(\"", quarter, "\") if needed.",
+      call. = FALSE
+    )
+  }
+  t <- setDT(readRDS(path))
+  if (sum(!is.na(pids)) > 0) {
+    t <- t[primaryid %in% pids]
+  }
+  if (save_in_environment) {
+    # e.g. "DRUG_NAME" is assigned as Drug_name
+    assign(paste0(substr(df_name, 1, 1), tolower(substring(df_name, 2))), t, envir = env)
+    return(invisible(t))
   }
   t
 }
 
 #' Import MedDRA Data
 #'
-#' This function imports MedDRA (Medical Dictionary for Regulatory Activities) data from a CSV file and stores it in the global environment.
+#' This function imports MedDRA (Medical Dictionary for Regulatory Activities) data from a CSV file and assigns it as `MedDRA` in `env`.
 #'
 #' @inheritParams import
 #' @return A data table containing MedDRA data.
@@ -66,24 +74,24 @@ import <- function(df_name, quarter = FAERS_version, pids = NA, save_in_environm
 #' @details
 #' This function reads MedDRA data from a CSV file located at the path specified by `here()/external_sources/meddra_primary.csv`.
 #' If the file does not exist, it will stop execution and provide instructions on how to obtain MedDRA data.
-#' If the file exists, it will load the data, select specific columns (def, soc, hlgt, hlt, pt), remove duplicates, and store it in the global environment as "MedDRA".
+#' If the file exists, it will load the data, select specific columns (def, soc, hlgt, hlt, pt), remove duplicates, and assign it as `MedDRA` in `env` (by default, the environment it is called from).
 #'
 #' @seealso
-#' You can find more information and instructions for obtaining MedDRA data at https://github.com/fusarolimichele/DiAna.
+#' You can find more information and instructions for obtaining MedDRA data at https://github.com/fusarolimichele/DiAna_cleaning.
 #'
 #' @examples
 #' # This example requires a specific file that can only be available with a MeDRA subscription.
-#' if (file.exists("external_source/meddra_primary.csv")) {
+#' if (file.exists(file.path(here::here(), "external_sources", "meddra_primary.csv"))) {
 #'   import_MedDRA()
 #' }
 #'
 #' @export
 
-import_MedDRA <- function(env = .GlobalEnv) {
-  path <- paste0(here::here(), "/external_sources/meddra_primary.csv")
+import_MedDRA <- function(env = parent.frame()) {
+  path <- file.path(diana_root(), "external_sources", "meddra_primary.csv")
   if (!file.exists(path)) {
     stop("The MedDRA is not available with DiAna since the subscription must be done with MEDDRA MSSO.
-         Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna
+         Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna_cleaning
          to make it ready for download.")
   } else {
     suppressMessages(MedDRA <- setDT(
@@ -94,13 +102,14 @@ import_MedDRA <- function(env = .GlobalEnv) {
     )[, .(def, soc, hlgt, hlt, pt)] %>% dplyr::distinct())
     assign("MedDRA", MedDRA, envir = env)
   }
-  MedDRA
+  invisible(MedDRA)
 }
 
 #' Import ATC classification
 #'
 #' This function reads the ATC (Anatomical Therapeutic Chemical) classification
-#' from an external source and assigns it to a global environment variable.
+#' from an external source and assigns it as `ATC` in `env` (by default, the
+#' environment it is called from).
 #' @param primary Whether only the primary ATC should be retrieved.
 #' @inheritParams import
 #' @return A data frame containing the dataset for ATC linkage.
@@ -109,12 +118,12 @@ import_MedDRA <- function(env = .GlobalEnv) {
 #' @importFrom readr read_delim
 #'
 #' @examples
-#' if (file.exists("external_source/ATC_DiAna.csv")) {
+#' if (file.exists(file.path(here::here(), "external_sources", "ATC_DiAna.csv"))) {
 #'   import_ATC()
 #' }
 #' @export
-import_ATC <- function(primary = T, env = .GlobalEnv) {
-  path <- paste0(here::here(), "/external_sources/ATC_DiAna.csv")
+import_ATC <- function(primary = TRUE, env = parent.frame()) {
+  path <- file.path(diana_root(), "external_sources", "ATC_DiAna.csv")
   if (!file.exists(path)) {
     stop("The ATC cannot be found in external sources. It should have been downloaded with setup_diana. Please investigate the problem.")
   } else {
@@ -126,11 +135,11 @@ import_ATC <- function(primary = T, env = .GlobalEnv) {
       substance = Substance, code, primary_code, Lvl4, Class4, Lvl3, Class3,
       Lvl2, Class2, Lvl1, Class1
     )] %>% dplyr::distinct())
-    if (primary == T) {
+    if (isTRUE(primary)) {
       ATC <- ATC[code == primary_code]
     }
     assign("ATC", ATC, envir = env)
-    ATC
+    invisible(ATC)
   }
 }
 
@@ -146,11 +155,16 @@ import_ATC <- function(primary = T, env = .GlobalEnv) {
 #' and the values are character vectors of Preferred Terms (PTs) associated with that SMQ.
 #'
 #' @details
-#' The function reads the SMQ dictionary from an external CSV file located at:
-#' `external_sources/smq_dictionary.csv`.
-#' Since MedDRA subscription is required, the user must obtain the SMQ dictionary separately.
-#' Instructions for setting up the required files are provided in the DiAna GitHub repository:
-#' <https://github.com/fusarolimichele/DiAna>.
+#' The function reads the SMQ dictionary from `external_sources/smq_dictionary.csv`.
+#' SMQs are part of MedDRA, which requires a subscription from MedDRA MSSO,
+#' so DiAna cannot distribute this file. Prepare it from your MedDRA release
+#' as a semicolon-separated file with the columns:
+#' \itemize{
+#'   \item `SMQ_1` to `SMQ_5`: the SMQ the term belongs to, at each level of
+#'     the SMQ hierarchy (level 1 being the broadest);
+#'   \item `pt`: the Preferred Term, in lowercase as in DiAna's `Reac`;
+#'   \item `NB`: the scope of the term in the SMQ, `"Narrow"` or `"Broad"`.
+#' }
 #'
 #' The function processes five hierarchical levels (`SMQ_1` to `SMQ_5`) and assigns Preferred Terms (PTs)
 #' accordingly, filtering by "Narrow" scope if requested.
@@ -158,80 +172,41 @@ import_ATC <- function(primary = T, env = .GlobalEnv) {
 #' @note If the required SMQ dictionary file is missing, the function stops execution and returns an error message.
 #'
 #' @examples
-#' \dontrun{
-#' smq_list <- extractSMQ(Narrow = TRUE)
-#' smq_list <- extractSMQ(Narrow = FALSE)
+#' # Requires an SMQ dictionary prepared from a MedDRA subscription
+#' if (file.exists(file.path(here::here(), "external_sources", "smq_dictionary.csv"))) {
+#'   smq_list <- extractSMQ(Narrow = TRUE)
+#'   smq_list <- extractSMQ(Narrow = FALSE)
 #' }
 #'
 #' @export
 extractSMQ <- function(Narrow = TRUE) {
-  path <- paste0(here::here(), "/external_sources/smq_dictionary.csv")
+  path <- file.path(diana_root(), "external_sources", "smq_dictionary.csv")
   if (!file.exists(path)) {
-    stop("The SMQ_dictionary is not available with DiAna since the subscription must be done with MEDDRA MSSO.\n         Once MedDRA is downloaded, you can use the steps provided in https://github.com/fusarolimichele/DiAna\n         to make it ready for download.")
+    stop("The SMQ dictionary was not found at ", path, ". ",
+      "DiAna cannot distribute it, because SMQs are part of MedDRA, which requires a subscription. ",
+      "Prepare it from your MedDRA release as a semicolon-separated file with the columns ",
+      "SMQ_1 to SMQ_5, pt and NB (\"Narrow\" or \"Broad\"): see ?extractSMQ.",
+      call. = FALSE
+    )
   }
   smq_dictionary <- setDT(readr::read_delim(path,
-    delim = ";", escape_double = FALSE, trim_ws = TRUE
+    delim = ";", escape_double = FALSE, trim_ws = TRUE, show_col_types = FALSE
   ))
-  smq_list <- c()
-  for (n in unique(smq_dictionary$SMQ_1)) {
-    ifelse(Narrow,
-      {
-        sublist <- list(smq_dictionary[SMQ_1 == n][NB == "Narrow"]$pt)
-      },
-      {
-        sublist <- list(smq_dictionary[SMQ_1 == n]$pt)
-      }
-    )
-    names(sublist) <- n
-    smq_list <- c(smq_list, sublist)
-  }
-  for (n in setdiff(unique(smq_dictionary$SMQ_2), unique(smq_dictionary$SMQ_1))) {
-    ifelse(Narrow,
-      {
-        sublist <- list(smq_dictionary[SMQ_2 == n][NB == "Narrow"]$pt)
-      },
-      {
-        sublist <- list(smq_dictionary[SMQ_2 == n]$pt)
-      }
-    )
-    names(sublist) <- n
-    smq_list <- c(smq_list, sublist)
-  }
-  for (n in setdiff(unique(smq_dictionary$SMQ_3), unique(smq_dictionary$SMQ_2))) {
-    ifelse(Narrow,
-      {
-        sublist <- list(smq_dictionary[SMQ_3 == n][NB == "Narrow"]$pt)
-      },
-      {
-        sublist <- list(smq_dictionary[SMQ_3 == n]$pt)
-      }
-    )
-    names(sublist) <- n
-    smq_list <- c(smq_list, sublist)
-  }
-  for (n in setdiff(unique(smq_dictionary$SMQ_4), unique(smq_dictionary$SMQ_3))) {
-    ifelse(Narrow,
-      {
-        sublist <- list(smq_dictionary[SMQ_4 == n][NB == "Narrow"]$pt)
-      },
-      {
-        sublist <- list(smq_dictionary[SMQ_4 == n]$pt)
-      }
-    )
-    names(sublist) <- n
-    smq_list <- c(smq_list, sublist)
-  }
-  for (n in setdiff(unique(smq_dictionary$SMQ_5), unique(smq_dictionary$SMQ_4))) {
-    ifelse(Narrow,
-      {
-        sublist <- list(smq_dictionary[SMQ_5 == n][NB == "Narrow"]$pt)
-      },
-      {
-        sublist <- list(smq_dictionary[SMQ_5 == n]$pt)
-      }
-    )
-    names(sublist) <- n
-    smq_list <- c(smq_list, sublist)
+  check_columns(smq_dictionary, c(paste0("SMQ_", 1:5), "pt", "NB"), "smq_dictionary.csv")
+  # SMQs are listed from the whole dictionary; with Narrow = TRUE only their
+  # narrow-scope terms are kept (an SMQ with only broad terms is then empty)
+  terms <- if (Narrow) smq_dictionary[NB == "Narrow"] else smq_dictionary
+  # one element per SMQ, at every level of the hierarchy; an SMQ that also
+  # appears at the level above is listed only once. Empty levels (NA) are
+  # not SMQs and are skipped.
+  smq_list <- list()
+  previous <- character(0)
+  for (level in paste0("SMQ_", 1:5)) {
+    smqs <- unique(smq_dictionary[[level]])
+    for (n in setdiff(smqs[!is.na(smqs)], previous)) {
+      smq_list[[n]] <- terms[terms[[level]] %in% n]$pt
+    }
+    previous <- smqs
   }
   return(smq_list)
 }

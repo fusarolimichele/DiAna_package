@@ -24,7 +24,7 @@ A data.table with 10 variables:
 }
 }
 \source{
-https://github.com/fusarolimichele/DiAna
+https://github.com/fusarolimichele/DiAna_cleaning
 }
 \usage{
 sample_Demo_Supp
@@ -38,4 +38,13 @@ This subset of Demo_Supp provides supplementary demographic information of repor
 including details related to reporting and manufacturer information.
 It is useful for understanding additional context around adverse drug reaction reports.
 }
+\section{Sampling}{
+
+The sample datasets contain all the records of 1,000 reports (\code{primaryid})
+drawn at random from \code{Demo} in the DiAna data of quarter 23Q1, kept in
+every table. They show the structure of the data and are used in examples
+and tests; they are not representative of FAERS for analysis. See
+\code{data-raw/sample_data.R} in the package repository.
+}
+
 \keyword{datasets}

@@ -1,6 +1,14 @@
+test_that("retrieve_pregnancy_pids() is deprecated and points to PVgravID", {
+  expect_warning(
+    retrieve_pregnancy_pids(quarter = "sample"),
+    "PVgravID",
+    class = "deprecatedWarning"
+  )
+})
+
 test_that("Pregnancy algorithm manages to retrieve inherent pids", {
   expect_equal(
-    retrieve_pregnancy_pids(quarter = "sample")[1:4],
+    suppressWarnings(retrieve_pregnancy_pids(quarter = "sample"), classes = "deprecatedWarning")[1:4],
     list(
       high_specificity = c(
         209984413, 90142505, 122688521, 141551261,
