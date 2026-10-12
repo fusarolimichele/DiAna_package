@@ -6,9 +6,9 @@ This is the first submission of DiAna to CRAN.
 
 * local: macOS (aarch64), R 4.6.0
 * GitHub Actions: macOS (release), Windows (release), Ubuntu (devel, release, oldrel-1)
-* win-builder: R-devel, R-release (TODO: run devtools::check_win_devel() and check_win_release() after the merge, then update)
+* win-builder: R-release (R 4.6.1) and R-devel (2026-10-08 r90650), Windows Server 2022
 * mac-builder: R-release (TODO: run devtools::check_mac_release(), then update)
-* R-hub (TODO: run rhub::rhub_check(), then list the platforms)
+* R-hub: linux, macos, windows (all R-devel), nosuggests
 
 ## R CMD check results
 
@@ -18,19 +18,33 @@ This is the first submission of DiAna to CRAN.
 
 * Suggests or Enhances not in mainstream repositories: pvOmega
 
-  pvOmega, developed at the Uppsala Monitoring Centre, is available from
-  GitHub (https://github.com/Uppsala-Monitoring-Centre/pvOmega). It is used
-  only by omega_analysis(), which checks for it with requireNamespace() and
-  explains how to install it if it is missing. Its example and tests are
-  skipped when it is not installed.
+  pvOmega is developed by the Uppsala Monitoring Centre, where the Omega
+  drug-drug interaction measure (Noren et al. 2008) was introduced, and is
+  available from GitHub (https://github.com/Uppsala-Monitoring-Centre/pvOmega).
+  As CRAN policy asks, the Description field says where to get it.
+
+  pvOmega is optional and is used by only one function, omega_analysis(),
+  which calls it as pvOmega::omega_from_counts(). It is never attached or
+  loaded otherwise:
+
+  - omega_analysis() checks for it with requireNamespace() and, if it is
+    missing, stops with a message explaining how to install it.
+  - The example of omega_analysis() runs only if requireNamespace("pvOmega")
+    succeeds, and its tests use skip_if_not_installed("pvOmega").
+  - The only article that uses pvOmega is for the pkgdown website and is
+    excluded from the package build (vignettes/articles is in .Rbuildignore).
+  - The package passes R CMD check without any suggested packages installed
+    (R-hub "nosuggests" platform), and win-builder, where pvOmega is not
+    available, reports no problem beyond this note.
 
 * The capitals in the Title, "DIsproportionality ANAlysis", are intentional:
   they show where the package name comes from (DIANA, from the first letters
   of the two words).
 
-* Possibly misspelled words in DESCRIPTION (if reported): FAERS (the FDA
-  Adverse Event Reporting System, spelled out in the Description),
-  pharmacovigilance, disproportionality and "al" (in "et al.") are correct.
+* Possibly misspelled words in DESCRIPTION: FAERS (the FDA Adverse Event
+  Reporting System, spelled out in the Description), Pharmacovigilance,
+  disproportionality, DIsproportionality and ANAlysis (see above), the
+  author names Fusaroli and Noren, and "et al." are all correct.
 
 ## Examples
 

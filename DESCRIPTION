@@ -24,7 +24,9 @@ Description: Advanced tools for analyzing the FDA Adverse Event Reporting
     al. (2021) <doi:10.3389/fphar.2021.740707>, the Omega interaction
     measure in Noren et al. (2008) <doi:10.1002/sim.3247>, and the
     pregnancy algorithm extends Sakai et al. (2022)
-    <doi:10.3389/fphar.2022.1063625>.
+    <doi:10.3389/fphar.2022.1063625>. The optional 'pvOmega' package,
+    needed only by the Omega analysis, is available from
+    <https://github.com/Uppsala-Monitoring-Centre/pvOmega>.
 License: MIT + file LICENSE
 URL: https://fusarolimichele.github.io/DiAna_package/,
     https://github.com/fusarolimichele/DiAna_package,
