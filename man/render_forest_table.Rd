@@ -35,8 +35,6 @@ The function:
 }
 }
 \examples{
-\dontrun{
-library(data.table)
 df <- data.table(
   nested = c("Crude", "Adjusted"),
   D_E = c(10, 8),
@@ -46,6 +44,5 @@ df <- data.table(
   IC_upper = c(1.9, 1.3)
 )
 render_forest_table(df)
-}
 
 }

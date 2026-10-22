@@ -19,11 +19,16 @@ This function extracts and organizes Standardised MedDRA Queries (SMQs) from an 
 The function categorizes SMQs into different levels and provides either a "Narrow" scope or all available terms.
 }
 \details{
-The function reads the SMQ dictionary from an external CSV file located at:
-\code{external_sources/smq_dictionary.csv}.
-Since MedDRA subscription is required, the user must obtain the SMQ dictionary separately.
-Instructions for setting up the required files are provided in the DiAna GitHub repository:
-\url{https://github.com/fusarolimichele/DiAna}.
+The function reads the SMQ dictionary from \code{external_sources/smq_dictionary.csv}.
+SMQs are part of MedDRA, which requires a subscription from MedDRA MSSO,
+so DiAna cannot distribute this file. Prepare it from your MedDRA release
+as a semicolon-separated file with the columns:
+\itemize{
+\item \code{SMQ_1} to \code{SMQ_5}: the SMQ the term belongs to, at each level of
+the SMQ hierarchy (level 1 being the broadest);
+\item \code{pt}: the Preferred Term, in lowercase as in DiAna's \code{Reac};
+\item \code{NB}: the scope of the term in the SMQ, \code{"Narrow"} or \code{"Broad"}.
+}
 
 The function processes five hierarchical levels (\code{SMQ_1} to \code{SMQ_5}) and assigns Preferred Terms (PTs)
 accordingly, filtering by "Narrow" scope if requested.
@@ -32,9 +37,10 @@ accordingly, filtering by "Narrow" scope if requested.
 If the required SMQ dictionary file is missing, the function stops execution and returns an error message.
 }
 \examples{
-\dontrun{
-smq_list <- extractSMQ(Narrow = TRUE)
-smq_list <- extractSMQ(Narrow = FALSE)
+# Requires an SMQ dictionary prepared from a MedDRA subscription
+if (file.exists(file.path(here::here(), "external_sources", "smq_dictionary.csv"))) {
+  smq_list <- extractSMQ(Narrow = TRUE)
+  smq_list <- extractSMQ(Narrow = FALSE)
 }
 
 }

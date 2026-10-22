@@ -1,8 +1,8 @@
 ---
-title: "Using pvOmega with DiAna"
+title: "Using PVomega with DiAna"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using pvOmega with DiAna}
+  %\VignetteIndexEntry{Using PVomega with DiAna}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,7 +21,7 @@ Omega is a measure of disproportionality designed to identify potential drug-dru
 It compares the observed reporting of an event for a pair of drugs with the reporting expected under an additive model.
 
 The `omega_analysis()` function provides an interface for performing an Omega analysis directly from drug and reaction data. This vignette
-illustrates the use of the functions coming from `pvOmega` with the sample data distributed with `DiAna` and
+illustrates the use of the functions coming from `PVomega` with the sample data distributed with `DiAna` and
 with locally stored FAERS data.
 
 ## Example using DiAna sample data
@@ -32,7 +32,7 @@ database.
 
 ```{r sample-data}
 library(DiAna)
-library(pvOmega)
+library(PVomega)
 
 omega_analysis(
   drug1_selected = "paracetamol",

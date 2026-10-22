@@ -7,7 +7,7 @@
 DiAna_reference(print = TRUE)
 }
 \arguments{
-\item{print}{Logical, should the output be printed? Default to TRUE.}
+\item{print}{Logical: print the text? Default \code{TRUE}. The text is also returned, invisibly when printed.}
 }
 \value{
 DiAna reference

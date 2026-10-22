@@ -18,7 +18,7 @@ A data.table with 7 variables:
 }
 }
 \source{
-https://github.com/fusarolimichele/DiAna
+https://github.com/fusarolimichele/DiAna_cleaning
 }
 \usage{
 sample_Doses
@@ -33,4 +33,13 @@ including verbatim descriptions, units, cumulative doses, amounts,
 and frequency of administration, facilitating analysis related to dosing patterns.
 As it can be observed in the sample, most of the dataset is NA (info not available).
 }
+\section{Sampling}{
+
+The sample datasets contain all the records of 1,000 reports (\code{primaryid})
+drawn at random from \code{Demo} in the DiAna data of quarter 23Q1, kept in
+every table. They show the structure of the data and are used in examples
+and tests; they are not representative of FAERS for analysis. See
+\code{data-raw/sample_data.R} in the package repository.
+}
+
 \keyword{datasets}

@@ -7,15 +7,15 @@
 #' @param entity Character specifying the type of entity to analyze ("reaction", "indication", or "substance").
 #' @param remove_singlet Logical indicating whether to remove singleton nodes (nodes with no edges). Default is TRUE.
 #' @param remove_negative_edges Logical indicating whether to remove edges with negative weights. Default is TRUE.
-#' @param file_name Character string specifying the file name (including path) to save the network visualization. Default is "network.tiff".
+#' @param file_name Character string specifying the file name (including path) to save the network visualization, if `save_plot = TRUE`. Default is "network.tiff" in `project_path`.
 #' @param width Numeric specifying the width of the saved image in pixels. Default is 1500.
 #' @param height Numeric specifying the height of the saved image in pixels. Default is 1500.
 #' @param labs_size Size of labels in network visualization. Default is 1. It can be changed if visualization is not good.
 #' @param min_frequency_term Frequency threshold for a term in the dataset to be included in the analysis. Default to 0.01
 #' @param restriction Restriction performed in the analysis. Default is none. It could be set to 'suspects' if entity is 'substance' to restrict the analysis to primary and secondary suspects
-#' @param save_plot Whether the plot should be saved as a tiff. Defaults to true
+#' @param save_plot Whether the plot should also be saved as a TIFF file, `file_name`. Defaults to `TRUE` only if `file_name` is supplied.
 
-#' @return NULL (invisibly). Saves a network visualization as a TIFF file.
+#' @return The network, as an igraph object, which can be drawn with `plot()`. If `save_plot = TRUE`, the visualization is also saved as a TIFF file.
 #'
 #' @importFrom dplyr distinct left_join select
 #' @importFrom igraph cluster_louvain graph_from_adjacency_matrix delete.vertices delete.edges degree layout_nicely set_vertex_attr simplify membership V E
@@ -44,14 +44,17 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
                              remove_negative_edges = TRUE,
                              file_name = paste0(project_path, "network.tiff"), width = 1500, height = 1500,
                              labs_size = 1, min_frequency_term = 0.01, restriction = "none", temp_reac = Reac, temp_indi = Indi, temp_drug = Drug,
-                             save_plot = TRUE) {
+                             save_plot = !missing(file_name)) {
   if (entity == "reaction") {
+    check_workspace_defaults("temp_reac")
     entity_var <- "pt"
     df <- temp_reac[, .(primaryid, pt)][primaryid %in% pids]
   } else if (entity == "indication") {
+    check_workspace_defaults("temp_indi")
     entity_var <- "indi_pt"
     df <- temp_indi[, .(primaryid, indi_pt)][primaryid %in% pids]
   } else if (entity == "substance") {
+    check_workspace_defaults("temp_drug")
     entity_var <- "substance"
     df <- temp_drug[primaryid %in% pids]
     if (restriction == "suspects") {
@@ -61,7 +64,7 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
   }
   df <- dplyr::distinct(df)
   df_N <- df[, .N, by = entity_var]
-  df <- df[!get(entity_var) %in% df_N[N <= length(unique(df$primaryid)) * min_frequency_term | N >= length(unique(df$primaryid)) - 1][[entity]]]
+  df <- df[!get(entity_var) %in% df_N[N <= length(unique(df$primaryid)) * min_frequency_term | N >= length(unique(df$primaryid)) - 1][[entity_var]]]
   df <- df[!is.na(get(entity_var))]
   binary_data <- df
   binary_data$value <- 1
@@ -88,7 +91,7 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
     as.matrix()
   rownames(binary_data) <- row_names
   binary_data[is.na(binary_data[, ])] <- 0
-  suppressWarnings(g1 <- IsingFit::IsingFit(binary_data))
+  suppressWarnings(g1 <- IsingFit::IsingFit(binary_data, plot = FALSE, progressbar = FALSE))
   G_igraph <- igraph::graph_from_adjacency_matrix(g1$weiadj, mode = "undirected", weighted = TRUE)
   if (remove_singlet) {
     G_igraph <- igraph::delete_vertices(igraph::simplify(G_igraph), igraph::degree(G_igraph) == 0)
@@ -114,7 +117,7 @@ network_analysis <- function(pids, entity = "reaction", remove_singlet = TRUE,
 
   # labs1 <- df[, .N, by = "pt"][order(-N)][, .(s = pt, s2 = N)]
   labs <- data.table(s = V(G_igraph)$name)
-  labs <- dplyr::left_join(labs, labs1)
+  labs <- dplyr::left_join(labs, labs1, by = "s")
   labs[is.na(s2)]$s2 <- 0
   G_igraph <- igraph::set_vertex_attr(G_igraph, "size", value = log(labs$s2))
   G_igraph <- igraph::set_vertex_attr(G_igraph, "label", value = labs$s)

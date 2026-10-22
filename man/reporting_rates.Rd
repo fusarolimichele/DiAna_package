@@ -12,7 +12,9 @@ reporting_rates(
   drug_indi = NA,
   temp_reac = Reac,
   temp_drug = Drug,
-  temp_indi = Indi
+  temp_indi = Indi,
+  temp_meddra = NULL,
+  temp_atc = NULL
 )
 }
 \arguments{
@@ -36,6 +38,14 @@ reporting_rates(
 \item{temp_drug}{Drug dataset. Can be set to sample_Drug for testing}
 
 \item{temp_indi}{Indi dataset. Can be set to sample_Indi for testing}
+
+\item{temp_meddra}{MedDRA dictionary, used for the levels "hlt", "hlgt" and "soc".
+By default, \code{MedDRA} from your workspace if it is loaded, otherwise it is
+read with \code{\link[=import_MedDRA]{import_MedDRA()}}.}
+
+\item{temp_atc}{ATC classification, used for the levels "Class1" to "Class4".
+By default, \code{ATC} from your workspace if it is loaded, otherwise it is
+read with \code{\link[=import_ATC]{import_ATC()}}. Only primary ATC codes are used.}
 }
 \value{
 A data.table containing counts and percentages of the investigated entity

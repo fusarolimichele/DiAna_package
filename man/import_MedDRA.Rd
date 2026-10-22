@@ -4,29 +4,32 @@
 \alias{import_MedDRA}
 \title{Import MedDRA Data}
 \usage{
-import_MedDRA(env = .GlobalEnv)
+import_MedDRA(env = parent.frame())
 }
 \arguments{
-\item{env}{The environment where the data will be assigned. Default to .GlobalEnv}
+\item{env}{The environment where the table is assigned. Defaults to the
+environment \code{import()} is called from: your workspace when called from the
+console or a script, or the calling function's own environment when
+called inside a function.}
 }
 \value{
 A data table containing MedDRA data.
 }
 \description{
-This function imports MedDRA (Medical Dictionary for Regulatory Activities) data from a CSV file and stores it in the global environment.
+This function imports MedDRA (Medical Dictionary for Regulatory Activities) data from a CSV file and assigns it as \code{MedDRA} in \code{env}.
 }
 \details{
 This function reads MedDRA data from a CSV file located at the path specified by \code{here()/external_sources/meddra_primary.csv}.
 If the file does not exist, it will stop execution and provide instructions on how to obtain MedDRA data.
-If the file exists, it will load the data, select specific columns (def, soc, hlgt, hlt, pt), remove duplicates, and store it in the global environment as "MedDRA".
+If the file exists, it will load the data, select specific columns (def, soc, hlgt, hlt, pt), remove duplicates, and assign it as \code{MedDRA} in \code{env} (by default, the environment it is called from).
 }
 \examples{
 # This example requires a specific file that can only be available with a MeDRA subscription.
-if (file.exists("external_source/meddra_primary.csv")) {
+if (file.exists(file.path(here::here(), "external_sources", "meddra_primary.csv"))) {
   import_MedDRA()
 }
 
 }
 \seealso{
-You can find more information and instructions for obtaining MedDRA data at https://github.com/fusarolimichele/DiAna.
+You can find more information and instructions for obtaining MedDRA data at https://github.com/fusarolimichele/DiAna_cleaning.
 }
