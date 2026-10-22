@@ -24,9 +24,9 @@ Description: Advanced tools for analyzing the FDA Adverse Event Reporting
     al. (2021) <doi:10.3389/fphar.2021.740707>, the Omega interaction
     measure in Noren et al. (2008) <doi:10.1002/sim.3247>, and the
     pregnancy algorithm extends Sakai et al. (2022)
-    <doi:10.3389/fphar.2022.1063625>. The optional 'pvOmega' package,
+    <doi:10.3389/fphar.2022.1063625>. The optional 'PVomega' package,
     needed only by the Omega analysis, is available from
-    <https://github.com/Uppsala-Monitoring-Centre/pvOmega>.
+    <https://github.com/Uppsala-Monitoring-Centre/PVomega>.
 License: MIT + file LICENSE
 URL: https://fusarolimichele.github.io/DiAna_package/,
     https://github.com/fusarolimichele/DiAna_package,
@@ -60,12 +60,12 @@ Imports:
     writexl
 Suggests: 
     knitr,
-    pvOmega,
+    PVomega,
     rmarkdown,
     testthat (>= 3.0.0)
-Config/Needs/check: Uppsala-Monitoring-Centre/pvOmega
-Config/Needs/coverage: Uppsala-Monitoring-Centre/pvOmega
-Config/Needs/website: rmarkdown, Uppsala-Monitoring-Centre/pvOmega,
+Config/Needs/check: Uppsala-Monitoring-Centre/PVomega
+Config/Needs/coverage: Uppsala-Monitoring-Centre/PVomega
+Config/Needs/website: rmarkdown, Uppsala-Monitoring-Centre/PVomega,
     Uppsala-Monitoring-Centre/PVgravID
 Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3

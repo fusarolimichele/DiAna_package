@@ -41,7 +41,7 @@ First release on CRAN.
 ## Dependencies
 * DiAna no longer depends on questionr, lubridate, httr and stringr, which reduces the packages installed with it from 158 to 130 (questionr alone brought in 22, including shiny). Results are unchanged: the reporting odds ratio is computed with `stats::fisher.test()`, which questionr was calling.
 * `disproportionality_analysis()` and `disproportionality_trend()` compute the IC for all combinations at once, and are about a third faster on many combinations.
-* 'pvOmega' moved from Imports to Suggests: it is needed only by `omega_analysis()`, which explains how to install it when it is missing.
+* 'PVomega' (formerly 'pvOmega', renamed upstream) moved from Imports to Suggests: it is needed only by `omega_analysis()`, which explains how to install it when it is missing.
 
 # DiAna 2.1.1
 * Now interoperable with the pvOmega package for identifying potential drug-drug interactions (including a function applying it to the DiAna data model)

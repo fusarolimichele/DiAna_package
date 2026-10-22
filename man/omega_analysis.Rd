@@ -56,18 +56,18 @@ file (requires the 'writexl' package). Default \code{FALSE}.}
 \value{
 A \code{data.table} with one row per drug1-drug2-event combination:
 the labels \code{drug1}, \code{drug2}, \code{event}, all columns returned by
-\code{pvOmega::omega_from_counts()}, \code{label_omega} and \code{omega_signal} (an ordered
+\code{PVomega::omega_from_counts()}, \code{label_omega} and \code{omega_signal} (an ordered
 factor: \code{"not enough cases"}, \code{"no SDR"}, \code{"SDR"}).
 }
 \description{
 Computes the Omega interaction measure (Noren et al. 2008) for every
 combination of a first drug, a second drug and an adverse event, starting
 from the \code{Drug} and \code{Reac} tables of the DiAna CDM. The
-interface mirrors \code{\link[=disproportionality_analysis]{disproportionality_analysis()}} and calls the pvOmega package for the calculation.
+interface mirrors \code{\link[=disproportionality_analysis]{disproportionality_analysis()}} and calls the PVomega package for the calculation.
 }
 \details{
-The 'pvOmega' package is not on CRAN and is needed only by this function.
-Install it with \code{remotes::install_github("Uppsala-Monitoring-Centre/pvOmega")}.
+The 'PVomega' package is not on CRAN and is needed only by this function.
+Install it with \code{remotes::install_github("Uppsala-Monitoring-Centre/PVomega")}.
 \subsection{Report universe}{
 
 The total number of reports (\code{n...}) is the number of distinct
@@ -100,7 +100,7 @@ and \code{g11} and the case series, alongside Omega, as recommended in the origi
 }
 }
 \examples{
-if (requireNamespace("pvOmega", quietly = TRUE)) {
+if (requireNamespace("PVomega", quietly = TRUE)) {
   omega_analysis(
     drug1_selected = "paracetamol",
     drug2_selected = "ibuprofen",

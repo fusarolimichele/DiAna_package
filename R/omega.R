@@ -3,10 +3,10 @@
 #' Computes the Omega interaction measure (Noren et al. 2008) for every
 #' combination of a first drug, a second drug and an adverse event, starting
 #' from the `Drug` and `Reac` tables of the DiAna CDM. The
-#' interface mirrors [DiAna::disproportionality_analysis()] and calls the pvOmega package for the calculation.
+#' interface mirrors [DiAna::disproportionality_analysis()] and calls the PVomega package for the calculation.
 #'
-#' The 'pvOmega' package is not on CRAN and is needed only by this function.
-#' Install it with `remotes::install_github("Uppsala-Monitoring-Centre/pvOmega")`.
+#' The 'PVomega' package is not on CRAN and is needed only by this function.
+#' Install it with `remotes::install_github("Uppsala-Monitoring-Centre/PVomega")`.
 #'
 #' ## Report universe
 #' The total number of reports (`n...`) is the number of distinct
@@ -60,7 +60,7 @@
 #'
 #' @return A `data.table` with one row per drug1-drug2-event combination:
 #'   the labels `drug1`, `drug2`, `event`, all columns returned by
-#'   `pvOmega::omega_from_counts()`, `label_omega` and `omega_signal` (an ordered
+#'   `PVomega::omega_from_counts()`, `label_omega` and `omega_signal` (an ordered
 #'   factor: `"not enough cases"`, `"no SDR"`, `"SDR"`).
 #'
 #' @references
@@ -73,7 +73,7 @@
 #' 2020;43:775-85. \doi{10.1007/s40264-020-00939-y}
 #'
 #' @examples
-#' if (requireNamespace("pvOmega", quietly = TRUE)) {
+#' if (requireNamespace("PVomega", quietly = TRUE)) {
 #'   omega_analysis(
 #'     drug1_selected = "paracetamol",
 #'     drug2_selected = "ibuprofen",
@@ -95,9 +95,9 @@ omega_analysis <- function(drug1_selected,
                            save_in_excel = FALSE,
                            file_name = "omega_results") {
   # ---- checks ----------------------------------------------------------------
-  if (!requireNamespace("pvOmega", quietly = TRUE)) {
-    stop("omega_analysis() requires the 'pvOmega' package. Install it with ",
-      "remotes::install_github(\"Uppsala-Monitoring-Centre/pvOmega\").",
+  if (!requireNamespace("PVomega", quietly = TRUE)) {
+    stop("omega_analysis() requires the 'PVomega' package. Install it with ",
+      "remotes::install_github(\"Uppsala-Monitoring-Centre/PVomega\").",
       call. = FALSE
     )
   }
@@ -187,7 +187,7 @@ omega_analysis <- function(drug1_selected,
     if (isTRUE(store_pids)) cases[[row]] <- d12r
   }
 
-  res <- pvOmega::omega_from_counts(
+  res <- PVomega::omega_from_counts(
     n111 = n111, n11. = n11., n1.1 = n1.1, n.11 = n.11,
     n1.. = n1.., n.1. = n.1., n..1 = n..1, n... = length(universe),
     alpha1 = 0.5, alpha2 = 0.5, cred_level = 0.95

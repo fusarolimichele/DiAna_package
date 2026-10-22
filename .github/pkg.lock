@@ -7,11 +7,11 @@
     {
       "ref": "local::.",
       "package": "DiAna",
-      "version": "2.1.1",
+      "version": "2.2.0",
       "type": "local",
       "direct": true,
       "binary": false,
-      "dependencies": ["data.table", "ggplot2", "dplyr", "forestplot", "ggflowchart", "gridExtra", "gtsummary", "here", "httr", "igraph", "IsingFit", "jsonlite", "lubridate", "magrittr", "purrr", "pvOmega", "questionr", "readr", "readxl", "stringr", "tibble", "tidyr", "twosamples", "writexl"],
+      "dependencies": ["data.table", "dplyr", "forestplot", "ggflowchart", "ggplot2", "gridExtra", "gtsummary", "here", "igraph", "IsingFit", "jsonlite", "magrittr", "purrr", "readr", "readxl", "tibble", "tidyr", "twosamples", "writexl"],
       "deps": [
         {
           "ref": "data.table",
@@ -21,18 +21,11 @@
           "version": ""
         },
         {
-          "ref": "ggplot2",
-          "type": "Depends",
-          "package": "ggplot2",
-          "op": "",
-          "version": ""
-        },
-        {
           "ref": "R",
           "type": "Depends",
           "package": "R",
           "op": ">=",
-          "version": "2.10"
+          "version": "4.1.0"
         },
         {
           "ref": "dplyr",
@@ -52,6 +45,13 @@
           "ref": "ggflowchart",
           "type": "Imports",
           "package": "ggflowchart",
+          "op": "",
+          "version": ""
+        },
+        {
+          "ref": "ggplot2",
+          "type": "Imports",
+          "package": "ggplot2",
           "op": "",
           "version": ""
         },
@@ -77,13 +77,6 @@
           "version": ""
         },
         {
-          "ref": "httr",
-          "type": "Imports",
-          "package": "httr",
-          "op": "",
-          "version": ""
-        },
-        {
           "ref": "igraph",
           "type": "Imports",
           "package": "igraph",
@@ -105,13 +98,6 @@
           "version": ""
         },
         {
-          "ref": "lubridate",
-          "type": "Imports",
-          "package": "lubridate",
-          "op": "",
-          "version": ""
-        },
-        {
           "ref": "magrittr",
           "type": "Imports",
           "package": "magrittr",
@@ -126,20 +112,6 @@
           "version": ""
         },
         {
-          "ref": "pvOmega=github::Uppsala-Monitoring-Centre/pvOmega",
-          "type": "Imports",
-          "package": "pvOmega",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "questionr",
-          "type": "Imports",
-          "package": "questionr",
-          "op": "",
-          "version": ""
-        },
-        {
           "ref": "readr",
           "type": "Imports",
           "package": "readr",
@@ -150,13 +122,6 @@
           "ref": "readxl",
           "type": "Imports",
           "package": "readxl",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "stringr",
-          "type": "Imports",
-          "package": "stringr",
           "op": "",
           "version": ""
         },
@@ -196,6 +161,13 @@
           "version": ""
         },
         {
+          "ref": "PVomega",
+          "type": "Suggests",
+          "package": "PVomega",
+          "op": "",
+          "version": ""
+        },
+        {
           "ref": "rmarkdown",
           "type": "Suggests",
           "package": "rmarkdown",
@@ -210,9 +182,37 @@
           "version": "3.0.0"
         },
         {
+          "ref": "Uppsala-Monitoring-Centre/PVomega",
+          "type": "Config/Needs/check",
+          "package": "PVomega",
+          "op": "",
+          "version": ""
+        },
+        {
+          "ref": "Uppsala-Monitoring-Centre/PVomega",
+          "type": "Config/Needs/coverage",
+          "package": "PVomega",
+          "op": "",
+          "version": ""
+        },
+        {
           "ref": "rmarkdown",
           "type": "Config/Needs/website",
           "package": "rmarkdown",
+          "op": "",
+          "version": ""
+        },
+        {
+          "ref": "Uppsala-Monitoring-Centre/PVomega",
+          "type": "Config/Needs/website",
+          "package": "PVomega",
+          "op": "",
+          "version": ""
+        },
+        {
+          "ref": "Uppsala-Monitoring-Centre/PVgravID",
+          "type": "Config/Needs/website",
+          "package": "PVgravID",
           "op": "",
           "version": ""
         }
@@ -222,8 +222,8 @@
         "RemotePkgRef": "local::.",
         "RemoteType": "local"
       },
-      "sources": ["file:///Users/MicheleF/Desktop/R_packages/DiAna_package"],
-      "target": "src/contrib/DiAna_2.1.1.tar.gz",
+      "sources": ["file:///Users/MicheleF/Documents/DiAna_package_dev"],
+      "target": "src/contrib/DiAna_2.2.0.tar.gz",
       "platform": "source",
       "rversion": "*",
       "directpkg": true,
@@ -277,43 +277,6 @@
       "platform": "*",
       "rversion": "R 4.6.0",
       "built": "R 4.6.0; ; 2026-04-25 15:40:28 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/askpass",
-      "package": "askpass",
-      "version": "1.2.1",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["sys"],
-      "deps": [
-        {
-          "ref": "sys",
-          "type": "imports",
-          "package": "sys",
-          "op": ">=",
-          "version": "2.1"
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/askpass",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "1.2.1"
-      },
-      "sources": [],
-      "target": "src/contrib/askpass_1.2.1.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 23:17:34 UTC; unix",
       "directpkg": false,
       "license": "MIT + file LICENSE",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
@@ -1031,136 +994,6 @@
       "repotype": "cran"
     },
     {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/class",
-      "package": "class",
-      "version": "7.3-24",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": [],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "3.0.0"
-        },
-        {
-          "ref": "stats",
-          "type": "depends",
-          "package": "stats",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "utils",
-          "type": "depends",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/class",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "7.3-24"
-      },
-      "sources": [],
-      "target": "src/contrib/class_7.3-24.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.1",
-      "built": "R 4.6.1; aarch64-apple-darwin23; 2026-08-03 13:53:56 UTC; unix",
-      "directpkg": false,
-      "license": "GPL-2 | GPL-3",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/classInt",
-      "package": "classInt",
-      "version": "0.4-11",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["e1071", "class", "KernSmooth"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "2.2"
-        },
-        {
-          "ref": "grDevices",
-          "type": "imports",
-          "package": "grDevices",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "stats",
-          "type": "imports",
-          "package": "stats",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "graphics",
-          "type": "imports",
-          "package": "graphics",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "e1071",
-          "type": "imports",
-          "package": "e1071",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "class",
-          "type": "imports",
-          "package": "class",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "KernSmooth",
-          "type": "imports",
-          "package": "KernSmooth",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/classInt",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "0.4-11"
-      },
-      "sources": [],
-      "target": "src/contrib/classInt_0.4-11.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-26 02:21:24 UTC; unix",
-      "directpkg": false,
-      "license": "GPL (>= 2)",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/cli",
       "package": "cli",
       "version": "3.6.6",
@@ -1788,85 +1621,6 @@
       "repotype": "cran"
     },
     {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/e1071",
-      "package": "e1071",
-      "version": "1.7-17",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["class", "proxy"],
-      "deps": [
-        {
-          "ref": "graphics",
-          "type": "imports",
-          "package": "graphics",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "grDevices",
-          "type": "imports",
-          "package": "grDevices",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "class",
-          "type": "imports",
-          "package": "class",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "stats",
-          "type": "imports",
-          "package": "stats",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "methods",
-          "type": "imports",
-          "package": "methods",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "utils",
-          "type": "imports",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "proxy",
-          "type": "imports",
-          "package": "proxy",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/e1071",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "1.7-17"
-      },
-      "sources": [],
-      "target": "src/contrib/e1071_1.7-17.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 23:17:21 UTC; unix",
-      "directpkg": false,
-      "license": "GPL-2 | GPL-3",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/evaluate",
       "package": "evaluate",
       "version": "1.0.5",
@@ -2063,85 +1817,6 @@
       "platform": "*",
       "rversion": "R 4.6.0",
       "built": "R 4.6.0; ; 2026-04-26 02:18:26 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/forcats",
-      "package": "forcats",
-      "version": "1.0.1",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["cli", "glue", "lifecycle", "magrittr", "rlang", "tibble"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "4.1"
-        },
-        {
-          "ref": "cli",
-          "type": "imports",
-          "package": "cli",
-          "op": ">=",
-          "version": "3.4.0"
-        },
-        {
-          "ref": "glue",
-          "type": "imports",
-          "package": "glue",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "lifecycle",
-          "type": "imports",
-          "package": "lifecycle",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "magrittr",
-          "type": "imports",
-          "package": "magrittr",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "rlang",
-          "type": "imports",
-          "package": "rlang",
-          "op": ">=",
-          "version": "1.0.0"
-        },
-        {
-          "ref": "tibble",
-          "type": "imports",
-          "package": "tibble",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/forcats",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "1.0.1"
-      },
-      "sources": [],
-      "target": "src/contrib/forcats_1.0.1.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-26 11:09:08 UTC; unix",
       "directpkg": false,
       "license": "MIT + file LICENSE",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
@@ -2949,7 +2624,7 @@
     {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/gt",
       "package": "gt",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "type": "installed",
       "direct": false,
       "binary": true,
@@ -3002,7 +2677,7 @@
           "type": "imports",
           "package": "dplyr",
           "op": ">=",
-          "version": "1.1.4"
+          "version": "1.2.0"
         },
         {
           "ref": "fs",
@@ -3017,6 +2692,13 @@
           "package": "glue",
           "op": ">=",
           "version": "1.8.0"
+        },
+        {
+          "ref": "grDevices",
+          "type": "imports",
+          "package": "grDevices",
+          "op": "",
+          "version": ""
         },
         {
           "ref": "htmltools",
@@ -3092,8 +2774,8 @@
           "ref": "vctrs",
           "type": "imports",
           "package": "vctrs",
-          "op": "",
-          "version": ""
+          "op": ">=",
+          "version": "0.7.0"
         },
         {
           "ref": "xml2",
@@ -3109,13 +2791,13 @@
         "RemoteType": "installed",
         "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/gt",
         "RemotePkgPlatform": "*",
-        "RemoteSha": "1.3.0"
+        "RemoteSha": "1.4.0"
       },
       "sources": [],
-      "target": "src/contrib/gt_1.3.0.tar.gz",
+      "target": "src/contrib/gt_1.4.0.tar.gz",
       "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-26 15:56:16 UTC; unix",
+      "rversion": "R 4.6.1",
+      "built": "R 4.6.1; ; 2026-10-15 09:47:42 UTC; unix",
       "directpkg": false,
       "license": "MIT + file LICENSE",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
@@ -3359,114 +3041,6 @@
       "params": [],
       "install_args": [],
       "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/haven",
-      "package": "haven",
-      "version": "2.5.5",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["cli", "forcats", "hms", "lifecycle", "readr", "rlang", "tibble", "tidyselect", "vctrs"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "3.6"
-        },
-        {
-          "ref": "cli",
-          "type": "imports",
-          "package": "cli",
-          "op": ">=",
-          "version": "3.0.0"
-        },
-        {
-          "ref": "forcats",
-          "type": "imports",
-          "package": "forcats",
-          "op": ">=",
-          "version": "0.2.0"
-        },
-        {
-          "ref": "hms",
-          "type": "imports",
-          "package": "hms",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "lifecycle",
-          "type": "imports",
-          "package": "lifecycle",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "methods",
-          "type": "imports",
-          "package": "methods",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "readr",
-          "type": "imports",
-          "package": "readr",
-          "op": ">=",
-          "version": "0.1.0"
-        },
-        {
-          "ref": "rlang",
-          "type": "imports",
-          "package": "rlang",
-          "op": ">=",
-          "version": "0.4.0"
-        },
-        {
-          "ref": "tibble",
-          "type": "imports",
-          "package": "tibble",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "tidyselect",
-          "type": "imports",
-          "package": "tidyselect",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "vctrs",
-          "type": "imports",
-          "package": "vctrs",
-          "op": ">=",
-          "version": "0.3.0"
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/haven",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "2.5.5"
-      },
-      "sources": [],
-      "target": "src/contrib/haven_2.5.5.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 12:39:12 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran",
-      "sysreqs": "GNU make, zlib: zlib1g-dev (deb), zlib-devel (rpm)"
     },
     {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/here",
@@ -4029,151 +3603,6 @@
       "repotype": "cran"
     },
     {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/httpuv",
-      "package": "httpuv",
-      "version": "1.6.17",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["later", "promises", "R6", "Rcpp"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "2.15.1"
-        },
-        {
-          "ref": "later",
-          "type": "imports",
-          "package": "later",
-          "op": ">=",
-          "version": "0.8.0"
-        },
-        {
-          "ref": "promises",
-          "type": "imports",
-          "package": "promises",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "R6",
-          "type": "imports",
-          "package": "R6",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "Rcpp",
-          "type": "imports",
-          "package": "Rcpp",
-          "op": ">=",
-          "version": "1.0.7"
-        },
-        {
-          "ref": "utils",
-          "type": "imports",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/httpuv",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "1.6.17"
-      },
-      "sources": [],
-      "target": "src/contrib/httpuv_1.6.17.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-26 05:14:15 UTC; unix",
-      "directpkg": false,
-      "license": "GPL (>= 2) | file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran",
-      "sysreqs": "GNU make, zlib"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/httr",
-      "package": "httr",
-      "version": "1.4.9",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["curl", "jsonlite", "mime", "openssl", "R6"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "3.6"
-        },
-        {
-          "ref": "curl",
-          "type": "imports",
-          "package": "curl",
-          "op": ">=",
-          "version": "5.1.0"
-        },
-        {
-          "ref": "jsonlite",
-          "type": "imports",
-          "package": "jsonlite",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "mime",
-          "type": "imports",
-          "package": "mime",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "openssl",
-          "type": "imports",
-          "package": "openssl",
-          "op": ">=",
-          "version": "0.8"
-        },
-        {
-          "ref": "R6",
-          "type": "imports",
-          "package": "R6",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/httr",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "1.4.9"
-      },
-      "sources": [],
-      "target": "src/contrib/httr_1.4.9.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.1",
-      "built": "R 4.6.1; ; 2026-09-01 17:10:27 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/igraph",
       "package": "igraph",
       "version": "2.3.4",
@@ -4605,50 +4034,6 @@
       "repotype": "cran"
     },
     {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/KernSmooth",
-      "package": "KernSmooth",
-      "version": "2.23-27",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": [],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "2.5.0"
-        },
-        {
-          "ref": "stats",
-          "type": "depends",
-          "package": "stats",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/KernSmooth",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "2.23-27"
-      },
-      "sources": [],
-      "target": "src/contrib/KernSmooth_2.23-27.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.1",
-      "built": "R 4.6.1; aarch64-apple-darwin23; 2026-08-12 07:00:40 UTC; unix",
-      "directpkg": false,
-      "license": "Unlimited",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/knitr",
       "package": "knitr",
       "version": "1.52",
@@ -4767,157 +4152,6 @@
       "built": "R 4.6.0; ; 2026-04-25 15:40:07 UTC; unix",
       "directpkg": false,
       "license": "MIT + file LICENSE | Unlimited",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/labelled",
-      "package": "labelled",
-      "version": "2.16.1",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["haven", "cli", "dplyr", "lifecycle", "rlang", "vctrs", "stringr", "tidyr", "tidyselect"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "3.2"
-        },
-        {
-          "ref": "haven",
-          "type": "imports",
-          "package": "haven",
-          "op": ">=",
-          "version": "2.4.1"
-        },
-        {
-          "ref": "cli",
-          "type": "imports",
-          "package": "cli",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "dplyr",
-          "type": "imports",
-          "package": "dplyr",
-          "op": ">=",
-          "version": "1.1.0"
-        },
-        {
-          "ref": "lifecycle",
-          "type": "imports",
-          "package": "lifecycle",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "rlang",
-          "type": "imports",
-          "package": "rlang",
-          "op": ">=",
-          "version": "1.1.0"
-        },
-        {
-          "ref": "vctrs",
-          "type": "imports",
-          "package": "vctrs",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "stringr",
-          "type": "imports",
-          "package": "stringr",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "tidyr",
-          "type": "imports",
-          "package": "tidyr",
-          "op": ">=",
-          "version": "1.3.0"
-        },
-        {
-          "ref": "tidyselect",
-          "type": "imports",
-          "package": "tidyselect",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/labelled",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "2.16.1"
-      },
-      "sources": [],
-      "target": "src/contrib/labelled_2.16.1.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.1",
-      "built": "R 4.6.1; ; 2026-08-20 18:45:43 UTC; unix",
-      "directpkg": false,
-      "license": "GPL (>= 3)",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/later",
-      "package": "later",
-      "version": "1.4.8",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["Rcpp", "rlang"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "3.5"
-        },
-        {
-          "ref": "Rcpp",
-          "type": "imports",
-          "package": "Rcpp",
-          "op": ">=",
-          "version": "1.0.10"
-        },
-        {
-          "ref": "rlang",
-          "type": "imports",
-          "package": "rlang",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/later",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "1.4.8"
-      },
-      "sources": [],
-      "target": "src/contrib/later_1.4.8.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 23:14:28 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": [],
@@ -5210,65 +4444,6 @@
       "params": [],
       "install_args": [],
       "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/lubridate",
-      "package": "lubridate",
-      "version": "1.9.5",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["generics", "timechange"],
-      "deps": [
-        {
-          "ref": "methods",
-          "type": "depends",
-          "package": "methods",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "3.2"
-        },
-        {
-          "ref": "generics",
-          "type": "imports",
-          "package": "generics",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "timechange",
-          "type": "imports",
-          "package": "timechange",
-          "op": ">=",
-          "version": "0.4.0"
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/lubridate",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "1.9.5"
-      },
-      "sources": [],
-      "target": "src/contrib/lubridate_1.9.5.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 23:16:04 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran",
-      "sysreqs": "A system with zoneinfo data (e.g.\n        /usr/share/zoneinfo). On Windows the zoneinfo included with R\n        is used."
     },
     {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/magrittr",
@@ -5605,57 +4780,6 @@
       "repotype": "cran"
     },
     {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/miniUI",
-      "package": "miniUI",
-      "version": "0.1.2",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["shiny", "htmltools"],
-      "deps": [
-        {
-          "ref": "shiny",
-          "type": "imports",
-          "package": "shiny",
-          "op": ">=",
-          "version": "0.13"
-        },
-        {
-          "ref": "htmltools",
-          "type": "imports",
-          "package": "htmltools",
-          "op": ">=",
-          "version": "0.3"
-        },
-        {
-          "ref": "utils",
-          "type": "imports",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/miniUI",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "0.1.2"
-      },
-      "sources": [],
-      "target": "src/contrib/miniUI_0.1.2.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-26 11:10:34 UTC; unix",
-      "directpkg": false,
-      "license": "GPL-3",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/mnormt",
       "package": "mnormt",
       "version": "2.1.2",
@@ -5840,81 +4964,6 @@
       "built": "R 4.6.0; ; 2026-04-25 15:42:27 UTC; unix",
       "directpkg": false,
       "license": "GPL-2",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/openssl",
-      "package": "openssl",
-      "version": "2.4.2",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["askpass"],
-      "deps": [
-        {
-          "ref": "askpass",
-          "type": "imports",
-          "package": "askpass",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/openssl",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "2.4.2"
-      },
-      "sources": [],
-      "target": "src/contrib/openssl_2.4.2.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-06-09 16:28:40 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran",
-      "sysreqs": "OpenSSL >= 1.0.2"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/otel",
-      "package": "otel",
-      "version": "0.2.0",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": [],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "3.6.0"
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/otel",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "0.2.0"
-      },
-      "sources": [],
-      "target": "src/contrib/otel_0.2.0.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-25 15:39:31 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": [],
@@ -6190,143 +5239,6 @@
       "install_args": [],
       "repotype": "cran",
       "sysreqs": "libpng"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/promises",
-      "package": "promises",
-      "version": "1.5.0",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["fastmap", "later", "lifecycle", "magrittr", "otel", "R6", "rlang"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "4.1.0"
-        },
-        {
-          "ref": "fastmap",
-          "type": "imports",
-          "package": "fastmap",
-          "op": ">=",
-          "version": "1.1.0"
-        },
-        {
-          "ref": "later",
-          "type": "imports",
-          "package": "later",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "lifecycle",
-          "type": "imports",
-          "package": "lifecycle",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "magrittr",
-          "type": "imports",
-          "package": "magrittr",
-          "op": ">=",
-          "version": "1.5"
-        },
-        {
-          "ref": "otel",
-          "type": "imports",
-          "package": "otel",
-          "op": ">=",
-          "version": "0.2.0"
-        },
-        {
-          "ref": "R6",
-          "type": "imports",
-          "package": "R6",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "rlang",
-          "type": "imports",
-          "package": "rlang",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/promises",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "1.5.0"
-      },
-      "sources": [],
-      "target": "src/contrib/promises_1.5.0.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-26 02:18:42 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/proxy",
-      "package": "proxy",
-      "version": "0.4-29",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": [],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "3.4.0"
-        },
-        {
-          "ref": "stats",
-          "type": "imports",
-          "package": "stats",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "utils",
-          "type": "imports",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/proxy",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "0.4-29"
-      },
-      "sources": [],
-      "target": "src/contrib/proxy_0.4-29.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 15:46:59 UTC; unix",
-      "directpkg": false,
-      "license": "GPL-2 | GPL-3",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
     },
     {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/psych",
@@ -6709,374 +5621,6 @@
       "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 15:55:14 UTC; unix",
       "directpkg": false,
       "license": "GPL (>= 2)",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/questionr",
-      "package": "questionr",
-      "version": "0.8.2",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["shiny", "miniUI", "rstudioapi", "highr", "styler", "classInt", "htmltools", "rlang", "labelled"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "4.1.0"
-        },
-        {
-          "ref": "shiny",
-          "type": "imports",
-          "package": "shiny",
-          "op": ">=",
-          "version": "1.0.5"
-        },
-        {
-          "ref": "miniUI",
-          "type": "imports",
-          "package": "miniUI",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "rstudioapi",
-          "type": "imports",
-          "package": "rstudioapi",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "highr",
-          "type": "imports",
-          "package": "highr",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "styler",
-          "type": "imports",
-          "package": "styler",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "classInt",
-          "type": "imports",
-          "package": "classInt",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "htmltools",
-          "type": "imports",
-          "package": "htmltools",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "graphics",
-          "type": "imports",
-          "package": "graphics",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "stats",
-          "type": "imports",
-          "package": "stats",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "utils",
-          "type": "imports",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "rlang",
-          "type": "imports",
-          "package": "rlang",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "labelled",
-          "type": "imports",
-          "package": "labelled",
-          "op": ">=",
-          "version": "2.6.0"
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/questionr",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "0.8.2"
-      },
-      "sources": [],
-      "target": "src/contrib/questionr_0.8.2.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-25 13:38:03 UTC; unix",
-      "directpkg": false,
-      "license": "GPL (>= 2)",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran",
-      "sysreqs": "xclip (Linux)"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/R.cache",
-      "package": "R.cache",
-      "version": "0.17.0",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["R.methodsS3", "R.oo", "R.utils", "digest"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "2.14.0"
-        },
-        {
-          "ref": "utils",
-          "type": "imports",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "R.methodsS3",
-          "type": "imports",
-          "package": "R.methodsS3",
-          "op": ">=",
-          "version": "1.8.1"
-        },
-        {
-          "ref": "R.oo",
-          "type": "imports",
-          "package": "R.oo",
-          "op": ">=",
-          "version": "1.24.0"
-        },
-        {
-          "ref": "R.utils",
-          "type": "imports",
-          "package": "R.utils",
-          "op": ">=",
-          "version": "2.10.1"
-        },
-        {
-          "ref": "digest",
-          "type": "imports",
-          "package": "digest",
-          "op": ">=",
-          "version": "0.6.13"
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/R.cache",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "0.17.0"
-      },
-      "sources": [],
-      "target": "src/contrib/R.cache_0.17.0.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-26 05:16:49 UTC; unix",
-      "directpkg": false,
-      "license": "LGPL (>= 2.1)",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/R.methodsS3",
-      "package": "R.methodsS3",
-      "version": "1.8.2",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": [],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "2.13.0"
-        },
-        {
-          "ref": "utils",
-          "type": "imports",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/R.methodsS3",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "1.8.2"
-      },
-      "sources": [],
-      "target": "src/contrib/R.methodsS3_1.8.2.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-25 15:50:08 UTC; unix",
-      "directpkg": false,
-      "license": "LGPL (>= 2.1)",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/R.oo",
-      "package": "R.oo",
-      "version": "1.27.1",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["R.methodsS3"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "2.13.0"
-        },
-        {
-          "ref": "R.methodsS3",
-          "type": "depends",
-          "package": "R.methodsS3",
-          "op": ">=",
-          "version": "1.8.2"
-        },
-        {
-          "ref": "methods",
-          "type": "imports",
-          "package": "methods",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "utils",
-          "type": "imports",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/R.oo",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "1.27.1"
-      },
-      "sources": [],
-      "target": "src/contrib/R.oo_1.27.1.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-25 23:18:34 UTC; unix",
-      "directpkg": false,
-      "license": "LGPL (>= 2.1)",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/R.utils",
-      "package": "R.utils",
-      "version": "2.13.0",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["R.oo", "R.methodsS3"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "2.14.0"
-        },
-        {
-          "ref": "R.oo",
-          "type": "depends",
-          "package": "R.oo",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "methods",
-          "type": "imports",
-          "package": "methods",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "utils",
-          "type": "imports",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "tools",
-          "type": "imports",
-          "package": "tools",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "R.methodsS3",
-          "type": "imports",
-          "package": "R.methodsS3",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/R.utils",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "2.13.0"
-      },
-      "sources": [],
-      "target": "src/contrib/R.utils_2.13.0.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-26 02:22:50 UTC; unix",
-      "directpkg": false,
-      "license": "LGPL (>= 2.1)",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": [],
@@ -8192,248 +6736,6 @@
       "repotype": "cran"
     },
     {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/shiny",
-      "package": "shiny",
-      "version": "1.14.0",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["bslib", "cachem", "cli", "commonmark", "fastmap", "fontawesome", "glue", "htmltools", "httpuv", "jsonlite", "later", "lifecycle", "mime", "otel", "promises", "R6", "rlang", "sourcetools", "withr", "xtable"],
-      "deps": [
-        {
-          "ref": "methods",
-          "type": "depends",
-          "package": "methods",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "3.1.2"
-        },
-        {
-          "ref": "bslib",
-          "type": "imports",
-          "package": "bslib",
-          "op": ">=",
-          "version": "0.6.0"
-        },
-        {
-          "ref": "cachem",
-          "type": "imports",
-          "package": "cachem",
-          "op": ">=",
-          "version": "1.1.0"
-        },
-        {
-          "ref": "cli",
-          "type": "imports",
-          "package": "cli",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "commonmark",
-          "type": "imports",
-          "package": "commonmark",
-          "op": ">=",
-          "version": "2.0.0"
-        },
-        {
-          "ref": "fastmap",
-          "type": "imports",
-          "package": "fastmap",
-          "op": ">=",
-          "version": "1.1.1"
-        },
-        {
-          "ref": "fontawesome",
-          "type": "imports",
-          "package": "fontawesome",
-          "op": ">=",
-          "version": "0.4.0"
-        },
-        {
-          "ref": "glue",
-          "type": "imports",
-          "package": "glue",
-          "op": ">=",
-          "version": "1.3.2"
-        },
-        {
-          "ref": "grDevices",
-          "type": "imports",
-          "package": "grDevices",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "htmltools",
-          "type": "imports",
-          "package": "htmltools",
-          "op": ">=",
-          "version": "0.5.4"
-        },
-        {
-          "ref": "httpuv",
-          "type": "imports",
-          "package": "httpuv",
-          "op": ">=",
-          "version": "1.5.2"
-        },
-        {
-          "ref": "jsonlite",
-          "type": "imports",
-          "package": "jsonlite",
-          "op": ">=",
-          "version": "0.9.16"
-        },
-        {
-          "ref": "later",
-          "type": "imports",
-          "package": "later",
-          "op": ">=",
-          "version": "1.0.0"
-        },
-        {
-          "ref": "lifecycle",
-          "type": "imports",
-          "package": "lifecycle",
-          "op": ">=",
-          "version": "0.2.0"
-        },
-        {
-          "ref": "mime",
-          "type": "imports",
-          "package": "mime",
-          "op": ">=",
-          "version": "0.3"
-        },
-        {
-          "ref": "otel",
-          "type": "imports",
-          "package": "otel",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "promises",
-          "type": "imports",
-          "package": "promises",
-          "op": ">=",
-          "version": "1.5.0"
-        },
-        {
-          "ref": "R6",
-          "type": "imports",
-          "package": "R6",
-          "op": ">=",
-          "version": "2.0"
-        },
-        {
-          "ref": "rlang",
-          "type": "imports",
-          "package": "rlang",
-          "op": ">=",
-          "version": "0.4.10"
-        },
-        {
-          "ref": "sourcetools",
-          "type": "imports",
-          "package": "sourcetools",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "tools",
-          "type": "imports",
-          "package": "tools",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "utils",
-          "type": "imports",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "withr",
-          "type": "imports",
-          "package": "withr",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "xtable",
-          "type": "imports",
-          "package": "xtable",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/shiny",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "1.14.0"
-      },
-      "sources": [],
-      "target": "src/contrib/shiny_1.14.0.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-06-21 15:41:33 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/sourcetools",
-      "package": "sourcetools",
-      "version": "0.1.7-2",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": [],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "3.0.2"
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/sourcetools",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "0.1.7-2"
-      },
-      "sources": [],
-      "target": "src/contrib/sourcetools_0.1.7-2.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 15:39:30 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/stringi",
       "package": "stringi",
       "version": "1.8.9",
@@ -8579,106 +6881,6 @@
       "repotype": "cran"
     },
     {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/styler",
-      "package": "styler",
-      "version": "1.11.0",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": ["cli", "magrittr", "purrr", "R.cache", "rlang", "rprojroot", "vctrs", "withr"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "4.0.0"
-        },
-        {
-          "ref": "cli",
-          "type": "imports",
-          "package": "cli",
-          "op": ">=",
-          "version": "3.1.1"
-        },
-        {
-          "ref": "magrittr",
-          "type": "imports",
-          "package": "magrittr",
-          "op": ">=",
-          "version": "2.0.0"
-        },
-        {
-          "ref": "purrr",
-          "type": "imports",
-          "package": "purrr",
-          "op": ">=",
-          "version": "1.0.2"
-        },
-        {
-          "ref": "R.cache",
-          "type": "imports",
-          "package": "R.cache",
-          "op": ">=",
-          "version": "0.15.0"
-        },
-        {
-          "ref": "rlang",
-          "type": "imports",
-          "package": "rlang",
-          "op": ">=",
-          "version": "1.0.0"
-        },
-        {
-          "ref": "rprojroot",
-          "type": "imports",
-          "package": "rprojroot",
-          "op": ">=",
-          "version": "1.1"
-        },
-        {
-          "ref": "tools",
-          "type": "imports",
-          "package": "tools",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "vctrs",
-          "type": "imports",
-          "package": "vctrs",
-          "op": ">=",
-          "version": "0.4.1"
-        },
-        {
-          "ref": "withr",
-          "type": "imports",
-          "package": "withr",
-          "op": ">=",
-          "version": "2.3.0"
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/styler",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "1.11.0"
-      },
-      "sources": [],
-      "target": "src/contrib/styler_1.11.0.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-26 11:11:39 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/survival",
       "package": "survival",
       "version": "3.8-12",
@@ -8752,35 +6954,6 @@
       "built": "R 4.6.1; aarch64-apple-darwin23; 2026-09-16 23:01:20 UTC; unix",
       "directpkg": false,
       "license": "LGPL (>= 2)",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/sys",
-      "package": "sys",
-      "version": "3.4.3",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": [],
-      "deps": [],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/sys",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "3.4.3"
-      },
-      "sources": [],
-      "target": "src/contrib/sys_3.4.3.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 15:48:55 UTC; unix",
-      "directpkg": false,
-      "license": "MIT + file LICENSE",
       "dep_types": ["Depends", "Imports", "LinkingTo"],
       "params": [],
       "install_args": [],
@@ -9085,44 +7258,6 @@
       "params": [],
       "install_args": [],
       "repotype": "cran"
-    },
-    {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/timechange",
-      "package": "timechange",
-      "version": "0.4.0",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": [],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "3.3"
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/timechange",
-        "RemotePkgPlatform": "aarch64-apple-darwin23",
-        "RemoteSha": "0.4.0"
-      },
-      "sources": [],
-      "target": "src/contrib/timechange_0.4.0.tar.gz",
-      "platform": "aarch64-apple-darwin23",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 15:44:04 UTC; unix",
-      "directpkg": false,
-      "license": "GPL (>= 3)",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran",
-      "sysreqs": "A system with zoneinfo data (e.g.\n        /usr/share/zoneinfo). On Windows the zoneinfo included with R\n        is used."
     },
     {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/tinytex",
@@ -9759,64 +7894,6 @@
       "sysreqs": "libxml2: libxml2-dev (deb), libxml2-devel (rpm)"
     },
     {
-      "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/xtable",
-      "package": "xtable",
-      "version": "1.8-8",
-      "type": "installed",
-      "direct": false,
-      "binary": true,
-      "dependencies": [],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "depends",
-          "package": "R",
-          "op": ">=",
-          "version": "2.10.0"
-        },
-        {
-          "ref": "stats",
-          "type": "imports",
-          "package": "stats",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "utils",
-          "type": "imports",
-          "package": "utils",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "methods",
-          "type": "imports",
-          "package": "methods",
-          "op": "",
-          "version": ""
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": false,
-      "metadata": {
-        "RemoteType": "installed",
-        "RemotePkgRef": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/xtable",
-        "RemotePkgPlatform": "*",
-        "RemoteSha": "1.8-8"
-      },
-      "sources": [],
-      "target": "src/contrib/xtable_1.8-8.tar.gz",
-      "platform": "*",
-      "rversion": "R 4.6.0",
-      "built": "R 4.6.0; ; 2026-04-25 15:39:58 UTC; unix",
-      "directpkg": false,
-      "license": "GPL (>= 2)",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "repotype": "cran"
-    },
-    {
       "ref": "installed::/Library/Frameworks/R.framework/Versions/4.6/Resources/library/yaml",
       "package": "yaml",
       "version": "2.3.12",
@@ -9844,84 +7921,6 @@
       "params": [],
       "install_args": [],
       "repotype": "cran"
-    },
-    {
-      "ref": "pvOmega=github::Uppsala-Monitoring-Centre/pvOmega",
-      "package": "pvOmega",
-      "version": "0.0.0.9000",
-      "type": "github",
-      "direct": false,
-      "binary": false,
-      "dependencies": ["data.table"],
-      "deps": [
-        {
-          "ref": "R",
-          "type": "Depends",
-          "package": "R",
-          "op": ">=",
-          "version": "4.1"
-        },
-        {
-          "ref": "data.table",
-          "type": "Imports",
-          "package": "data.table",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "devtools",
-          "type": "Suggests",
-          "package": "devtools",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "knitr",
-          "type": "Suggests",
-          "package": "knitr",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "styler",
-          "type": "Suggests",
-          "package": "styler",
-          "op": "",
-          "version": ""
-        },
-        {
-          "ref": "testthat",
-          "type": "Suggests",
-          "package": "testthat",
-          "op": ">=",
-          "version": "3.0.0"
-        }
-      ],
-      "vignettes": false,
-      "needscompilation": true,
-      "metadata": {
-        "RemoteType": "github",
-        "RemoteHost": "api.github.com",
-        "RemoteRepo": "pvOmega",
-        "RemoteUsername": "Uppsala-Monitoring-Centre",
-        "RemotePkgRef": "pvOmega=github::Uppsala-Monitoring-Centre/pvOmega",
-        "RemoteRef": "HEAD",
-        "RemoteSha": "97450732c4adee74ecfb39ef7180fad27b4c9729",
-        "GithubRepo": "pvOmega",
-        "GithubUsername": "Uppsala-Monitoring-Centre",
-        "GithubRef": "HEAD",
-        "GithubSHA1": "97450732c4adee74ecfb39ef7180fad27b4c9729"
-      },
-      "sources": ["https://api.github.com/repos/Uppsala-Monitoring-Centre/pvOmega/zipball/97450732c4adee74ecfb39ef7180fad27b4c9729"],
-      "target": "src/contrib/pvOmega_0.0.0.9000_9745073.tar.gz",
-      "platform": "source",
-      "rversion": "*",
-      "directpkg": false,
-      "license": "Apache License (>= 2)",
-      "dep_types": ["Depends", "Imports", "LinkingTo"],
-      "params": [],
-      "install_args": [],
-      "sysreqs": ""
     }
   ]
 }

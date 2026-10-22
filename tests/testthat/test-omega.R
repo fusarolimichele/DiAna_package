@@ -1,5 +1,5 @@
 test_that("omega works starting from input combination and DiAna data model", {
-  skip_if_not_installed("pvOmega")
+  skip_if_not_installed("PVomega")
   expect_equal(
     omega_analysis(
       drug1_selected = "paracetamol",
